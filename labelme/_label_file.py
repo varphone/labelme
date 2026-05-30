@@ -35,6 +35,29 @@ class ShapeDict(TypedDict):
     other_data: dict
 
 
+def _normalize_shape_points(*, shape_type: str, points: list[list[float]]) -> list[list[float]]:
+    if shape_type != "rectangle" or len(points) != 4:
+        return points
+
+    xs = {point[0] for point in points}
+    ys = {point[1] for point in points}
+    if len(xs) != 2 or len(ys) != 2:
+        return points
+
+    xmin, xmax = min(xs), max(xs)
+    ymin, ymax = min(ys), max(ys)
+    corners = {
+        (xmin, ymin),
+        (xmax, ymin),
+        (xmax, ymax),
+        (xmin, ymax),
+    }
+    if {(point[0], point[1]) for point in points} != corners:
+        return points
+
+    return [[xmin, ymin], [xmax, ymax]]
+
+
 def _load_shape_json_obj(shape_json_obj: dict) -> ShapeDict:
     SHAPE_KEYS: set[str] = {
         "label",
@@ -72,6 +95,7 @@ def _load_shape_json_obj(shape_json_obj: dict) -> ShapeDict:
     if not isinstance(shape_json_obj["shape_type"], str):
         raise TypeError(f"shape_type must be str: {shape_json_obj['shape_type']}")
     shape_type: str = shape_json_obj["shape_type"]
+    points = _normalize_shape_points(shape_type=shape_type, points=points)
 
     flags: dict = {}
     if shape_json_obj.get("flags") is not None:

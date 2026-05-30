@@ -107,6 +107,29 @@ def test_read_label_file_extracts_other_data(
     assert label_data.other_data == {"customField": {"reviewer": "alice"}}
 
 
+def test_read_label_file_normalizes_legacy_rectangle_points(
+    annotated_raw: dict[str, Any],
+    annotated_dst: Path,
+) -> None:
+    annotated_raw["shapes"] = [
+        {
+            "label": "bbox",
+            "points": [[10, 20], [30, 20], [30, 40], [10, 40]],
+            "group_id": None,
+            "shape_type": "rectangle",
+            "flags": {},
+            "description": "",
+            "score": None,
+        }
+    ]
+    _dump_json(path=annotated_dst, raw=annotated_raw)
+
+    label_data = read_label_file(filename=str(annotated_dst))
+
+    assert label_data.shapes[0]["shape_type"] == "rectangle"
+    assert label_data.shapes[0]["points"] == [[10, 20], [30, 40]]
+
+
 @pytest.mark.parametrize(
     "mutator,error_match",
     [
