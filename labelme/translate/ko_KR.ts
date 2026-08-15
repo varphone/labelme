@@ -182,6 +182,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>반지름</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>선택한 원의 반지름</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Flags</source>
