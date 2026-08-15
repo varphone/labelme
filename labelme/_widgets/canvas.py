@@ -260,6 +260,7 @@ class Canvas(QtWidgets.QWidget):
         self._ai_suppress_existing_shape_matches = False
         self._ai_existing_shape_highlights = []
         self._snapping = True
+        self.snap_to_point = False
         self._hovered_shape_is_selected: bool = False
         self._painter = QtGui.QPainter()
         self._pan_anchor = None
@@ -278,6 +279,9 @@ class Canvas(QtWidgets.QWidget):
 
     def set_fill_drawing(self, value: bool) -> None:
         self._fill_drawing = value
+
+    def set_snap_to_point(self, value: bool) -> None:
+        self.snap_to_point = value
 
     def set_show_labels(self, value: bool) -> None:
         self._show_labels = value
@@ -660,6 +664,7 @@ class Canvas(QtWidgets.QWidget):
             return
         is_shift_pressed = bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier)
         pos = self._project_drawing_pos_into_image(pos=pos)
+        pos = self._snap_to_nearest_annotation_point(pos=pos)
         self._update_drawing_line(pos=pos, is_shift_pressed=is_shift_pressed)
         assert len(self._line.points) == len(self._line.point_labels)
         self.update()
@@ -709,6 +714,34 @@ class Canvas(QtWidgets.QWidget):
             scale=self.scale,
             epsilon=self._epsilon,
         )
+
+    def _snap_to_nearest_annotation_point(self, pos: QPointF) -> QPointF:
+        """Snap the cursor to the nearest vertex of any visible shape.
+
+        Applied while drawing when snap_to_point is enabled; the returned
+        position feeds both the preview line and the points committed on
+        click. Uses the same pick threshold as vertex selection.
+        """
+        if not self.snap_to_point:
+            return pos
+        candidates = [
+            QPointF(float(point[0]), float(point[1]))
+            for shape in self.shapes
+            if shape.visible
+            for point in shape.points
+        ]
+        if not candidates:
+            return pos
+        threshold = self._epsilon / self.scale  # image coordinates
+        nearest = min(
+            candidates,
+            key=lambda point: (point.x() - pos.x()) ** 2 + (point.y() - pos.y()) ** 2,
+        )
+        if (nearest.x() - pos.x()) ** 2 + (nearest.y() - pos.y()) ** 2 <= (
+            threshold * threshold
+        ):
+            return nearest
+        return pos
 
     def _refresh_hover_state(self, pos: QPointF) -> None:
         status_messages: list[str] = []
@@ -1005,7 +1038,11 @@ class Canvas(QtWidgets.QWidget):
         if self._current is not None:
             self._extend_current_shape(current=self._current, event=event)
             return
-        self._start_new_shape(pos=pos, event=event, is_shift_pressed=is_shift_pressed)
+        self._start_new_shape(
+            pos=self._snap_to_nearest_annotation_point(pos=pos),
+            event=event,
+            is_shift_pressed=is_shift_pressed,
+        )
 
     def _reject_incompatible_point_prompt(self) -> bool:
         if self.create_mode != "ai_points_to_shape":

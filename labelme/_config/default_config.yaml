@@ -5,6 +5,8 @@ with_image_data: false
 keep_prev: false
 keep_prev_scale: false
 keep_prev_brightness_contrast: false
+# Snap the drawing cursor to the nearest annotation point.
+snap_to_point: false
 # UI language as a locale code (e.g. ja_JP); null follows the system locale.
 language:
 # Color theme: 'system' follows the OS appearance, or force 'light' / 'dark'.
@@ -119,6 +121,7 @@ shortcuts:
   undo_last_point: Ctrl+Z
   edit_label: Ctrl+E
   toggle_keep_prev_mode: Ctrl+P
+  toggle_snap_to_point: S
   remove_selected_point: [Meta+H, Backspace]
   show_all_shapes:
   hide_all_shapes:
