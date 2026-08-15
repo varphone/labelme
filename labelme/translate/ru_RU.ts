@@ -466,6 +466,14 @@ Shapes</source>
         <translation>&amp;Редактировать метку</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Привязка к точке</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>При наведении привязывает курсор к ближайшей точке разметки.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Изменить метку выбранной фигуры</translation>
     </message>
@@ -843,6 +851,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Встраивает изображение в JSON-файл меток.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Привязывать курсор к точкам разметки</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>При рисовании курсор привязывается к ближайшей существующей точке разметки.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

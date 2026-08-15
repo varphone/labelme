@@ -261,6 +261,14 @@
         <translation>Διατήρηση προηγούμενης φωτεινότητας/αντίθεσης</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Προσκόλληση σε σημείο</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Προσκολλά τον δείκτη στο πλησιέστερο σημείο σημείωσης κατά τη σχεδίαση.</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Διαγραφή σχημάτων</translation>
     </message>
@@ -842,6 +850,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Ενσωματώνει την εικόνα στο αρχείο JSON της ετικέτας.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Προσκόλληση δείκτη σε σημεία σημείωσης</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Κατά τη σχεδίαση, ο δείκτης προσκολλάται στο πλησιέστερο υπάρχον σημείο σημείωσης.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

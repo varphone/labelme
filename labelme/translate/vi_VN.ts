@@ -481,6 +481,14 @@ Shapes</source>
         <translation>Chỉnh sửa Nhãn(&amp;E)</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Gắn vào điểm</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Gắn con trỏ vào điểm chú thích gần nhất khi vẽ.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Sửa đổi nhãn của hình dạng đã chọn</translation>
     </message>
@@ -840,6 +848,14 @@ Vui lòng chọn mô hình khác hoặc sử dụng chế độ AI-Box.</transla
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Nhúng hình ảnh vào tệp JSON nhãn.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Gắn con trỏ vào các điểm chú thích</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Khi vẽ, con trỏ gắn vào điểm chú thích hiện có gần nhất.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

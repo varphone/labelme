@@ -481,6 +481,14 @@ Shapes</source>
         <translation>레이블 편집(&amp;E)</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>점에 스냅</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>그리기 중에 커서를 가장 가까운 주석 점에 스냅합니다.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>선택한 도형의 레이블 수정</translation>
     </message>
@@ -840,6 +848,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>이미지를 레이블 JSON 파일에 포함합니다.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>커서를 주석 점에 스냅</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>그리는 동안 커서가 가장 가까운 기존 주석 점에 스냅됩니다.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

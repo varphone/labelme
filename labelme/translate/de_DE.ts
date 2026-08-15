@@ -507,6 +507,14 @@ Formen</translation>
         <translation>Vorherige Helligkeit/Kontrast beibehalten</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>An Punkt ausrichten</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Richtet den Cursor beim Zeichnen am nächsten Annotationspunkt aus.</translation>
+    </message>
+    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Strg+Mausrad zoomt die Leinwand</translation>
     </message>
@@ -846,6 +854,14 @@ Bitte wählen Sie ein anderes Modell oder verwenden Sie den AI-Box-Modus.</trans
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Bettet das Bild in die Label-JSON-Datei ein.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Cursor an Annotationspunkten ausrichten</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Beim Zeichnen rastet der Cursor am nächsten vorhandenen Annotationspunkt ein.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

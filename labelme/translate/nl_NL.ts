@@ -481,6 +481,14 @@ Shapes</source>
         <translation>Label &amp;bewerken</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Uitlijnen op punt</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Lijnt de cursor tijdens het tekenen uit op het dichtstbijzijnde annotatiepunt.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Label van geselecteerde vorm wijzigen</translation>
     </message>
@@ -840,6 +848,14 @@ Selecteer een ander model of gebruik de AI-Box-modus.</translation>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Sluit de afbeelding in het JSON-labelbestand in.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Cursor uitlijnen op annotatiepunten</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Tijdens het tekenen lijnt de cursor uit op het dichtstbijzijnde bestaande annotatiepunt.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

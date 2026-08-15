@@ -484,6 +484,14 @@ Shapes</source>
         <translation>Etiketi &amp;Düzenle</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Noktaya yapıştır</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Çizim sırasında imleci en yakın açıklama noktasına yapıştırır.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Seçili şeklin etiketini değiştir</translation>
     </message>
@@ -843,6 +851,14 @@ Lütfen farklı bir model seçin veya AI-Box modunu kullanın.</translation>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Görüntüyü etiket JSON dosyasına gömer.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>İmleci açıklama noktalarına yapıştır</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Çizim sırasında imleç en yakın mevcut açıklama noktasına yapışır.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

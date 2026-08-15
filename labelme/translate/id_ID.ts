@@ -456,6 +456,14 @@
         <translation>&amp;Edit Label</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Lekatkan ke titik</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Menempelkan kursor ke titik anotasi terdekat saat menggambar.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Ubah label bentuk yang dipilih</translation>
     </message>
@@ -892,6 +900,14 @@ Shapes</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Menyematkan gambar dalam file JSON label.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Lekatkan kursor ke titik anotasi</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Saat menggambar, kursor menempel ke titik anotasi terdekat yang ada.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

@@ -261,6 +261,14 @@
         <translation>Зберегти попередню яскравість/контраст</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Прив&apos;язка до точки</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Під час малювання прив&apos;язує курсор до найближчої точки анотації.</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Видалити фігури</translation>
     </message>
@@ -843,6 +851,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Вбудовує зображення у JSON-файл мітки.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Прив&apos;язувати курсор до точок анотації</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Під час малювання курсор прив&apos;язується до найближчої наявної точки анотації.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

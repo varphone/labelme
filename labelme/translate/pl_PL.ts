@@ -481,6 +481,14 @@ Shapes</source>
         <translation>&amp;Edytuj etykietę</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Przyciągaj do punktu</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Przyciąga kursor do najbliższego punktu adnotacji podczas rysowania.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Zmień etykietę zaznaczonego kształtu</translation>
     </message>
@@ -840,6 +848,14 @@ Wybierz inny model lub użyj trybu AI-Box.</translation>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Osadza obraz w pliku JSON etykiety.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Przyciągaj kursor do punktów adnotacji</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Podczas rysowania kursor przyciąga się do najbliższego istniejącego punktu adnotacji.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

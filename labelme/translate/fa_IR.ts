@@ -481,6 +481,14 @@ Shapes</source>
         <translation>ویرایش برچسب(&amp;E)</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>چسباندن به نقطه</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>هنگام ترسیم، مکان‌نما به نزدیک‌ترین نقطه برچسب‌گذاری می‌چسبد.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>تغییر برچسب شکل انتخاب شده</translation>
     </message>
@@ -840,6 +848,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>تصویر را در فایل JSON برچسب جاسازی می‌کند.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>چسباندن مکان‌نما به نقاط برچسب‌گذاری</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>هنگام ترسیم، مکان‌نما به نزدیک‌ترین نقطه برچسب‌گذاری موجود می‌چسبد.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>
