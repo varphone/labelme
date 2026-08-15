@@ -166,6 +166,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Радіус</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Радіус вибраного кола</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>&amp;Save
