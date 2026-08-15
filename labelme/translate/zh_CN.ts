@@ -481,6 +481,14 @@ Shapes</source>
         <translation>编辑标签(&amp;E)</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>吸附到标注点</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>绘制时,将光标吸附到最近的标注点。</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>修改所选形状的标签</translation>
     </message>
@@ -840,6 +848,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>将图像嵌入标签 JSON 文件中。</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>将光标吸附到标注点</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>绘制时,光标会吸附到最近的现有标注点。</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

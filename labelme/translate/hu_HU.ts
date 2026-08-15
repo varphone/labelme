@@ -507,6 +507,14 @@ Shapes</source>
         <translation>Előző fényerő/kontraszt megtartása</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Igazítás pontra</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Rajzolás közben a kurzort a legközelebbi megjegyzésponthoz igazítja.</translation>
+    </message>
+    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>A Ctrl+Görgő nagyítja a vásznat</translation>
     </message>
@@ -846,6 +854,14 @@ Kérjük, válasszon másik modellt vagy használja az AI-Box módot.</translati
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Beágyazza a képet a címke JSON-fájljába.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Kurzor igazítása megjegyzéspontokhoz</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Rajzolás közben a kurzor a legközelebbi meglévő megjegyzésponthoz igazodik.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

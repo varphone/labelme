@@ -481,6 +481,14 @@ Shapes</source>
         <translation>แก้ไขเลเบล (&amp;E)</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>สนับไปยังจุด</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>ดูดเคอร์เซอร์ไปยังจุดคำอธิบายประกอบที่ใกล้ที่สุดขณะวาด</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>แก้ไขเลเบลของรูปร่างที่เลือก</translation>
     </message>
@@ -840,6 +848,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>ฝังรูปภาพไว้ในไฟล์ JSON ของเลเบล</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>สนับเคอร์เซอร์ไปยังจุดคำอธิบายประกอบ</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>ขณะวาด เคอร์เซอร์จะสนับไปยังจุดคำอธิบายประกอบที่มีอยู่ใกล้ที่สุด</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

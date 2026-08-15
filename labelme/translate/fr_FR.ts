@@ -487,6 +487,14 @@ les formes</translation>
         <translation>&amp;Modifier l&apos;étiquette</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>Aligner sur un point</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Aligne le curseur sur le point d&apos;annotation le plus proche pendant le dessin.</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modifier l&apos;étiquette de la forme sélectionnée</translation>
     </message>
@@ -846,6 +854,14 @@ Veuillez sélectionner un autre modèle ou utiliser le mode AI-Box.</translation
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Intègre l’image dans le fichier JSON d’étiquettes.</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Aligner le curseur sur les points d&apos;annotation</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>Pendant le dessin, le curseur s&apos;aligne sur le point d&apos;annotation existant le plus proche.</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>

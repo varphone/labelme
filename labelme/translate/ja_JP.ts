@@ -495,6 +495,14 @@ Shapes</source>
         <translation>ラベルを編集(&amp;E)</translation>
     </message>
     <message>
+        <source>Snap to Point</source>
+        <translation>ポイントにスナップ</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>描画中、カーソルを最も近い注釈ポイントにスナップします。</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>選択した図形のラベルを変更</translation>
     </message>
@@ -854,6 +862,14 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>画像をラベル JSON ファイルに埋め込みます。</translation>
+    </message>
+    <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>カーソルを注釈ポイントにスナップ</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>描画中、カーソルは最も近い既存の注釈ポイントにスナップします。</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>
