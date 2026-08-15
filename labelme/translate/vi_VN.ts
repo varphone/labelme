@@ -166,6 +166,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Bán kính</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Bán kính của hình tròn đã chọn</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Flags</source>

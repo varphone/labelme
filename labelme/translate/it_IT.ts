@@ -166,6 +166,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Raggio</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Raggio del cerchio selezionato</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Flags</source>

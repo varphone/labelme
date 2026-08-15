@@ -166,6 +166,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Jari-jari</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Jari-jari lingkaran yang dipilih</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Flags</source>
