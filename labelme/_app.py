@@ -127,6 +127,7 @@ class _Actions(NamedTuple):
     delete_file: QtGui.QAction
     toggle_keep_prev_mode: QtGui.QAction
     toggle_keep_prev_brightness_contrast: QtGui.QAction
+    toggle_snap_to_point: QtGui.QAction
     delete: QtGui.QAction
     edit: QtGui.QAction
     duplicate: QtGui.QAction
@@ -250,6 +251,7 @@ class MainWindow(QtWidgets.QMainWindow):
             (
                 "keep_prev_brightness_contrast",
             ): self._actions.toggle_keep_prev_brightness_contrast,
+            ("snap_to_point",): self._actions.toggle_snap_to_point,
             ("canvas", "fill_drawing"): self._actions.fill_drawing,
         }
         self._connect_persistent_actions()
@@ -425,6 +427,15 @@ class MainWindow(QtWidgets.QMainWindow):
             text=self.tr("Keep Previous Brightness/Contrast"),
             checkable=True,
             checked=self._config["keep_prev_brightness_contrast"],
+        )
+        toggle_snap_to_point = action(
+            text=self.tr("Snap to Point"),
+            shortcut=shortcuts["toggle_snap_to_point"],
+            tip=self.tr(
+                "Snap the cursor to the nearest annotation point while drawing"
+            ),
+            checkable=True,
+            checked=self._config["snap_to_point"],
         )
         delete = action(
             self.tr("Delete Shapes"),
@@ -780,6 +791,7 @@ class MainWindow(QtWidgets.QMainWindow):
             remove_point,
             None,
             keep_prev_action,
+            toggle_snap_to_point,
         )
         return _Actions(
             about=about,
@@ -793,6 +805,7 @@ class MainWindow(QtWidgets.QMainWindow):
             delete_file=delete_file,
             toggle_keep_prev_mode=keep_prev_action,
             toggle_keep_prev_brightness_contrast=toggle_keep_prev_brightness_contrast,
+            toggle_snap_to_point=toggle_snap_to_point,
             delete=delete,
             edit=edit,
             duplicate=duplicate,
@@ -2774,6 +2787,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 action.setChecked(value)
             if key_path == ("canvas", "fill_drawing"):
                 self._canvas_widgets.canvas.set_fill_drawing(value)
+            elif key_path == ("snap_to_point",):
+                self._canvas_widgets.canvas.set_snap_to_point(value)
         elif key_path == ("shape", "show_labels"):
             canvas = self._canvas_widgets.canvas
             canvas.set_show_labels(self._config["shape"]["show_labels"])
