@@ -107,6 +107,22 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         kind="bool",
     ),
     Setting(
+        key_path=("snap_to_point",),
+        group="Drawing and canvas",
+        label=cast(
+            str, QT_TRANSLATE_NOOP("SettingsDialog", "Snap cursor to annotation points")
+        ),
+        kind="bool",
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "While drawing, the cursor snaps to the nearest existing "
+                "annotation point.",
+            ),
+        ),
+    ),
+    Setting(
         key_path=("keep_prev",),
         group="Continue between images",
         label=cast(
