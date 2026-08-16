@@ -481,6 +481,14 @@ Shapes</source>
         <translation>Chỉnh sửa Nhãn(&amp;E)</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Xóa &amp;hình ảnh và tệp chú thích</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Xóa hình ảnh hiện tại và tệp chú thích của nó</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Gắn vào điểm</translation>
     </message>
@@ -611,6 +619,10 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     <message>
         <source>Cancel</source>
         <translation>Hủy</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Xóa vĩnh viễn hình ảnh này và tệp chú thích của nó? Hành động này không thể hoàn tác.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

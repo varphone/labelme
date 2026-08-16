@@ -466,6 +466,14 @@ Shapes</source>
         <translation>&amp;Редактировать метку</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Удалить &amp;изображение и файл разметки</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Удалить текущее изображение и его файл разметки</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Привязка к точке</translation>
     </message>
@@ -596,6 +604,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Cancel</source>
         <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Безвозвратно удалить это изображение и его файл разметки? Это действие нельзя отменить.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

@@ -481,6 +481,14 @@ Shapes</source>
         <translation>ویرایش برچسب(&amp;E)</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>حذف &amp;تصویر و فایل برچسب</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>حذف تصویر فعلی و فایل برچسب آن</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>چسباندن به نقطه</translation>
     </message>
@@ -611,6 +619,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Cancel</source>
         <translation>لغو</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>این تصویر و فایل برچسب آن برای همیشه حذف شوند؟ این عمل قابل بازگشت نیست.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

@@ -456,6 +456,14 @@
         <translation>&amp;Edit Label</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Hapus &amp;gambar dan file label</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Hapus gambar saat ini dan file labelnya</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Lekatkan ke titik</translation>
     </message>
@@ -586,6 +594,10 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     <message>
         <source>Cancel</source>
         <translation>Batal</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Hapus permanen gambar ini dan file labelnya? Tindakan ini tidak dapat dibatalkan.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

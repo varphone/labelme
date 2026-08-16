@@ -487,6 +487,14 @@ forme</translation>
         <translation>&amp;Modifica etichetta</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Elimina &amp;immagine e file di annotazione</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Elimina l&apos;immagine corrente e il suo file di annotazione</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Aggancia al punto</translation>
     </message>
@@ -617,6 +625,10 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
     <message>
         <source>Cancel</source>
         <translation>Annulla</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Eliminare definitivamente questa immagine e il suo file di annotazione? Questa azione non può essere annullata.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

@@ -249,6 +249,14 @@
         <translation>Видалити поточний файл мітки</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Видалити &amp;зображення та файл розмітки</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Видалити поточне зображення та його файл розмітки</translation>
+    </message>
+    <message>
         <source>Keep Previous Annotation</source>
         <translation>Зберегти попередню анотацію</translation>
     </message>
@@ -630,6 +638,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Cancel</source>
         <translation>Скасувати</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Безповоротно видалити це зображення та його файл розмітки? Цю дію не можна скасувати.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

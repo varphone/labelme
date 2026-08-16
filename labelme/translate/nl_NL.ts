@@ -481,6 +481,14 @@ Shapes</source>
         <translation>Label &amp;bewerken</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>&amp;Afbeelding en labelbestand verwijderen</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>De huidige afbeelding en het labelbestand verwijderen</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Uitlijnen op punt</translation>
     </message>
@@ -611,6 +619,10 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     <message>
         <source>Cancel</source>
         <translation>Annuleren</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Deze afbeelding en het labelbestand definitief verwijderen? Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>
