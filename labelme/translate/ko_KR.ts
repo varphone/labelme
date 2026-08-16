@@ -481,6 +481,14 @@ Shapes</source>
         <translation>레이블 편집(&amp;E)</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>&amp;이미지 및 레이블 파일 삭제</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>현재 이미지와 레이블 파일 삭제</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>점에 스냅</translation>
     </message>
@@ -611,6 +619,10 @@ AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나
     <message>
         <source>Cancel</source>
         <translation>취소</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>이 이미지와 레이블 파일을 영구적으로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

@@ -481,6 +481,14 @@ Shapes</source>
         <translation>แก้ไขเลเบล (&amp;E)</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>ลบ&amp;ภาพและไฟล์คำอธิบายประกอบ</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>ลบภาพปัจจุบันและไฟล์คำอธิบายประกอบ</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>สนับไปยังจุด</translation>
     </message>
@@ -611,6 +619,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Cancel</source>
         <translation>ยกเลิก</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>ลบภาพและไฟล์คำอธิบายประกอบนี้อย่างถาวร? การดำเนินการนี้ไม่สามารถเลิกทำได้</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

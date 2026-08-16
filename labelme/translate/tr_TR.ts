@@ -484,6 +484,14 @@ Shapes</source>
         <translation>Etiketi &amp;Düzenle</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>&amp;Görseli ve etiket dosyasını sil</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Geçerli görseli ve etiket dosyasını sil</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Noktaya yapıştır</translation>
     </message>
@@ -614,6 +622,10 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     <message>
         <source>Cancel</source>
         <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Bu görsel ve etiket dosyası kalıcı olarak silinsin mi? Bu işlem geri alınamaz.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

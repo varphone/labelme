@@ -481,6 +481,14 @@ Shapes</source>
         <translation>&amp;Editar Rótulo</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Excluir &amp;imagem e arquivo de rótulos</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Excluir a imagem atual e seu arquivo de rótulos</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Ajustar ao ponto</translation>
     </message>
@@ -611,6 +619,10 @@ Mude o modelo de AI Text-to-Annotation para &apos;SAM3 (smart)&apos; ou defina o
     <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Excluir permanentemente esta imagem e seu arquivo de rótulos? Esta ação não pode ser desfeita.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

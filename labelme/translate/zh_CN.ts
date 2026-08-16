@@ -481,6 +481,14 @@ Shapes</source>
         <translation>编辑标签(&amp;E)</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>删除&amp;图像和标注文件</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>删除当前图像及其标注文件</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>吸附到标注点</translation>
     </message>
@@ -611,6 +619,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Cancel</source>
         <translation>取消</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>永久删除此图像及其标注文件?此操作无法撤消。</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

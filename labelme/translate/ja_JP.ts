@@ -495,6 +495,14 @@ Shapes</source>
         <translation>ラベルを編集(&amp;E)</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>&amp;画像とラベルファイルを削除</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>現在の画像とそのラベルファイルを削除</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>ポイントにスナップ</translation>
     </message>
@@ -625,6 +633,10 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     <message>
         <source>Cancel</source>
         <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>この画像とラベルファイルを完全に削除しますか?この操作は元に戻せません。</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

@@ -507,6 +507,14 @@ Shapes</source>
         <translation>Előző fényerő/kontraszt megtartása</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>&amp;Kép és címkefájl törlése</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>A jelenlegi kép és címkefájljának törlése</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>Igazítás pontra</translation>
     </message>
@@ -625,6 +633,10 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     <message>
         <source>Cancel</source>
         <translation>Mégse</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Véglegesen törli ezt a képet és címkefájlját? Ez a művelet nem vonható vissza.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

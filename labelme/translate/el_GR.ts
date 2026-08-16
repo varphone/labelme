@@ -249,6 +249,14 @@
         <translation>Διαγραφή τρέχοντος αρχείου ετικέτας</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Διαγραφή &amp;εικόνας και αρχείου σημειώσεων</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Διαγραφή της τρέχουσας εικόνας και του αρχείου σημειώσεών της</translation>
+    </message>
+    <message>
         <source>Keep Previous Annotation</source>
         <translation>Διατήρηση προηγούμενου σχολιασμού</translation>
     </message>
@@ -629,6 +637,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Cancel</source>
         <translation>Άκυρο</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Μόνιμη διαγραφή αυτής της εικόνας και του αρχείου σημειώσεών της; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

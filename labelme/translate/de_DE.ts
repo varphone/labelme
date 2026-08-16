@@ -507,6 +507,14 @@ Formen</translation>
         <translation>Vorherige Helligkeit/Kontrast beibehalten</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>&amp;Bild und Labeldatei löschen</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Aktuelles Bild und seine Labeldatei löschen</translation>
+    </message>
+    <message>
         <source>Snap to Point</source>
         <translation>An Punkt ausrichten</translation>
     </message>
@@ -625,6 +633,10 @@ Wechseln Sie das AI Text-to-Annotation-Modell zu &apos;SAM3 (smart)&apos; oder s
     <message>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Dieses Bild und seine Labeldatei dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>
