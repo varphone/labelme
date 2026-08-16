@@ -116,6 +116,7 @@ class _Actions(NamedTuple):
     open: QtGui.QAction
     close: QtGui.QAction
     delete_file: QtGui.QAction
+    delete_image_file: QtGui.QAction
     toggle_keep_prev_mode: QtGui.QAction
     toggle_keep_prev_brightness_contrast: QtGui.QAction
     toggle_snap_to_point: QtGui.QAction
@@ -397,6 +398,14 @@ class MainWindow(QtWidgets.QMainWindow):
             shortcut=shortcuts["delete_file"],
             icon="phosphor/file-x.svg",
             tip=self.tr("Delete current label file"),
+            enabled=False,
+        )
+        delete_image_file = action(
+            text=self.tr("Delete &Image and Label File"),
+            slot=self.delete_image_file,
+            shortcut=shortcuts["delete_image_file"],
+            icon="phosphor/file-x.svg",
+            tip=self.tr("Delete current image and its label file"),
             enabled=False,
         )
         keep_prev_action = action(
@@ -786,6 +795,7 @@ class MainWindow(QtWidgets.QMainWindow):
             open=open_,
             close=close,
             delete_file=delete_file,
+            delete_image_file=delete_image_file,
             toggle_keep_prev_mode=keep_prev_action,
             toggle_keep_prev_brightness_contrast=toggle_keep_prev_brightness_contrast,
             toggle_snap_to_point=toggle_snap_to_point,
@@ -892,6 +902,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.save_with_image_data,
                 self._actions.close,
                 self._actions.delete_file,
+                self._actions.delete_image_file,
                 None,
                 open_config,
                 None,
@@ -1350,6 +1361,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._actions.delete_file.setEnabled(True)
         else:
             self._actions.delete_file.setEnabled(False)
+        self._actions.delete_image_file.setEnabled(self._image_path is not None)
 
     def update_action_states(self, value: bool = True) -> None:
         for action in (*self._actions.zoom, *self._actions.on_load_active):
@@ -2532,6 +2544,42 @@ class MainWindow(QtWidgets.QMainWindow):
         self._canvas_widgets.canvas.load_shapes(shapes=[], replace=True)
         self._actions.undo.setEnabled(self._canvas_widgets.canvas.can_restore_shape)
         self.mark_clean()
+
+    def delete_image_file(self) -> None:
+        if self._image_path is None:
+            return
+        msg = self.tr(
+            "Permanently delete this image and its label file? "
+            "This action cannot be undone."
+        )
+        if not self._confirm_deletion(message=msg):
+            return
+
+        image_path = Path(self._image_path)
+        annotation_path = Path(self.current_label_file_path())
+        # The files are going away, so there is nothing left to save; clearing
+        # the dirty flag keeps the subsequent navigation from prompting.
+        self._is_changed = False
+
+        for path in (annotation_path, image_path):
+            if path.exists():
+                path.unlink()
+                logger.info("File is removed: {}", path)
+
+        # Remove the entry from the file list and load the next file, or
+        # empty the workspace when the list is exhausted.
+        row = self._docks.file_list.currentRow()
+        self._docks.file_list.takeItem(row)
+        if self._docks.file_list.count() > 0:
+            next_row = min(max(row, 0), self._docks.file_list.count() - 1)
+            self._docks.file_list.setCurrentRow(next_row)
+        else:
+            self.reset_state()
+            self.mark_clean()
+            self.update_action_states(False)
+            self._canvas_widgets.canvas.setEnabled(False)
+            self._actions.save_as.setEnabled(False)
+            self._docks.file_list.setFocus()
 
     @property
     def _is_settings_editable(self) -> bool:

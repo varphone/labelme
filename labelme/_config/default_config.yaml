@@ -98,6 +98,7 @@ shortcuts:
   save_as: Ctrl+Shift+S
   save_to:
   delete_file: Ctrl+Delete
+  delete_image_file: Shift+Delete
   open_next: [D, Ctrl+Shift+D]
   open_prev: [A, Ctrl+Shift+A]
   zoom_in: [Ctrl++, Ctrl+=]
