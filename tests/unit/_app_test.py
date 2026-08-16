@@ -445,3 +445,37 @@ def test_resolve_label_path(
         )
         == expected
     )
+
+
+def test_scan_image_files_sorts_by_filename(tmp_path: Path) -> None:
+    for name in (
+        "2bd6a3c1.jpg",  # hex digest
+        "02be5f9a.jpg",  # hex digest: leading zero must come first
+        "10.png",
+        "2.png",
+        "A.png",
+        "a.png",
+    ):
+        (tmp_path / name).write_bytes(b"")
+    sub = tmp_path / "sub"
+    sub.mkdir()
+    (sub / "a.png").write_bytes(b"")
+
+    images = _app._scan_image_files(root_dir=str(tmp_path))
+
+    # Plain case-insensitive lexicographic order by file name; the full
+    # path breaks ties. Numeric-looking names sort as plain text (a hex
+    # digest keeps its code-point order instead of a numeric one).
+    assert [Path(p).name for p in images] == [
+        "02be5f9a.jpg",
+        "10.png",
+        "2.png",
+        "2bd6a3c1.jpg",
+        "A.png",
+        "a.png",
+        "a.png",
+    ]
+    # Case and path tiebreaks are deterministic.
+    assert images[4] == str(tmp_path / "A.png")
+    assert images[5] == str(tmp_path / "a.png")
+    assert images[6] == str(sub / "a.png")

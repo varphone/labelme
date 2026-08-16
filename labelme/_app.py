@@ -18,7 +18,6 @@ from typing import NamedTuple
 from typing import TypeAlias
 from typing import cast
 
-import natsort
 import numpy as np
 import osam
 from loguru import logger
@@ -2906,11 +2905,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def import_dropped_image_files(self, image_files: list[str]) -> None:
         extensions = _list_supported_image_extensions()
         already_loaded = set(self.image_list)
-        new_files = [
-            path
-            for path in image_files
-            if path not in already_loaded and path.lower().endswith(extensions)
-        ]
+        new_files = sorted(
+            (
+                path
+                for path in image_files
+                if path not in already_loaded and path.lower().endswith(extensions)
+            ),
+            key=_image_file_sort_key,
+        )
 
         self._image_path = None
         for path in new_files:
@@ -3151,11 +3153,15 @@ def _scan_image_files(root_dir: str) -> list[str]:
                 images.append(relative_path)
 
     logger.debug("found {:d} images in {!r}", len(images), root_dir)
-    try:
-        return natsort.os_sorted(images)
-    except OSError:
-        logger.warning(
-            "natsort.os_sorted failed (known macOS strxfrm bug), "
-            "falling back to locale-unaware natural sort"
-        )
-        return natsort.natsorted(images)
+    return sorted(images, key=_image_file_sort_key)
+
+
+def _image_file_sort_key(image_path: str) -> tuple[str, str, str]:
+    """Sort key for the file list: file name first, plain lexicographic.
+
+    Case-insensitive so hex digests (e.g. ``02be..`` vs ``2bd6..``) keep
+    their natural code-point order instead of being reordered by a
+    numeric-aware or locale-aware collation.
+    """
+    basename = os.path.basename(image_path)
+    return (basename.lower(), basename, image_path)
