@@ -24,7 +24,6 @@ dependencies = [
   "imgviz>=2.0.0",
   "loguru>=0.7",
   "matplotlib>=3.7",
-  "natsort>=7.1.0",
   "numpy>=1.24",
   "onnxruntime>=1.23.2",
   "osam>=0.4.0",
