@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 
 import pytest
@@ -156,3 +157,68 @@ def test_drag_enter_rejects_non_image_and_keeps_state(
     assert list(raw_win.image_list) == original_image_list
 
     close_or_pause(qtbot=qtbot, widget=raw_win, pause=pause)
+
+
+@pytest.mark.gui
+def test_drop_image_files_sorts_by_filename(
+    qtbot: QtBot,
+    main_win: MainWinFactory,
+    data_path: Path,
+    pause: bool,
+) -> None:
+    win = main_win()
+    win.show()
+    qtbot.waitUntil(win.isVisible)
+
+    # Dropped in reverse order; the list must come out sorted by filename.
+    images = [
+        data_path / "raw/2011_000025.jpg",
+        data_path / "raw/2011_000003.jpg",
+        data_path / "raw/2011_000006.jpg",
+    ]
+    mime = _make_drop_mime(paths=images)
+    assert _drag_enter_accepted(win=win, mime=mime)
+    _send_drop(win=win, mime=mime)
+
+    expected = [
+        str(data_path / "raw/2011_000003.jpg"),
+        str(data_path / "raw/2011_000006.jpg"),
+        str(data_path / "raw/2011_000025.jpg"),
+    ]
+
+    def check_sorted() -> None:
+        assert win.image_list == expected
+
+    qtbot.waitUntil(check_sorted)
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_drop_image_files_sorts_hex_digest_names(
+    qtbot: QtBot,
+    main_win: MainWinFactory,
+    data_path: Path,
+    tmp_path: Path,
+    pause: bool,
+) -> None:
+    win = main_win()
+    win.show()
+    qtbot.waitUntil(win.isVisible)
+
+    # Hex digest names keep code-point order: 02be.. must come before 2bd6..
+    source = data_path / "raw/2011_000003.jpg"
+    files = [tmp_path / f"{digest}.jpg" for digest in ("2bd6a3c1", "02be5f9a")]
+    for file in files:
+        shutil.copy(source, file)
+
+    mime = _make_drop_mime(paths=list(reversed(files)))
+    assert _drag_enter_accepted(win=win, mime=mime)
+    _send_drop(win=win, mime=mime)
+
+    expected = [str(files[1]), str(files[0])]
+
+    def check_sorted() -> None:
+        assert win.image_list == expected
+
+    qtbot.waitUntil(check_sorted)
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
