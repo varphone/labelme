@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 
 import pytest
@@ -196,5 +197,104 @@ def test_undo_after_delete_file_does_not_restore_shapes(
     win.undo_shape_edit()
     assert canvas.shapes == []
     assert len(win._docks.label_list) == 0
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_delete_image_and_label_file(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+    pause: bool,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    win = main_win(file_or_dir=str(data_path / "annotated"))
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+
+    image_file = data_path / "annotated/2011_000003.jpg"
+    label_file = data_path / "annotated/2011_000003.json"
+    next_image = data_path / "annotated/2011_000006.jpg"
+    assert image_file.exists()
+    assert label_file.exists()
+    assert win._image_path == str(image_file)
+    assert len(win.image_list) == 3
+    assert win._actions.delete_image_file.shortcut().toString() == "Shift+Del"
+    assert win._actions.delete_image_file.isEnabled()
+
+    monkeypatch.setattr(win, "_confirm_deletion", lambda *args, **kwargs: True)
+    win.delete_image_file()
+    qtbot.wait(50)
+
+    # Both files are gone, the list entry is removed, and the next image loads.
+    assert not image_file.exists()
+    assert not label_file.exists()
+    assert len(win.image_list) == 2
+    assert str(image_file) not in win.image_list
+    assert win._image_path == str(next_image)
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_delete_image_and_label_file_cancel_keeps_files(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+    pause: bool,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    win = main_win(file_or_dir=str(data_path / "annotated"))
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+
+    image_file = data_path / "annotated/2011_000003.jpg"
+    label_file = data_path / "annotated/2011_000003.json"
+
+    monkeypatch.setattr(win, "_confirm_deletion", lambda *args, **kwargs: False)
+    win.delete_image_file()
+    qtbot.wait(50)
+
+    assert image_file.exists()
+    assert label_file.exists()
+    assert len(win.image_list) == 3
+    assert win._image_path == str(image_file)
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_delete_image_and_label_file_last_entry_empties_workspace(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+    tmp_path: Path,
+    pause: bool,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # A directory holding a single image, so deletion empties the workspace.
+    single_dir = tmp_path / "single"
+    single_dir.mkdir()
+    shutil.copy(data_path / "annotated/2011_000003.jpg", single_dir / "2011_000003.jpg")
+    shutil.copy(
+        data_path / "annotated/2011_000003.json", single_dir / "2011_000003.json"
+    )
+
+    win = main_win(file_or_dir=str(single_dir))
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+    assert len(win.image_list) == 1
+
+    image_file = single_dir / "2011_000003.jpg"
+    label_file = single_dir / "2011_000003.json"
+
+    monkeypatch.setattr(win, "_confirm_deletion", lambda *args, **kwargs: True)
+    win.delete_image_file()
+    qtbot.wait(50)
+
+    assert not image_file.exists()
+    assert not label_file.exists()
+    assert win.image_list == []
+    assert win._image_path is None
+    assert not win._actions.delete_image_file.isEnabled()
+    assert not win._canvas_widgets.canvas.isEnabled()
 
     close_or_pause(qtbot=qtbot, widget=win, pause=pause)
