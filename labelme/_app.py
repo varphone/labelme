@@ -86,6 +86,7 @@ WINDOW_LAYOUT_KEY: Final[str] = "window/state"
 
 class _StatusBarWidgets(NamedTuple):
     message: QtWidgets.QLabel
+    file_count: QtWidgets.QLabel
     stats: StatusStats
 
 
@@ -130,6 +131,8 @@ class _Actions(NamedTuple):
     toggle_snap_to_point: QtGui.QAction
     copy_annotations_to_next: QtGui.QAction
     merge_linestrips: QtGui.QAction
+    delete_selected_files: QtGui.QAction
+    export_selected_files: QtGui.QAction
     delete: QtGui.QAction
     edit: QtGui.QAction
     duplicate: QtGui.QAction
@@ -465,6 +468,16 @@ class MainWindow(QtWidgets.QMainWindow):
                 "into a single linestrip"
             ),
             enabled=False,
+        )
+        delete_selected_files = action(
+            text=self.tr("Delete Selected Files"),
+            slot=self.delete_selected_files,
+            tip=self.tr("Permanently delete the selected files and their label files"),
+        )
+        export_selected_files = action(
+            text=self.tr("Export Selected Files"),
+            slot=self.export_selected_files,
+            tip=self.tr("Copy the selected files and their label files to a directory"),
         )
         delete = action(
             self.tr("Delete Shapes"),
@@ -854,6 +867,8 @@ class MainWindow(QtWidgets.QMainWindow):
             toggle_snap_to_point=toggle_snap_to_point,
             copy_annotations_to_next=copy_annotations_to_next,
             merge_linestrips=merge_linestrips,
+            delete_selected_files=delete_selected_files,
+            export_selected_files=export_selected_files,
             delete=delete,
             edit=edit,
             duplicate=duplicate,
@@ -1144,11 +1159,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _setup_status_bar(self) -> _StatusBarWidgets:
         message = QtWidgets.QLabel(self.tr("%s started.") % __appname__)
+        file_count = QtWidgets.QLabel("")
         stats = StatusStats()
         self.statusBar().addWidget(message, 1)
+        self.statusBar().addWidget(file_count, 0)
         self.statusBar().addWidget(stats, 0)
         self.statusBar().show()
-        return _StatusBarWidgets(message=message, stats=stats)
+        return _StatusBarWidgets(message=message, file_count=file_count, stats=stats)
 
     def _setup_canvas(self) -> _CanvasWidgets:
         zoom_widget = ZoomWidget()
@@ -1269,7 +1286,13 @@ class MainWindow(QtWidgets.QMainWindow):
         file_search.setPlaceholderText(self.tr("Search Filename"))
         file_search.textChanged.connect(self._on_file_search_changed)
         file_list = QtWidgets.QListWidget()
+        file_list.setSelectionMode(
+            QtWidgets.QAbstractItemView.SelectionMode.ExtendedSelection
+        )
         file_list.currentItemChanged.connect(self._load_selected_image)
+        file_list.itemSelectionChanged.connect(self._file_list_selection_count_changed)
+        file_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        file_list.customContextMenuRequested.connect(self._show_file_list_context_menu)
         file_list_layout = QtWidgets.QVBoxLayout()
         file_list_layout.setContentsMargins(0, 0, 0, 0)
         file_list_layout.setSpacing(0)
@@ -1784,6 +1807,15 @@ class MainWindow(QtWidgets.QMainWindow):
             image_or_label_path=current_item.text()
         ):
             self._restore_file_list_state(item=previous_item)
+
+    def _file_list_selection_count_changed(self) -> None:
+        count = len(self._docks.file_list.selectedItems())
+        if count > 1:
+            self._status_bar.file_count.setText(
+                self.tr("{count} files selected").format(count=count)
+            )
+        else:
+            self._status_bar.file_count.setText("")
 
     # React to canvas signals.
     def _on_shape_selection_changed(self, selected_shapes: list[Shape]) -> None:
@@ -2762,6 +2794,100 @@ class MainWindow(QtWidgets.QMainWindow):
             self._canvas_widgets.canvas.setEnabled(False)
             self._actions.save_as.setEnabled(False)
             self._docks.file_list.setFocus()
+
+    def _show_file_list_context_menu(self, point: QtCore.QPoint) -> None:
+        selected = self._docks.file_list.selectedItems()
+        has_selection = len(selected) > 0
+        self._actions.delete_selected_files.setEnabled(has_selection)
+        self._actions.export_selected_files.setEnabled(has_selection)
+        menu = QtWidgets.QMenu(self)
+        menu.addAction(self._actions.delete_selected_files)
+        menu.addAction(self._actions.export_selected_files)
+        menu.exec(self._docks.file_list.mapToGlobal(point))  # ty: ignore[invalid-argument-type]
+
+    def delete_selected_files(self) -> None:
+        items = self._docks.file_list.selectedItems()
+        if not items:
+            return
+        count = len(items)
+        msg = self.tr(
+            "Permanently delete {count} files and their label files? "
+            "This action cannot be undone."
+        ).format(count=count)
+        if not self._confirm_deletion(message=msg):
+            return
+
+        current_item = self._docks.file_list.currentItem()
+        # Clear dirty state so the file-list removal cannot trigger an
+        # unsaved-changes prompt for each deleted entry.
+        self._is_changed = False
+        # Collect image paths and remove items from the list in reverse
+        # order so earlier indices stay valid.
+        for item in sorted(
+            items, key=lambda i: self._docks.file_list.row(i), reverse=True
+        ):
+            image_path = Path(item.text())
+            label_path = Path(
+                _resolve_label_path(
+                    image_or_label_path=str(image_path),
+                    output_dir=self._output_dir,
+                )
+            )
+            for path in (label_path, image_path):
+                if path.exists():
+                    path.unlink()
+                    logger.info("File is removed: {}", path)
+            self._docks.file_list.takeItem(self._docks.file_list.row(item))
+
+        if self._docks.file_list.count() > 0:
+            # Navigate to the nearest remaining file.
+            if current_item is not None and current_item in [
+                self._docks.file_list.item(i)
+                for i in range(self._docks.file_list.count())
+            ]:
+                self._docks.file_list.setCurrentItem(current_item)
+            else:
+                self._docks.file_list.setCurrentRow(0)
+        else:
+            self.reset_state()
+            self.mark_clean()
+            self.update_action_states(False)
+            self._canvas_widgets.canvas.setEnabled(False)
+            self._actions.save_as.setEnabled(False)
+            self._docks.file_list.setFocus()
+
+    def export_selected_files(self) -> None:
+        items = self._docks.file_list.selectedItems()
+        if not items:
+            return
+        target_dir = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            self.tr("Choose Export Directory"),
+            str(self._prev_opened_dir or Path.home()),
+        )
+        if not target_dir:
+            return
+        target = Path(target_dir)
+        exported = 0
+        for item in items:
+            image_path = Path(item.text())
+            label_path = Path(
+                _resolve_label_path(
+                    image_or_label_path=str(image_path),
+                    output_dir=self._output_dir,
+                )
+            )
+            for src in (image_path, label_path):
+                if src.exists():
+                    dest = target / src.name
+                    QtCore.QFile.copy(str(src), str(dest))
+                    exported += 1
+        self.show_status_message(
+            self.tr("Exported {count} files to {dir}").format(
+                count=len(items), dir=target_dir
+            ),
+            5000,
+        )
 
     @property
     def _is_settings_editable(self) -> bool:

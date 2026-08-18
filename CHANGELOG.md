@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added multi-select support to the file list: `Ctrl+click` and `Shift+click` now select multiple files, the status bar shows the count of selected files, and a right-click context menu provides "Delete Selected Files" and "Export Selected Files" actions — delete removes the chosen images and their label files after a confirmation prompt, while export copies them to a user-chosen directory ([#2489](https://github.com/wkentaro/labelme/pull/2489))
 - Added a "Merge into Linestrip" action (annotation list right-click menu, Edit menu, shortcut `M`) that combines the selected line and linestrip annotations into a single linestrip in list order, preserving the first shape's label, flags, and group; the operation is undoable ([#2488](https://github.com/wkentaro/labelme/pull/2488))
 - Added a "Copy Annotations to Next Unannotated File" action (Edit menu, shortcut `Shift+N`) that saves the current file's annotations as a label file for the next file in the list that has no label file yet, then navigates to it — useful for propagating annotations across a sequence of similar images ([#2487](https://github.com/wkentaro/labelme/pull/2487))
 - Added a "Split Linestrip at Vertex" action (Edit menu, also in the right-click context menu, shortcut `B`) that splits the selected open polyline into two new linestrips at the hovered vertex, preserving labels, flags, and group membership; the operation is undoable ([#2484](https://github.com/wkentaro/labelme/pull/2484))
