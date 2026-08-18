@@ -523,6 +523,14 @@ Formen</translation>
         <translation>Richtet den Cursor beim Zeichnen am nächsten Annotationspunkt aus.</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Linestrip am Knoten teilen</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Die ausgewählte Polylinie am schwebenden Knoten in zwei teilen</translation>
+    </message>
+    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Strg+Mausrad zoomt die Leinwand</translation>
     </message>

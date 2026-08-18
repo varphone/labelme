@@ -486,6 +486,14 @@ Shapes</source>
         <translation>Изменить метку выбранной фигуры</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Разделить линию в вершине</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Разделить выбранную полилинию на две в вершине под курсором</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Заполнить нарисованный полигон</translation>
     </message>

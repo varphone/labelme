@@ -501,6 +501,14 @@ Shapes</source>
         <translation>선택한 도형의 레이블 수정</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>꼭짓점에서 선 분할</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>커서 아래의 꼭짓점에서 선택한 다각선을 두 개로 분할</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>그리기 다각형 채우기</translation>
     </message>

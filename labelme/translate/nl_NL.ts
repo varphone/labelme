@@ -501,6 +501,14 @@ Shapes</source>
         <translation>Label van geselecteerde vorm wijzigen</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Splits lijn bij punt</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Splits de geselecteerde polylijn op het punt onder de cursor in tweeën</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Polygoon Vullen bij Tekenen</translation>
     </message>

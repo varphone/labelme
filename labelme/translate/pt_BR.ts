@@ -501,6 +501,14 @@ Shapes</source>
         <translation>Modificar o rótulo da forma selecionada</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Dividir linha no vértice</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Dividir a polilinha selecionada em dois no vértice sob o cursor</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Preencher Polígono ao Desenhar</translation>
     </message>

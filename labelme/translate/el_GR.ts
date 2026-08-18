@@ -342,6 +342,14 @@
         <translation>Αφαίρεση επιλεγμένου σημείου από πολύγωνο</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Διαχωρισμός γραμμής σε κόμβο</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Διαχωρισμός της επιλεγμένης πολυγραμμής σε δύο στον κόμβο που βρίσκεται κάτω από τον κέρσορα</translation>
+    </message>
+    <message>
         <source>Start drawing polygons</source>
         <translation>Ξεκινήστε να σχεδιάζετε πολύγωνα</translation>
     </message>

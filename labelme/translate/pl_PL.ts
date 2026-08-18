@@ -501,6 +501,14 @@ Shapes</source>
         <translation>Zmień etykietę zaznaczonego kształtu</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Podziel linię w wierzchołku</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Podziel wybraną polilinię na dwie w wierzchołku pod kursorem</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Wypełnij rysowany wielokąt</translation>
     </message>

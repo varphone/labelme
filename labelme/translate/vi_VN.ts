@@ -501,6 +501,14 @@ Shapes</source>
         <translation>Sửa đổi nhãn của hình dạng đã chọn</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Chia đường tại đỉnh</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Chia đường đa tuyến đã chọn thành hai tại đỉnh dưới con trỏ</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Tô Đa giác Vẽ</translation>
     </message>

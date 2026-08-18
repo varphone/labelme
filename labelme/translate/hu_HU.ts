@@ -523,6 +523,14 @@ Shapes</source>
         <translation>Rajzolás közben a kurzort a legközelebbi megjegyzésponthoz igazítja.</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Vonalvég megszakítása csúcspontnál</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>A kiválasztott vonallánc felosztása kettőre a kurzor alatti csúcspontnál</translation>
+    </message>
+    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>A Ctrl+Görgő nagyítja a vásznat</translation>
     </message>

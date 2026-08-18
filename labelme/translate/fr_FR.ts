@@ -507,6 +507,14 @@ les formes</translation>
         <translation>Modifier l&apos;étiquette de la forme sélectionnée</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Diviser la ligne au sommet</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Diviser la polyligne sélectionnée en deux au sommet sous le curseur</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Remplir le polygone en cours de dessin</translation>
     </message>

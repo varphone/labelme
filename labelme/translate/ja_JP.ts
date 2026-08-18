@@ -515,6 +515,14 @@ Shapes</source>
         <translation>選択した図形のラベルを変更</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>頂点で折線を分割</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>カーソルの下の頂点で選択した折線を2つに分割します</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>描画中のポリゴンを塗りつぶす</translation>
     </message>
