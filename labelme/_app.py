@@ -503,6 +503,7 @@ class MainWindow(QtWidgets.QMainWindow):
         add_point_to_edge = action(
             text=self.tr("Add Point to Edge"),
             slot=self._canvas_widgets.canvas.add_point_to_edge,
+            shortcut=shortcuts["add_point_to_edge"],
             tip=self.tr("Insert a new point at the hovered polygon edge"),
             enabled=False,
         )
@@ -793,6 +794,7 @@ class MainWindow(QtWidgets.QMainWindow):
             undo,
             undo_last_point,
             None,
+            add_point_to_edge,
             remove_point,
             split_linestrip,
             None,

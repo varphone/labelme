@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added a "Split Linestrip at Vertex" action (Edit menu, also in the right-click context menu) that splits the selected open polyline into two new linestrips at the hovered vertex, preserving labels, flags, and group membership; the operation is undoable ([#2484](https://github.com/wkentaro/labelme/pull/2484))
+- Added shortcut `V` for the "Add Point to Edge" action, so a new vertex can be inserted at the hovered edge without reaching for the right-click context menu ([#2485](https://github.com/wkentaro/labelme/pull/2485))
 - Added a "Delete Image and Label File" action (File menu, shortcut `Shift+Delete`) that permanently removes the current image together with its annotation file after a confirmation prompt, then loads the next file in the list ([#2483](https://github.com/wkentaro/labelme/pull/2483))
 - Added a Snap to Point toggle to the Edit menu (shortcut `S`) that snaps the drawing cursor to the nearest existing annotation point within the pick threshold, so new shapes can share vertices exactly with existing ones; the setting is persisted in the config file and exposed in the Settings dialog ([#2481](https://github.com/wkentaro/labelme/pull/2481))
 - Added a Radius input to the toolbar that activates when a circle annotation is selected, so the radius can be typed exactly (in image pixels) instead of dragging the circumference point; the circle keeps its center and the edit is undoable ([#2480](https://github.com/wkentaro/labelme/pull/2480))
