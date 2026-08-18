@@ -511,6 +511,14 @@ les formes</translation>
         <translation>Enregistrer les annotations actuelles dans le prochain fichier sans fichier d&apos;annotation</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Fusionner en polyligne</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Combiner les annotations de ligne et de polyligne sélectionnées en une seule polyligne</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modifier l&apos;étiquette de la forme sélectionnée</translation>
     </message>

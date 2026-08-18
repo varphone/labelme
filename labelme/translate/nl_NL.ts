@@ -505,6 +505,14 @@ Shapes</source>
         <translation>Sla de huidige annotaties op naar het volgende bestand zonder labelbestand</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Samenvoegen tot polylijn</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>De geselecteerde lijn- en polylijnannotaties samenvoegen tot één polylijn</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Label van geselecteerde vorm wijzigen</translation>
     </message>

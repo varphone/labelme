@@ -285,6 +285,14 @@
         <translation>Зберегти поточні анотації до наступного файлу без файлу розмітки</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Об&apos;єднати в полілінію</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Об&apos;єднати обрані анотації лінії та полілінії в одну полілінію</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Видалити фігури</translation>
     </message>

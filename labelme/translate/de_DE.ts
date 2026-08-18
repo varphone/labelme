@@ -531,6 +531,14 @@ Formen</translation>
         <translation>Aktuelle Annotationen in die nächste Datei ohne Beschriftungsdatei speichern</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Zu Polylinie zusammenführen</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Die ausgewählten Linien- und Polylinien-Annotationen zu einer einzelnen Polylinie zusammenführen</translation>
+    </message>
+    <message>
         <source>Split Linestrip at Vertex</source>
         <translation>Linestrip am Knoten teilen</translation>
     </message>

@@ -505,6 +505,14 @@ Shapes</source>
         <translation>Salvar as anotações atuais no próximo arquivo sem arquivo de rótulos</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Mesclar em polilinha</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Combinar as anotações de linha e polilinha selecionadas em uma única polilinha</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modificar o rótulo da forma selecionada</translation>
     </message>

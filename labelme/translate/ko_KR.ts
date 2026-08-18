@@ -505,6 +505,14 @@ Shapes</source>
         <translation>현재 주석을 레이블 파일이 없는 다음 파일에 저장</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>폴리라인으로 병합</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>선택한 선 및 폴리라인 주석을 하나의 폴리라인으로 결합</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>선택한 도형의 레이블 수정</translation>
     </message>

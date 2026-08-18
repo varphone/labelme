@@ -480,6 +480,14 @@
         <translation>Simpan anotasi saat ini ke file berikutnya yang tidak memiliki file label</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Gabungkan ke poligaris</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Gabungkan anotasi garis dan poligaris yang dipilih menjadi satu poligaris</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Ubah label bentuk yang dipilih</translation>
     </message>

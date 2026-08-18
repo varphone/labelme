@@ -505,6 +505,14 @@ Shapes</source>
         <translation>將目前標註儲存到下一個沒有標註檔案的檔案中</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>合併為折線</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>將選中的直線和折線標註合併為一條折線</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>修改選中圖形的標籤</translation>
     </message>
