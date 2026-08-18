@@ -488,6 +488,22 @@
         <translation>Gabungkan anotasi garis dan poligaris yang dipilih menjadi satu poligaris</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Hapus file yang dipilih</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Hapus permanen file yang dipilih dan file labelnya</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Ekspor file yang dipilih</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Salin file yang dipilih dan file labelnya ke direktori</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Ubah label bentuk yang dipilih</translation>
     </message>
@@ -550,6 +566,10 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Label &apos;{}&apos; tidak valid dengan tipe validasi &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} file dipilih</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -622,6 +642,18 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Hapus permanen gambar ini dan file labelnya? Tindakan ini tidak dapat dibatalkan.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Hapus permanen {count} file dan file labelnya? Tindakan ini tidak dapat dibatalkan.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Pilih direktori ekspor</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} file diekspor ke {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

@@ -519,6 +519,22 @@ les formes</translation>
         <translation>Combiner les annotations de ligne et de polyligne sélectionnées en une seule polyligne</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Supprimer les fichiers sélectionnés</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Supprimer définitivement les fichiers sélectionnés et leurs fichiers d&apos;annotation</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Exporter les fichiers sélectionnés</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Copier les fichiers sélectionnés et leurs fichiers d&apos;annotation vers un répertoire</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modifier l&apos;étiquette de la forme sélectionnée</translation>
     </message>
@@ -581,6 +597,10 @@ Changez le modèle AI Text-to-Annotation pour &apos;SAM3 (smart)&apos;, ou défi
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Étiquette invalide &apos;{}&apos; avec le type de validation &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} fichiers sélectionnés</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -653,6 +673,18 @@ Changez le modèle AI Text-to-Annotation pour &apos;SAM3 (smart)&apos;, ou défi
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Supprimer définitivement cette image et son fichier d&apos;annotation ? Cette action est irréversible.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Supprimer définitivement {count} fichiers et leurs fichiers d&apos;annotation ? Cette action est irréversible.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Choisir le répertoire d&apos;exportation</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} fichiers exportés vers {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

@@ -527,6 +527,22 @@ Shapes</source>
         <translation>選択した線と折線のアノテーションを1つの折線に結合します</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>選択したファイルを削除</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>選択したファイルとそのラベルファイルを完全に削除します</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>選択したファイルをエクスポート</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>選択したファイルとそのラベルファイルをディレクトリにコピーします</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>選択した図形のラベルを変更</translation>
     </message>
@@ -589,6 +605,10 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>ラベル &apos;{}&apos; は検証タイプ &apos;{}&apos; では無効です</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} ファイル選択中</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -661,6 +681,18 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>この画像とラベルファイルを完全に削除しますか?この操作は元に戻せません。</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>{count} 個のファイルとそのラベルファイルを完全に削除しますか?この操作は元に戻せません。</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>エクスポート先ディレクトリを選択</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} 個のファイルを {dir} にエクスポートしました</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

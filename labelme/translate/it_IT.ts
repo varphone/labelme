@@ -519,6 +519,22 @@ forme</translation>
         <translation>Combina le annotazioni di linea e polilinea selezionate in una singola polilinea</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Elimina file selezionati</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Elimina definitivamente i file selezionati e i loro file di annotazione</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Esporta file selezionati</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Copia i file selezionati e i loro file di annotazione in una directory</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modifica l&apos;etichetta della forma selezionata</translation>
     </message>
@@ -581,6 +597,10 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Etichetta non valida &apos;{}&apos; con tipo di validazione &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} file selezionati</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -653,6 +673,18 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Eliminare definitivamente questa immagine e il suo file di annotazione? Questa azione non può essere annullata.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Eliminare definitivamente {count} file e i loro file di annotazione? Questa azione non può essere annullata.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Scegli directory di esportazione</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} file esportati in {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

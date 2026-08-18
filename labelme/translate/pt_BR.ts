@@ -513,6 +513,22 @@ Shapes</source>
         <translation>Combinar as anotações de linha e polilinha selecionadas em uma única polilinha</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Excluir arquivos selecionados</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Excluir permanentemente os arquivos selecionados e seus arquivos de rótulos</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Exportar arquivos selecionados</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Copiar os arquivos selecionados e seus arquivos de rótulos para um diretório</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modificar o rótulo da forma selecionada</translation>
     </message>
@@ -575,6 +591,10 @@ Mude o modelo de AI Text-to-Annotation para &apos;SAM3 (smart)&apos; ou defina o
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Rótulo inválido &apos;{}&apos; com tipo de validação &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} arquivos selecionados</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ Mude o modelo de AI Text-to-Annotation para &apos;SAM3 (smart)&apos; ou defina o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Excluir permanentemente esta imagem e seu arquivo de rótulos? Esta ação não pode ser desfeita.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Excluir permanentemente {count} arquivos e seus arquivos de rótulos? Esta ação não pode ser desfeita.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Escolher diretório de exportação</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} arquivos exportados para {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

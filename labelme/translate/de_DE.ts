@@ -539,6 +539,22 @@ Formen</translation>
         <translation>Die ausgewählten Linien- und Polylinien-Annotationen zu einer einzelnen Polylinie zusammenführen</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Ausgewählte Dateien löschen</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Die ausgewählten Dateien und ihre Beschriftungsdateien dauerhaft löschen</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Ausgewählte Dateien exportieren</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Die ausgewählten Dateien und ihre Beschriftungsdateien in ein Verzeichnis kopieren</translation>
+    </message>
+    <message>
         <source>Split Linestrip at Vertex</source>
         <translation>Linestrip am Knoten teilen</translation>
     </message>
@@ -589,6 +605,10 @@ Wechseln Sie das AI Text-to-Annotation-Modell zu &apos;SAM3 (smart)&apos; oder s
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Ungültiges Label &apos;{}&apos; mit Validierungstyp &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} Dateien ausgewählt</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -661,6 +681,18 @@ Wechseln Sie das AI Text-to-Annotation-Modell zu &apos;SAM3 (smart)&apos; oder s
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Dieses Bild und seine Labeldatei dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>{count} Dateien und ihre Beschriftungsdateien dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Export-Verzeichnis wählen</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} Dateien nach {dir} exportiert</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

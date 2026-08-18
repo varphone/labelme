@@ -513,6 +513,22 @@ Shapes</source>
         <translation>Połącz wybrane adnotacje linii i linii łamanej w jedną linię łamaną</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Usuń wybrane pliki</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Trwale usuń wybrane pliki i ich pliki adnotacji</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Eksportuj wybrane pliki</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Skopiuj wybrane pliki i ich pliki adnotacji do katalogu</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Zmień etykietę zaznaczonego kształtu</translation>
     </message>
@@ -575,6 +591,10 @@ Zmień model AI Text-to-Annotation na &apos;SAM3 (smart)&apos; lub ustaw format 
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Nieprawidłowa etykieta &apos;{}&apos; dla typu walidacji &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>Wybrano {count} plików</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ Zmień model AI Text-to-Annotation na &apos;SAM3 (smart)&apos; lub ustaw format 
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Trwale usunąć ten obraz i jego plik adnotacji? Tej operacji nie można cofnąć.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Trwale usunąć {count} plików i ich pliki adnotacji? Tej operacji nie można cofnąć.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Wybierz katalog eksportu</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>Wyeksportowano {count} plików do {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

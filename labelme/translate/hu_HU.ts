@@ -539,6 +539,22 @@ Shapes</source>
         <translation>A kiválasztott vonal- és vonallánc-megjegyzések összefűzése egyetlen vonallánccá</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Kiválasztott fájlok törlése</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>A kiválasztott fájlok és címkefájljaik végleges törlése</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Kiválasztott fájlok exportálása</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>A kiválasztott fájlok és címkefájljaik másolása egy könyvtárba</translation>
+    </message>
+    <message>
         <source>Split Linestrip at Vertex</source>
         <translation>Vonalvég megszakítása csúcspontnál</translation>
     </message>
@@ -589,6 +605,10 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Érvénytelen címke &apos;{}&apos; &apos;{}&apos; validációs típussal</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} fájl kiválasztva</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -661,6 +681,18 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Véglegesen törli ezt a képet és címkefájlját? Ez a művelet nem vonható vissza.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>{count} fájl és címkefájljaik véglegesen törölve? Ez a művelet nem vonható vissza.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Exportálási könyvtár kiválasztása</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} fájl exportálva ide: {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

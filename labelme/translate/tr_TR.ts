@@ -516,6 +516,22 @@ Shapes</source>
         <translation>Seçili çizgi ve çoklu çizgi açıklamalarını tek bir çoklu çizgide birleştir</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Seçili dosyaları sil</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Seçili dosyaları ve etiket dosyalarını kalıcı olarak sil</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Seçili dosyaları dışa aktar</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Seçili dosyaları ve etiket dosyalarını bir dizine kopyala</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Seçili şeklin etiketini değiştir</translation>
     </message>
@@ -578,6 +594,10 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>&apos;{}&apos; doğrulama türü için &apos;{}&apos; etiketi geçersiz</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} dosya seçili</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -650,6 +670,18 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Bu görsel ve etiket dosyası kalıcı olarak silinsin mi? Bu işlem geri alınamaz.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>{count} dosya ve etiket dosyaları kalıcı olarak silinsin mi? Bu işlem geri alınamaz.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Dışa aktarma dizini seç</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} dosya {dir} konumuna aktarıldı</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

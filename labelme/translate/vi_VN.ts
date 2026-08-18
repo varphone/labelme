@@ -513,6 +513,22 @@ Shapes</source>
         <translation>Kết hợp các chú thích đường và đường đa tuyến đã chọn thành một đường đa tuyến duy nhất</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Xóa tệp đã chọn</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Xóa vĩnh viễn các tệp đã chọn và tệp chú thích của chúng</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Xuất tệp đã chọn</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Sao chép các tệp đã chọn và tệp chú thích của chúng vào thư mục</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Sửa đổi nhãn của hình dạng đã chọn</translation>
     </message>
@@ -575,6 +591,10 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Nhãn không hợp lệ &apos;{}&apos; với loại xác thực &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>Đã chọn {count} tệp</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Xóa vĩnh viễn hình ảnh này và tệp chú thích của nó? Hành động này không thể hoàn tác.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Xóa vĩnh viễn {count} tệp và tệp chú thích của chúng? Hành động này không thể hoàn tác.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Chọn thư mục xuất</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>Đã xuất {count} tệp tới {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

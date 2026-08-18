@@ -293,6 +293,22 @@
         <translation>Συνδυασμός των επιλεγμένων σημειώσεων γραμμής και πολυγραμμής σε μία μοναδική πολυγραμμή</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Διαγραφή επιλεγμένων αρχείων</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Μόνιμη διαγραφή των επιλεγμένων αρχείων και των αρχείων σημειώσεών τους</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Εξαγωγή επιλεγμένων αρχείων</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Αντιγραφή των επιλεγμένων αρχείων και των αρχείων σημειώσεών τους σε έναν κατάλογο</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Διαγραφή σχημάτων</translation>
     </message>
@@ -595,6 +611,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Μη έγκυρη ετικέτα &apos;{}&apos; με τύπο επικύρωσης &apos;{}&apos;</translation>
     </message>
     <message>
+        <source>{count} files selected</source>
+        <translation>{count} αρχεία επιλεγμένα</translation>
+    </message>
+    <message>
         <source>Error saving label data</source>
         <translation>Σφάλμα κατά την αποθήκευση δεδομένων ετικέτας</translation>
     </message>
@@ -665,6 +685,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Μόνιμη διαγραφή αυτής της εικόνας και του αρχείου σημειώσεών της; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Μόνιμη διαγραφή {count} αρχείων και των αρχείων σημειώσεών τους; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Επιλογή καταλόγου εξαγωγής</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>Εξήχθησαν {count} αρχεία στο {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>
