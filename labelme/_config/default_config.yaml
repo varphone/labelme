@@ -121,6 +121,7 @@ shortcuts:
   undo: Ctrl+Z
   undo_last_point: Ctrl+Z
   edit_label: Ctrl+E
+  add_point_to_edge: V
   toggle_keep_prev_mode: Ctrl+P
   toggle_snap_to_point: S
   remove_selected_point: [Meta+H, Backspace]
