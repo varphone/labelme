@@ -124,6 +124,7 @@ shortcuts:
   add_point_to_edge: V
   split_linestrip: B
   copy_annotations_to_next: Shift+N
+  merge_linestrips: M
   toggle_keep_prev_mode: Ctrl+P
   toggle_snap_to_point: S
   remove_selected_point: [X, Backspace]
