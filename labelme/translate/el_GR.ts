@@ -285,6 +285,14 @@
         <translation>Αποθήκευση των τρεχουσών σημειώσεων στο επόμενο αρχείο χωρίς αρχείο σημειώσεων</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Συγχώνευση σε γραμμή</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Συνδυασμός των επιλεγμένων σημειώσεων γραμμής και πολυγραμμής σε μία μοναδική πολυγραμμή</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Διαγραφή σχημάτων</translation>
     </message>

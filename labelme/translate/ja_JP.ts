@@ -519,6 +519,14 @@ Shapes</source>
         <translation>現在のアノテーションをラベルファイルのない次のファイルに保存</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>折線に結合</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>選択した線と折線のアノテーションを1つの折線に結合します</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>選択した図形のラベルを変更</translation>
     </message>

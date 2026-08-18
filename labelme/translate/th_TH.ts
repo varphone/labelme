@@ -505,6 +505,14 @@ Shapes</source>
         <translation>บันทึกคำอธิบายประกอบปัจจุบันไปยังไฟล์ถัดไปที่ไม่มีไฟล์คำอธิบายประกอบ</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>รวมเป็นเส้นเชิงเส้น</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>รวมคำอธิบายประกอบเส้นและเส้นเชิงเส้นที่เลือกเป็นเส้นเชิงเส้นเดียว</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>แก้ไขเลเบลของรูปร่างที่เลือก</translation>
     </message>

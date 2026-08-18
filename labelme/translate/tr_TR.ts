@@ -508,6 +508,14 @@ Shapes</source>
         <translation>Mevcut açıklamaları etiket dosyası olmayan sonraki dosyaya kaydet</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Çoklu çizgiye birleştir</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Seçili çizgi ve çoklu çizgi açıklamalarını tek bir çoklu çizgide birleştir</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Seçili şeklin etiketini değiştir</translation>
     </message>

@@ -505,6 +505,14 @@ Shapes</source>
         <translation>Zapisz bieżące adnotacje w następnym pliku bez pliku adnotacji</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Scal w linię łamaną</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Połącz wybrane adnotacje linii i linii łamanej w jedną linię łamaną</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Zmień etykietę zaznaczonego kształtu</translation>
     </message>

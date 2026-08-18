@@ -490,6 +490,14 @@ Shapes</source>
         <translation>Сохранить текущие аннотации в следующий файл без файла разметки</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Объединить в полилинию</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Объединить выбранные аннотации линии и полилинии в одну полилинию</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Изменить метку выбранной фигуры</translation>
     </message>

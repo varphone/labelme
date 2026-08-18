@@ -531,6 +531,14 @@ Shapes</source>
         <translation>A jelenlegi megjegyzések mentése a következő megjegyzésfájl nélküli fájlba</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Összefűzés vonallánccá</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>A kiválasztott vonal- és vonallánc-megjegyzések összefűzése egyetlen vonallánccá</translation>
+    </message>
+    <message>
         <source>Split Linestrip at Vertex</source>
         <translation>Vonalvég megszakítása csúcspontnál</translation>
     </message>

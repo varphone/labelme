@@ -505,6 +505,14 @@ Shapes</source>
         <translation>Lưu chú thích hiện tại vào tệp tiếp theo không có tệp chú thích</translation>
     </message>
     <message>
+        <source>Merge into Linestrip</source>
+        <translation>Gộp thành đường đa tuyến</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Kết hợp các chú thích đường và đường đa tuyến đã chọn thành một đường đa tuyến duy nhất</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Sửa đổi nhãn của hình dạng đã chọn</translation>
     </message>
