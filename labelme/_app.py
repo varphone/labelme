@@ -129,6 +129,7 @@ class _Actions(NamedTuple):
     undo: QtGui.QAction
     add_point_to_edge: QtGui.QAction
     remove_point: QtGui.QAction
+    split_linestrip: QtGui.QAction
     create_mode: QtGui.QAction
     edit_mode: QtGui.QAction
     create_rectangle_mode: QtGui.QAction
@@ -503,6 +504,12 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Insert a new point at the hovered polygon edge"),
             enabled=False,
         )
+        split_linestrip = action(
+            text=self.tr("Split Linestrip at Vertex"),
+            slot=self.split_linestrip,
+            tip=self.tr("Split the selected linestrip into two at the hovered vertex"),
+            enabled=False,
+        )
         create_mode = action(
             text=self.tr("Polygon"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="polygon"),
@@ -722,6 +729,9 @@ class MainWindow(QtWidgets.QMainWindow):
         fit_window.setChecked(True)
 
         self._canvas_widgets.canvas.vertex_selected.connect(remove_point.setEnabled)
+        self._canvas_widgets.canvas.vertex_selected.connect(
+            self._sync_split_linestrip_enabled
+        )
         self._canvas_widgets.canvas.edge_selected.connect(add_point_to_edge.setEnabled)
 
         draw = [
@@ -769,6 +779,7 @@ class MainWindow(QtWidgets.QMainWindow):
             undo_last_point,
             add_point_to_edge,
             remove_point,
+            split_linestrip,
         )
         edit_menu = (
             edit,
@@ -781,6 +792,7 @@ class MainWindow(QtWidgets.QMainWindow):
             undo_last_point,
             None,
             remove_point,
+            split_linestrip,
             None,
             keep_prev_action,
             toggle_snap_to_point,
@@ -807,6 +819,7 @@ class MainWindow(QtWidgets.QMainWindow):
             undo_last_point=undo_last_point,
             undo=undo,
             remove_point=remove_point,
+            split_linestrip=split_linestrip,
             add_point_to_edge=add_point_to_edge,
             create_mode=create_mode,
             edit_mode=edit_mode,
@@ -948,6 +961,7 @@ class MainWindow(QtWidgets.QMainWindow):
             (
                 action("&Copy here", self.copy_shape),
                 action("&Move here", self.move_shape),
+                self._actions.split_linestrip,
             ),
         )
 
@@ -1159,6 +1173,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         canvas.shape_moved.connect(self.mark_dirty)
         canvas.selection_changed.connect(self._on_shape_selection_changed)
+        canvas.selection_changed.connect(self._sync_split_linestrip_enabled)
         canvas.drawing_polygon.connect(self._on_drawing_polygon_changed)
 
         self.setCentralWidget(scroll_area)
@@ -1758,6 +1773,11 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.update()
         self.mark_dirty()
         self._sync_circle_radius_widget()
+
+    def _sync_split_linestrip_enabled(self, *_: object) -> None:
+        self._actions.split_linestrip.setEnabled(
+            self._canvas_widgets.canvas.can_split_linestrip
+        )
 
     def add_label(self, shape: Shape) -> None:
         assert shape.label is not None
@@ -2882,6 +2902,20 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.has_no_shapes():
             for action in self._actions.on_shapes_present:
                 action.setEnabled(False)
+
+    def split_linestrip(self) -> None:
+        canvas = self._canvas_widgets.canvas
+        result = canvas.split_linestrip()
+        if result is None:
+            return
+        old_shape, left, right = result
+        self.remove_labels([old_shape])
+        self.add_label(left)
+        self.add_label(right)
+        canvas.deselect_shape()
+        canvas.select_shapes([left, right])
+        canvas.update()
+        self.mark_dirty()
 
     def copy_shape(self) -> None:
         self._canvas_widgets.canvas.end_move(copy=True)
