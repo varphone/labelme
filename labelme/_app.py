@@ -129,6 +129,7 @@ class _Actions(NamedTuple):
     toggle_keep_prev_brightness_contrast: QtGui.QAction
     toggle_snap_to_point: QtGui.QAction
     copy_annotations_to_next: QtGui.QAction
+    merge_linestrips: QtGui.QAction
     delete: QtGui.QAction
     edit: QtGui.QAction
     duplicate: QtGui.QAction
@@ -454,6 +455,16 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr(
                 "Save the current annotations to the next file that has no label file"
             ),
+        )
+        merge_linestrips = action(
+            text=self.tr("Merge into Linestrip"),
+            slot=self.merge_linestrips,
+            shortcut=shortcuts["merge_linestrips"],
+            tip=self.tr(
+                "Combine the selected line and linestrip annotations "
+                "into a single linestrip"
+            ),
+            enabled=False,
         )
         delete = action(
             self.tr("Delete Shapes"),
@@ -823,6 +834,7 @@ class MainWindow(QtWidgets.QMainWindow):
             split_linestrip,
             None,
             copy_annotations_to_next,
+            merge_linestrips,
             keep_prev_action,
             toggle_snap_to_point,
         )
@@ -841,6 +853,7 @@ class MainWindow(QtWidgets.QMainWindow):
             toggle_keep_prev_brightness_contrast=toggle_keep_prev_brightness_contrast,
             toggle_snap_to_point=toggle_snap_to_point,
             copy_annotations_to_next=copy_annotations_to_next,
+            merge_linestrips=merge_linestrips,
             delete=delete,
             edit=edit,
             duplicate=duplicate,
@@ -923,7 +936,10 @@ class MainWindow(QtWidgets.QMainWindow):
         view_menu = self.menu(self.tr("&View"))
         help_menu = self.menu(self.tr("&Help"))
         label_menu = QtWidgets.QMenu()
-        _utils.add_actions(label_menu, (self._actions.edit, self._actions.delete))
+        _utils.add_actions(
+            label_menu,
+            (self._actions.edit, self._actions.delete, self._actions.merge_linestrips),
+        )
         self._docks.label_list.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu
         )
@@ -1622,6 +1638,12 @@ class MainWindow(QtWidgets.QMainWindow):
                         widget.setStyleSheet(style)
 
     def show_label_list_menu(self, point: QtCore.QPoint) -> None:
+        selected = self._docks.label_list.selected_items()
+        selected_shapes = [s for item in selected if (s := item.shape()) is not None]
+        can_merge = len(selected_shapes) >= 2 and all(
+            s.shape_type in ("line", "linestrip") for s in selected_shapes
+        )
+        self._actions.merge_linestrips.setEnabled(can_merge)
         self._label_list_menu_origin = self._docks.label_list.mapToGlobal(point)
         try:
             # PySide6 type QMenu.exec() argument too narrowly
@@ -3103,6 +3125,61 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_label(right)
         canvas.deselect_shape()
         canvas.select_shapes([left, right])
+        canvas.update()
+        self.mark_dirty()
+
+    def merge_linestrips(self) -> None:
+        items = self._docks.label_list.selected_items()
+        shapes = [s for item in items if (s := item.shape()) is not None]
+        if len(shapes) < 2:
+            return
+        if any(s.shape_type not in ("line", "linestrip") for s in shapes):
+            return
+        # Merge in label-list order; reverse each shape when its far end is
+        # closer to the current tail than its near end, so the merged
+        # linestrip flows without backtracking.
+        ordered = [shapes[0]]
+        for shape in shapes[1:]:
+            tail = ordered[-1].points[-1]
+            if np.linalg.norm(shape.points[-1] - tail) < np.linalg.norm(
+                shape.points[0] - tail
+            ):
+                ordered.append(
+                    Shape(
+                        label=shape.label,
+                        group_id=shape.group_id,
+                        shape_type=shape.shape_type,
+                        flags=shape.flags,
+                        description=shape.description,
+                        points=shape.points[::-1].copy(),
+                        point_labels=shape.point_labels[::-1].copy(),
+                    )
+                )
+            else:
+                ordered.append(shape)
+        merged_points = np.concatenate([s.points for s in ordered])
+        merged_labels = np.concatenate([s.point_labels for s in ordered])
+        first = shapes[0]
+        merged = Shape(
+            label=first.label,
+            group_id=first.group_id,
+            shape_type="linestrip",
+            flags=first.flags,
+            description=first.description,
+            points=merged_points,
+            point_labels=merged_labels,
+        )
+        canvas = self._canvas_widgets.canvas
+        for shape in shapes:
+            if shape in canvas.selected_shapes:
+                canvas.selected_shapes.remove(shape)
+            canvas.shapes.remove(shape)
+        canvas.shapes.append(merged)
+        canvas.backup_shapes()
+        self.remove_labels(shapes)
+        self.add_label(merged)
+        canvas.deselect_shape()
+        canvas.select_shapes([merged])
         canvas.update()
         self.mark_dirty()
 
