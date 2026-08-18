@@ -556,6 +556,17 @@ class Canvas(QtWidgets.QWidget):
     def _is_rotation_point_selected(self) -> bool:
         return self._hovered_rotation is not None
 
+    @property
+    def can_split_linestrip(self) -> bool:
+        """True when the split action would succeed at the current state."""
+        if len(self.selected_shapes) != 1:
+            return False
+        shape = self.selected_shapes[0]
+        if shape.shape_type != "linestrip" or len(shape.points) < 3:
+            return False
+        i = self._last_hovered_vertex
+        return i is not None and 0 < i < len(shape.points) - 1
+
     def _update_status(self, extra_messages: list[str] | None = None) -> None:
         messages: list[str] = []
         if self.mode == _CanvasMode.CREATE:
@@ -994,6 +1005,48 @@ class Canvas(QtWidgets.QWidget):
         # Repaint now; otherwise the edit is invisible until the next mouse move.
         self.update()
         return True
+
+    def split_linestrip(
+        self,
+    ) -> tuple[Shape, Shape, Shape] | None:
+        """Split the selected linestrip at the hovered vertex.
+
+        Returns ``(original, left, right)`` when the split is applied, or
+        ``None`` if the operation is not valid (wrong shape type, endpoint
+        selected, or degenerate result).
+        """
+        if len(self.selected_shapes) != 1:
+            return None
+        shape = self.selected_shapes[0]
+        if shape.shape_type != "linestrip":
+            return None
+        i = self._last_hovered_vertex
+        # Splitting at an endpoint would produce a one-point linestrip.
+        if i is None or i == 0 or i >= len(shape.points) - 1:
+            return None
+        left = Shape(
+            label=shape.label,
+            group_id=shape.group_id,
+            shape_type="linestrip",
+            flags=shape.flags,
+            description=shape.description,
+            points=shape.points[: i + 1].copy(),
+            point_labels=shape.point_labels[: i + 1].copy(),
+        )
+        right = Shape(
+            label=shape.label,
+            group_id=shape.group_id,
+            shape_type="linestrip",
+            flags=shape.flags,
+            description=shape.description,
+            points=shape.points[i:].copy(),
+            point_labels=shape.point_labels[i:].copy(),
+        )
+        idx = self.shapes.index(shape)
+        self.shapes[idx] = left
+        self.shapes.insert(idx + 1, right)
+        self.backup_shapes()
+        return shape, left, right
 
     def mousePressEvent(self, a0: QtGui.QMouseEvent) -> None:
         pos: QPointF = self._transform_point_widget_to_image(a0.position())
