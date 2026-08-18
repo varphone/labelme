@@ -498,6 +498,22 @@ Shapes</source>
         <translation>Объединить выбранные аннотации линии и полилинии в одну полилинию</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Удалить выбранные файлы</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Безвозвратно удалить выбранные файлы и их файлы разметки</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Экспортировать выбранные файлы</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Копировать выбранные файлы и их файлы разметки в каталог</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Изменить метку выбранной фигуры</translation>
     </message>
@@ -560,6 +576,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Неверная метка &apos;{}&apos; с типом проверки &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>Выбрано файлов: {count}</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -632,6 +652,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Безвозвратно удалить это изображение и его файл разметки? Это действие нельзя отменить.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Безвозвратно удалить {count} файлов и их файлы разметки? Это действие нельзя отменить.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Выбрать каталог экспорта</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} файлов экспортировано в {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

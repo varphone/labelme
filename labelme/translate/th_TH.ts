@@ -513,6 +513,22 @@ Shapes</source>
         <translation>รวมคำอธิบายประกอบเส้นและเส้นเชิงเส้นที่เลือกเป็นเส้นเชิงเส้นเดียว</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>ลบไฟล์ที่เลือก</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>ลบไฟล์ที่เลือกและไฟล์คำอธิบายประกอบอย่างถาวร</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>ส่งออกไฟล์ที่เลือก</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>คัดลอกไฟล์ที่เลือกและไฟล์คำอธิบายประกอบไปยังไดเรกทอรี</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>แก้ไขเลเบลของรูปร่างที่เลือก</translation>
     </message>
@@ -575,6 +591,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>เลเบล &apos;{}&apos; ไม่ถูกต้อง ประเภทการตรวจ &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>เลือก {count} ไฟล์</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>ลบภาพและไฟล์คำอธิบายประกอบนี้อย่างถาวร? การดำเนินการนี้ไม่สามารถเลิกทำได้</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>ลบ {count} ไฟล์และไฟล์คำอธิบายประกอบอย่างถาวร? การดำเนินการนี้ไม่สามารถเลิกทำได้</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>เลือกไดเรกทอรีส่งออก</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>ส่งออก {count} ไฟล์ไปยัง {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

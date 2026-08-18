@@ -513,6 +513,22 @@ Shapes</source>
         <translation>將選中的直線和折線標註合併為一條折線</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>刪除選中檔案</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>永久刪除選中的檔案及其標註檔案</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>匯出選中檔案</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>將選中的檔案及其標註檔案複製到指定目錄</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>修改選中圖形的標籤</translation>
     </message>
@@ -575,6 +591,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>無效的標籤&apos;{}&apos;，驗證類型&apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>已選中 {count} 個檔案</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>永久刪除此圖像及其標註檔案?此操作無法復原。</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>永久刪除 {count} 個檔案及其標註檔案?此操作無法復原。</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>選擇匯出目錄</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>已將 {count} 個檔案匯出到 {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

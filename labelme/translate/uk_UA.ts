@@ -293,6 +293,22 @@
         <translation>Об&apos;єднати обрані анотації лінії та полілінії в одну полілінію</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Видалити вибрані файли</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Безповоротно видалити вибрані файли та їх файли розмітки</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Експортувати вибрані файли</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Копіювати вибрані файли та їх файли розмітки до каталогу</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Видалити фігури</translation>
     </message>
@@ -596,6 +612,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Недійсна мітка &quot;{}&quot; з типом перевірки &quot;{}&quot;</translation>
     </message>
     <message>
+        <source>{count} files selected</source>
+        <translation>Вибрано файлів: {count}</translation>
+    </message>
+    <message>
         <source>Error saving label data</source>
         <translation>Помилка збереження даних мітки</translation>
     </message>
@@ -666,6 +686,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Безповоротно видалити це зображення та його файл розмітки? Цю дію не можна скасувати.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Безповоротно видалити {count} файлів та їх файли розмітки? Цю дію не можна скасувати.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Обрати каталог експорту</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} файлів експортовано до {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

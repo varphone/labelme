@@ -513,6 +513,22 @@ Shapes</source>
         <translation>De geselecteerde lijn- en polylijnannotaties samenvoegen tot één polylijn</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>Geselecteerde bestanden verwijderen</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>De geselecteerde bestanden en hun labelbestanden definitief verwijderen</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Geselecteerde bestanden exporteren</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>De geselecteerde bestanden en hun labelbestanden naar een map kopiëren</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Label van geselecteerde vorm wijzigen</translation>
     </message>
@@ -575,6 +591,10 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Ongeldig label &apos;{}&apos; met validatietype &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} bestanden geselecteerd</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Deze afbeelding en het labelbestand definitief verwijderen? Deze actie kan niet ongedaan worden gemaakt.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>{count} bestanden en hun labelbestanden definitief verwijderen? Deze actie kan niet ongedaan worden gemaakt.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Exportmap kiezen</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} bestanden geëxporteerd naar {dir}</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

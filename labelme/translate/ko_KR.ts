@@ -513,6 +513,22 @@ Shapes</source>
         <translation>선택한 선 및 폴리라인 주석을 하나의 폴리라인으로 결합</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>선택한 파일 삭제</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>선택한 파일과 레이블 파일을 영구적으로 삭제</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>선택한 파일 내보내기</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>선택한 파일과 레이블 파일을 디렉토리에 복사</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>선택한 도형의 레이블 수정</translation>
     </message>
@@ -575,6 +591,10 @@ AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>검증 유형 &apos;{}&apos;에 대한 잘못된 레이블 &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count}개 파일 선택됨</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>이 이미지와 레이블 파일을 영구적으로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>{count}개 파일과 레이블 파일을 영구적으로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>내보내기 디렉토리 선택</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count}개 파일을 {dir}(으)로 내보냈습니다</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>

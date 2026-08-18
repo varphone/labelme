@@ -513,6 +513,22 @@ Shapes</source>
         <translation>ترکیب حاشیه‌نویسی‌های خط و چندخطی انتخاب‌شده در یک خط چندگانه</translation>
     </message>
     <message>
+        <source>Delete Selected Files</source>
+        <translation>حذف فایل‌های انتخاب‌شده</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>حذف دائمی فایل‌های انتخاب‌شده و فایل‌های برچسب آنها</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>صادرات فایل‌های انتخاب‌شده</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>کپی فایل‌های انتخاب‌شده و فایل‌های برچسب آنها به یک پوشه</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>تغییر برچسب شکل انتخاب شده</translation>
     </message>
@@ -575,6 +591,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>برچسب نامعتبر &apos;{}&apos; با نوع اعتبارسنجی &apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} فایل انتخاب شده</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -647,6 +667,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>این تصویر و فایل برچسب آن برای همیشه حذف شوند؟ این عمل قابل بازگشت نیست.</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>{count} فایل و فایل‌های برچسب آنها برای همیشه حذف شوند؟ این عمل قابل بازگشت نیست.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>انتخاب پوشه صادرات</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>{count} فایل به {dir} صادر شد</translation>
     </message>
     <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>
