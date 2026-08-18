@@ -482,6 +482,14 @@ Shapes</source>
         <translation>При наведении привязывает курсор к ближайшей точке разметки.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Копировать аннотации в следующий неаннотированный файл</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Сохранить текущие аннотации в следующий файл без файла разметки</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Изменить метку выбранной фигуры</translation>
     </message>
@@ -628,6 +636,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Save annotations?</source>
         <translation>Сохранить аннотации?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Текущий файл не содержит аннотаций для копирования</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Неаннотированный файл после текущего не найден</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

@@ -523,6 +523,14 @@ Formen</translation>
         <translation>Richtet den Cursor beim Zeichnen am nächsten Annotationspunkt aus.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Annotationen in nächste unbeschriftete Datei kopieren</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Aktuelle Annotationen in die nächste Datei ohne Beschriftungsdatei speichern</translation>
+    </message>
+    <message>
         <source>Split Linestrip at Vertex</source>
         <translation>Linestrip am Knoten teilen</translation>
     </message>
@@ -657,6 +665,14 @@ Wechseln Sie das AI Text-to-Annotation-Modell zu &apos;SAM3 (smart)&apos; oder s
     <message>
         <source>Save annotations?</source>
         <translation>Annotationen speichern?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Aktuelle Datei hat keine Annotationen zum Kopieren</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Keine unbeschriftete Datei nach der aktuellen Datei gefunden</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

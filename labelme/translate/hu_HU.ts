@@ -523,6 +523,14 @@ Shapes</source>
         <translation>Rajzolás közben a kurzort a legközelebbi megjegyzésponthoz igazítja.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Megjegyzések másolása a következő megjegyzés nélküli fájlba</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>A jelenlegi megjegyzések mentése a következő megjegyzésfájl nélküli fájlba</translation>
+    </message>
+    <message>
         <source>Split Linestrip at Vertex</source>
         <translation>Vonalvég megszakítása csúcspontnál</translation>
     </message>
@@ -657,6 +665,14 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     <message>
         <source>Save annotations?</source>
         <translation>Mentse az annotációkat?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>A jelenlegi fájlnak nincsenek másolható megjegyzései</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Nem található megjegyzés nélküli fájl a jelenlegi fájl után</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

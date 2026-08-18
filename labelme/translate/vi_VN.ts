@@ -497,6 +497,14 @@ Shapes</source>
         <translation>Gắn con trỏ vào điểm chú thích gần nhất khi vẽ.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Sao lưu chú thích vào tệp chưa chú thích tiếp theo</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Lưu chú thích hiện tại vào tệp tiếp theo không có tệp chú thích</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Sửa đổi nhãn của hình dạng đã chọn</translation>
     </message>
@@ -643,6 +651,14 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     <message>
         <source>Save annotations?</source>
         <translation>Lưu chú thích?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Tệp hiện tại không có chú thích để sao chép</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Không tìm thấy tệp chưa chú thích sau tệp hiện tại</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

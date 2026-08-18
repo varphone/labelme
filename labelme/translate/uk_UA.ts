@@ -277,6 +277,14 @@
         <translation>Під час малювання прив&apos;язує курсор до найближчої точки анотації.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Копіювати анотації до наступного неанотованого файлу</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Зберегти поточні анотації до наступного файлу без файлу розмітки</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Видалити фігури</translation>
     </message>
@@ -662,6 +670,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Save annotations?</source>
         <translation>Зберегти анотації?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Поточний файл не містить анотацій для копіювання</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Неанотований файл після поточного не знайдено</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>
