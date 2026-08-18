@@ -510,6 +510,7 @@ class MainWindow(QtWidgets.QMainWindow):
         split_linestrip = action(
             text=self.tr("Split Linestrip at Vertex"),
             slot=self.split_linestrip,
+            shortcut=shortcuts["split_linestrip"],
             tip=self.tr("Split the selected linestrip into two at the hovered vertex"),
             enabled=False,
         )
