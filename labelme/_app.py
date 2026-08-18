@@ -128,6 +128,7 @@ class _Actions(NamedTuple):
     toggle_keep_prev_mode: QtGui.QAction
     toggle_keep_prev_brightness_contrast: QtGui.QAction
     toggle_snap_to_point: QtGui.QAction
+    copy_annotations_to_next: QtGui.QAction
     delete: QtGui.QAction
     edit: QtGui.QAction
     duplicate: QtGui.QAction
@@ -445,6 +446,14 @@ class MainWindow(QtWidgets.QMainWindow):
             ),
             checkable=True,
             checked=self._config["snap_to_point"],
+        )
+        copy_annotations_to_next = action(
+            text=self.tr("Copy Annotations to Next Unannotated File"),
+            slot=self.copy_annotations_to_next,
+            shortcut=shortcuts["copy_annotations_to_next"],
+            tip=self.tr(
+                "Save the current annotations to the next file that has no label file"
+            ),
         )
         delete = action(
             self.tr("Delete Shapes"),
@@ -813,6 +822,7 @@ class MainWindow(QtWidgets.QMainWindow):
             remove_point,
             split_linestrip,
             None,
+            copy_annotations_to_next,
             keep_prev_action,
             toggle_snap_to_point,
         )
@@ -830,6 +840,7 @@ class MainWindow(QtWidgets.QMainWindow):
             toggle_keep_prev_mode=keep_prev_action,
             toggle_keep_prev_brightness_contrast=toggle_keep_prev_brightness_contrast,
             toggle_snap_to_point=toggle_snap_to_point,
+            copy_annotations_to_next=copy_annotations_to_next,
             delete=delete,
             edit=edit,
             duplicate=duplicate,
@@ -3094,6 +3105,65 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.select_shapes([left, right])
         canvas.update()
         self.mark_dirty()
+
+    def copy_annotations_to_next(self) -> None:
+        if self._image_path is None:
+            return
+        canvas = self._canvas_widgets.canvas
+        if not canvas.shapes:
+            self.show_status_message(
+                self.tr("Current file has no annotations to copy"), 3000
+            )
+            return
+
+        file_list = self._docks.file_list
+        start = file_list.currentRow() + 1
+        for row in range(start, file_list.count()):
+            item = file_list.item(row)
+            if item is None:
+                continue
+            if item.checkState() == Qt.CheckState.Unchecked:
+                target_image_path = item.text()
+                target_label_path = _resolve_label_path(
+                    image_or_label_path=target_image_path,
+                    output_dir=self._output_dir,
+                )
+                shapes = [
+                    _shape_to_dict(s) for s in canvas.shapes if s.label is not None
+                ]
+                flags = self._read_flag_dock_states()
+                try:
+                    target_image = QtGui.QImage(target_image_path)
+                    annotation = Annotation(
+                        image_path=os.path.relpath(
+                            target_image_path,
+                            Path(target_label_path).parent,
+                        ),
+                        image_data=b"",
+                        shapes=shapes,
+                        flags=flags,
+                        other_data={},
+                    )
+                    write_label_file(
+                        filename=target_label_path,
+                        annotation=annotation,
+                        image_height=target_image.height(),
+                        image_width=target_image.width(),
+                        save_image_data=False,
+                    )
+                except (LabelFileError, OSError, ValueError) as e:
+                    self.show_error_message(
+                        self.tr("Error saving label data"),
+                        self.tr("<b>%s</b>") % e,
+                    )
+                    return
+                item.setCheckState(Qt.CheckState.Checked)
+                file_list.setCurrentRow(row)
+                return
+
+        self.show_status_message(
+            self.tr("No unannotated file found after the current file"), 3000
+        )
 
     def copy_shape(self) -> None:
         self._canvas_widgets.canvas.end_move(copy=True)
