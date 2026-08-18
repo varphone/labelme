@@ -501,6 +501,14 @@ Shapes</source>
         <translation>修改選中圖形的標籤</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>在頂點處分割折線</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>將選中的折線在游標懸停的頂點處分割為兩條</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>填充所繪多邊形</translation>
     </message>

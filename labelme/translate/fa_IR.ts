@@ -501,6 +501,14 @@ Shapes</source>
         <translation>تغییر برچسب شکل انتخاب شده</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>تقسیم خط در رأس</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>تقسیم چندخطی انتخاب‌شده به دو در رأس زیر اشاره‌گر</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>پر کردن چندضلعی رسم شده</translation>
     </message>

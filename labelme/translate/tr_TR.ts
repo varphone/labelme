@@ -504,6 +504,14 @@ Shapes</source>
         <translation>Seçili şeklin etiketini değiştir</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Köşede çizgiyi böl</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Seçili çoklu çizgiyi imleç altındaki köşede ikiye böl</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Çizerken Çokgeni Doldur</translation>
     </message>

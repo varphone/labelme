@@ -476,6 +476,14 @@
         <translation>Ubah label bentuk yang dipilih</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Pisahkan Garis di Titik</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Pisahkan poligaris yang dipilih menjadi dua di titik di bawah kursor</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Isi Poligon yang Digambar</translation>
     </message>

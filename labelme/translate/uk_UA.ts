@@ -342,6 +342,14 @@
         <translation>Видалити вибрану точку з багатокутника</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>Розрізати лінію у вершині</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>Розрізати обрану полілінію на дві у вершині під курсором</translation>
+    </message>
+    <message>
         <source>Start drawing polygons</source>
         <translation>Почніть малювати багатокутники</translation>
     </message>

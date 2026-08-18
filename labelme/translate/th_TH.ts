@@ -501,6 +501,14 @@ Shapes</source>
         <translation>แก้ไขเลเบลของรูปร่างที่เลือก</translation>
     </message>
     <message>
+        <source>Split Linestrip at Vertex</source>
+        <translation>แบ่งเส้นที่จุดยอด</translation>
+    </message>
+    <message>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>แบ่งเส้นเชิงเส้นที่เลือกเป็นสองส่วนที่จุดยอดใต้เคอร์เซอร์</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>เติมสีหลายเหลี่ยมที่วาด</translation>
     </message>
