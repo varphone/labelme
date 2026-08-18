@@ -277,6 +277,14 @@
         <translation>Προσκολλά τον δείκτη στο πλησιέστερο σημείο σημείωσης κατά τη σχεδίαση.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Αντιγραφή σημειώσεων στο επόμενο μη σημειωμένο αρχείο</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Αποθήκευση των τρεχουσών σημειώσεων στο επόμενο αρχείο χωρίς αρχείο σημειώσεων</translation>
+    </message>
+    <message>
         <source>Delete Shapes</source>
         <translation>Διαγραφή σχημάτων</translation>
     </message>
@@ -661,6 +669,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Save annotations?</source>
         <translation>Αποθήκευση σχολιασμών;</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Το τρέχον αρχείο δεν έχει σημειώσεις για αντιγραφή</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Δεν βρέθηκε μη σημειωμένο αρχείο μετά το τρέχον αρχείο</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

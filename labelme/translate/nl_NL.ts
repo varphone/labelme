@@ -497,6 +497,14 @@ Shapes</source>
         <translation>Lijnt de cursor tijdens het tekenen uit op het dichtstbijzijnde annotatiepunt.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Annotaties kopiëren naar volgende niet-geannoteerd bestand</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Sla de huidige annotaties op naar het volgende bestand zonder labelbestand</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Label van geselecteerde vorm wijzigen</translation>
     </message>
@@ -643,6 +651,14 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     <message>
         <source>Save annotations?</source>
         <translation>Annotaties opslaan?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Huidig bestand heeft geen annotaties om te kopiëren</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Geen niet-geannoteerd bestand gevonden na het huidige bestand</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

@@ -497,6 +497,14 @@ Shapes</source>
         <translation>هنگام ترسیم، مکان‌نما به نزدیک‌ترین نقطه برچسب‌گذاری می‌چسبد.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>کپی حاشیه‌نویسی‌ها به فایل بدون حاشیه‌نویسی بعدی</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>ذخیره حاشیه‌نویسی‌های فعلی در فایل بعدی بدون فایل برچسب</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>تغییر برچسب شکل انتخاب شده</translation>
     </message>
@@ -643,6 +651,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Save annotations?</source>
         <translation>ذخیره حاشیه‌نویسی‌ها؟</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>فایل فعلی حاشیه‌نویسی برای کپی ندارد</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>فایل بدون حاشیه‌نویسی پس از فایل فعلی یافت نشد</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

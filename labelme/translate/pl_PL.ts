@@ -497,6 +497,14 @@ Shapes</source>
         <translation>Przyciąga kursor do najbliższego punktu adnotacji podczas rysowania.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Skopiuj adnotacje do następnego nieoznaczonego pliku</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Zapisz bieżące adnotacje w następnym pliku bez pliku adnotacji</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Zmień etykietę zaznaczonego kształtu</translation>
     </message>
@@ -643,6 +651,14 @@ Zmień model AI Text-to-Annotation na &apos;SAM3 (smart)&apos; lub ustaw format 
     <message>
         <source>Save annotations?</source>
         <translation>Zapisać adnotacje?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Bieżący plik nie ma adnotacji do skopiowania</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Nie znaleziono nieoznaczonego pliku po bieżącym pliku</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

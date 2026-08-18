@@ -472,6 +472,14 @@
         <translation>Menempelkan kursor ke titik anotasi terdekat saat menggambar.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Salin anotasi ke file tanpa anotasi berikutnya</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Simpan anotasi saat ini ke file berikutnya yang tidak memiliki file label</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Ubah label bentuk yang dipilih</translation>
     </message>
@@ -618,6 +626,14 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     <message>
         <source>Save annotations?</source>
         <translation>Simpan anotasi?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>File saat ini tidak memiliki anotasi untuk disalin</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Tidak ditemukan file tanpa anotasi setelah file saat ini</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

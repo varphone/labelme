@@ -497,6 +497,14 @@ Shapes</source>
         <translation>그리기 중에 커서를 가장 가까운 주석 점에 스냅합니다.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>주석을 다음 미주석 파일에 복사</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>현재 주석을 레이블 파일이 없는 다음 파일에 저장</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>선택한 도형의 레이블 수정</translation>
     </message>
@@ -643,6 +651,14 @@ AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나
     <message>
         <source>Save annotations?</source>
         <translation>주석을 저장하시겠습니까?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>현재 파일에 복사할 주석이 없습니다</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>현재 파일 뒤에 미주석 파일이 없습니다</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

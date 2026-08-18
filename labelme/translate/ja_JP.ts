@@ -511,6 +511,14 @@ Shapes</source>
         <translation>描画中、カーソルを最も近い注釈ポイントにスナップします。</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>アノテーションを次の未アノテーションファイルにコピー</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>現在のアノテーションをラベルファイルのない次のファイルに保存</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>選択した図形のラベルを変更</translation>
     </message>
@@ -657,6 +665,14 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     <message>
         <source>Save annotations?</source>
         <translation>アノテーションを保存しますか？</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>現在のファイルにコピーするアノテーションがありません</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>現在のファイルの後に未アノテーションファイルが見つかりません</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

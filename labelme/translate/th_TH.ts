@@ -497,6 +497,14 @@ Shapes</source>
         <translation>ดูดเคอร์เซอร์ไปยังจุดคำอธิบายประกอบที่ใกล้ที่สุดขณะวาด</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>คัดลอกคำอธิบายประกอบไปยังไฟล์ที่ยังไม่มีคำอธิบายประกอบถัดไป</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>บันทึกคำอธิบายประกอบปัจจุบันไปยังไฟล์ถัดไปที่ไม่มีไฟล์คำอธิบายประกอบ</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>แก้ไขเลเบลของรูปร่างที่เลือก</translation>
     </message>
@@ -643,6 +651,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Save annotations?</source>
         <translation>บันทึกแอนโนเทชันหรือไม่?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>ไฟล์ปัจจุบันไม่มีคำอธิบายประกอบให้คัดลอก</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>ไม่พบไฟล์ที่ยังไม่มีคำอธิบายประกอบหลังไฟล์ปัจจุบัน</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

@@ -497,6 +497,14 @@ Shapes</source>
         <translation>绘制时,将光标吸附到最近的标注点。</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>复制标注到下一个未标注文件</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>将当前标注保存到下一个没有标注文件的文件中</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>修改所选形状的标签</translation>
     </message>
@@ -643,6 +651,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Save annotations?</source>
         <translation>是否保存标注？</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>当前文件没有可复制的标注</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>当前文件之后没有找到未标注文件</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

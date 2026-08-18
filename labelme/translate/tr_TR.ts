@@ -500,6 +500,14 @@ Shapes</source>
         <translation>Çizim sırasında imleci en yakın açıklama noktasına yapıştırır.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Açıklamaları sonraki açıklanmamış dosyaya kopyala</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Mevcut açıklamaları etiket dosyası olmayan sonraki dosyaya kaydet</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Seçili şeklin etiketini değiştir</translation>
     </message>
@@ -646,6 +654,14 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     <message>
         <source>Save annotations?</source>
         <translation>Açıklamalar kaydedilsin mi?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Geçerli dosyada kopyalanacak açıklama yok</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Geçerli dosyadan sonra açıklanmamış dosya bulunamadı</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>

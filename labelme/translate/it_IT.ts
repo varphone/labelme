@@ -503,6 +503,14 @@ forme</translation>
         <translation>Aggancia il cursore al punto di annotazione più vicino durante il disegno.</translation>
     </message>
     <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Copia annotazioni nel file non annotato successivo</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Salva le annotazioni correnti nel prossimo file senza file di annotazione</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modifica l&apos;etichetta della forma selezionata</translation>
     </message>
@@ -649,6 +657,14 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
     <message>
         <source>Save annotations?</source>
         <translation>Salvare le annotazioni?</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Il file corrente non ha annotazioni da copiare</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>Nessun file non annotato trovato dopo il file corrente</translation>
     </message>
     <message>
         <source>%s - Open Directory</source>
