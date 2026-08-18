@@ -124,7 +124,7 @@ shortcuts:
   add_point_to_edge: V
   toggle_keep_prev_mode: Ctrl+P
   toggle_snap_to_point: S
-  remove_selected_point: [Meta+H, Backspace]
+  remove_selected_point: [X, Backspace]
   show_all_shapes:
   hide_all_shapes:
   toggle_all_shapes: T
