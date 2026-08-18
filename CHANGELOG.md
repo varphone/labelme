@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a "Copy Annotations to Next Unannotated File" action (Edit menu, shortcut `Shift+N`) that saves the current file's annotations as a label file for the next file in the list that has no label file yet, then navigates to it — useful for propagating annotations across a sequence of similar images ([#2487](https://github.com/wkentaro/labelme/pull/2487))
 - Added a "Split Linestrip at Vertex" action (Edit menu, also in the right-click context menu, shortcut `B`) that splits the selected open polyline into two new linestrips at the hovered vertex, preserving labels, flags, and group membership; the operation is undoable ([#2484](https://github.com/wkentaro/labelme/pull/2484))
 - Added shortcut `V` for the "Add Point to Edge" action, so a new vertex can be inserted at the hovered edge without reaching for the right-click context menu ([#2485](https://github.com/wkentaro/labelme/pull/2485))
 - Added a "Delete Image and Label File" action (File menu, shortcut `Shift+Delete`) that permanently removes the current image together with its annotation file after a confirmation prompt, then loads the next file in the list ([#2483](https://github.com/wkentaro/labelme/pull/2483))
