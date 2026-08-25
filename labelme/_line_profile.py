@@ -6,12 +6,29 @@ from collections.abc import Callable
 from collections.abc import Sequence
 from typing import Any
 from typing import Literal
+from typing import NotRequired
 from typing import TypedDict
 from typing import cast
 
 PathMode = Literal["continuous", "visible_only"]
 Parameterization = Literal["normalized_arc_length"]
 AnchorSource = Literal["auto", "manual"]
+MeasurementOverrideKey = Literal[
+    "sample_spacing",
+    "search_radius",
+    "min_width",
+    "max_width",
+    "contrast_factor",
+]
+_MEASUREMENT_OVERRIDE_KEYS = frozenset(
+    {
+        "sample_spacing",
+        "search_radius",
+        "min_width",
+        "max_width",
+        "contrast_factor",
+    }
+)
 
 CURRENT_SCHEMA_VERSION = 1
 DEFAULT_PARAMETERIZATION: Parameterization = "normalized_arc_length"
@@ -43,6 +60,7 @@ class LineProfileDict(TypedDict):
     max_width: float | None
     measurement_version: str | None
     reviewed: bool
+    measurement_overrides: NotRequired[dict[str, float]]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -77,6 +95,7 @@ class LineProfile:
     max_width: float | None = None
     measurement_version: str | None = None
     reviewed: bool = False
+    measurement_overrides: tuple[tuple[MeasurementOverrideKey, float], ...] = ()
 
     def __post_init__(self) -> None:
         if isinstance(self.schema_version, bool) or not isinstance(
@@ -100,6 +119,7 @@ class LineProfile:
             self.measurement_version, str
         ):
             raise ValueError("measurement_version must be str or null")
+        _validate_measurement_overrides(self.measurement_overrides)
 
         min_width = _optional_positive_float(self.min_width, "min_width")
         max_width = _optional_positive_float(self.max_width, "max_width")
@@ -153,6 +173,9 @@ class LineProfile:
         reviewed = value.get("reviewed")
         if not isinstance(reviewed, bool):
             raise ValueError("reviewed must be bool")
+        measurement_overrides = _measurement_overrides_from_json(
+            value.get("measurement_overrides")
+        )
         return cls(
             schema_version=schema_version,
             path_mode=cast(PathMode, path_mode),
@@ -163,10 +186,11 @@ class LineProfile:
             max_width=max_width,
             measurement_version=measurement_version,
             reviewed=reviewed,
+            measurement_overrides=measurement_overrides,
         )
 
     def to_json_obj(self) -> LineProfileDict:
-        return {
+        result: LineProfileDict = {
             "schema_version": self.schema_version,
             "path_mode": self.path_mode,
             "parameterization": self.parameterization,
@@ -195,6 +219,9 @@ class LineProfile:
             "measurement_version": self.measurement_version,
             "reviewed": self.reviewed,
         }
+        if self.measurement_overrides:
+            result["measurement_overrides"] = dict(self.measurement_overrides)
+        return result
 
     def evaluate_width(self, position: float) -> float | None:
         _validate_position(position, field="position")
@@ -229,6 +256,44 @@ def migrate_line_profile_json(value: object) -> dict[str, Any]:
             f"no line_profile migration is available for schema_version {version}"
         )
     return dict(value)
+
+
+def _measurement_overrides_from_json(
+    value: object,
+) -> tuple[tuple[MeasurementOverrideKey, float], ...]:
+    if value is None:
+        return ()
+    if not isinstance(value, dict):
+        raise ValueError("measurement_overrides must be an object or null")
+    overrides: list[tuple[MeasurementOverrideKey, float]] = []
+    for key, raw in value.items():
+        if key not in _MEASUREMENT_OVERRIDE_KEYS:
+            raise ValueError(f"unsupported measurement override: {key!r}")
+        if isinstance(raw, bool) or not isinstance(raw, int | float):
+            raise ValueError(f"measurement override {key!r} must be a number")
+        overrides.append((cast(MeasurementOverrideKey, key), float(raw)))
+    result = tuple(sorted(overrides))
+    _validate_measurement_overrides(result)
+    return result
+
+
+def _validate_measurement_overrides(
+    overrides: Sequence[tuple[MeasurementOverrideKey, float]],
+) -> None:
+    values: dict[str, float] = {}
+    for key, value in overrides:
+        if key not in _MEASUREMENT_OVERRIDE_KEYS:
+            raise ValueError(f"unsupported measurement override: {key!r}")
+        if not math.isfinite(value):
+            raise ValueError(f"measurement override {key!r} must be finite")
+        if key == "contrast_factor":
+            if not 0.0 <= value <= 1.0:
+                raise ValueError("contrast_factor override must be within [0, 1]")
+        elif value <= 0.0:
+            raise ValueError(f"measurement override {key!r} must be positive")
+        values[key] = value
+    if values.get("min_width", 0.0) > values.get("max_width", math.inf):
+        raise ValueError("min_width override must not exceed max_width override")
 
 
 def cumulative_lengths(points: Sequence[Sequence[float]]) -> tuple[float, ...]:

@@ -46,6 +46,12 @@ arc-length values in `[0, 1]`; duplicate positions are invalid. `source` is
 The fixed round-trip example is in
 [`docs/line_profile_example.json`](line_profile_example.json).
 
+The optional `measurement_overrides` object stores Shape-level measurement
+defaults. When present, its keys override the global Settings values for that
+linestrip only; clearing the override returns the linestrip to global defaults.
+The override is part of the profile and therefore follows the same backup,
+undo, and save workflow as other profile edits.
+
 Older LabelMe versions ignore unknown Shape fields and therefore retain their
 ordinary centerline behavior. LabelMe keeps malformed profile data in memory
 for explicit repair instead of silently deleting it.
