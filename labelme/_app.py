@@ -2115,20 +2115,18 @@ class MainWindow(QtWidgets.QMainWindow):
             self._active_line_profile_anchor_index,
             self._active_line_profile_anchor_kind,
         )
-        width_index = (
+        selected_anchor_position = anchors[
             self._active_line_profile_anchor_index
-            if self._active_line_profile_anchor_kind == "width"
-            else 0
+        ].position
+        width_index = _nearest_line_profile_anchor_index(
+            profile.width_anchors, selected_anchor_position
         )
-        visibility_index = (
-            self._active_line_profile_anchor_index
-            if self._active_line_profile_anchor_kind == "visibility"
-            else 0
+        visibility_index = _nearest_line_profile_anchor_index(
+            profile.visibility_anchors, selected_anchor_position
         )
         if profile.width_anchors:
-            anchor = profile.width_anchors[
-                min(width_index, len(profile.width_anchors) - 1)
-            ]
+            assert width_index is not None
+            anchor = profile.width_anchors[width_index]
             width_widget.set_profile(
                 (
                     anchor.position,
@@ -2139,9 +2137,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 )
             )
         if profile.visibility_anchors:
-            anchor = profile.visibility_anchors[
-                min(visibility_index, len(profile.visibility_anchors) - 1)
-            ]
+            assert visibility_index is not None
+            anchor = profile.visibility_anchors[visibility_index]
             visibility_widget.set_anchor(
                 (
                     anchor.position,
@@ -4717,6 +4714,18 @@ def _line_measurement_token(
     """Build the immutable state token used to reject stale worker results."""
     profile = None if shape.line_profile is None else shape.line_profile.to_json_obj()
     return id(shape), shape.points.tobytes() + repr(profile).encode(), pixmap_hash
+
+
+def _nearest_line_profile_anchor_index(
+    anchors: tuple[WidthAnchor, ...] | tuple[VisibilityAnchor, ...],
+    position: float,
+) -> int | None:
+    if not anchors:
+        return None
+    return min(
+        range(len(anchors)),
+        key=lambda index: abs(anchors[index].position - position),
+    )
 
 
 def _image_file_sort_key(image_path: str) -> tuple[str, str, str]:
