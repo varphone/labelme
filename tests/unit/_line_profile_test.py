@@ -264,3 +264,10 @@ def test_profile_measurement_overrides_round_trip_and_validate() -> None:
         LineProfile.from_json_obj(
             {**_profile_json(), "measurement_overrides": {"min_width": 0}}
         )
+    with pytest.raises(ValueError, match="duplicate"):
+        LineProfile(
+            measurement_overrides=(
+                ("sample_spacing", 4.0),
+                ("sample_spacing", 5.0),
+            )
+        )
