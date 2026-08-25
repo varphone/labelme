@@ -1,0 +1,67 @@
+{
+  "version": "7.1.0",
+  "imageData": null,
+  "imagePath": "example.png",
+  "imageHeight": 128,
+  "imageWidth": 256,
+  "shapes": [
+    {
+      "label": "LaserLine",
+      "points": [[16, 64], [128, 72], [240, 96]],
+      "shape_type": "linestrip",
+      "flags": {},
+      "description": "",
+      "group_id": null,
+      "mask": null,
+      "line_profile": {
+        "schema_version": 1,
+        "path_mode": "continuous",
+        "parameterization": "normalized_arc_length",
+        "width_anchors": [
+          {
+            "position": 0.0,
+            "width": 6.0,
+            "source": "manual",
+            "confidence": 1.0,
+            "confirmed": true
+          },
+          {
+            "position": 0.5,
+            "width": 18.0,
+            "source": "manual",
+            "confidence": 1.0,
+            "confirmed": true
+          },
+          {
+            "position": 1.0,
+            "width": 26.0,
+            "source": "auto",
+            "confidence": 0.68,
+            "confirmed": false
+          }
+        ],
+        "visibility_anchors": [
+          {
+            "position": 0.0,
+            "visibility": 1.0,
+            "source": "manual",
+            "confidence": 1.0,
+            "confirmed": true
+          },
+          {
+            "position": 0.5,
+            "visibility": 0.45,
+            "source": "auto",
+            "confidence": 0.72,
+            "confirmed": false
+          }
+        ],
+        "min_width": 4.0,
+        "max_width": 40.0,
+        "measurement_version": "line-profile-measurement-v1",
+        "reviewed": false
+      }
+    }
+  ],
+  "flags": {}
+}

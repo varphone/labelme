@@ -12,6 +12,9 @@ import numpy as np
 import numpy.typing as npt
 from loguru import logger
 
+from ._line_profile import LineProfile
+from ._line_profile import remap_profile
+
 ShapeType: TypeAlias = Literal[
     "polygon",
     "rectangle",
@@ -42,6 +45,8 @@ class Shape:
         default_factory=lambda: np.empty((0,), dtype=np.int_)
     )
     other_data: dict[str, Any] = dataclasses.field(default_factory=dict)
+    line_profile: LineProfile | None = None
+    line_profile_error: str | None = None
     closed: bool = False
     visible: bool = True
 
@@ -64,9 +69,11 @@ class Shape:
                 len(self.points),
             )
             return
+        old_points = self.points.copy()
         point = np.asarray(point, dtype=np.float64).reshape(2)
         self.points = np.insert(self.points, i, point, axis=0)
         self.point_labels = np.insert(self.point_labels, i, label)
+        self._remap_line_profile(old_points=old_points)
 
     def can_remove_point(self) -> bool:
         if not self.can_add_point():
@@ -85,14 +92,27 @@ class Shape:
                 len(self.points),
             )
             return
+        old_points = self.points.copy()
         self.points = np.delete(self.points, i, axis=0)
         self.point_labels = np.delete(self.point_labels, i)
+        self._remap_line_profile(old_points=old_points)
 
     def move_vertex(self, i: int, pos: npt.ArrayLike) -> None:
+        old_points = self.points.copy()
         self.points[i] = np.asarray(pos, dtype=np.float64).reshape(2)
+        self._remap_line_profile(old_points=old_points)
 
     def translate(self, offset: npt.ArrayLike) -> None:
         self.points = self.points + np.asarray(offset, dtype=np.float64).reshape(2)
+
+    def _remap_line_profile(self, *, old_points: npt.NDArray[np.float64]) -> None:
+        if self.line_profile is None or self.shape_type != "linestrip":
+            return
+        self.line_profile = remap_profile(
+            profile=self.line_profile,
+            old_points=old_points,
+            new_points=self.points,
+        )
 
     def copy(self) -> Shape:
         return copy.deepcopy(self)

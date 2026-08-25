@@ -24,6 +24,7 @@ from labelme._label_file import _normalize_to_uint8
 from labelme._label_file import is_label_file_path
 from labelme._label_file import read_label_file
 from labelme._label_file import write_label_file
+from labelme._line_profile import LineProfile
 from labelme._utils import img_arr_to_b64
 
 
@@ -502,6 +503,79 @@ def test_load_shape_json_obj_buckets_unknown_keys_into_other_data() -> None:
     )
 
     assert loaded["other_data"] == {"score": 0.9, "reviewer": "alice"}
+
+
+def _line_profile_json() -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "path_mode": "visible_only",
+        "parameterization": "normalized_arc_length",
+        "width_anchors": [
+            {
+                "position": 0.0,
+                "width": 3.0,
+                "source": "manual",
+                "confidence": 1.0,
+                "confirmed": True,
+            }
+        ],
+        "visibility_anchors": [],
+        "min_width": 1.0,
+        "max_width": 8.0,
+        "measurement_version": "manual",
+        "reviewed": True,
+    }
+
+
+def test_shape_codec_round_trips_line_profile() -> None:
+    raw_profile = _line_profile_json()
+    shape_json_obj = {
+        "label": "stripe",
+        "points": [[0.0, 0.0], [10.0, 0.0]],
+        "shape_type": "linestrip",
+        "line_profile": raw_profile,
+    }
+
+    loaded = _load_shape_json_obj(shape_json_obj=shape_json_obj)
+    dumped = _dump_shape_to_json_obj(shape=loaded)
+
+    assert loaded["line_profile"] == LineProfile.from_json_obj(raw_profile)
+    assert loaded.get("line_profile_error") is None
+    assert dumped["line_profile"] == raw_profile
+    assert "line_profile" not in loaded["other_data"]
+
+
+def test_shape_codec_preserves_invalid_line_profile_without_blocking_load() -> None:
+    raw_profile = {"schema_version": 99}
+    shape_json_obj = {
+        "label": "stripe",
+        "points": [[0.0, 0.0], [10.0, 0.0]],
+        "shape_type": "linestrip",
+        "line_profile": raw_profile,
+    }
+
+    loaded = _load_shape_json_obj(shape_json_obj=shape_json_obj)
+
+    assert loaded.get("line_profile") is None
+    assert loaded.get("line_profile_error")
+    assert loaded["other_data"]["line_profile"] == raw_profile
+    assert _dump_shape_to_json_obj(shape=loaded)["line_profile"] == raw_profile
+
+
+def test_shape_codec_preserves_profile_on_unsupported_shape_type() -> None:
+    raw_profile = _line_profile_json()
+    loaded = _load_shape_json_obj(
+        shape_json_obj={
+            "label": "stripe",
+            "points": [[0.0, 0.0], [10.0, 0.0]],
+            "shape_type": "line",
+            "line_profile": raw_profile,
+        }
+    )
+
+    assert loaded.get("line_profile") is None
+    assert loaded.get("line_profile_error")
+    assert loaded["other_data"]["line_profile"] == raw_profile
 
 
 def test_load_shape_json_obj_decodes_mask_to_bool_array(

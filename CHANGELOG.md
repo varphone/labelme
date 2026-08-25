@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- towncrier release notes start -->
 
+## [Unreleased]
+
+### Added
+
+- Added typed, backward-compatible `line_profile` support for `linestrip` annotations, including normalized centerline positions, width/visibility anchors, profile-aware editing, visual boundaries, and opt-in background measurement with explicit acceptance.
+
 ## [7.1.0] - 2026-08-21
 
 ### Added

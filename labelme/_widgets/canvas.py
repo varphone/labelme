@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import collections
+import copy
 import dataclasses
 import enum
+import math
 import typing
 from collections.abc import Callable
 from collections.abc import Sequence
@@ -25,6 +27,10 @@ from .. import _ai_models
 from .. import _automation
 from .. import _shape
 from .. import _utils
+from .._line_profile import point_to_position
+from .._line_profile import position_to_point
+from .._line_profile import profile_boundary_points
+from .._line_profile import split_profile
 from .._shape import POLYLINE_SHAPE_TYPES
 from .._shape import Shape
 from .._shape import ShapeType
@@ -166,6 +172,8 @@ class Canvas(QtWidgets.QWidget):
     _hovered_edge: int | None
     _last_hovered_edge: int | None
     _hovered_rotation: int | None
+    active_line_profile_anchor_index: int | None
+    _line_profile_drag: tuple[Shape, int, Literal["position", "width"]] | None
 
     zoom_request = QtCore.Signal(int, QPointF)
     scroll_request = QtCore.Signal(int, Qt.Orientation)
@@ -180,6 +188,9 @@ class Canvas(QtWidgets.QWidget):
     drawing_polygon = QtCore.Signal(bool)
     vertex_selected = QtCore.Signal(bool)
     edge_selected = QtCore.Signal(bool)
+    line_profile_anchor_selected = QtCore.Signal(int)
+    line_profile_anchor_dragged = QtCore.Signal(int, QPointF, str)
+    line_profile_anchor_drag_finished = QtCore.Signal()
     mouse_moved = QtCore.Signal(QPointF)
     status_updated = QtCore.Signal(str)
 
@@ -267,6 +278,8 @@ class Canvas(QtWidgets.QWidget):
         self._color_resolver: Callable[[str], tuple[int, int, int]] | None = None
         self._point_size: int = 8
         self._point_type: Literal["square", "round"] = "round"
+        self.active_line_profile_anchor_index = None
+        self._line_profile_drag = None
         self._draft_palette = _DEFAULT_PALETTE
         self._palette_cache = {}
         self.context_menus = _canvas_interaction.ContextMenuPair(
@@ -296,6 +309,10 @@ class Canvas(QtWidgets.QWidget):
 
     def set_point_size(self, point_size: int) -> None:
         self._point_size = point_size
+
+    def set_active_line_profile_anchor_index(self, index: int | None) -> None:
+        self.active_line_profile_anchor_index = index
+        self.update()
 
     def _resolve_palette(self, label: str | None) -> Palette:
         if label is None or self._color_resolver is None:
@@ -828,6 +845,10 @@ class Canvas(QtWidgets.QWidget):
     def _continue_left_button_drag(
         self, pos: QPointF, event: QtGui.QMouseEvent
     ) -> None:
+        if self._line_profile_drag is not None:
+            _, index, mode = self._line_profile_drag
+            self.line_profile_anchor_dragged.emit(index, pos, mode)
+            return
         is_shift_pressed = bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier)
         if self._is_vertex_selected():
             self._drag_hovered_vertex(pos=pos, is_shift_pressed=is_shift_pressed)
@@ -1024,6 +1045,18 @@ class Canvas(QtWidgets.QWidget):
         # Splitting at an endpoint would produce a one-point linestrip.
         if i is None or i == 0 or i >= len(shape.points) - 1:
             return None
+        split_position = point_to_position(shape.points, shape.points[i])
+        if split_position <= 0.0 or split_position >= 1.0:
+            return None
+        if shape.line_profile is None:
+            left_profile = right_profile = None
+        else:
+            try:
+                left_profile, right_profile = split_profile(
+                    shape.line_profile, split_position
+                )
+            except ValueError:
+                return None
         left = Shape(
             label=shape.label,
             group_id=shape.group_id,
@@ -1032,6 +1065,9 @@ class Canvas(QtWidgets.QWidget):
             description=shape.description,
             points=shape.points[: i + 1].copy(),
             point_labels=shape.point_labels[: i + 1].copy(),
+            other_data=copy.deepcopy(shape.other_data),
+            line_profile=left_profile,
+            line_profile_error=shape.line_profile_error,
         )
         right = Shape(
             label=shape.label,
@@ -1041,6 +1077,9 @@ class Canvas(QtWidgets.QWidget):
             description=shape.description,
             points=shape.points[i:].copy(),
             point_labels=shape.point_labels[i:].copy(),
+            other_data=copy.deepcopy(shape.other_data),
+            line_profile=right_profile,
+            line_profile_error=shape.line_profile_error,
         )
         idx = self.shapes.index(shape)
         self.shapes[idx] = left
@@ -1212,6 +1251,17 @@ class Canvas(QtWidgets.QWidget):
 
     def _press_left_while_editing(self, pos: QPointF, event: QtGui.QMouseEvent) -> None:
         modifiers = event.modifiers()
+        profile_hit = self._find_line_profile_anchor_at_point(pos)
+        if profile_hit is not None:
+            shape, index, mode = profile_hit
+            if shape not in self.selected_shapes:
+                self.selection_changed.emit([shape])
+            self.active_line_profile_anchor_index = index
+            self.line_profile_anchor_selected.emit(index)
+            self._line_profile_drag = (shape, index, mode)
+            self._prev_point = pos
+            self.update()
+            return
         if self._maybe_modify_polygon_topology(modifiers=modifiers):
             # remove_selected_point already repainted; just consume the press.
             return
@@ -1264,6 +1314,9 @@ class Canvas(QtWidgets.QWidget):
             self._release_right(event=event)
             return
         if button == Qt.MouseButton.LeftButton:
+            if self._line_profile_drag is not None:
+                self._line_profile_drag = None
+                self.line_profile_anchor_drag_finished.emit()
             self._release_left()
             return
         if button == Qt.MouseButton.MiddleButton:
@@ -1436,6 +1489,38 @@ class Canvas(QtWidgets.QWidget):
                 return shape
         return None
 
+    def _find_line_profile_anchor_at_point(
+        self, point: QPointF
+    ) -> tuple[Shape, int, Literal["position", "width"]] | None:
+        if len(self.selected_shapes) > 1:
+            return None
+        candidates: list[tuple[float, Shape, int, Literal["position", "width"]]] = []
+        shapes = self.selected_shapes or [
+            shape
+            for shape in self.shapes
+            if shape.visible and shape.shape_type == "linestrip"
+        ]
+        for shape in shapes:
+            if shape.shape_type != "linestrip" or shape.line_profile is None:
+                continue
+            for index, anchor in enumerate(shape.line_profile.width_anchors):
+                center = position_to_point(shape.points, anchor.position)
+                dx, dy = point.x() - center[0], point.y() - center[1]
+                distance = math.hypot(dx, dy)
+                display_radius = max(4.0, min(18.0, anchor.width * self.scale / 2.0))
+                radius = display_radius / self.scale
+                threshold = max(radius, self._epsilon / self.scale)
+                if distance > threshold:
+                    continue
+                mode: Literal["position", "width"] = (
+                    "width" if distance >= radius * 0.65 else "position"
+                )
+                candidates.append((distance, shape, index, mode))
+        if not candidates:
+            return None
+        _, shape, index, mode = min(candidates, key=lambda item: item[0])
+        return shape, index, mode
+
     def _record_drag_anchor(self, shapes: list[Shape], click: QPointF) -> None:
         if not shapes:
             self._drag_anchor = (QPointF(), QRectF())
@@ -1587,6 +1672,7 @@ class Canvas(QtWidgets.QWidget):
             self._draw_pixmap_layer,
             self._draw_crosshair_layer,
             self._draw_committed_shapes_layer,
+            self._draw_line_profile_layer,
             self._draw_active_shape_layer,
             self._draw_drag_copy_layer,
             self._draw_preview_overlay_layer,
@@ -1643,6 +1729,43 @@ class Canvas(QtWidgets.QWidget):
                 shape=shape, highlighted=shape is self.hovered_shape
             )
             render_shape(painter=painter, shape=shape, context=context)
+
+    def _draw_line_profile_layer(self, painter: QtGui.QPainter) -> None:
+        if len(self.selected_shapes) != 1:
+            return
+        shape = self.selected_shapes[0]
+        profile = shape.line_profile
+        if shape.shape_type != "linestrip" or profile is None:
+            return
+        if profile.width_anchors:
+            left, right = profile_boundary_points(
+                profile, shape.points, samples=max(16, min(128, len(shape.points) * 16))
+            )
+            boundary_pen = QtGui.QPen(QtGui.QColor(80, 170, 255, 180))
+            boundary_pen.setWidth(1)
+            boundary_pen.setStyle(Qt.PenStyle.DashLine)
+            painter.setPen(boundary_pen)
+            for boundary in (left, right):
+                path = QtGui.QPainterPath()
+                path.moveTo(QtCore.QPointF(*boundary[0]) * self.scale)
+                for point in boundary[1:]:
+                    path.lineTo(QtCore.QPointF(*point) * self.scale)
+                painter.drawPath(path)
+        for index, anchor in enumerate(profile.width_anchors):
+            center = position_to_point(shape.points, anchor.position)
+            radius = max(4.0, min(18.0, anchor.width * self.scale / 2.0))
+            if index == self.active_line_profile_anchor_index:
+                color = QtGui.QColor(40, 120, 255, 255)
+            elif anchor.confirmed:
+                color = QtGui.QColor(30, 190, 80, 230)
+            elif anchor.confidence < 0.5:
+                color = QtGui.QColor(220, 50, 50, 230)
+            else:
+                color = QtGui.QColor(230, 180, 40, 230)
+            painter.setPen(QtGui.QPen(color, 2))
+            painter.setBrush(QtGui.QColor(255, 255, 255, 80))
+            point = QtCore.QPointF(*center) * self.scale
+            painter.drawEllipse(point, radius, radius)
 
     def _draw_active_shape_layer(self, painter: QtGui.QPainter) -> None:
         if self._current is None:
@@ -2018,6 +2141,7 @@ class Canvas(QtWidgets.QWidget):
         self._hovered_vertex = None
         self._hovered_edge = None
         self._hovered_rotation = None
+        self.active_line_profile_anchor_index = None
         self._clear_highlight_state()
         self._set_ai_existing_shape_highlights(shapes=[])
 

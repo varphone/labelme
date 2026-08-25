@@ -40,6 +40,14 @@ shape:
 ai:
   default: Sam2 (balanced)
   suppress_existing_shape_matches: false
+# Global defaults for opt-in linestrip profile measurement. Shape/profile data
+# remains independent from these settings.
+line_profile_measurement:
+  sample_spacing: 8.0
+  search_radius: 32.0
+  min_width: 1.0
+  max_width: 256.0
+  contrast_factor: 0.35
 # main
 flag_dock:
   show: true
