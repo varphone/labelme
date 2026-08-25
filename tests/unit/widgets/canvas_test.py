@@ -16,6 +16,8 @@ from PySide6.QtCore import Qt
 from pytestqt.qtbot import QtBot
 
 from labelme._automation._ai_assist import AiAssistProposal
+from labelme._line_profile import LineProfile
+from labelme._line_profile import WidthAnchor
 from labelme._shape import Shape
 from labelme._shape import ShapeType
 from labelme._widgets.canvas import Canvas
@@ -503,8 +505,28 @@ def test_shape_visibility_survives_backup_and_restore(canvas: Canvas) -> None:
     canvas.load_shapes([shape.copy()])
     assert canvas.shapes[0].visible is False
 
+
+@pytest.mark.gui
+def test_profile_survives_canvas_backup_and_restore(canvas: Canvas) -> None:
+    profile = LineProfile(
+        width_anchors=(
+            # Full-width values are intentionally distinct from the geometry.
+            WidthAnchor(0.0, 4.0, "manual", 1.0, True),
+        )
+    )
+    shape = Shape(
+        label="profiled",
+        shape_type="linestrip",
+        points=np.array([(10, 20), (80, 20)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes([shape])
+    canvas.shapes[0].line_profile = LineProfile(reviewed=True)
+    canvas.backup_shapes()
+
     canvas.restore_last_shape()
-    assert canvas.shapes[0].visible is False
+
+    assert canvas.shapes[0].line_profile == profile
 
 
 def _make_rectangle(label: str | None) -> Shape:

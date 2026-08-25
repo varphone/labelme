@@ -2136,10 +2136,10 @@ class MainWindow(QtWidgets.QMainWindow):
         shape = selected[0]
         if shape.line_profile is None and "line_profile" not in shape.other_data:
             return
-        self._canvas_widgets.canvas.backup_shapes()
         shape.line_profile = None
         shape.line_profile_error = None
         shape.other_data.pop("line_profile", None)
+        self._canvas_widgets.canvas.backup_shapes()
         self.mark_dirty()
         self._sync_line_profile_widgets()
 
@@ -2173,8 +2173,8 @@ class MainWindow(QtWidgets.QMainWindow):
             )
         except ValueError:
             return
-        self._canvas_widgets.canvas.backup_shapes()
         shape.line_profile = updated_profile
+        self._canvas_widgets.canvas.backup_shapes()
         self._active_line_profile_anchor_index = min(
             self._active_line_profile_anchor_index + 1, len(anchors)
         )
@@ -2197,8 +2197,8 @@ class MainWindow(QtWidgets.QMainWindow):
             )
         except IndexError:
             return
-        self._canvas_widgets.canvas.backup_shapes()
         shape.line_profile = updated_profile
+        self._canvas_widgets.canvas.backup_shapes()
         self._active_line_profile_anchor_index = max(
             0, self._active_line_profile_anchor_index - 1
         )
@@ -2251,9 +2251,9 @@ class MainWindow(QtWidgets.QMainWindow):
         except ValueError:
             self._sync_line_profile_widgets()
             return
+        shape.line_profile = updated_profile
         canvas = self._canvas_widgets.canvas
         canvas.backup_shapes()
-        shape.line_profile = updated_profile
         self._active_line_profile_anchor_index = anchors.index(updated_anchor)
         self.mark_dirty()
         self._sync_line_profile_widgets()
@@ -2302,9 +2302,9 @@ class MainWindow(QtWidgets.QMainWindow):
         except ValueError:
             self._sync_line_profile_widgets()
             return
+        shape.line_profile = updated_profile
         canvas = self._canvas_widgets.canvas
         canvas.backup_shapes()
-        shape.line_profile = updated_profile
         self._active_line_profile_anchor_index = anchors.index(updated_anchor)
         self.mark_dirty()
         self._sync_line_profile_widgets()
@@ -2567,8 +2567,8 @@ class MainWindow(QtWidgets.QMainWindow):
         except ValueError as e:
             self._on_line_measurement_failed(str(e))
             return
-        self._canvas_widgets.canvas.backup_shapes()
         shape.line_profile = profile
+        self._canvas_widgets.canvas.backup_shapes()
         self.mark_dirty()
         self._active_line_profile_anchor_index = 0
         self._sync_line_profile_width_widget()
