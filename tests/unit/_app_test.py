@@ -6,6 +6,7 @@ import zlib
 from collections.abc import Callable
 from pathlib import Path
 from typing import cast
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -391,6 +392,33 @@ def test_shapes_from_dicts_and_shape_to_dict_carry_line_profile() -> None:
     assert shape.line_profile is profile
     result = _app._shape_to_dict(shape)
     assert result["line_profile"] is profile
+
+
+def test_line_measurement_token_changes_when_shape_state_changes() -> None:
+    shape = Shape(
+        shape_type="linestrip",
+        points=np.array([[0.0, 0.0], [10.0, 0.0]]),
+        line_profile=LineProfile(),
+    )
+    before = _app._line_measurement_token(shape=shape, pixmap_hash=1)
+    shape.points[1, 0] = 11.0
+    after = _app._line_measurement_token(shape=shape, pixmap_hash=1)
+
+    assert before != after
+
+
+def test_cancel_line_measurement_stops_worker_thread_and_progress() -> None:
+    window = _app.MainWindow.__new__(_app.MainWindow)
+    window._line_measurement_worker = Mock()
+    window._line_measurement_thread = Mock()
+    window._line_measurement_progress = Mock()
+
+    window._cancel_line_measurement()
+
+    window._line_measurement_worker.cancel.assert_called_once_with()
+    window._line_measurement_thread.requestInterruption.assert_called_once_with()
+    window._line_measurement_thread.quit.assert_called_once_with()
+    window._line_measurement_progress.close.assert_called_once_with()
 
 
 def test_line_measurement_parameters_apply_shape_overrides() -> None:

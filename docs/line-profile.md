@@ -22,6 +22,12 @@ and profile have not changed before a result can be accepted. Low-confidence
 samples may carry a neighboring-width recommendation, but their confidence is
 not raised automatically.
 
+The preview boundary uses the normal of the containing centerline segment. At a
+sharp turn, adjacent offset samples form a bevel-like join; no miter extension
+is generated. The outline is closed with perpendicular butt caps at both
+endpoints. This keeps the displayed boundary bounded by the requested width
+and does not create a polygon or mask annotation.
+
 ## File format
 
 The optional `line_profile` object contains:

@@ -29,7 +29,7 @@ from .. import _shape
 from .. import _utils
 from .._line_profile import point_to_position
 from .._line_profile import position_to_point
-from .._line_profile import profile_boundary_points
+from .._line_profile import profile_boundary_polygon
 from .._line_profile import split_profile
 from .._shape import POLYLINE_SHAPE_TYPES
 from .._shape import Shape
@@ -927,6 +927,27 @@ class Canvas(QtWidgets.QWidget):
         self._is_moving_shape = True
 
     def _highlight_hover_shape(self, pos: QPointF, status_messages: list[str]) -> None:
+        profile_hit = self._find_line_profile_anchor_at_point(pos)
+        if profile_hit is not None:
+            shape, kind, _, mode = profile_hit
+            self._set_highlight(
+                hovered_shape=shape,
+                hovered_edge=None,
+                hovered_vertex=None,
+                hovered_rotation=None,
+            )
+            self._apply_cursor(CursorRole.HANDLE)
+            if kind == "width":
+                message = (
+                    self.tr("Click & drag to adjust profile width")
+                    if mode == "width"
+                    else self.tr("Click & drag to move width anchor")
+                )
+            else:
+                message = self.tr("Click & drag to move visibility anchor")
+            status_messages.append(message)
+            self.update()
+            return
         target = _canvas_interaction.find_hover_target(
             shapes=self.shapes,
             point=np.array([pos.x(), pos.y()]),
@@ -1778,19 +1799,23 @@ class Canvas(QtWidgets.QWidget):
         if shape.shape_type != "linestrip" or profile is None:
             return
         if profile.width_anchors:
-            left, right = profile_boundary_points(
+            boundary = profile_boundary_polygon(
                 profile, shape.points, samples=max(16, min(128, len(shape.points) * 16))
             )
-            boundary_pen = QtGui.QPen(QtGui.QColor(80, 170, 255, 180))
+            boundary_color = QtGui.QColor(
+                self._resolve_palette(shape.label).select_line
+            )
+            boundary_color.setAlpha(180)
+            boundary_pen = QtGui.QPen(boundary_color)
             boundary_pen.setWidth(1)
             boundary_pen.setStyle(Qt.PenStyle.DashLine)
             painter.setPen(boundary_pen)
-            for boundary in (left, right):
-                path = QtGui.QPainterPath()
-                path.moveTo(QtCore.QPointF(*boundary[0]) * self.scale)
-                for point in boundary[1:]:
-                    path.lineTo(QtCore.QPointF(*point) * self.scale)
-                painter.drawPath(path)
+            path = QtGui.QPainterPath()
+            path.moveTo(QtCore.QPointF(*boundary[0]) * self.scale)
+            for point in boundary[1:]:
+                path.lineTo(QtCore.QPointF(*point) * self.scale)
+            path.closeSubpath()
+            painter.drawPath(path)
         for index, anchor in enumerate(profile.width_anchors):
             center = position_to_point(shape.points, anchor.position)
             radius = max(4.0, min(18.0, anchor.width * self.scale / 2.0))
@@ -1798,7 +1823,10 @@ class Canvas(QtWidgets.QWidget):
                 index == self.active_line_profile_anchor_index
                 and self.active_line_profile_anchor_kind == "width"
             ):
-                color = QtGui.QColor(40, 120, 255, 255)
+                color = QtGui.QColor(
+                    self.palette().color(QtGui.QPalette.ColorRole.Highlight)
+                )
+                color.setAlpha(255)
             elif anchor.confirmed:
                 color = QtGui.QColor(30, 190, 80, 230)
             elif anchor.confidence < 0.5:
@@ -1815,7 +1843,10 @@ class Canvas(QtWidgets.QWidget):
                 index == self.active_line_profile_anchor_index
                 and self.active_line_profile_anchor_kind == "visibility"
             ):
-                color = QtGui.QColor(40, 120, 255, 255)
+                color = QtGui.QColor(
+                    self.palette().color(QtGui.QPalette.ColorRole.Highlight)
+                )
+                color.setAlpha(255)
             elif anchor.confirmed:
                 color = QtGui.QColor(30, 190, 80, 230)
             elif anchor.confidence < 0.5:

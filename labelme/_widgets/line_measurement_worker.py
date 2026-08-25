@@ -11,6 +11,7 @@ class LineMeasurementWorker(QtCore.QObject):
     progress = QtCore.Signal(int)
     succeeded = QtCore.Signal(object)
     failed = QtCore.Signal(str)
+    canceled = QtCore.Signal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -27,6 +28,7 @@ class LineMeasurementWorker(QtCore.QObject):
         try:
             self.progress.emit(5)
             if self._cancelled:
+                self.canceled.emit()
                 return
             result = measure_line_profile(
                 image,  # type: ignore[arg-type]
@@ -35,12 +37,15 @@ class LineMeasurementWorker(QtCore.QObject):
                 cancel_check=lambda: self._cancelled,
             )
             if self._cancelled or result is None:
+                self.canceled.emit()
                 return
             self.progress.emit(100)
             self.succeeded.emit(result)
         except Exception as e:
             if not self._cancelled:
                 self.failed.emit(f"{type(e).__name__}: {e}")
+            else:
+                self.canceled.emit()
 
     @QtCore.Slot()
     def cancel(self) -> None:

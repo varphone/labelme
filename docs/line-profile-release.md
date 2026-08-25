@@ -29,8 +29,11 @@ or arbitrary profile payloads. The recommended event names are:
 - `line_profile_measurement_canceled`;
 - `line_profile_save_failed`.
 
-Collection is opt-in through the host application's existing log/metrics
-pipeline; no new network endpoint is required by this feature.
+The application now emits these events through the existing local logger with
+only the fields above. Collection is opt-in through the host application's
+existing log/metrics pipeline; no new network endpoint is required by this
+feature. A release review should aggregate the four event counts and failure
+reason codes after rollout, without retaining image or annotation payloads.
 
 ## Schema and rollback procedure
 
@@ -44,7 +47,23 @@ pipeline; no new network endpoint is required by this feature.
    LabelMe versions continue to operate on the centerline and ignore the
    additive `line_profile` field; do not rewrite files merely to remove it.
 
+## Stage-gate review
+
+The stage gate is reviewed before enabling a later feature stage:
+
+- format, migration, invalid-data preservation, and ordinary-annotation tests;
+- line-profile unit tests, batch preview/rollback tests, and continuous-frame
+  GUI tests;
+- full test suite, translation consistency, and offscreen application startup;
+- performance baseline and privacy-safe event-field review.
+
+The current implementation remains a Preview capability until a maintainer
+reviews this checklist and the release changelog entry. No batch or frame
+operation is enabled implicitly by opening an image.
+
 Continuous-frame transfer now has an explicit compatibility check and a
-difference preview and confirmation step. Large-directory batch review remains a separate follow-up
-capability; it must not silently modify another frame or bypass the single-file
-atomic writer.
+difference preview and confirmation step. Batch measurement exposes a dry-run
+preview and a caller-supplied confirmation gate; a rejected confirmation does
+not write any file. Every accepted file still uses the single-file atomic
+writer, and a batch caller must persist the report before allowing a retry or
+manual rollback. Neither workflow may silently modify another frame.

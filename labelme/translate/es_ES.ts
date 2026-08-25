@@ -121,6 +121,18 @@
         <translation>Haz clic para añadir un punto</translation>
     </message>
     <message>
+        <source>Click &amp; drag to adjust profile width</source>
+        <translation>Click &amp; drag to adjust profile width</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move width anchor</source>
+        <translation>Click &amp; drag to move width anchor</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move visibility anchor</source>
+        <translation>Click &amp; drag to move visibility anchor</translation>
+    </message>
+    <message>
         <source>ALT + SHIFT + Click to delete point</source>
         <translation>ALT + MAYÚS + Clic para eliminar el punto</translation>
     </message>
