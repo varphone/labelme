@@ -54,9 +54,13 @@ from ._line_profile import LineProfile
 from ._line_profile import VisibilityAnchor
 from ._line_profile import WidthAnchor
 from ._line_profile import cumulative_lengths
+from ._line_profile import insert_visibility_anchor
+from ._line_profile import insert_width_anchor
 from ._line_profile import merge_profiles
 from ._line_profile import point_to_position
 from ._line_profile import position_to_point
+from ._line_profile import remove_visibility_anchor
+from ._line_profile import remove_width_anchor
 from ._line_profile import reverse_profile
 from ._shape import Shape
 from ._shape import ShapeType
@@ -71,6 +75,7 @@ from ._widgets import LabelDialog
 from ._widgets import LabelListWidget
 from ._widgets import LabelListWidgetItem
 from ._widgets import LineMeasurementWorker
+from ._widgets import LineProfileVisibilityWidget
 from ._widgets import LineProfileWidthWidget
 from ._widgets import Palette
 from ._widgets import SettingsDialog
@@ -189,6 +194,11 @@ class _Actions(NamedTuple):
     zoom_widget_action: QtWidgets.QWidgetAction
     circle_radius_action: QtWidgets.QWidgetAction
     line_profile_width_action: QtWidgets.QWidgetAction
+    line_profile_visibility_action: QtWidgets.QWidgetAction
+    show_line_profile_preview: QtGui.QAction
+    insert_line_profile_anchor: QtGui.QAction
+    delete_line_profile_anchor: QtGui.QAction
+    clear_line_profile: QtGui.QAction
     draw: list[tuple[str, QtGui.QAction]]
     zoom: tuple[ZoomWidget | QtGui.QAction, ...]
     on_load_active: tuple[QtGui.QAction, ...]
@@ -271,6 +281,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._prev_opened_dir = None
         self._label_list_menu_origin: QtCore.QPoint | None = None
         self._active_line_profile_anchor_index = 0
+        self._active_line_profile_anchor_kind: Literal["width", "visibility"] = "width"
         self._line_profile_anchor_drag_changed = False
         self._docks = self._setup_dock_widgets()
 
@@ -596,6 +607,24 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Split the selected linestrip into two at the hovered vertex"),
             enabled=False,
         )
+        insert_line_profile_anchor = action(
+            text=self.tr("Insert Profile Anchor"),
+            slot=self.insert_line_profile_anchor,
+            tip=self.tr("Insert an interpolated profile anchor"),
+            enabled=False,
+        )
+        delete_line_profile_anchor = action(
+            text=self.tr("Delete Profile Anchor"),
+            slot=self.delete_line_profile_anchor,
+            tip=self.tr("Delete the active profile anchor"),
+            enabled=False,
+        )
+        clear_line_profile = action(
+            text=self.tr("Clear Line Profile"),
+            slot=self.clear_selected_line_profile,
+            tip=self.tr("Remove profile metadata and keep the centerline"),
+            enabled=False,
+        )
         create_mode = action(
             text=self.tr("Polygon"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="polygon"),
@@ -791,6 +820,15 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Toggle all shapes"),
             enabled=False,
         )
+        show_line_profile_preview = action(
+            text=self.tr("Show Line Profile Preview"),
+            tip=self.tr("Show variable-width profile boundaries and handles"),
+            checkable=True,
+            checked=True,
+        )
+        show_line_profile_preview.toggled.connect(
+            self._canvas_widgets.canvas.set_show_line_profile_preview
+        )
 
         zoom_widget_action = QtWidgets.QWidgetAction(self)
         zoom_box_layout = QtWidgets.QVBoxLayout()
@@ -826,6 +864,13 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         line_profile_width_action = QtWidgets.QWidgetAction(self)
         line_profile_width_action.setDefaultWidget(line_profile_width_widget)
+
+        line_profile_visibility_widget = LineProfileVisibilityWidget(self)
+        line_profile_visibility_widget.visibility_committed.connect(
+            self._on_line_profile_visibility_committed
+        )
+        line_profile_visibility_action = QtWidgets.QWidgetAction(self)
+        line_profile_visibility_action.setDefaultWidget(line_profile_visibility_widget)
 
         self._zoom_mode = _ZoomMode.FIT_WINDOW
         fit_window.setChecked(True)
@@ -870,6 +915,7 @@ class MainWindow(QtWidgets.QMainWindow):
             measure_line_profile,
             delete_file,
             delete_image_file,
+            show_line_profile_preview,
         )
         on_shapes_present = (save_as, hide_all, show_all, toggle_all)
         context_menu = (
@@ -886,6 +932,9 @@ class MainWindow(QtWidgets.QMainWindow):
             remove_point,
             split_linestrip,
             measure_line_profile,
+            insert_line_profile_anchor,
+            delete_line_profile_anchor,
+            clear_line_profile,
         )
         edit_menu = (
             edit,
@@ -901,6 +950,9 @@ class MainWindow(QtWidgets.QMainWindow):
             remove_point,
             split_linestrip,
             None,
+            insert_line_profile_anchor,
+            delete_line_profile_anchor,
+            clear_line_profile,
             copy_annotations_to_next,
             merge_linestrips,
             measure_line_profile,
@@ -964,6 +1016,11 @@ class MainWindow(QtWidgets.QMainWindow):
             zoom_widget_action=zoom_widget_action,
             circle_radius_action=circle_radius_action,
             line_profile_width_action=line_profile_width_action,
+            line_profile_visibility_action=line_profile_visibility_action,
+            show_line_profile_preview=show_line_profile_preview,
+            insert_line_profile_anchor=insert_line_profile_anchor,
+            delete_line_profile_anchor=delete_line_profile_anchor,
+            clear_line_profile=clear_line_profile,
             draw=draw,
             zoom=zoom,
             on_load_active=on_load_active,
@@ -1057,6 +1114,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.hide_all,
                 self._actions.show_all,
                 self._actions.toggle_all,
+                self._actions.show_line_profile_preview,
                 None,
                 self._actions.zoom_in,
                 self._actions.zoom_out,
@@ -1122,6 +1180,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     None,
                     self._actions.circle_radius_action,
                     self._actions.line_profile_width_action,
+                    self._actions.line_profile_visibility_action,
                     None,
                     select_ai_model,
                     None,
@@ -1653,6 +1712,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._last_failed_auto_save_path = None
         self._canvas_widgets.canvas.reset_state()
         self._active_line_profile_anchor_index = 0
+        self._active_line_profile_anchor_kind = "width"
         self._sync_circle_radius_widget()
         self._sync_line_profile_width_widget()
 
@@ -1908,6 +1968,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self._sync_circle_radius_widget()
         self._active_line_profile_anchor_index = 0
+        self._active_line_profile_anchor_kind = "width"
         self._sync_line_profile_width_widget()
 
     def _sync_circle_radius_widget(self) -> None:
@@ -1952,38 +2013,200 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mark_dirty()
         self._sync_circle_radius_widget()
 
-    def _sync_line_profile_width_widget(self) -> None:
-        widget = cast(
+    def _sync_line_profile_widgets(self) -> None:
+        width_widget = cast(
             LineProfileWidthWidget,
             self._actions.line_profile_width_action.defaultWidget(),
         )
+        visibility_widget = cast(
+            LineProfileVisibilityWidget,
+            self._actions.line_profile_visibility_action.defaultWidget(),
+        )
         selected = self._canvas_widgets.canvas.selected_shapes
         if len(selected) != 1:
+            self._sync_line_profile_anchor_actions(available=False)
+            self._actions.clear_line_profile.setEnabled(False)
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
-            widget.set_profile(None)
+            width_widget.set_profile(None)
+            visibility_widget.set_anchor(None)
             return
         profile = selected[0].line_profile
-        if profile is None or not profile.width_anchors:
+        if profile is None:
+            self._sync_line_profile_anchor_actions(available=False)
+            self._actions.clear_line_profile.setEnabled(False)
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
-            widget.set_profile(None)
+            width_widget.set_profile(None)
+            visibility_widget.set_anchor(None)
             return
-        self._active_line_profile_anchor_index = min(
-            self._active_line_profile_anchor_index,
-            len(profile.width_anchors) - 1,
-        )
-        anchor = profile.width_anchors[self._active_line_profile_anchor_index]
-        self._canvas_widgets.canvas.set_active_line_profile_anchor_index(
-            self._active_line_profile_anchor_index
-        )
-        widget.set_profile(
-            (
-                anchor.position,
-                anchor.width,
-                anchor.source,
-                anchor.confidence,
-                anchor.confirmed,
+        width_widget.set_profile(
+            None
+            if not profile.width_anchors
+            else (
+                profile.width_anchors[0].position,
+                profile.width_anchors[0].width,
+                profile.width_anchors[0].source,
+                profile.width_anchors[0].confidence,
+                profile.width_anchors[0].confirmed,
             )
         )
+        visibility_widget.set_anchor(
+            None
+            if not profile.visibility_anchors
+            else (
+                profile.visibility_anchors[0].position,
+                profile.visibility_anchors[0].visibility,
+                profile.visibility_anchors[0].source,
+                profile.visibility_anchors[0].confidence,
+                profile.visibility_anchors[0].confirmed,
+            )
+        )
+        anchors = (
+            profile.width_anchors
+            if self._active_line_profile_anchor_kind == "width"
+            else profile.visibility_anchors
+        )
+        if not anchors:
+            self._active_line_profile_anchor_kind = (
+                "visibility" if profile.visibility_anchors else "width"
+            )
+            anchors = (
+                profile.visibility_anchors
+                if self._active_line_profile_anchor_kind == "visibility"
+                else profile.width_anchors
+            )
+        if not anchors:
+            self._sync_line_profile_anchor_actions(available=False)
+            self._actions.clear_line_profile.setEnabled(True)
+            self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
+            return
+        self._active_line_profile_anchor_index = min(
+            self._active_line_profile_anchor_index, len(anchors) - 1
+        )
+        self._canvas_widgets.canvas.set_active_line_profile_anchor_index(
+            self._active_line_profile_anchor_index,
+            self._active_line_profile_anchor_kind,
+        )
+        width_index = (
+            self._active_line_profile_anchor_index
+            if self._active_line_profile_anchor_kind == "width"
+            else 0
+        )
+        visibility_index = (
+            self._active_line_profile_anchor_index
+            if self._active_line_profile_anchor_kind == "visibility"
+            else 0
+        )
+        if profile.width_anchors:
+            anchor = profile.width_anchors[
+                min(width_index, len(profile.width_anchors) - 1)
+            ]
+            width_widget.set_profile(
+                (
+                    anchor.position,
+                    anchor.width,
+                    anchor.source,
+                    anchor.confidence,
+                    anchor.confirmed,
+                )
+            )
+        if profile.visibility_anchors:
+            anchor = profile.visibility_anchors[
+                min(visibility_index, len(profile.visibility_anchors) - 1)
+            ]
+            visibility_widget.set_anchor(
+                (
+                    anchor.position,
+                    anchor.visibility,
+                    anchor.source,
+                    anchor.confidence,
+                    anchor.confirmed,
+                )
+            )
+        self._sync_line_profile_anchor_actions(available=True)
+        self._actions.clear_line_profile.setEnabled(True)
+
+    def _sync_line_profile_anchor_actions(self, *, available: bool) -> None:
+        self._actions.insert_line_profile_anchor.setEnabled(available)
+        self._actions.delete_line_profile_anchor.setEnabled(available)
+
+    def clear_selected_line_profile(self) -> None:
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if len(selected) != 1:
+            return
+        shape = selected[0]
+        if shape.line_profile is None and "line_profile" not in shape.other_data:
+            return
+        self._canvas_widgets.canvas.backup_shapes()
+        shape.line_profile = None
+        shape.line_profile_error = None
+        shape.other_data.pop("line_profile", None)
+        self.mark_dirty()
+        self._sync_line_profile_widgets()
+
+    def _profile_anchor_position_for_insert(self, anchors: tuple) -> float:
+        index = min(self._active_line_profile_anchor_index, len(anchors) - 1)
+        if index + 1 < len(anchors):
+            return (anchors[index].position + anchors[index + 1].position) / 2.0
+        if index > 0:
+            return (anchors[index - 1].position + anchors[index].position) / 2.0
+        return 0.5 if not math.isclose(anchors[0].position, 0.5) else 0.25
+
+    def insert_line_profile_anchor(self) -> None:
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if len(selected) != 1 or selected[0].line_profile is None:
+            return
+        shape = selected[0]
+        profile = shape.line_profile
+        anchors = (
+            profile.width_anchors
+            if self._active_line_profile_anchor_kind == "width"
+            else profile.visibility_anchors
+        )
+        if not anchors:
+            return
+        position = self._profile_anchor_position_for_insert(anchors)
+        try:
+            updated_profile = (
+                insert_width_anchor(profile, position)
+                if self._active_line_profile_anchor_kind == "width"
+                else insert_visibility_anchor(profile, position)
+            )
+        except ValueError:
+            return
+        self._canvas_widgets.canvas.backup_shapes()
+        shape.line_profile = updated_profile
+        self._active_line_profile_anchor_index = min(
+            self._active_line_profile_anchor_index + 1, len(anchors)
+        )
+        self.mark_dirty()
+        self._sync_line_profile_widgets()
+
+    def delete_line_profile_anchor(self) -> None:
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if len(selected) != 1 or selected[0].line_profile is None:
+            return
+        shape = selected[0]
+        profile = shape.line_profile
+        try:
+            updated_profile = (
+                remove_width_anchor(profile, self._active_line_profile_anchor_index)
+                if self._active_line_profile_anchor_kind == "width"
+                else remove_visibility_anchor(
+                    profile, self._active_line_profile_anchor_index
+                )
+            )
+        except IndexError:
+            return
+        self._canvas_widgets.canvas.backup_shapes()
+        shape.line_profile = updated_profile
+        self._active_line_profile_anchor_index = max(
+            0, self._active_line_profile_anchor_index - 1
+        )
+        self.mark_dirty()
+        self._sync_line_profile_widgets()
+
+    def _sync_line_profile_width_widget(self) -> None:
+        self._sync_line_profile_widgets()
 
     def _on_line_profile_width_committed(
         self,
@@ -1993,6 +2216,7 @@ class MainWindow(QtWidgets.QMainWindow):
         confidence: float,
         confirmed: bool,
     ) -> None:
+        self._active_line_profile_anchor_kind = "width"
         selected = self._canvas_widgets.canvas.selected_shapes
         if len(selected) != 1 or source not in ("auto", "manual"):
             return
@@ -2017,7 +2241,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if any(
             left.position >= right.position for left, right in zip(anchors, anchors[1:])
         ):
-            self._sync_line_profile_width_widget()
+            self._sync_line_profile_widgets()
             return
         try:
             updated_profile = dataclasses.replace(
@@ -2025,36 +2249,105 @@ class MainWindow(QtWidgets.QMainWindow):
                 width_anchors=tuple(anchors),
             )
         except ValueError:
-            self._sync_line_profile_width_widget()
+            self._sync_line_profile_widgets()
             return
         canvas = self._canvas_widgets.canvas
         canvas.backup_shapes()
         shape.line_profile = updated_profile
         self._active_line_profile_anchor_index = anchors.index(updated_anchor)
         self.mark_dirty()
-        self._sync_line_profile_width_widget()
+        self._sync_line_profile_widgets()
 
-    def _on_line_profile_anchor_selected(self, index: int) -> None:
-        self._active_line_profile_anchor_index = index
-        self._sync_line_profile_width_widget()
-
-    def _on_line_profile_anchor_dragged(
-        self, index: int, point: QtCore.QPointF, mode: str
+    def _on_line_profile_visibility_committed(
+        self,
+        position: float,
+        visibility: float,
+        source: str,
+        confidence: float,
+        confirmed: bool,
     ) -> None:
+        self._active_line_profile_anchor_kind = "visibility"
         selected = self._canvas_widgets.canvas.selected_shapes
-        if len(selected) != 1 or mode not in ("position", "width"):
+        if len(selected) != 1 or source not in ("auto", "manual"):
             return
         shape = selected[0]
         profile = shape.line_profile
-        if profile is None or index >= len(profile.width_anchors):
+        if profile is None or not profile.visibility_anchors:
             return
-        anchor = profile.width_anchors[index]
+        index = min(
+            self._active_line_profile_anchor_index,
+            len(profile.visibility_anchors) - 1,
+        )
+        anchors = list(profile.visibility_anchors)
+        updated_anchor = dataclasses.replace(
+            anchors[index],
+            position=position,
+            visibility=visibility,
+            source=cast(AnchorSource, source),
+            confidence=confidence,
+            confirmed=confirmed,
+        )
+        anchors[index] = updated_anchor
+        anchors.sort(key=lambda anchor: anchor.position)
+        if any(
+            left.position >= right.position for left, right in zip(anchors, anchors[1:])
+        ):
+            self._sync_line_profile_widgets()
+            return
+        try:
+            updated_profile = dataclasses.replace(
+                profile,
+                visibility_anchors=tuple(anchors),
+            )
+        except ValueError:
+            self._sync_line_profile_widgets()
+            return
+        canvas = self._canvas_widgets.canvas
+        canvas.backup_shapes()
+        shape.line_profile = updated_profile
+        self._active_line_profile_anchor_index = anchors.index(updated_anchor)
+        self.mark_dirty()
+        self._sync_line_profile_widgets()
+
+    def _on_line_profile_anchor_selected(
+        self, kind: str, index: int
+    ) -> None:
+        if kind not in ("width", "visibility"):
+            return
+        self._active_line_profile_anchor_kind = cast(
+            Literal["width", "visibility"], kind
+        )
+        self._active_line_profile_anchor_index = index
+        self._sync_line_profile_widgets()
+
+    def _on_line_profile_anchor_dragged(
+        self, kind: str, index: int, point: QtCore.QPointF, mode: str
+    ) -> None:
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if (
+            len(selected) != 1
+            or kind not in ("width", "visibility")
+            or mode not in ("position", "width")
+        ):
+            return
+        shape = selected[0]
+        profile = shape.line_profile
+        if profile is None:
+            return
+        anchors = (
+            profile.width_anchors if kind == "width" else profile.visibility_anchors
+        )
+        if index >= len(anchors):
+            return
+        anchor = anchors[index]
         if mode == "position":
             position = point_to_position(shape.points, [point.x(), point.y()])
-            width = anchor.width
+            value = anchor.width if kind == "width" else anchor.visibility
         else:
+            if kind != "width":
+                return
             center_point = position_to_point(shape.points, anchor.position)
-            width = 2.0 * math.hypot(
+            value = 2.0 * math.hypot(
                 point.x() - center_point[0], point.y() - center_point[1]
             )
             position = anchor.position
@@ -2062,28 +2355,38 @@ class MainWindow(QtWidgets.QMainWindow):
             updated_anchor = dataclasses.replace(
                 anchor,
                 position=position,
-                width=width,
+                **({"width": value} if kind == "width" else {"visibility": value}),
             )
-            anchors = list(profile.width_anchors)
-            anchors[index] = updated_anchor
-            anchors.sort(key=lambda item: item.position)
+            updated_anchors = list(anchors)
+            updated_anchors[index] = updated_anchor
+            updated_anchors.sort(key=lambda item: item.position)
             if any(
                 left.position >= right.position
-                for left, right in zip(anchors, anchors[1:])
+                for left, right in zip(updated_anchors, updated_anchors[1:])
             ):
                 return
             updated_profile = dataclasses.replace(
                 profile,
-                width_anchors=tuple(anchors),
+                **{
+                    "width_anchors": tuple(updated_anchors)
+                    if kind == "width"
+                    else profile.width_anchors,
+                    "visibility_anchors": tuple(updated_anchors)
+                    if kind == "visibility"
+                    else profile.visibility_anchors,
+                },
             )
         except ValueError:
             return
         if updated_profile == profile:
             return
         shape.line_profile = updated_profile
-        self._active_line_profile_anchor_index = anchors.index(updated_anchor)
+        self._active_line_profile_anchor_index = updated_anchors.index(updated_anchor)
+        self._active_line_profile_anchor_kind = cast(
+            Literal["width", "visibility"], kind
+        )
         self._line_profile_anchor_drag_changed = True
-        self._sync_line_profile_width_widget()
+        self._sync_line_profile_widgets()
 
     def _on_line_profile_anchor_drag_finished(self) -> None:
         if not self._line_profile_anchor_drag_changed:
@@ -2180,18 +2483,26 @@ class MainWindow(QtWidgets.QMainWindow):
         if current_token != token:
             self.show_status_message(self.tr("Measurement result is out of date"))
             return
-        reply = QMessageBox.question(
-            self,
-            self.tr("Accept Line Profile Measurement"),
+        acceptance = QMessageBox(self)
+        acceptance.setWindowTitle(self.tr("Accept Line Profile Measurement"))
+        acceptance.setText(
             self.tr(
                 "Measurement produced {0} samples. Accept automatic width and "
                 "visibility anchors?"
-            ).format(len(result.samples)),
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.Yes,
+            ).format(len(result.samples))
         )
+        high_confidence_only = QtWidgets.QCheckBox(
+            self.tr("Only accept samples with confidence >= 0.5"), acceptance
+        )
+        acceptance.setCheckBox(high_confidence_only)
+        acceptance.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        acceptance.setDefaultButton(QMessageBox.StandardButton.Yes)
+        reply = acceptance.exec()
         if reply != QMessageBox.StandardButton.Yes:
             return
+        accept_only_high_confidence = high_confidence_only.isChecked()
         existing = shape.line_profile
         manual_width = (
             []
@@ -2214,6 +2525,8 @@ class MainWindow(QtWidgets.QMainWindow):
         width_anchors = list(manual_width)
         visibility_anchors = list(manual_visibility)
         for sample in result.samples:
+            if accept_only_high_confidence and sample.confidence < 0.5:
+                continue
             if not any(
                 math.isclose(anchor.position, sample.position, abs_tol=1e-6)
                 for anchor in manual_width

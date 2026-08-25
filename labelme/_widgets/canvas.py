@@ -172,8 +172,11 @@ class Canvas(QtWidgets.QWidget):
     _hovered_edge: int | None
     _last_hovered_edge: int | None
     _hovered_rotation: int | None
+    active_line_profile_anchor_kind: Literal["width", "visibility"] | None
     active_line_profile_anchor_index: int | None
-    _line_profile_drag: tuple[Shape, int, Literal["position", "width"]] | None
+    _line_profile_drag: tuple[
+        Shape, Literal["width", "visibility"], int, Literal["position", "width"]
+    ] | None
 
     zoom_request = QtCore.Signal(int, QPointF)
     scroll_request = QtCore.Signal(int, Qt.Orientation)
@@ -188,8 +191,8 @@ class Canvas(QtWidgets.QWidget):
     drawing_polygon = QtCore.Signal(bool)
     vertex_selected = QtCore.Signal(bool)
     edge_selected = QtCore.Signal(bool)
-    line_profile_anchor_selected = QtCore.Signal(int)
-    line_profile_anchor_dragged = QtCore.Signal(int, QPointF, str)
+    line_profile_anchor_selected = QtCore.Signal(str, int)
+    line_profile_anchor_dragged = QtCore.Signal(str, int, QPointF, str)
     line_profile_anchor_drag_finished = QtCore.Signal()
     mouse_moved = QtCore.Signal(QPointF)
     status_updated = QtCore.Signal(str)
@@ -201,6 +204,8 @@ class Canvas(QtWidgets.QWidget):
     _fill_drawing = False
 
     _show_labels = False
+
+    _show_line_profile_preview = True
 
     _prev_point: QPointF
     _prev_move_point: QPointF
@@ -278,6 +283,7 @@ class Canvas(QtWidgets.QWidget):
         self._color_resolver: Callable[[str], tuple[int, int, int]] | None = None
         self._point_size: int = 8
         self._point_type: Literal["square", "round"] = "round"
+        self.active_line_profile_anchor_kind = None
         self.active_line_profile_anchor_index = None
         self._line_profile_drag = None
         self._draft_palette = _DEFAULT_PALETTE
@@ -298,6 +304,10 @@ class Canvas(QtWidgets.QWidget):
 
     def set_show_labels(self, value: bool) -> None:
         self._show_labels = value
+
+    def set_show_line_profile_preview(self, value: bool) -> None:
+        self._show_line_profile_preview = value
+        self.update()
 
     def set_allow_out_of_bounds_points(self, value: bool) -> None:
         self._allow_out_of_bounds_points = value
@@ -340,7 +350,12 @@ class Canvas(QtWidgets.QWidget):
     def set_point_size(self, point_size: int) -> None:
         self._point_size = point_size
 
-    def set_active_line_profile_anchor_index(self, index: int | None) -> None:
+    def set_active_line_profile_anchor_index(
+        self,
+        index: int | None,
+        kind: Literal["width", "visibility"] | None = None,
+    ) -> None:
+        self.active_line_profile_anchor_kind = kind
         self.active_line_profile_anchor_index = index
         self.update()
 
@@ -887,8 +902,8 @@ class Canvas(QtWidgets.QWidget):
         self, pos: QPointF, event: QtGui.QMouseEvent
     ) -> None:
         if self._line_profile_drag is not None:
-            _, index, mode = self._line_profile_drag
-            self.line_profile_anchor_dragged.emit(index, pos, mode)
+            _, kind, index, mode = self._line_profile_drag
+            self.line_profile_anchor_dragged.emit(kind, index, pos, mode)
             return
         is_shift_pressed = bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier)
         if self._is_vertex_selected():
@@ -1293,12 +1308,13 @@ class Canvas(QtWidgets.QWidget):
         modifiers = event.modifiers()
         profile_hit = self._find_line_profile_anchor_at_point(pos)
         if profile_hit is not None:
-            shape, index, mode = profile_hit
+            shape, kind, index, mode = profile_hit
             if shape not in self.selected_shapes:
                 self.selection_changed.emit([shape])
+            self.active_line_profile_anchor_kind = kind
             self.active_line_profile_anchor_index = index
-            self.line_profile_anchor_selected.emit(index)
-            self._line_profile_drag = (shape, index, mode)
+            self.line_profile_anchor_selected.emit(kind, index)
+            self._line_profile_drag = (shape, kind, index, mode)
             self._prev_point = pos
             self.update()
             return
@@ -1533,10 +1549,23 @@ class Canvas(QtWidgets.QWidget):
 
     def _find_line_profile_anchor_at_point(
         self, point: QPointF
-    ) -> tuple[Shape, int, Literal["position", "width"]] | None:
+    ) -> tuple[
+        Shape,
+        Literal["width", "visibility"],
+        int,
+        Literal["position", "width"],
+    ] | None:
         if len(self.selected_shapes) > 1:
             return None
-        candidates: list[tuple[float, Shape, int, Literal["position", "width"]]] = []
+        candidates: list[
+            tuple[
+                float,
+                Shape,
+                Literal["width", "visibility"],
+                int,
+                Literal["position", "width"],
+            ]
+        ] = []
         shapes = self.selected_shapes or [
             shape
             for shape in self.shapes
@@ -1557,11 +1586,20 @@ class Canvas(QtWidgets.QWidget):
                 mode: Literal["position", "width"] = (
                     "width" if distance >= radius * 0.65 else "position"
                 )
-                candidates.append((distance, shape, index, mode))
+                candidates.append((distance, shape, "width", index, mode))
+            for index, anchor in enumerate(shape.line_profile.visibility_anchors):
+                center = position_to_point(shape.points, anchor.position)
+                distance = math.hypot(
+                    point.x() - center[0], point.y() - center[1]
+                )
+                if distance <= 7.0 / self.scale:
+                    candidates.append(
+                        (distance, shape, "visibility", index, "position")
+                    )
         if not candidates:
             return None
-        _, shape, index, mode = min(candidates, key=lambda item: item[0])
-        return shape, index, mode
+        _, shape, kind, index, mode = min(candidates, key=lambda item: item[0])
+        return shape, kind, index, mode
 
     def _record_drag_anchor(self, shapes: list[Shape], click: QPointF) -> None:
         if not shapes:
@@ -1773,6 +1811,8 @@ class Canvas(QtWidgets.QWidget):
             render_shape(painter=painter, shape=shape, context=context)
 
     def _draw_line_profile_layer(self, painter: QtGui.QPainter) -> None:
+        if not self._show_line_profile_preview:
+            return
         if len(self.selected_shapes) != 1:
             return
         shape = self.selected_shapes[0]
@@ -1796,7 +1836,10 @@ class Canvas(QtWidgets.QWidget):
         for index, anchor in enumerate(profile.width_anchors):
             center = position_to_point(shape.points, anchor.position)
             radius = max(4.0, min(18.0, anchor.width * self.scale / 2.0))
-            if index == self.active_line_profile_anchor_index:
+            if (
+                index == self.active_line_profile_anchor_index
+                and self.active_line_profile_anchor_kind == "width"
+            ):
                 color = QtGui.QColor(40, 120, 255, 255)
             elif anchor.confirmed:
                 color = QtGui.QColor(30, 190, 80, 230)
@@ -1808,6 +1851,23 @@ class Canvas(QtWidgets.QWidget):
             painter.setBrush(QtGui.QColor(255, 255, 255, 80))
             point = QtCore.QPointF(*center) * self.scale
             painter.drawEllipse(point, radius, radius)
+        for index, anchor in enumerate(profile.visibility_anchors):
+            center = position_to_point(shape.points, anchor.position)
+            if (
+                index == self.active_line_profile_anchor_index
+                and self.active_line_profile_anchor_kind == "visibility"
+            ):
+                color = QtGui.QColor(40, 120, 255, 255)
+            elif anchor.confirmed:
+                color = QtGui.QColor(30, 190, 80, 230)
+            elif anchor.confidence < 0.5:
+                color = QtGui.QColor(220, 50, 50, 230)
+            else:
+                color = QtGui.QColor(150, 90, 220, 230)
+            painter.setPen(QtGui.QPen(color, 2))
+            painter.setBrush(QtGui.QColor(255, 255, 255, 100))
+            point = QtCore.QPointF(*center) * self.scale
+            painter.drawRect(QtCore.QRectF(point.x() - 5, point.y() - 5, 10, 10))
 
     def _draw_active_shape_layer(self, painter: QtGui.QPainter) -> None:
         if self._current is None:
@@ -2202,6 +2262,7 @@ class Canvas(QtWidgets.QWidget):
         self._hovered_vertex = None
         self._hovered_edge = None
         self._hovered_rotation = None
+        self.active_line_profile_anchor_kind = None
         self.active_line_profile_anchor_index = None
         self._clear_highlight_state()
         self._set_ai_existing_shape_highlights(shapes=[])
@@ -2268,6 +2329,8 @@ class Canvas(QtWidgets.QWidget):
         self._hovered_edge = None
         self._last_hovered_edge = None
         self._hovered_rotation = None
+        self.active_line_profile_anchor_kind = None
+        self.active_line_profile_anchor_index = None
         self.update()
 
 

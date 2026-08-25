@@ -73,6 +73,24 @@ def test_shape_translation_does_not_change_profile() -> None:
     assert shape.line_profile == before
 
 
+def test_shape_profile_edit_rolls_back_when_remap_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    shape = _make_profiled_linestrip()
+    before_points = shape.points.copy()
+    before_profile = shape.line_profile
+
+    def fail_remap(*args: object, **kwargs: object) -> object:
+        raise ValueError("cannot remap")
+
+    monkeypatch.setattr(_shape, "remap_profile", fail_remap)
+    with pytest.raises(ValueError, match="cannot remap"):
+        shape.move_vertex(i=1, pos=(20.0, 0.0))
+
+    np.testing.assert_array_equal(shape.points, before_points)
+    assert shape.line_profile == before_profile
+
+
 def test_rotate_oriented_rectangle_around_origin() -> None:
     shape = _make_axis_aligned_oriented_rectangle()
 
