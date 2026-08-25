@@ -10,7 +10,7 @@ from numpy.typing import NDArray
 
 from ._line_profile import position_to_point
 
-MEASUREMENT_VERSION = "line-profile-measurement-v2"
+MEASUREMENT_VERSION = "line-profile-measurement-v3"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -224,14 +224,31 @@ def _measure_sample(
     width = max(0.0, right_edge - left_edge)
     width = max(parameters.min_width, min(parameters.max_width, width))
 
-    # Visibility is a bounded local signal-to-noise score.  It is deliberately
-    # independent of the absolute image range, so a dim line in a flat dark
-    # crop cannot receive a perfect score from a tiny denominator.
-    contrast_visibility = max(
+    # Visibility combines local signal-to-noise and stripe/background contrast.
+    # The separate display-intensity factor below prevents a dim bright stripe
+    # in a flat dark crop from receiving a perfect score from a tiny denominator.
+    signal_visibility = max(
         0.0,
         min(1.0, (signal - 1.5 * noise) / max(signal + 1.5 * noise, 1e-9)),
     )
-    visibility = contrast_visibility
+    background_level = abs(float(baseline[center_index]))
+    background_denominator = (
+        background_level + 1.5 * noise
+        if polarity < 0
+        else signal + background_level + 1.5 * noise
+    )
+    background_contrast = max(
+        0.0,
+        min(
+            1.0,
+            signal / max(background_denominator, 1e-9),
+        ),
+    )
+    # SNR alone gives the same score to a 35-on-2 stripe and a 235-on-202
+    # stripe.  The former may be visible on a black background, while the
+    # latter is nearly lost in a bright glare field.  Blend both measurements
+    # before applying the display-intensity factor for bright stripes.
+    visibility = 0.65 * signal_visibility + 0.35 * background_contrast
     if polarity > 0:
         # On the supplied 8-bit welding images, a line at intensity 30-40 on
         # a black background is barely visible even though its local contrast

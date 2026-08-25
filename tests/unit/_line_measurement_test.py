@@ -19,7 +19,7 @@ def test_measure_line_profile_detects_local_bright_stripe() -> None:
         parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
     )
 
-    assert result.measurement_version == "line-profile-measurement-v2"
+    assert result.measurement_version == "line-profile-measurement-v3"
     assert len(result.samples) >= 2
     middle = result.samples[len(result.samples) // 2]
     assert middle.width == pytest.approx(7.0, abs=0.5)
@@ -83,6 +83,42 @@ def test_measure_line_profile_supports_a_strong_dark_stripe() -> None:
     middle = result.samples[len(result.samples) // 2]
     assert middle.width == pytest.approx(7.0, abs=0.5)
     assert middle.visibility > 0.9
+
+
+def test_visibility_distinguishes_glare_background_from_a_dark_stripe() -> None:
+    image = np.full((80, 112), 220, dtype=np.uint8)
+    image[10:17, 8:104] = 20
+    image[40:47, 8:104] = 255
+
+    dark = measure_line_profile(
+        image,
+        [[8.0, 13.0], [103.0, 13.0]],
+        parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
+    ).samples[2]
+    bright = measure_line_profile(
+        image,
+        [[8.0, 43.0], [103.0, 43.0]],
+        parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
+    ).samples[2]
+
+    assert dark.visibility > bright.visibility
+    assert bright.visibility < 0.75
+
+
+def test_visibility_changes_with_bright_line_intensity_along_the_path() -> None:
+    image = np.zeros((48, 128), dtype=np.uint8)
+    intensity = np.linspace(40, 240, 112).astype(np.uint8)
+    image[20:25, 8:120] = intensity
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 22.0], [119.0, 22.0]],
+        parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
+    )
+    visibility = [sample.visibility for sample in result.samples]
+
+    assert visibility[0] < visibility[-1]
+    assert max(visibility) - min(visibility) > 0.5
 
 
 def test_measure_line_profile_validates_parameters_and_image() -> None:
