@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Shape Color controls to Settings for automatic, uniform, and per-Label fallback coloring. ([#2552](https://github.com/wkentaro/labelme/pull/2552))
 - Added typed, backward-compatible `line_profile` support for `linestrip` annotations, including normalized centerline positions, width/visibility anchors, profile-aware editing, visual boundaries, and opt-in background measurement with explicit acceptance.
+- Added profile-aware frame transfer with compatibility checks and a difference
+  confirmation preview, plus dry-run, confirmation, backup, and rollback APIs
+  for batch measurement. The feature remains Preview pending maintainer review
+  and a release PR link ([PR pending](https://github.com/varphone/labelme/pulls)).
 
 ### Changed
 

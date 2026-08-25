@@ -1726,10 +1726,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mark_dirty()
 
     def reset_state(self) -> None:
-        if self._line_measurement_worker is not None:
-            self._line_measurement_worker.cancel()
-        if self._line_measurement_thread is not None:
-            self._line_measurement_thread.requestInterruption()
+        self._cancel_line_measurement()
         self._docks.label_list.clear()
         self._annotation = None
         self._image_path = None
@@ -2512,6 +2509,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self._line_profile_anchor_drag_changed = False
         self.mark_dirty()
 
+    def _cancel_line_measurement(self) -> None:
+        """Stop an in-flight measurement before replacing or closing a view."""
+        if self._line_measurement_worker is not None:
+            self._line_measurement_worker.cancel()
+        if self._line_measurement_thread is not None:
+            self._line_measurement_thread.requestInterruption()
+            self._line_measurement_thread.quit()
+        if self._line_measurement_progress is not None:
+            self._line_measurement_progress.close()
+
     def measure_selected_line_profile(self) -> None:
         selected = self._canvas_widgets.canvas.selected_shapes
         if len(selected) != 1 or selected[0].shape_type != "linestrip":
@@ -2522,16 +2529,7 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas = self._canvas_widgets.canvas
         image = _utils.img_qt_to_rgb_arr(img_qt=canvas.pixmap.toImage())
         points = shape.points.copy()
-        token = (
-            id(shape),
-            points.tobytes()
-            + repr(
-                None
-                if shape.line_profile is None
-                else shape.line_profile.to_json_obj()
-            ).encode(),
-            canvas._pixmap_hash,
-        )
+        token = _line_measurement_token(shape=shape, pixmap_hash=canvas._pixmap_hash)
         parameters = self._line_measurement_parameters(profile=shape.line_profile)
         progress = QProgressDialog(
             self.tr("Measuring line profile…"), self.tr("Cancel"), 0, 100, self
@@ -2549,8 +2547,10 @@ class MainWindow(QtWidgets.QMainWindow):
         worker.progress.connect(progress.setValue)
         worker.succeeded.connect(self._on_line_measurement_result)
         worker.failed.connect(self._on_line_measurement_failed)
+        worker.canceled.connect(self._on_line_measurement_canceled)
         worker.succeeded.connect(thread.quit)
         worker.failed.connect(thread.quit)
+        worker.canceled.connect(thread.quit)
         thread.finished.connect(worker.deleteLater)
         thread.finished.connect(thread.deleteLater)
         thread.finished.connect(self._on_line_measurement_finished)
@@ -2592,15 +2592,8 @@ class MainWindow(QtWidgets.QMainWindow):
         if len(selected) != 1:
             return
         shape = selected[0]
-        current_token = (
-            id(shape),
-            shape.points.tobytes()
-            + repr(
-                None
-                if shape.line_profile is None
-                else shape.line_profile.to_json_obj()
-            ).encode(),
-            self._canvas_widgets.canvas._pixmap_hash,
+        current_token = _line_measurement_token(
+            shape=shape, pixmap_hash=self._canvas_widgets.canvas._pixmap_hash
         )
         if current_token != token:
             self.show_status_message(self.tr("Measurement result is out of date"))
@@ -2702,8 +2695,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self._accept_line_measurement(result, self._line_measurement_token)
 
     def _on_line_measurement_failed(self, message: str) -> None:
+        _log_line_profile_event(
+            "line_profile_measurement_failed", reason_code="worker_error"
+        )
         self.show_status_message(
             self.tr("Line profile measurement failed: {0}").format(message)
+        )
+
+    def _on_line_measurement_canceled(self) -> None:
+        _log_line_profile_event(
+            "line_profile_measurement_canceled", reason_code="user_or_lifecycle"
         )
 
     def _on_line_measurement_finished(self) -> None:
@@ -2808,6 +2809,11 @@ class MainWindow(QtWidgets.QMainWindow):
             for item in self._docks.label_list
             if (s := item.shape()) is not None
         ]
+        profile_shape_count = sum(
+            shape.get("line_profile") is not None
+            or shape.get("line_profile_error") is not None
+            for shape in shapes
+        )
         flags = self._read_flag_dock_states()
         try:
             assert self._image_path
@@ -2841,6 +2847,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self._last_failed_auto_save_path = None
             return True
         except (LabelFileError, OSError, ValueError) as e:
+            if profile_shape_count:
+                _log_line_profile_event(
+                    "line_profile_save_failed",
+                    reason_code=type(e).__name__,
+                    shape_count=profile_shape_count,
+                )
             if show_error:
                 self.show_error_message(
                     self.tr("Error saving label data"), self.tr("<b>%s</b>") % e
@@ -3470,6 +3482,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if not self._can_continue():
             a0.ignore()
             return
+        self._cancel_line_measurement()
         self._window_state.setValue(WINDOW_SIZE_KEY, self.size())
         self._window_state.setValue(WINDOW_POSITION_KEY, self.pos())
         self._window_state.setValue(WINDOW_LAYOUT_KEY, self.saveState())
@@ -4467,6 +4480,26 @@ class MainWindow(QtWidgets.QMainWindow):
         self._status_bar.stats.setText(" | ".join(stats))
 
 
+def _log_line_profile_event(
+    event: str,
+    *,
+    reason_code: str,
+    shape_count: int = 0,
+    sample_count: int = 0,
+    elapsed_ms: float | None = None,
+) -> None:
+    """Emit privacy-safe profile telemetry through the existing logger."""
+    fields: dict[str, object] = {
+        "event": event,
+        "reason_code": reason_code,
+        "shape_count": shape_count,
+        "sample_count": sample_count,
+    }
+    if elapsed_ms is not None:
+        fields["elapsed_ms"] = round(elapsed_ms, 3)
+    logger.bind(**fields).info("line_profile_event")
+
+
 def _shapes_from_dicts(
     *,
     shape_dicts: list[ShapeDict],
@@ -4501,6 +4534,13 @@ def _shapes_from_dicts(
         shape.line_profile_error = shape_dict.get("line_profile_error")
 
         shapes.append(shape)
+    invalid_count = sum(shape.line_profile_error is not None for shape in shapes)
+    if invalid_count:
+        _log_line_profile_event(
+            "line_profile_load_failed",
+            reason_code="invalid_profile_preserved",
+            shape_count=invalid_count,
+        )
     return shapes
 
 
@@ -4669,6 +4709,14 @@ def _scan_image_files(root_dir: str) -> list[str]:
 
     logger.debug("found {:d} images in {!r}", len(images), root_dir)
     return sorted(images, key=_image_file_sort_key)
+
+
+def _line_measurement_token(
+    *, shape: Shape, pixmap_hash: int | None
+) -> tuple[int, bytes, int | None]:
+    """Build the immutable state token used to reject stale worker results."""
+    profile = None if shape.line_profile is None else shape.line_profile.to_json_obj()
+    return id(shape), shape.points.tobytes() + repr(profile).encode(), pixmap_hash
 
 
 def _image_file_sort_key(image_path: str) -> tuple[str, str, str]:

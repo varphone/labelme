@@ -19,6 +19,7 @@ from labelme._automation._ai_assist import AiAssistProposal
 from labelme._line_profile import LineProfile
 from labelme._line_profile import WidthAnchor
 from labelme._line_profile import profile_boundary_points
+from labelme._line_profile import profile_boundary_polygon
 from labelme._shape import Shape
 from labelme._shape import ShapeType
 from labelme._widgets.canvas import Canvas
@@ -585,6 +586,76 @@ def test_profile_boundary_sampling_handles_an_acute_turn() -> None:
 
     assert len(left) == len(right) == 32
     assert all(np.isfinite(point).all() for point in (*left, *right))
+
+    polygon = profile_boundary_polygon(
+        profile,
+        [[10.0, 10.0], [50.0, 10.0], [52.0, 40.0]],
+        samples=32,
+    )
+    assert len(polygon) == 64
+    assert polygon[0] == left[0]
+    assert polygon[-1] == right[0]
+
+
+@pytest.mark.gui
+def test_profile_anchor_hit_testing_scales_and_reports_status(
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        width_anchors=(WidthAnchor(0.0, 80.0, "manual", 1.0, True),)
+    )
+    shape = Shape(
+        label="profiled",
+        shape_type="linestrip",
+        points=np.array([(0.0, 25.0), (99.0, 25.0)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes([shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    statuses: list[str] = []
+    canvas.status_updated.connect(statuses.append)
+
+    for scale in (0.25, 1.0, 4.0):
+        canvas.scale = scale
+        canvas._refresh_hover_state(QPointF(0.0, 25.0))
+        assert (
+            canvas._find_line_profile_anchor_at_point(QPointF(0.0, 25.0))
+            is not None
+        )
+
+    assert any("anchor" in status.lower() for status in statuses)
+
+
+@pytest.mark.gui
+def test_profile_preview_handles_dense_anchors_edges_and_large_width(
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        width_anchors=tuple(
+            WidthAnchor(index / 20.0, 200.0 + index, "auto", 0.4, False)
+            for index in range(21)
+        )
+    )
+    shape = Shape(
+        label="dense",
+        shape_type="linestrip",
+        points=np.array(
+            [(0.0, 0.0), (30.0, 5.0), (99.0, 49.0)], dtype=np.float64
+        ),
+        line_profile=profile,
+    )
+    canvas.load_shapes([shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    canvas.scale = 4.0
+    image = QtGui.QImage(_WIDTH, _HEIGHT, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtCore.Qt.GlobalColor.transparent)
+    painter = QtGui.QPainter(image)
+    canvas._draw_line_profile_layer(painter)
+    painter.end()
+    assert image.isNull() is False
+    assert sum(
+        image.pixelColor(x, y).alpha() for x in range(_WIDTH) for y in range(_HEIGHT)
+    ) > 0
 
 
 @pytest.mark.gui

@@ -379,9 +379,18 @@ def profile_boundary_points(
     *,
     samples: int = 64,
 ) -> tuple[tuple[tuple[float, float], ...], tuple[tuple[float, float], ...]]:
-    """Sample left and right boundaries without creating annotation Shapes."""
+    """Sample left and right boundaries without creating annotation Shapes.
+
+    Each sample uses the normal of the centerline segment containing its arc
+    position. Connecting samples around a sharp vertex is therefore a
+    bevel-like join; the renderer never extends a miter beyond the requested
+    half-width. The first and last samples use the end-segment normal, which
+    gives the resulting polygon a butt cap.
+    """
     if samples < 2:
         raise ValueError("samples must be at least 2")
+    lengths = cumulative_lengths(points)
+    total = lengths[-1]
     left: list[tuple[float, float]] = []
     right: list[tuple[float, float]] = []
     for index in range(samples):
@@ -392,9 +401,7 @@ def profile_boundary_points(
             left.append(center)
             right.append(center)
             continue
-        before = position_to_point(points, max(0.0, position - 1e-4))
-        after = position_to_point(points, min(1.0, position + 1e-4))
-        dx, dy = after[0] - before[0], after[1] - before[1]
+        dx, dy = _segment_tangent_at_position(points, lengths, position * total)
         length = math.hypot(dx, dy)
         if length == 0:
             dx, dy = _fallback_tangent(points)
@@ -408,6 +415,37 @@ def profile_boundary_points(
         left.append((center[0] + nx * half_width, center[1] + ny * half_width))
         right.append((center[0] - nx * half_width, center[1] - ny * half_width))
     return tuple(left), tuple(right)
+
+
+def profile_boundary_polygon(
+    profile: LineProfile,
+    points: Sequence[Sequence[float]],
+    *,
+    samples: int = 64,
+) -> tuple[tuple[float, float], ...]:
+    """Return a closed-region outline with butt caps at both endpoints.
+
+    The first boundary runs forward and the second runs backward. Consumers
+    should close the path after drawing these vertices; the closing segments
+    are the explicit perpendicular butt caps.
+    """
+    left, right = profile_boundary_points(profile, points, samples=samples)
+    return (*left, *reversed(right))
+
+
+def _segment_tangent_at_position(
+    points: Sequence[Sequence[float]],
+    lengths: Sequence[float],
+    distance: float,
+) -> tuple[float, float]:
+    """Return a non-zero centerline segment tangent for an arc distance."""
+    for index, (start, end) in enumerate(zip(lengths, lengths[1:])):
+        if end <= start:
+            continue
+        if distance <= end or index == len(lengths) - 2:
+            left, right = points[index], points[index + 1]
+            return float(right[0] - left[0]), float(right[1] - left[1])
+    return _fallback_tangent(points)
 
 
 def remap_profile(

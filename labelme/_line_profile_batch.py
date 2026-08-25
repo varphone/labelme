@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import dataclasses
+import hashlib
+import os
+import shutil
 from collections.abc import Callable
 from pathlib import Path
 
@@ -27,6 +30,9 @@ class BatchOptions:
     )
     cancel_check: Callable[[], bool] | None = None
     retry_count: int = 0
+    # A caller can show the dry-run report and decide whether writes may start.
+    confirm_check: Callable[[BatchReport], bool] | None = None
+    backup_dir: str | None = None
     # The caller persists the last completed ordinal and passes it back after
     # cancellation; this keeps restart policy outside the file writer.
     resume_from: int = 0
@@ -44,11 +50,15 @@ class BatchItemResult:
     status: str
     processed_shapes: int = 0
     error: str | None = None
+    output_filename: str | None = None
+    backup_filename: str | None = None
 
 
 @dataclasses.dataclass(frozen=True)
 class BatchReport:
     items: tuple[BatchItemResult, ...]
+    is_preview: bool = False
+    confirmed: bool = True
 
     @property
     def failed(self) -> tuple[BatchItemResult, ...]:
@@ -71,6 +81,14 @@ def measure_annotation_files(
 ) -> BatchReport:
     """Measure eligible files with per-file atomic writes and a report."""
     options = options or BatchOptions()
+    if options.confirm_check is not None and not options.dry_run:
+        preview = preview_annotation_files(filenames, options=options)
+        if not options.confirm_check(preview):
+            return BatchReport(
+                preview.items,
+                is_preview=True,
+                confirmed=False,
+            )
     results: list[BatchItemResult] = []
     for index, filename in enumerate(filenames):
         if index < options.resume_from:
@@ -98,7 +116,22 @@ def measure_annotation_files(
                             error=f"{type(e).__name__}: {e}",
                         )
                     )
-    return BatchReport(tuple(results))
+    return BatchReport(tuple(results), is_preview=options.dry_run)
+
+
+def preview_annotation_files(
+    filenames: list[str], *, options: BatchOptions | None = None
+) -> BatchReport:
+    """Build a write-free report suitable for confirmation in a batch UI."""
+    source = options or BatchOptions()
+    return measure_annotation_files(
+        filenames,
+        options=dataclasses.replace(
+            source,
+            dry_run=True,
+            confirm_check=None,
+        ),
+    )
 
 
 def _measure_annotation_file(
@@ -109,6 +142,8 @@ def _measure_annotation_file(
     shapes = [dict(shape) for shape in annotation.shapes]
     processed = 0
     skipped_invalid = False
+    target: Path | None = None
+    backup_filename: str | None = None
     for shape in shapes:
         if options.cancel_check is not None and options.cancel_check():
             raise _BatchCanceled
@@ -140,6 +175,13 @@ def _measure_annotation_file(
         )
         if output_dir is not None:
             target.parent.mkdir(parents=True, exist_ok=True)
+        if options.backup_dir is not None and target.exists():
+            backup_root = Path(options.backup_dir)
+            backup_root.mkdir(parents=True, exist_ok=True)
+            digest = hashlib.sha256(str(target).encode()).hexdigest()[:12]
+            backup_path = backup_root / f"{digest}-{target.name}"
+            shutil.copy2(target, backup_path)
+            backup_filename = str(backup_path)
         write_label_file(
             filename=str(target),
             annotation=Annotation(
@@ -156,7 +198,37 @@ def _measure_annotation_file(
     status = "skipped-invalid" if skipped_invalid and not processed else "processed"
     if not processed and not skipped_invalid:
         status = "skipped"
-    return BatchItemResult(filename, status, processed)
+    return BatchItemResult(
+        filename,
+        status,
+        processed,
+        output_filename=(
+            None
+            if not processed or options.dry_run or target is None
+            else str(target)
+        ),
+        backup_filename=(None if options.dry_run else backup_filename),
+    )
+
+
+def rollback_batch(report: BatchReport) -> tuple[str, ...]:
+    """Restore files whose pre-write backups are present in a batch report."""
+    restored: list[str] = []
+    for item in report.items:
+        if item.output_filename is None or item.backup_filename is None:
+            continue
+        backup = Path(item.backup_filename)
+        target = Path(item.output_filename)
+        if not backup.is_file():
+            continue
+        temporary = Path(f"{target}.rollback.tmp")
+        try:
+            shutil.copy2(backup, temporary)
+            os.replace(temporary, target)
+        finally:
+            temporary.unlink(missing_ok=True)
+        restored.append(str(target))
+    return tuple(restored)
 
 
 def _profile_from_measurement(
