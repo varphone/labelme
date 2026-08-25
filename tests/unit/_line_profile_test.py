@@ -241,3 +241,26 @@ def test_profile_anchor_insert_and_remove_preserve_interpolated_values() -> None
 
     with pytest.raises(ValueError, match="already exists"):
         insert_width_anchor(inserted, 0.5)
+
+
+def test_profile_measurement_overrides_round_trip_and_validate() -> None:
+    raw = _profile_json()
+    raw["measurement_overrides"] = {
+        "sample_spacing": 4.0,
+        "contrast_factor": 0.6,
+    }
+
+    profile = LineProfile.from_json_obj(raw)
+
+    assert dict(profile.measurement_overrides) == raw["measurement_overrides"]
+    assert profile.to_json_obj()["measurement_overrides"] == raw[
+        "measurement_overrides"
+    ]
+    with pytest.raises(ValueError, match="unsupported measurement override"):
+        LineProfile.from_json_obj(
+            {**_profile_json(), "measurement_overrides": {"x": 1}}
+        )
+    with pytest.raises(ValueError, match="must be positive"):
+        LineProfile.from_json_obj(
+            {**_profile_json(), "measurement_overrides": {"min_width": 0}}
+        )

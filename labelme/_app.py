@@ -199,6 +199,7 @@ class _Actions(NamedTuple):
     insert_line_profile_anchor: QtGui.QAction
     delete_line_profile_anchor: QtGui.QAction
     clear_line_profile: QtGui.QAction
+    line_profile_measurement_parameters: QtGui.QAction
     draw: list[tuple[str, QtGui.QAction]]
     zoom: tuple[ZoomWidget | QtGui.QAction, ...]
     on_load_active: tuple[QtGui.QAction, ...]
@@ -625,6 +626,12 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Remove profile metadata and keep the centerline"),
             enabled=False,
         )
+        line_profile_measurement_parameters = action(
+            text=self.tr("Line Profile Measurement Parameters"),
+            slot=self.edit_line_profile_measurement_parameters,
+            tip=self.tr("Override measurement defaults for this linestrip"),
+            enabled=False,
+        )
         create_mode = action(
             text=self.tr("Polygon"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="polygon"),
@@ -935,6 +942,7 @@ class MainWindow(QtWidgets.QMainWindow):
             insert_line_profile_anchor,
             delete_line_profile_anchor,
             clear_line_profile,
+            line_profile_measurement_parameters,
         )
         edit_menu = (
             edit,
@@ -953,6 +961,7 @@ class MainWindow(QtWidgets.QMainWindow):
             insert_line_profile_anchor,
             delete_line_profile_anchor,
             clear_line_profile,
+            line_profile_measurement_parameters,
             copy_annotations_to_next,
             merge_linestrips,
             measure_line_profile,
@@ -1021,6 +1030,7 @@ class MainWindow(QtWidgets.QMainWindow):
             insert_line_profile_anchor=insert_line_profile_anchor,
             delete_line_profile_anchor=delete_line_profile_anchor,
             clear_line_profile=clear_line_profile,
+            line_profile_measurement_parameters=line_profile_measurement_parameters,
             draw=draw,
             zoom=zoom,
             on_load_active=on_load_active,
@@ -2026,6 +2036,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if len(selected) != 1:
             self._sync_line_profile_anchor_actions(available=False)
             self._actions.clear_line_profile.setEnabled(False)
+            self._actions.line_profile_measurement_parameters.setEnabled(False)
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
             width_widget.set_profile(None)
             visibility_widget.set_anchor(None)
@@ -2034,6 +2045,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if profile is None:
             self._sync_line_profile_anchor_actions(available=False)
             self._actions.clear_line_profile.setEnabled(False)
+            self._actions.line_profile_measurement_parameters.setEnabled(False)
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
             width_widget.set_profile(None)
             visibility_widget.set_anchor(None)
@@ -2077,6 +2089,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if not anchors:
             self._sync_line_profile_anchor_actions(available=False)
             self._actions.clear_line_profile.setEnabled(True)
+            self._actions.line_profile_measurement_parameters.setEnabled(True)
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
             return
         self._active_line_profile_anchor_index = min(
@@ -2124,6 +2137,7 @@ class MainWindow(QtWidgets.QMainWindow):
             )
         self._sync_line_profile_anchor_actions(available=True)
         self._actions.clear_line_profile.setEnabled(True)
+        self._actions.line_profile_measurement_parameters.setEnabled(True)
 
     def _sync_line_profile_anchor_actions(self, *, available: bool) -> None:
         self._actions.insert_line_profile_anchor.setEnabled(available)
@@ -2139,6 +2153,90 @@ class MainWindow(QtWidgets.QMainWindow):
         shape.line_profile = None
         shape.line_profile_error = None
         shape.other_data.pop("line_profile", None)
+        self._canvas_widgets.canvas.backup_shapes()
+        self.mark_dirty()
+        self._sync_line_profile_widgets()
+
+    def edit_line_profile_measurement_parameters(self) -> None:
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if len(selected) != 1 or selected[0].line_profile is None:
+            return
+        shape = selected[0]
+        profile = shape.line_profile
+        global_values = self._config.get("line_profile_measurement", {})
+        if not isinstance(global_values, dict):
+            global_values = {}
+        values = {
+            "sample_spacing": float(global_values.get("sample_spacing", 8.0)),
+            "search_radius": float(global_values.get("search_radius", 32.0)),
+            "min_width": float(global_values.get("min_width", 1.0)),
+            "max_width": float(global_values.get("max_width", 256.0)),
+            "contrast_factor": float(global_values.get("contrast_factor", 0.35)),
+        }
+        values.update(dict(profile.measurement_overrides))
+        specifications = (
+            ("sample_spacing", self.tr("Sample spacing"), 0.1, 4096.0, 1),
+            ("search_radius", self.tr("Search radius"), 0.5, 4096.0, 1),
+            ("min_width", self.tr("Minimum width"), 0.1, 4096.0, 1),
+            ("max_width", self.tr("Maximum width"), 0.1, 4096.0, 1),
+            ("contrast_factor", self.tr("Contrast factor"), 0.0, 1.0, 2),
+        )
+        dialog = QtWidgets.QDialog(self)
+        dialog.setWindowTitle(self.tr("Line Profile Measurement Parameters"))
+        layout = QtWidgets.QVBoxLayout(dialog)
+        override = QtWidgets.QCheckBox(
+            self.tr("Override global measurement settings"), dialog
+        )
+        override.setChecked(bool(profile.measurement_overrides))
+        layout.addWidget(override)
+        form = QtWidgets.QFormLayout()
+        editors: dict[str, QtWidgets.QDoubleSpinBox] = {}
+        for key, label, minimum, maximum, decimals in specifications:
+            editor = QtWidgets.QDoubleSpinBox(dialog)
+            editor.setRange(minimum, maximum)
+            editor.setDecimals(decimals)
+            editor.setValue(values[key])
+            editor.setSuffix(" px" if key != "contrast_factor" else "")
+            editors[key] = editor
+            form.addRow(label, editor)
+        layout.addLayout(form)
+
+        def sync_enabled(enabled: bool) -> None:
+            for editor in editors.values():
+                editor.setEnabled(enabled)
+
+        override.toggled.connect(sync_enabled)
+        sync_enabled(override.isChecked())
+        buttons = QtWidgets.QDialogButtonBox(
+            QtWidgets.QDialogButtonBox.StandardButton.Ok
+            | QtWidgets.QDialogButtonBox.StandardButton.Cancel,
+            parent=dialog,
+        )
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+        if dialog.exec() != QtWidgets.QDialog.DialogCode.Accepted:
+            return
+        if not override.isChecked():
+            updated_overrides: tuple[tuple[str, float], ...] = ()
+        else:
+            raw_values = {key: editor.value() for key, editor in editors.items()}
+            try:
+                MeasurementParameters(**raw_values)
+            except ValueError as error:
+                QMessageBox.warning(
+                    self,
+                    self.tr("Invalid Measurement Parameters"),
+                    str(error),
+                )
+                return
+            updated_overrides = tuple(sorted(raw_values.items()))
+        updated_profile = dataclasses.replace(
+            profile, measurement_overrides=updated_overrides
+        )
+        if updated_profile == profile:
+            return
+        shape.line_profile = updated_profile
         self._canvas_widgets.canvas.backup_shapes()
         self.mark_dirty()
         self._sync_line_profile_widgets()
@@ -2415,7 +2513,7 @@ class MainWindow(QtWidgets.QMainWindow):
             ).encode(),
             canvas._pixmap_hash,
         )
-        parameters = self._line_measurement_parameters()
+        parameters = self._line_measurement_parameters(profile=shape.line_profile)
         progress = QProgressDialog(
             self.tr("Measuring line profile…"), self.tr("Cancel"), 0, 100, self
         )
@@ -2445,17 +2543,22 @@ class MainWindow(QtWidgets.QMainWindow):
         progress.show()
         thread.start()
 
-    def _line_measurement_parameters(self) -> MeasurementParameters:
+    def _line_measurement_parameters(
+        self, *, profile: LineProfile | None = None
+    ) -> MeasurementParameters:
         values = self._config.get("line_profile_measurement", {})
         if not isinstance(values, dict):
-            return MeasurementParameters()
+            values = {}
+        merged_values = dict(values)
+        if profile is not None:
+            merged_values.update(dict(profile.measurement_overrides))
         try:
             return MeasurementParameters(
-                sample_spacing=float(values.get("sample_spacing", 8.0)),
-                search_radius=float(values.get("search_radius", 32.0)),
-                min_width=float(values.get("min_width", 1.0)),
-                max_width=float(values.get("max_width", 256.0)),
-                contrast_factor=float(values.get("contrast_factor", 0.35)),
+                sample_spacing=float(merged_values.get("sample_spacing", 8.0)),
+                search_radius=float(merged_values.get("search_radius", 32.0)),
+                min_width=float(merged_values.get("min_width", 1.0)),
+                max_width=float(merged_values.get("max_width", 256.0)),
+                contrast_factor=float(merged_values.get("contrast_factor", 0.35)),
             )
         except (TypeError, ValueError):
             return MeasurementParameters()
@@ -2563,6 +2666,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 max_width=None if existing is None else existing.max_width,
                 measurement_version=result.measurement_version,
                 reviewed=False,
+                measurement_overrides=(
+                    () if existing is None else existing.measurement_overrides
+                ),
             )
         except ValueError as e:
             self._on_line_measurement_failed(str(e))

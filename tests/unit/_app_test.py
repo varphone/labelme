@@ -393,6 +393,34 @@ def test_shapes_from_dicts_and_shape_to_dict_carry_line_profile() -> None:
     assert result["line_profile"] is profile
 
 
+def test_line_measurement_parameters_apply_shape_overrides() -> None:
+    profile = LineProfile(
+        measurement_overrides=(
+            ("sample_spacing", 3.0),
+            ("contrast_factor", 0.8),
+        )
+    )
+
+    class StubWindow:
+        _config = {
+            "line_profile_measurement": {
+                "sample_spacing": 8.0,
+                "search_radius": 32.0,
+                "min_width": 1.0,
+                "max_width": 256.0,
+                "contrast_factor": 0.35,
+            }
+        }
+
+    parameters = _app.MainWindow._line_measurement_parameters(
+        StubWindow(), profile=profile
+    )
+
+    assert parameters.sample_spacing == 3.0
+    assert parameters.search_radius == 32.0
+    assert parameters.contrast_factor == 0.8
+
+
 def test_shape_to_dict_maps_all_fields() -> None:
     shape = Shape(
         label="cat",
