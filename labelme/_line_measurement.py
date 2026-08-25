@@ -73,7 +73,9 @@ def measure_line_profile(
         )
         for index in range(count)
     )
-    return LineMeasurement(MEASUREMENT_VERSION, samples)
+    return LineMeasurement(
+        MEASUREMENT_VERSION, _recommend_neighbor_widths(samples=samples)
+    )
 
 
 def _measure_sample(
@@ -153,6 +155,49 @@ def _as_gray(image: NDArray[np.generic]) -> NDArray[np.float64]:
             + 0.114 * array[..., 2]
         ).astype(np.float64)
     raise ValueError("image must be a grayscale or RGB array")
+
+
+def _recommend_neighbor_widths(
+    *, samples: tuple[MeasurementSample, ...]
+) -> tuple[MeasurementSample, ...]:
+    """Fill uncertain widths from nearby reliable samples without raising confidence."""
+    reliable = tuple(sample for sample in samples if sample.confidence >= 0.5)
+    if not reliable:
+        return samples
+    result: list[MeasurementSample] = []
+    for sample in samples:
+        if sample.confidence >= 0.5:
+            result.append(sample)
+            continue
+        left = next(
+            (
+                candidate
+                for candidate in reversed(reliable)
+                if candidate.position < sample.position
+            ),
+            None,
+        )
+        right = next(
+            (
+                candidate
+                for candidate in reliable
+                if candidate.position > sample.position
+            ),
+            None,
+        )
+        if left is not None and right is not None:
+            ratio = (sample.position - left.position) / (
+                right.position - left.position
+            )
+            width = left.width + ratio * (right.width - left.width)
+        else:
+            nearest = min(
+                reliable,
+                key=lambda candidate: abs(candidate.position - sample.position),
+            )
+            width = nearest.width
+        result.append(dataclasses.replace(sample, width=width))
+    return tuple(result)
 
 
 def _sample_nearest(

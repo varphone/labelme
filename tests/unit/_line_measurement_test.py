@@ -4,6 +4,8 @@ import numpy as np
 import pytest
 
 from labelme._line_measurement import MeasurementParameters
+from labelme._line_measurement import MeasurementSample
+from labelme._line_measurement import _recommend_neighbor_widths
 from labelme._line_measurement import measure_line_profile
 
 
@@ -46,3 +48,17 @@ def test_measure_line_profile_validates_parameters_and_image() -> None:
             np.zeros((4, 4, 2), dtype=np.uint8),
             [[0.0, 0.0], [1.0, 1.0]],
         )
+
+
+def test_low_confidence_width_uses_neighbor_recommendation_without_acceptance() -> None:
+    samples = (
+        MeasurementSample(0.0, 4.0, 1.0, 0.9),
+        MeasurementSample(0.5, 1.0, 0.0, 0.1, "low_contrast"),
+        MeasurementSample(1.0, 8.0, 1.0, 0.9),
+    )
+
+    recommended = _recommend_neighbor_widths(samples=samples)
+
+    assert recommended[1].width == pytest.approx(6.0)
+    assert recommended[1].confidence == 0.1
+    assert recommended[1].reason == "low_contrast"

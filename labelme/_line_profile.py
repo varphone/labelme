@@ -124,8 +124,7 @@ class LineProfile:
 
     @classmethod
     def from_json_obj(cls, value: object) -> LineProfile:
-        if not isinstance(value, dict):
-            raise ValueError("line_profile must be an object")
+        value = migrate_line_profile_json(value)
 
         schema_version = _required_int(value, "schema_version")
         path_mode = _required_literal(
@@ -213,6 +212,23 @@ class LineProfile:
                 for anchor in self.visibility_anchors
             ],
         )
+
+
+def migrate_line_profile_json(value: object) -> dict[str, Any]:
+    """Apply explicit, idempotent schema migrations to a JSON object.
+
+    Version 1 is the first published profile schema, so there is intentionally
+    no heuristic migration from an earlier shape. Unknown future versions are
+    rejected by the model and retained by the annotation codec as raw data.
+    """
+    if not isinstance(value, dict):
+        raise ValueError("line_profile must be an object")
+    version = _required_int(value, "schema_version")
+    if version != CURRENT_SCHEMA_VERSION:
+        raise ValueError(
+            f"no line_profile migration is available for schema_version {version}"
+        )
+    return dict(value)
 
 
 def cumulative_lengths(points: Sequence[Sequence[float]]) -> tuple[float, ...]:
@@ -358,6 +374,172 @@ def reverse_profile(profile: LineProfile) -> LineProfile:
         visibility_anchors=tuple(
             dataclasses.replace(anchor, position=1.0 - anchor.position)
             for anchor in reversed(profile.visibility_anchors)
+        ),
+    )
+
+
+def crop_profile(
+    profile: LineProfile, start_position: float, end_position: float
+) -> LineProfile:
+    """Keep an interval of a profile and renormalize it to ``[0, 1]``."""
+    _validate_position(start_position, field="start_position")
+    _validate_position(end_position, field="end_position")
+    if start_position >= end_position:
+        raise ValueError("start_position must be less than end_position")
+    return dataclasses.replace(
+        profile,
+        width_anchors=_crop_anchor_set(
+            profile.width_anchors,
+            profile.evaluate_width,
+            start_position,
+            end_position,
+            WidthAnchor,
+        ),
+        visibility_anchors=_crop_anchor_set(
+            profile.visibility_anchors,
+            profile.evaluate_visibility,
+            start_position,
+            end_position,
+            VisibilityAnchor,
+        ),
+    )
+
+
+def extend_profile(
+    profile: LineProfile, start_position: float, end_position: float
+) -> LineProfile:
+    """Place an existing profile inside an extended normalized path interval."""
+    _validate_position(start_position, field="start_position")
+    _validate_position(end_position, field="end_position")
+    if start_position >= end_position:
+        raise ValueError("start_position must be less than end_position")
+    scale = end_position - start_position
+    return dataclasses.replace(
+        profile,
+        width_anchors=tuple(
+            dataclasses.replace(
+                anchor, position=start_position + anchor.position * scale
+            )
+            for anchor in profile.width_anchors
+        ),
+        visibility_anchors=tuple(
+            dataclasses.replace(
+                anchor, position=start_position + anchor.position * scale
+            )
+            for anchor in profile.visibility_anchors
+        ),
+    )
+
+
+def resample_profile(
+    profile: LineProfile, positions: Sequence[float]
+) -> LineProfile:
+    """Sample both curves at fixed normalized positions without changing values."""
+    normalized_positions = [float(position) for position in positions]
+    _validate_positions(positions=normalized_positions, field="positions")
+    return dataclasses.replace(
+        profile,
+        width_anchors=_resample_anchor_set(
+            profile.width_anchors,
+            profile.evaluate_width,
+            normalized_positions,
+            WidthAnchor,
+        ),
+        visibility_anchors=_resample_anchor_set(
+            profile.visibility_anchors,
+            profile.evaluate_visibility,
+            normalized_positions,
+            VisibilityAnchor,
+        ),
+    )
+
+
+def insert_width_anchor(
+    profile: LineProfile,
+    position: float,
+    *,
+    width: float | None = None,
+    source: AnchorSource = "auto",
+    confidence: float = 0.0,
+    confirmed: bool = False,
+) -> LineProfile:
+    """Insert one width anchor, deriving its value from the current curve."""
+    _validate_position(position, field="position")
+    if any(
+        math.isclose(anchor.position, position, abs_tol=1e-9)
+        for anchor in profile.width_anchors
+    ):
+        raise ValueError("width anchor position already exists")
+    value = profile.evaluate_width(position) if width is None else width
+    if value is None:
+        raise ValueError("cannot insert a width anchor into an empty curve")
+    anchor = WidthAnchor(position, value, source, confidence, confirmed)
+    return dataclasses.replace(
+        profile,
+        width_anchors=tuple(
+            sorted(
+                (*profile.width_anchors, anchor), key=lambda item: item.position
+            )
+        ),
+    )
+
+
+def insert_visibility_anchor(
+    profile: LineProfile,
+    position: float,
+    *,
+    visibility: float | None = None,
+    source: AnchorSource = "auto",
+    confidence: float = 0.0,
+    confirmed: bool = False,
+) -> LineProfile:
+    """Insert one visibility anchor, deriving its value from the current curve."""
+    _validate_position(position, field="position")
+    if any(
+        math.isclose(anchor.position, position, abs_tol=1e-9)
+        for anchor in profile.visibility_anchors
+    ):
+        raise ValueError("visibility anchor position already exists")
+    value = (
+        profile.evaluate_visibility(position)
+        if visibility is None
+        else visibility
+    )
+    if value is None:
+        raise ValueError("cannot insert a visibility anchor into an empty curve")
+    anchor = VisibilityAnchor(position, value, source, confidence, confirmed)
+    return dataclasses.replace(
+        profile,
+        visibility_anchors=tuple(
+            sorted(
+                (*profile.visibility_anchors, anchor),
+                key=lambda item: item.position,
+            )
+        ),
+    )
+
+
+def remove_width_anchor(profile: LineProfile, index: int) -> LineProfile:
+    """Remove a width anchor while retaining the rest of the profile."""
+    if not 0 <= index < len(profile.width_anchors):
+        raise IndexError("width anchor index is out of range")
+    return dataclasses.replace(
+        profile,
+        width_anchors=(
+            profile.width_anchors[:index] + profile.width_anchors[index + 1 :]
+        ),
+    )
+
+
+def remove_visibility_anchor(profile: LineProfile, index: int) -> LineProfile:
+    """Remove a visibility anchor while retaining the rest of the profile."""
+    if not 0 <= index < len(profile.visibility_anchors):
+        raise IndexError("visibility anchor index is out of range")
+    return dataclasses.replace(
+        profile,
+        visibility_anchors=(
+            profile.visibility_anchors[:index]
+            + profile.visibility_anchors[index + 1 :]
         ),
     )
 
@@ -552,6 +734,85 @@ def _split_width_anchors(
         left=left,
         make_anchor=WidthAnchor,
     )
+
+
+def _crop_anchor_set(
+    anchors: tuple[Anchor, ...],
+    evaluate: Callable[[float], float | None],
+    start_position: float,
+    end_position: float,
+    make_anchor: type[WidthAnchor] | type[VisibilityAnchor],
+) -> tuple[Anchor, ...]:
+    if not anchors:
+        return ()
+    selected = [
+        dataclasses.replace(
+            anchor,
+            position=(anchor.position - start_position)
+            / (end_position - start_position),
+        )
+        for anchor in anchors
+        if start_position <= anchor.position <= end_position
+    ]
+    for boundary, normalized in ((start_position, 0.0), (end_position, 1.0)):
+        if any(math.isclose(anchor.position, normalized) for anchor in selected):
+            continue
+        value = evaluate(boundary)
+        if value is None:
+            continue
+        if make_anchor is WidthAnchor:
+            selected.append(
+                WidthAnchor(
+                    position=normalized,
+                    width=value,
+                    source="auto",
+                    confidence=0.0,
+                    confirmed=False,
+                )
+            )
+        else:
+            selected.append(
+                VisibilityAnchor(
+                    position=normalized,
+                    visibility=value,
+                    source="auto",
+                    confidence=0.0,
+                    confirmed=False,
+                )
+            )
+    return _deduplicate_anchors(selected)
+
+
+def _resample_anchor_set(
+    anchors: tuple[Anchor, ...],
+    evaluate: Callable[[float], float | None],
+    positions: list[float],
+    make_anchor: type[WidthAnchor] | type[VisibilityAnchor],
+) -> tuple[Anchor, ...]:
+    result: list[Anchor] = []
+    for position in positions:
+        value = evaluate(position)
+        if value is None:
+            continue
+        original = next(
+            (
+                anchor
+                for anchor in anchors
+                if math.isclose(anchor.position, position, abs_tol=1e-9)
+            ),
+            None,
+        )
+        if original is not None:
+            result.append(dataclasses.replace(original, position=position))
+        elif make_anchor is WidthAnchor:
+            result.append(
+                WidthAnchor(position, value, "auto", 0.0, False)
+            )
+        else:
+            result.append(
+                VisibilityAnchor(position, value, "auto", 0.0, False)
+            )
+    return tuple(result)
 
 
 def _split_visibility_anchors(

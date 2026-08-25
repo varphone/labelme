@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
+import labelme._line_profile_batch as batch
 from labelme._label_file import Annotation
 from labelme._label_file import ShapeDict
 from labelme._label_file import read_label_file
@@ -53,3 +56,37 @@ def test_batch_measurement_supports_dry_run_and_atomic_output(
     assert report.items[0].processed_shapes == 1
     output = read_label_file(str(output_dir / input_file.name))
     assert output.shapes[0].get("line_profile") is not None
+
+
+def test_batch_measurement_can_cancel_before_writing(data_path: Path) -> None:
+    source = data_path / "annotated/2011_000003.json"
+
+    report = measure_annotation_files(
+        [str(source)], options=BatchOptions(cancel_check=lambda: True)
+    )
+
+    assert report.items[0].status == "canceled"
+    assert report.canceled == report.items
+
+
+def test_batch_measurement_retries_transient_read_failure(
+    data_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = data_path / "annotated/2011_000003.json"
+    original = batch.read_label_file
+    calls = 0
+
+    def flaky_read_label_file(filename: str) -> Annotation:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise OSError("transient")
+        return original(filename)
+
+    monkeypatch.setattr(batch, "read_label_file", flaky_read_label_file)
+    report = measure_annotation_files(
+        [str(source)], options=BatchOptions(dry_run=True, retry_count=1)
+    )
+
+    assert calls == 2
+    assert report.items[0].status == "skipped"

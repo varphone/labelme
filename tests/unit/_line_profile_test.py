@@ -5,12 +5,20 @@ from collections.abc import Callable
 import pytest
 
 from labelme._line_profile import LineProfile
+from labelme._line_profile import crop_profile
 from labelme._line_profile import cumulative_lengths
+from labelme._line_profile import extend_profile
+from labelme._line_profile import insert_visibility_anchor
+from labelme._line_profile import insert_width_anchor
 from labelme._line_profile import merge_profiles
+from labelme._line_profile import migrate_line_profile_json
 from labelme._line_profile import point_to_position
 from labelme._line_profile import position_to_point
 from labelme._line_profile import profile_boundary_points
 from labelme._line_profile import remap_profile
+from labelme._line_profile import remove_visibility_anchor
+from labelme._line_profile import remove_width_anchor
+from labelme._line_profile import resample_profile
 from labelme._line_profile import reverse_profile
 from labelme._line_profile import split_profile
 
@@ -190,3 +198,46 @@ def test_profile_boundary_points_use_full_width_and_local_normals() -> None:
 
     assert left[1] == pytest.approx((5.0, 3.0))
     assert right[1] == pytest.approx((5.0, -3.0))
+
+
+def test_profile_crop_extend_and_resample_preserve_curve_values() -> None:
+    profile = LineProfile.from_json_obj(_profile_json())
+
+    cropped = crop_profile(profile, 0.25, 0.75)
+    extended = extend_profile(cropped, 0.25, 0.75)
+    resampled = resample_profile(profile, [0.0, 0.25, 0.5, 0.75, 1.0])
+
+    assert cropped.evaluate_width(0.0) == pytest.approx(5.0)
+    assert cropped.evaluate_width(1.0) == pytest.approx(7.0)
+    assert extended.evaluate_width(0.0) == pytest.approx(5.0)
+    assert extended.evaluate_width(1.0) == pytest.approx(7.0)
+    assert resampled.evaluate_width(0.25) == pytest.approx(5.0)
+    assert resampled.evaluate_width(0.75) == pytest.approx(7.0)
+
+
+def test_profile_schema_migration_is_explicit_and_idempotent() -> None:
+    raw = _profile_json()
+
+    migrated = migrate_line_profile_json(raw)
+
+    assert migrated == raw
+    assert migrated is not raw
+    with pytest.raises(ValueError, match="no line_profile migration"):
+        migrate_line_profile_json({**raw, "schema_version": 2})
+
+
+def test_profile_anchor_insert_and_remove_preserve_interpolated_values() -> None:
+    profile = LineProfile.from_json_obj(_profile_json())
+
+    inserted = insert_width_anchor(profile, 0.5)
+    inserted = insert_visibility_anchor(inserted, 0.5)
+
+    assert inserted.evaluate_width(0.5) == pytest.approx(6.0)
+    assert inserted.evaluate_visibility(0.5) == pytest.approx(0.75)
+    assert len(inserted.width_anchors) == 3
+    assert len(inserted.visibility_anchors) == 3
+    assert len(remove_width_anchor(inserted, 1).width_anchors) == 2
+    assert len(remove_visibility_anchor(inserted, 1).visibility_anchors) == 2
+
+    with pytest.raises(ValueError, match="already exists"):
+        insert_width_anchor(inserted, 0.5)

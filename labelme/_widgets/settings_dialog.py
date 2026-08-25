@@ -158,6 +158,11 @@ class _SettingsPage(QtWidgets.QWidget):
         scroll_bar = self._scroll_area.verticalScrollBar()
         if scroll_bar.maximum() > 0 and value == scroll_bar.maximum():
             active = len(self._groups) - 1
+        elif active == len(self._groups) - 1:
+            # Keep the last section selected only at the exact scroll limit;
+            # this preserves the useful second-to-last reading point one pixel
+            # above the bottom when the final group is shorter than the viewport.
+            active = max(0, active - 1)
         with QtCore.QSignalBlocker(self._navigation):
             self._navigation.setCurrentRow(active)
 
@@ -185,6 +190,7 @@ class SettingsDialog(QtWidgets.QDialog):
             "Label sources": "phosphor/tag.svg",
             "Label behavior": "phosphor/sliders-horizontal.svg",
             "AI assist": "phosphor/sparkle.svg",
+            "Line profile measurement": "phosphor/line-segments.svg",
         }
         groups: list[tuple[str, QtGui.QIcon, QtWidgets.QGroupBox]] = []
         for group in typing.get_args(schema.Group):
@@ -356,6 +362,19 @@ class SettingsDialog(QtWidgets.QDialog):
                 lambda checked: self._apply(setting.key_path, checked)
             )
             return check
+        if setting.kind == "float":
+            assert setting.minimum is not None
+            assert setting.maximum is not None
+            spin = QtWidgets.QDoubleSpinBox()
+            spin.setRange(setting.minimum, setting.maximum)
+            spin.setDecimals(setting.decimals)
+            spin.setSingleStep(0.1 if setting.decimals else 1.0)
+            spin.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
+            self._set_editor_value(editor=spin, value=value)
+            spin.valueChanged.connect(
+                lambda changed: self._apply(setting.key_path, changed)
+            )
+            return spin
         if setting.kind == "enum":
             assert setting.choices is not None
             enum_items: list[tuple[str, object]] = []
@@ -427,6 +446,8 @@ class SettingsDialog(QtWidgets.QDialog):
             items = value if isinstance(value, list) else []
             editor.setPlainText("\n".join(str(item) for item in items))
             editor.mark_committed()
+        elif isinstance(editor, QtWidgets.QDoubleSpinBox):
+            editor.setValue(float(value))
 
     def _apply(self, key_path: tuple[str, ...], value: object) -> bool:
         editor = self._editors[key_path]
