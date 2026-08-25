@@ -177,6 +177,52 @@
     </message>
 </context>
 <context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmed</translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation>Position</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Visibility</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>Source</translation>
+    </message>
+    <message>
+        <source>Confidence</source>
+        <translation>Confidence</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileWidthWidget</name>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmed</translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation>Position</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Width</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>Source</translation>
+    </message>
+    <message>
+        <source>Confidence</source>
+        <translation>Confidence</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>&amp;Save
@@ -293,6 +339,14 @@
         <translation>Об&apos;єднати обрані анотації лінії та полілінії в одну полілінію</translation>
     </message>
     <message>
+        <source>Measure Line Profile</source>
+        <translation>Measure Line Profile</translation>
+    </message>
+    <message>
+        <source>Measure width and visibility along the selected linestrip</source>
+        <translation>Measure width and visibility along the selected linestrip</translation>
+    </message>
+    <message>
         <source>Delete Selected Files</source>
         <translation>Видалити вибрані файли</translation>
     </message>
@@ -380,6 +434,46 @@
     <message>
         <source>Split the selected linestrip into two at the hovered vertex</source>
         <translation>Розрізати обрану полілінію на дві у вершині під курсором</translation>
+    </message>
+    <message>
+        <source>Insert Profile Anchor</source>
+        <translation>Insert Profile Anchor</translation>
+    </message>
+    <message>
+        <source>Insert an interpolated profile anchor</source>
+        <translation>Insert an interpolated profile anchor</translation>
+    </message>
+    <message>
+        <source>Delete Profile Anchor</source>
+        <translation>Delete Profile Anchor</translation>
+    </message>
+    <message>
+        <source>Delete the active profile anchor</source>
+        <translation>Delete the active profile anchor</translation>
+    </message>
+    <message>
+        <source>Clear Line Profile</source>
+        <translation>Clear Line Profile</translation>
+    </message>
+    <message>
+        <source>Remove profile metadata and keep the centerline</source>
+        <translation>Remove profile metadata and keep the centerline</translation>
+    </message>
+    <message>
+        <source>Line Profile Measurement Parameters</source>
+        <translation>Line Profile Measurement Parameters</translation>
+    </message>
+    <message>
+        <source>Override measurement defaults for this linestrip</source>
+        <translation>Override measurement defaults for this linestrip</translation>
+    </message>
+    <message>
+        <source>Copy Profiles from Previous Frame</source>
+        <translation>Copy Profiles from Previous Frame</translation>
+    </message>
+    <message>
+        <source>Copy only compatible line profiles from the previous frame</source>
+        <translation>Copy only compatible line profiles from the previous frame</translation>
     </message>
     <message>
         <source>Start drawing polygons</source>
@@ -520,6 +614,14 @@ Shapes</source>
         <translation>Переключити всі фігури</translation>
     </message>
     <message>
+        <source>Show Line Profile Preview</source>
+        <translation>Show Line Profile Preview</translation>
+    </message>
+    <message>
+        <source>Show variable-width profile boundaries and handles</source>
+        <translation>Show variable-width profile boundaries and handles</translation>
+    </message>
+    <message>
         <source>Zoom</source>
         <translation>Збільшити</translation>
     </message>
@@ -616,6 +718,62 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Вибрано файлів: {count}</translation>
     </message>
     <message>
+        <source>Sample spacing</source>
+        <translation>Sample spacing</translation>
+    </message>
+    <message>
+        <source>Search radius</source>
+        <translation>Search radius</translation>
+    </message>
+    <message>
+        <source>Minimum width</source>
+        <translation>Minimum width</translation>
+    </message>
+    <message>
+        <source>Maximum width</source>
+        <translation>Maximum width</translation>
+    </message>
+    <message>
+        <source>Contrast factor</source>
+        <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Override global measurement settings</source>
+        <translation>Override global measurement settings</translation>
+    </message>
+    <message>
+        <source>Invalid Measurement Parameters</source>
+        <translation>Invalid Measurement Parameters</translation>
+    </message>
+    <message>
+        <source>Measuring line profile…</source>
+        <translation>Measuring line profile…</translation>
+    </message>
+    <message>
+        <source>Line Profile Measurement</source>
+        <translation>Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>Measurement result is out of date</source>
+        <translation>Measurement result is out of date</translation>
+    </message>
+    <message>
+        <source>Accept Line Profile Measurement</source>
+        <translation>Accept Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
+        <translation>Measurement produced {0} samples. Accept automatic width and visibility anchors?</translation>
+    </message>
+    <message>
+        <source>Only accept samples with confidence &gt;= 0.5</source>
+        <translation>Only accept samples with confidence &gt;= 0.5</translation>
+    </message>
+    <message>
+        <source>Line profile measurement failed: {0}</source>
+        <translation>Line profile measurement failed: {0}</translation>
+    </message>
+    <message>
         <source>Error saving label data</source>
         <translation>Помилка збереження даних мітки</translation>
     </message>
@@ -642,6 +800,38 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Loaded %s</source>
         <translation>Завантажено %s</translation>
+    </message>
+    <message>
+        <source>Previous frame profiles are incompatible: {0}</source>
+        <translation>Previous frame profiles are incompatible: {0}</translation>
+    </message>
+    <message>
+        <source>Shape {0} ({1}): centerline difference {2:.2f} px</source>
+        <translation>Shape {0} ({1}): centerline difference {2:.2f} px</translation>
+    </message>
+    <message>
+        <source>unlabeled</source>
+        <translation>unlabeled</translation>
+    </message>
+    <message>
+        <source>Shape {0}: width difference {1}, visibility difference {2}</source>
+        <translation>Shape {0}: width difference {1}, visibility difference {2}</translation>
+    </message>
+    <message>
+        <source>n/a</source>
+        <translation>n/a</translation>
+    </message>
+    <message>
+        <source>Frame Profile Transfer Preview</source>
+        <translation>Frame Profile Transfer Preview</translation>
+    </message>
+    <message>
+        <source>Copy profiles from the previous frame?
+
+{0}</source>
+        <translation>Copy profiles from the previous frame?
+
+{0}</translation>
     </message>
     <message>
         <source>Image &amp; Label files (%s)</source>
@@ -917,6 +1107,10 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Допомога ШІ</translation>
     </message>
     <message>
+        <source>Line profile measurement</source>
+        <translation>Line profile measurement</translation>
+    </message>
+    <message>
         <source>Save automatically</source>
         <translation>Зберігати автоматично</translation>
     </message>
@@ -987,6 +1181,34 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Contains</source>
         <translation>Містить</translation>
+    </message>
+    <message>
+        <source>Sample spacing</source>
+        <translation>Sample spacing</translation>
+    </message>
+    <message>
+        <source>Pixels along the centerline.</source>
+        <translation>Pixels along the centerline.</translation>
+    </message>
+    <message>
+        <source>Search radius</source>
+        <translation>Search radius</translation>
+    </message>
+    <message>
+        <source>Pixels sampled on each normal.</source>
+        <translation>Pixels sampled on each normal.</translation>
+    </message>
+    <message>
+        <source>Minimum width</source>
+        <translation>Minimum width</translation>
+    </message>
+    <message>
+        <source>Maximum width</source>
+        <translation>Maximum width</translation>
+    </message>
+    <message>
+        <source>Contrast factor</source>
+        <translation>Contrast factor</translation>
     </message>
     <message>
         <source>Default model</source>

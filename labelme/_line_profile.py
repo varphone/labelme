@@ -284,6 +284,8 @@ def _validate_measurement_overrides(
     for key, value in overrides:
         if key not in _MEASUREMENT_OVERRIDE_KEYS:
             raise ValueError(f"unsupported measurement override: {key!r}")
+        if key in values:
+            raise ValueError(f"duplicate measurement override: {key!r}")
         if not math.isfinite(value):
             raise ValueError(f"measurement override {key!r} must be finite")
         if key == "contrast_factor":

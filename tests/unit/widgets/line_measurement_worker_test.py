@@ -59,3 +59,24 @@ def test_worker_drops_a_result_canceled_during_measurement(
     )
 
     assert results == []
+
+
+def test_worker_emits_failure_without_touching_widgets(
+    monkeypatch: pytest.MonkeyPatch, qtbot: QtBot
+) -> None:
+    worker = LineMeasurementWorker()
+    qtbot.addWidget(QtWidgets.QWidget())
+    failures: list[str] = []
+    worker.failed.connect(failures.append)
+
+    def fail(*args: object, **kwargs: object) -> object:
+        raise RuntimeError("synthetic measurement failure")
+
+    monkeypatch.setattr(worker_module, "measure_line_profile", fail)
+    worker.run(
+        np.zeros((16, 32), dtype=np.uint8),
+        [[1.0, 8.0], [30.0, 8.0]],
+        MeasurementParameters(sample_spacing=8.0),
+    )
+
+    assert failures == ["RuntimeError: synthetic measurement failure"]

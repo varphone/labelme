@@ -62,6 +62,9 @@ from ._line_profile import position_to_point
 from ._line_profile import remove_visibility_anchor
 from ._line_profile import remove_width_anchor
 from ._line_profile import reverse_profile
+from ._line_profile_sequence import compare_frames
+from ._line_profile_sequence import transfer_frame_profiles
+from ._line_profile_sequence import validate_frame_mapping
 from ._shape import Shape
 from ._shape import ShapeType
 from ._shape_clipboard import ShapeClipboard
@@ -192,6 +195,7 @@ class _Actions(NamedTuple):
     delete_line_profile_anchor: QtGui.QAction
     clear_line_profile: QtGui.QAction
     line_profile_measurement_parameters: QtGui.QAction
+    copy_profiles_from_previous_frame: QtGui.QAction
     draw: list[tuple[str, QtGui.QAction]]
     zoom: tuple[ZoomWidget | QtGui.QAction, ...]
     on_load_active: tuple[QtGui.QAction, ...]
@@ -242,6 +246,7 @@ class MainWindow(QtWidgets.QMainWindow):
     _file_list_image_path: str | None
     _loaded_image_paths: list[str]
     _prev_image_path: str | None
+    _previous_frame_shapes: list[Shape] | None
     _zoom_values: dict[str, tuple[_ZoomMode, float]]
     _brightness_contrast_values: dict[str, tuple[int | None, int | None]]
     _scroll_values: dict[Qt.Orientation, dict[str, float]]
@@ -271,6 +276,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._label_dialog = self._make_label_dialog()
 
         self._prev_opened_dir = None
+        self._previous_frame_shapes = None
         self._label_list_menu_origin: QtCore.QPoint | None = None
         self._active_line_profile_anchor_index = 0
         self._active_line_profile_anchor_kind: Literal["width", "visibility"] = "width"
@@ -618,6 +624,12 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Override measurement defaults for this linestrip"),
             enabled=False,
         )
+        copy_profiles_from_previous_frame = action(
+            text=self.tr("Copy Profiles from Previous Frame"),
+            slot=self.copy_profiles_from_previous_frame,
+            tip=self.tr("Copy only compatible line profiles from the previous frame"),
+            enabled=False,
+        )
         create_mode = action(
             text=self.tr("Polygon"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="polygon"),
@@ -929,6 +941,7 @@ class MainWindow(QtWidgets.QMainWindow):
             delete_line_profile_anchor,
             clear_line_profile,
             line_profile_measurement_parameters,
+            copy_profiles_from_previous_frame,
         )
         edit_menu = (
             edit,
@@ -948,6 +961,7 @@ class MainWindow(QtWidgets.QMainWindow):
             delete_line_profile_anchor,
             clear_line_profile,
             line_profile_measurement_parameters,
+            copy_profiles_from_previous_frame,
             copy_annotations_to_next,
             merge_linestrips,
             measure_line_profile,
@@ -1017,6 +1031,7 @@ class MainWindow(QtWidgets.QMainWindow):
             delete_line_profile_anchor=delete_line_profile_anchor,
             clear_line_profile=clear_line_profile,
             line_profile_measurement_parameters=line_profile_measurement_parameters,
+            copy_profiles_from_previous_frame=copy_profiles_from_previous_frame,
             draw=draw,
             zoom=zoom,
             on_load_active=on_load_active,
@@ -1702,6 +1717,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self._file_list_image_path = None
         self._label_file_path = None
         self._last_failed_auto_save_path = None
+        self._previous_frame_shapes = None
+        if hasattr(self, "_actions"):
+            self._actions.copy_profiles_from_previous_frame.setEnabled(False)
         self._canvas_widgets.canvas.reset_state()
         self._active_line_profile_anchor_index = 0
         self._active_line_profile_anchor_kind = "width"
@@ -3190,8 +3208,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # The replacement session is fully staged; only now replace the
         # current one.
+        previous_frame_shapes = [
+            shape.copy() for shape in self._canvas_widgets.canvas.shapes
+        ]
         self._remember_current_viewport()
         self.reset_state()
+        self._previous_frame_shapes = previous_frame_shapes or None
         self._canvas_widgets.canvas.setEnabled(False)
         self._annotation = annotation
         self._image_path = image_path
@@ -3241,6 +3263,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.open_brightness_contrast_dialog(value=False, is_initial_load=True)
         self._paint_canvas()
         self.update_action_states(True)
+        self._sync_previous_frame_profile_action()
         # A load never pulls the keyboard out of the File List, whatever drove
         # it; otherwise an arrow-key walk of the list ends after one keypress.
         if not self._docks.file_list.hasFocus():
@@ -3252,6 +3275,90 @@ class MainWindow(QtWidgets.QMainWindow):
             (time.time() - t0_load_file) * 1000,
         )
         return True
+
+    def _sync_previous_frame_profile_action(self) -> None:
+        previous = self._previous_frame_shapes
+        current = self._canvas_widgets.canvas.shapes
+        enabled = bool(previous and current and self._prev_image_path)
+        if enabled:
+            try:
+                validate_frame_mapping(previous, current)
+            except ValueError:
+                enabled = False
+        self._actions.copy_profiles_from_previous_frame.setEnabled(enabled)
+
+    def copy_profiles_from_previous_frame(self) -> None:
+        previous = self._previous_frame_shapes
+        current = self._canvas_widgets.canvas.shapes
+        if not previous or not current:
+            return
+        try:
+            differences = compare_frames(previous, current)
+            mapped = transfer_frame_profiles(previous, current)
+        except ValueError as error:
+            self.show_status_message(
+                self.tr("Previous frame profiles are incompatible: {0}").format(error)
+            )
+            return
+        details = [
+            self.tr("Shape {0} ({1}): centerline difference {2:.2f} px").format(
+                difference.index + 1,
+                difference.label or self.tr("unlabeled"),
+                difference.centerline_max_displacement,
+            )
+            for difference in differences
+        ]
+        if any(
+            difference.width_max_difference is not None
+            or difference.visibility_max_difference is not None
+            for difference in differences
+        ):
+            details.extend(
+                self.tr(
+                    "Shape {0}: width difference {1}, visibility difference {2}"
+                ).format(
+                    difference.index + 1,
+                    (
+                        self.tr("n/a")
+                        if difference.width_max_difference is None
+                        else f"{difference.width_max_difference:.2f} px"
+                    ),
+                    (
+                        self.tr("n/a")
+                        if difference.visibility_max_difference is None
+                        else f"{difference.visibility_max_difference:.2f}"
+                    ),
+                )
+                for difference in differences
+                if difference.width_max_difference is not None
+                or difference.visibility_max_difference is not None
+            )
+        confirmation = QMessageBox.question(
+            self,
+            self.tr("Frame Profile Transfer Preview"),
+            self.tr("Copy profiles from the previous frame?\n\n{0}").format(
+                "\n".join(details)
+            ),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if confirmation != QMessageBox.StandardButton.Yes:
+            return
+        changed = False
+        for target, source in zip(current, mapped):
+            if source.line_profile is None or target.shape_type != "linestrip":
+                continue
+            if target.line_profile == source.line_profile:
+                continue
+            target.line_profile = source.line_profile
+            target.line_profile_error = None
+            target.other_data.pop("line_profile", None)
+            changed = True
+        if not changed:
+            return
+        self._canvas_widgets.canvas.backup_shapes()
+        self.mark_dirty()
+        self._sync_line_profile_widgets()
 
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
         if (

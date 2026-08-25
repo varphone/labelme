@@ -80,3 +80,21 @@ def test_measurement_can_cancel_between_samples() -> None:
     )
 
     assert result is None
+
+
+@pytest.mark.parametrize(
+    "points",
+    [[], [[2.0, 2.0]], [[2.0, 2.0], [2.0, 2.0], [20.0, 2.0]]],
+)
+def test_measurement_handles_empty_short_and_repeated_centerlines(
+    points: list[list[float]],
+) -> None:
+    result = measure_line_profile(
+        np.zeros((32, 32), dtype=np.uint8),
+        points,
+        parameters=MeasurementParameters(search_radius=4.0),
+    )
+
+    assert result is not None
+    if len(points) < 2 or points == [[2.0, 2.0], [2.0, 2.0]]:
+        assert result.samples == ()
