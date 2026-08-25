@@ -58,7 +58,7 @@
         ],
         "min_width": 4.0,
         "max_width": 40.0,
-        "measurement_version": "line-profile-measurement-v2",
+        "measurement_version": "line-profile-measurement-v3",
         "reviewed": false
       }
     }
