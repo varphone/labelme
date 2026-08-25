@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   now uses local background-trend removal, subpixel normal profiles, robust
   stripe boundary crossings, stripe/background contrast,
   displayed-intensity-aware visibility, and signal-to-noise scoring ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed the line-profile visibility editor showing the first visibility value
+  for every selected width handle; paired width and visibility anchors are now
+  synchronized by normalized position ([PR pending](https://github.com/varphone/labelme/pulls)).
 
 ## [7.1.0] - 2026-08-21
 

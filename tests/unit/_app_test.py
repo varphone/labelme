@@ -20,6 +20,8 @@ from labelme import _app
 from labelme import _automation
 from labelme._label_file import ShapeDict
 from labelme._line_profile import LineProfile
+from labelme._line_profile import VisibilityAnchor
+from labelme._line_profile import WidthAnchor
 from labelme._shape import Shape
 
 
@@ -115,6 +117,29 @@ def test_format_window_title(
         )
         == expected
     )
+
+
+def test_nearest_profile_anchor_index_keeps_width_and_visibility_in_sync() -> None:
+    position = _app._nearest_line_profile_anchor_index(
+        (
+            VisibilityAnchor(0.0, 0.1, "auto", 1.0, False),
+            VisibilityAnchor(0.52, 0.2, "auto", 1.0, False),
+            VisibilityAnchor(1.0, 0.3, "auto", 1.0, False),
+        ),
+        0.5,
+    )
+    width = _app._nearest_line_profile_anchor_index(
+        (
+            WidthAnchor(0.0, 4.0, "auto", 1.0, False),
+            WidthAnchor(0.49, 5.0, "auto", 1.0, False),
+            WidthAnchor(1.0, 6.0, "auto", 1.0, False),
+        ),
+        0.5,
+    )
+
+    assert position == 1
+    assert width == 1
+    assert _app._nearest_line_profile_anchor_index((), 0.5) is None
 
 
 def _make_png_bytes(
