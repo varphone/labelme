@@ -41,7 +41,7 @@ The optional `line_profile` object contains:
   "visibility_anchors": [],
   "min_width": null,
   "max_width": null,
-  "measurement_version": "line-profile-measurement-v1",
+  "measurement_version": "line-profile-measurement-v2",
   "reviewed": false
 }
 ```
@@ -49,6 +49,11 @@ The optional `line_profile` object contains:
 Width is the full diameter in image pixels. Anchor positions are normalized
 arc-length values in `[0, 1]`; duplicate positions are invalid. `source` is
 `auto` or `manual`, `confidence` is in `[0, 1]`, and `confirmed` is a boolean.
+The current automatic measurement version uses bilinear normal sampling,
+local background-trend removal, subpixel threshold crossings, and a local
+signal-to-noise visibility score combined with displayed intensity for bright
+stripes. Existing profiles keep their stored `measurement_version`; remeasurement
+writes the current version.
 The fixed round-trip example is in
 [`docs/line_profile_example.json`](line_profile_example.json).
 

@@ -10,7 +10,7 @@ from numpy.typing import NDArray
 
 from ._line_profile import position_to_point
 
-MEASUREMENT_VERSION = "line-profile-measurement-v1"
+MEASUREMENT_VERSION = "line-profile-measurement-v2"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -62,6 +62,7 @@ def measure_line_profile(
     """
     parameters = parameters or MeasurementParameters()
     gray = _as_gray(image)
+    intensity_scale = _intensity_scale(image)
     total_length = _polyline_length(points)
     if total_length == 0:
         return LineMeasurement(MEASUREMENT_VERSION, ())
@@ -76,6 +77,7 @@ def measure_line_profile(
                 points=points,
                 position=index / (count - 1),
                 parameters=parameters,
+                intensity_scale=intensity_scale,
             )
         )
     samples = tuple(samples_list)
@@ -90,6 +92,7 @@ def _measure_sample(
     points: Sequence[Sequence[float]],
     position: float,
     parameters: MeasurementParameters,
+    intensity_scale: float,
 ) -> MeasurementSample:
     center = position_to_point(points, position)
     before = position_to_point(points, max(0.0, position - 1e-4))
@@ -103,8 +106,8 @@ def _measure_sample(
     normal = (-dy / tangent_length, dx / tangent_length)
     offsets = np.arange(
         -parameters.search_radius,
-        parameters.search_radius + 0.5,
-        1.0,
+        parameters.search_radius + 0.25,
+        0.5,
         dtype=np.float64,
     )
     coordinates = np.array(
@@ -113,39 +116,145 @@ def _measure_sample(
             for offset in offsets
         ]
     )
-    values, valid = _sample_nearest(gray, coordinates)
+    values, valid = _sample_bilinear(gray, coordinates)
     if not valid.any():
         return MeasurementSample(
             position, parameters.min_width, 0.0, 0.0, "outside_image"
         )
-    valid_values = values[valid]
-    background = float(np.percentile(valid_values, 20))
-    center_index = int(np.argmin(np.abs(offsets)))
-    center_value = float(values[center_index]) if valid[center_index] else background
-    contrast = center_value - background
-    if contrast <= 0:
-        return MeasurementSample(
-            position, parameters.min_width, 0.0, 0.0, "low_contrast"
+
+    # A global percentile is easily dominated by a glare patch or a second
+    # line.  Estimate the background independently at both ends of the normal
+    # and remove its linear trend before looking for the stripe.
+    sample_values = _fill_invalid(values=values, valid=valid, offsets=offsets)
+    outer_radius = max(2.0, parameters.search_radius * 0.65)
+    left_outer = valid & (offsets <= -outer_radius)
+    right_outer = valid & (offsets >= outer_radius)
+    if left_outer.sum() < 2 or right_outer.sum() < 2:
+        outer = valid
+        left_background = right_background = float(np.percentile(values[outer], 35))
+        left_reference = -parameters.search_radius
+        right_reference = parameters.search_radius
+        outer_residual = values[outer] - np.median(values[outer])
+    else:
+        left_background = float(np.percentile(values[left_outer], 35))
+        right_background = float(np.percentile(values[right_outer], 35))
+        left_reference = float(np.median(offsets[left_outer]))
+        right_reference = float(np.median(offsets[right_outer]))
+        outer = left_outer | right_outer
+        outer_baseline = np.interp(
+            offsets[outer],
+            [left_reference, right_reference],
+            [left_background, right_background],
         )
-    threshold = background + contrast * parameters.contrast_factor
-    bright = valid & (values >= threshold)
-    if not bright[center_index]:
+        outer_residual = values[outer] - outer_baseline
+    baseline = np.interp(
+        offsets,
+        [left_reference, right_reference],
+        [left_background, right_background],
+    )
+    residual = _smooth_profile(sample_values - baseline)
+    outer_scale = 1.4826 * float(
+        np.median(np.abs(outer_residual - np.median(outer_residual)))
+    )
+    # A small noise floor is intentional.  Without it, a 3-5 level intensity
+    # change in a nearly flat 8-bit image is incorrectly treated as perfectly
+    # visible merely because the local peak-to-peak range is also small.
+    noise = max(2.0, outer_scale)
+
+    # The annotation is a prior for where the line should be, not a promise
+    # that its centre pixel is the brightest pixel.  Search a limited band so
+    # a one-pixel drawing error or a dim centre does not truncate the stripe,
+    # while a nearby glare streak cannot take over the measurement wholesale.
+    candidate_radius = min(8.0, max(2.0, parameters.search_radius * 0.25))
+    candidate = valid & (np.abs(offsets) <= candidate_radius)
+    if not candidate.any():
         return MeasurementSample(
-            position, parameters.min_width, 0.0, 0.0, "no_center_evidence"
+            position, parameters.min_width, 0.0, 0.0, "outside_image"
         )
+    candidate_indices = np.flatnonzero(candidate)
+    bright_index = int(candidate_indices[np.argmax(residual[candidate])])
+    dark_index = int(candidate_indices[np.argmin(residual[candidate])])
+    if residual[bright_index] >= -residual[dark_index]:
+        center_index = bright_index
+        polarity = 1.0
+    else:
+        center_index = dark_index
+        polarity = -1.0
+    signed_residual = polarity * residual
+    signal = float(signed_residual[center_index])
+    if signal <= 1.5 * noise:
+        return MeasurementSample(
+            position,
+            parameters.min_width,
+            0.0,
+            0.0,
+            "low_contrast" if signal <= noise else "low_visibility",
+        )
+
+    threshold = signal * parameters.contrast_factor
+    evidence = valid & (signed_residual >= threshold)
     left = center_index
-    while left > 0 and bright[left - 1]:
+    while left > 0 and evidence[left - 1]:
         left -= 1
     right = center_index
-    while right + 1 < len(bright) and bright[right + 1]:
+    while right + 1 < len(evidence) and evidence[right + 1]:
         right += 1
-    width = float(offsets[right] - offsets[left] + 1.0)
+    left_edge = (
+        _threshold_crossing(
+            offsets[left - 1],
+            signed_residual[left - 1],
+            offsets[left],
+            signed_residual[left],
+            threshold,
+        )
+        if left > 0
+        else float(offsets[left])
+    )
+    right_edge = (
+        _threshold_crossing(
+            offsets[right],
+            signed_residual[right],
+            offsets[right + 1],
+            signed_residual[right + 1],
+            threshold,
+        )
+        if right + 1 < len(offsets)
+        else float(offsets[right])
+    )
+    width = max(0.0, right_edge - left_edge)
     width = max(parameters.min_width, min(parameters.max_width, width))
-    left_strength = float(values[center_index] - values[left])
-    right_strength = float(values[center_index] - values[right])
-    symmetry = 1.0 - abs(left_strength - right_strength) / max(contrast, 1e-9)
-    visibility = max(0.0, min(1.0, contrast / max(np.ptp(valid_values), 1e-9)))
-    confidence = max(0.0, min(1.0, 0.5 * visibility + 0.5 * symmetry))
+
+    # Visibility is a bounded local signal-to-noise score.  It is deliberately
+    # independent of the absolute image range, so a dim line in a flat dark
+    # crop cannot receive a perfect score from a tiny denominator.
+    contrast_visibility = max(
+        0.0,
+        min(1.0, (signal - 1.5 * noise) / max(signal + 1.5 * noise, 1e-9)),
+    )
+    visibility = contrast_visibility
+    if polarity > 0:
+        # On the supplied 8-bit welding images, a line at intensity 30-40 on
+        # a black background is barely visible even though its local contrast
+        # is technically strong.  Keep local contrast as the primary signal,
+        # but also account for the displayed intensity of a bright stripe.
+        display_floor = 0.08 * intensity_scale
+        display_ceiling = 0.86 * intensity_scale
+        display_factor = max(
+            0.0,
+            min(
+                1.0,
+                (sample_values[center_index] - display_floor)
+                / max(display_ceiling - display_floor, 1e-9),
+            ),
+        )
+        visibility *= display_factor
+    gradient = np.abs(np.gradient(signed_residual, offsets))
+    edge_quality = min(
+        1.0,
+        float(np.mean((gradient[left], gradient[right])))
+        / max(signal / max(width, 1.0), 1e-9),
+    )
+    confidence = max(0.0, min(1.0, 0.8 * visibility + 0.2 * edge_quality))
     reason = None if confidence >= 0.5 else "low_confidence"
     return MeasurementSample(position, width, visibility, confidence, reason)
 
@@ -156,11 +265,19 @@ def _as_gray(image: NDArray[np.generic]) -> NDArray[np.float64]:
         return array.astype(np.float64, copy=False)
     if array.ndim == 3 and array.shape[2] >= 3:
         return (
-            0.299 * array[..., 0]
-            + 0.587 * array[..., 1]
-            + 0.114 * array[..., 2]
+            0.299 * array[..., 0] + 0.587 * array[..., 1] + 0.114 * array[..., 2]
         ).astype(np.float64)
     raise ValueError("image must be a grayscale or RGB array")
+
+
+def _intensity_scale(image: NDArray[np.generic]) -> float:
+    array = np.asarray(image)
+    if np.issubdtype(array.dtype, np.integer):
+        return float(np.iinfo(array.dtype).max)
+    finite = array[np.isfinite(array)]
+    if finite.size == 0 or float(np.max(finite)) <= 1.5:
+        return 1.0
+    return 255.0
 
 
 def _recommend_neighbor_widths(
@@ -192,9 +309,7 @@ def _recommend_neighbor_widths(
             None,
         )
         if left is not None and right is not None:
-            ratio = (sample.position - left.position) / (
-                right.position - left.position
-            )
+            ratio = (sample.position - left.position) / (right.position - left.position)
             width = left.width + ratio * (right.width - left.width)
         else:
             nearest = min(
@@ -206,16 +321,69 @@ def _recommend_neighbor_widths(
     return tuple(result)
 
 
-def _sample_nearest(
+def _sample_bilinear(
     image: NDArray[np.float64], coordinates: NDArray[np.float64]
 ) -> tuple[NDArray[np.float64], NDArray[np.bool_]]:
     height, width = image.shape
-    x = np.rint(coordinates[:, 0]).astype(int)
-    y = np.rint(coordinates[:, 1]).astype(int)
-    valid = (x >= 0) & (x < width) & (y >= 0) & (y < height)
+    x_float = coordinates[:, 0]
+    y_float = coordinates[:, 1]
+    valid = (
+        (x_float >= 0)
+        & (x_float <= width - 1)
+        & (y_float >= 0)
+        & (y_float <= height - 1)
+    )
+    x = np.clip(np.floor(x_float).astype(int), 0, width - 1)
+    y = np.clip(np.floor(y_float).astype(int), 0, height - 1)
+    x1 = np.minimum(x + 1, width - 1)
+    y1 = np.minimum(y + 1, height - 1)
+    tx = x_float - x
+    ty = y_float - y
     values = np.zeros(len(coordinates), dtype=np.float64)
-    values[valid] = image[y[valid], x[valid]]
+    values[:] = (
+        image[y, x] * (1 - tx) * (1 - ty)
+        + image[y, x1] * tx * (1 - ty)
+        + image[y1, x] * (1 - tx) * ty
+        + image[y1, x1] * tx * ty
+    )
+    values[~valid] = 0.0
     return values, valid
+
+
+def _fill_invalid(
+    *,
+    values: NDArray[np.float64],
+    valid: NDArray[np.bool_],
+    offsets: NDArray[np.float64],
+) -> NDArray[np.float64]:
+    if valid.all():
+        return values
+    valid_indices = np.flatnonzero(valid)
+    if len(valid_indices) == 0:
+        return values
+    return np.interp(offsets, offsets[valid], values[valid])
+
+
+def _smooth_profile(values: NDArray[np.float64]) -> NDArray[np.float64]:
+    if len(values) < 3:
+        return values
+    kernel = np.array([1.0, 2.0, 1.0], dtype=np.float64) / 4.0
+    padded = np.pad(values, (1, 1), mode="edge")
+    return np.convolve(padded, kernel, mode="valid")
+
+
+def _threshold_crossing(
+    left_offset: float,
+    left_value: float,
+    right_offset: float,
+    right_value: float,
+    threshold: float,
+) -> float:
+    denominator = right_value - left_value
+    if denominator == 0:
+        return (left_offset + right_offset) / 2.0
+    fraction = (threshold - left_value) / denominator
+    return left_offset + max(0.0, min(1.0, fraction)) * (right_offset - left_offset)
 
 
 def _polyline_length(points: Sequence[Sequence[float]]) -> float:
