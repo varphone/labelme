@@ -18,6 +18,7 @@ from labelme import __appname__
 from labelme import _app
 from labelme import _automation
 from labelme._label_file import ShapeDict
+from labelme._line_profile import LineProfile
 from labelme._shape import Shape
 
 
@@ -369,6 +370,27 @@ def test_shapes_from_dicts_carries_over_the_shape_fields() -> None:
     np.testing.assert_array_equal(shape.mask, mask)
     assert shape.points.dtype == np.float64
     assert shape.points.tolist() == [[1.0, 2.0], [3.0, 4.0]]
+
+
+def test_shapes_from_dicts_and_shape_to_dict_carry_line_profile() -> None:
+    profile = LineProfile(reviewed=True)
+    shape_dict = ShapeDict(
+        label="stripe",
+        points=[[1.0, 2.0], [3.0, 4.0]],
+        shape_type="linestrip",
+        flags={},
+        description="",
+        group_id=None,
+        mask=None,
+        other_data={},
+        line_profile=profile,
+    )
+
+    (shape,) = _app._shapes_from_dicts(shape_dicts=[shape_dict], label_flags=None)
+
+    assert shape.line_profile is profile
+    result = _app._shape_to_dict(shape)
+    assert result["line_profile"] is profile
 
 
 def test_shape_to_dict_maps_all_fields() -> None:
