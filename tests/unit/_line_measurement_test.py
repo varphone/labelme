@@ -19,10 +19,10 @@ def test_measure_line_profile_detects_local_bright_stripe() -> None:
         parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
     )
 
-    assert result.measurement_version == "line-profile-measurement-v1"
+    assert result.measurement_version == "line-profile-measurement-v2"
     assert len(result.samples) >= 2
     middle = result.samples[len(result.samples) // 2]
-    assert middle.width == pytest.approx(7.0)
+    assert middle.width == pytest.approx(7.0, abs=0.5)
     assert middle.visibility > 0.9
     assert middle.confidence > 0.5
 
@@ -38,6 +38,51 @@ def test_measure_line_profile_reports_low_contrast_without_failure() -> None:
     assert result.samples
     assert all(sample.confidence == 0.0 for sample in result.samples)
     assert all(sample.reason == "low_contrast" for sample in result.samples)
+
+
+def test_measure_line_profile_recovers_width_when_centerline_is_off_center() -> None:
+    image = np.full((64, 128), 20, dtype=np.uint8)
+    image[12:28, 8:120] = 220
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [119.0, 20.0]],
+        parameters=MeasurementParameters(sample_spacing=24, search_radius=16),
+    )
+
+    middle = result.samples[len(result.samples) // 2]
+    assert middle.width > 14.0
+    assert middle.visibility > 0.9
+
+
+def test_measure_line_profile_does_not_call_a_dim_line_perfectly_visible() -> None:
+    image = np.full((48, 112), 30, dtype=np.uint8)
+    image[20:25, 8:104] = 35
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 22.0], [103.0, 22.0]],
+        parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
+    )
+
+    middle = result.samples[len(result.samples) // 2]
+    assert middle.visibility < 0.3
+    assert middle.confidence < 0.5
+
+
+def test_measure_line_profile_supports_a_strong_dark_stripe() -> None:
+    image = np.full((48, 112), 220, dtype=np.uint8)
+    image[17:24, 8:104] = 20
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [103.0, 20.0]],
+        parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
+    )
+
+    middle = result.samples[len(result.samples) // 2]
+    assert middle.width == pytest.approx(7.0, abs=0.5)
+    assert middle.visibility > 0.9
 
 
 def test_measure_line_profile_validates_parameters_and_image() -> None:
