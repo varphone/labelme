@@ -27,10 +27,15 @@ class BatchOptions:
     )
     cancel_check: Callable[[], bool] | None = None
     retry_count: int = 0
+    # The caller persists the last completed ordinal and passes it back after
+    # cancellation; this keeps restart policy outside the file writer.
+    resume_from: int = 0
 
     def __post_init__(self) -> None:
         if self.retry_count < 0:
             raise ValueError("retry_count must be non-negative")
+        if self.resume_from < 0:
+            raise ValueError("resume_from must be non-negative")
 
 
 @dataclasses.dataclass(frozen=True)
@@ -67,7 +72,9 @@ def measure_annotation_files(
     """Measure eligible files with per-file atomic writes and a report."""
     options = options or BatchOptions()
     results: list[BatchItemResult] = []
-    for filename in filenames:
+    for index, filename in enumerate(filenames):
+        if index < options.resume_from:
+            continue
         if options.cancel_check is not None and options.cancel_check():
             results.append(BatchItemResult(filename, "canceled"))
             break

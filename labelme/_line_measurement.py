@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import math
+from collections.abc import Callable
 from collections.abc import Sequence
 
 import numpy as np
@@ -51,7 +52,8 @@ def measure_line_profile(
     points: Sequence[Sequence[float]],
     *,
     parameters: MeasurementParameters | None = None,
-) -> LineMeasurement:
+    cancel_check: Callable[[], bool] | None = None,
+) -> LineMeasurement | None:
     """Measure bright stripe candidates along a centerline.
 
     The function is deterministic and has no Shape or Qt side effects. It uses
@@ -64,15 +66,19 @@ def measure_line_profile(
     if total_length == 0:
         return LineMeasurement(MEASUREMENT_VERSION, ())
     count = max(2, int(math.ceil(total_length / parameters.sample_spacing)) + 1)
-    samples = tuple(
-        _measure_sample(
-            gray=gray,
-            points=points,
-            position=index / (count - 1),
-            parameters=parameters,
+    samples_list: list[MeasurementSample] = []
+    for index in range(count):
+        if cancel_check is not None and cancel_check():
+            return None
+        samples_list.append(
+            _measure_sample(
+                gray=gray,
+                points=points,
+                position=index / (count - 1),
+                parameters=parameters,
+            )
         )
-        for index in range(count)
-    )
+    samples = tuple(samples_list)
     return LineMeasurement(
         MEASUREMENT_VERSION, _recommend_neighbor_widths(samples=samples)
     )

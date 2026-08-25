@@ -62,3 +62,21 @@ def test_low_confidence_width_uses_neighbor_recommendation_without_acceptance() 
     assert recommended[1].width == pytest.approx(6.0)
     assert recommended[1].confidence == 0.1
     assert recommended[1].reason == "low_contrast"
+
+
+def test_measurement_can_cancel_between_samples() -> None:
+    image = np.full((32, 128), 20, dtype=np.uint8)
+    calls = 0
+
+    def cancel_after_first_sample() -> bool:
+        nonlocal calls
+        calls += 1
+        return calls > 1
+
+    result = measure_line_profile(
+        image,
+        [[4.0, 16.0], [120.0, 16.0]],
+        cancel_check=cancel_after_first_sample,
+    )
+
+    assert result is None

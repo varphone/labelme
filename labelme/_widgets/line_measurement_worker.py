@@ -32,8 +32,9 @@ class LineMeasurementWorker(QtCore.QObject):
                 image,  # type: ignore[arg-type]
                 points,  # type: ignore[arg-type]
                 parameters=parameters,  # type: ignore[arg-type]
+                cancel_check=lambda: self._cancelled,
             )
-            if self._cancelled:
+            if self._cancelled or result is None:
                 return
             self.progress.emit(100)
             self.succeeded.emit(result)

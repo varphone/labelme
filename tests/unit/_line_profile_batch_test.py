@@ -90,3 +90,17 @@ def test_batch_measurement_retries_transient_read_failure(
 
     assert calls == 2
     assert report.items[0].status == "skipped"
+
+
+def test_batch_measurement_can_resume_from_a_completed_ordinal(
+    data_path: Path,
+) -> None:
+    source = data_path / "annotated/2011_000003.json"
+
+    report = measure_annotation_files(
+        [str(source), str(source)],
+        options=BatchOptions(dry_run=True, resume_from=1),
+    )
+
+    assert len(report.items) == 1
+    assert report.items[0].filename == str(source)
