@@ -1149,19 +1149,11 @@ def split_profile(
     if split_position <= 0.0 or split_position >= 1.0:
         raise ValueError("split_position must be strictly within (0, 1)")
     return (
-        dataclasses.replace(
-            profile,
-            width_anchors=_split_width_anchors(profile, split_position, left=True),
-            visibility_anchors=_split_visibility_anchors(
-                profile, split_position, left=True
-            ),
+        _replace_profile_anchors(
+            profile, _split_shared_anchors(profile, split_position, left=True)
         ),
-        dataclasses.replace(
-            profile,
-            width_anchors=_split_width_anchors(profile, split_position, left=False),
-            visibility_anchors=_split_visibility_anchors(
-                profile, split_position, left=False
-            ),
+        _replace_profile_anchors(
+            profile, _split_shared_anchors(profile, split_position, left=False)
         ),
     )
 
@@ -1201,34 +1193,17 @@ def merge_profiles(
     left_scale = left_length / total
     right_offset = left_scale
     right_scale = right_length / total
-    width = _merge_anchor_sets(
-        left.width_anchors,
-        right.width_anchors,
+    anchors = _merge_shared_anchor_sets(
+        left.anchors,
+        right.anchors,
         left_scale=left_scale,
         right_offset=right_offset,
         right_scale=right_scale,
         join_policy=join_policy,
     )
-    visibility = _merge_anchor_sets(
-        left.visibility_anchors,
-        right.visibility_anchors,
-        left_scale=left_scale,
-        right_offset=right_offset,
-        right_scale=right_scale,
-        join_policy=join_policy,
-    )
-    return dataclasses.replace(
+    return _replace_profile_anchors(
         left,
-        width_anchors=width,
-        visibility_anchors=visibility,
-        min_width=_merge_optional_min(left.min_width, right.min_width),
-        max_width=_merge_optional_max(left.max_width, right.max_width),
-        measurement_version=(
-            left.measurement_version
-            if left.measurement_version == right.measurement_version
-            else None
-        ),
-        reviewed=left.reviewed and right.reviewed,
+        anchors,
     )
 
 
@@ -1444,6 +1419,35 @@ def _split_visibility_anchors(
     )
 
 
+def _split_shared_anchors(
+    profile: LineProfile, split_position: float, *, left: bool
+) -> list[ProfileAnchor]:
+    start, end = (0.0, split_position) if left else (split_position, 1.0)
+    scale = split_position if left else 1.0 - split_position
+    selected = [
+        dataclasses.replace(
+            anchor,
+            position=(anchor.position if left else anchor.position - split_position)
+            / scale,
+        )
+        for anchor in profile.anchors
+        if start <= anchor.position <= end
+    ]
+    for boundary, normalized in ((start, 0.0), (end, 1.0)):
+        if any(math.isclose(anchor.position, normalized) for anchor in selected):
+            continue
+        selected.append(
+            ProfileAnchor(
+                normalized,
+                _auto_profile_value(profile.evaluate_width(boundary), "width"),
+                _auto_profile_value(
+                    profile.evaluate_visibility(boundary), "visibility"
+                ),
+            )
+        )
+    return list(_deduplicate_shared_anchors(selected))
+
+
 def _split_anchors(
     *,
     anchors: tuple[Anchor, ...],
@@ -1532,6 +1536,65 @@ def _merge_anchor_sets(
         else:
             mapped_right.remove(right_anchor)
     return _deduplicate_anchors(mapped_left + mapped_right)
+
+
+def _merge_shared_anchor_sets(
+    left: tuple[ProfileAnchor, ...],
+    right: tuple[ProfileAnchor, ...],
+    *,
+    left_scale: float,
+    right_offset: float,
+    right_scale: float,
+    join_policy: Literal["left", "right", "average"],
+) -> tuple[ProfileAnchor, ...]:
+    mapped = [
+        dataclasses.replace(anchor, position=anchor.position * left_scale)
+        for anchor in left
+    ] + [
+        dataclasses.replace(
+            anchor, position=right_offset + anchor.position * right_scale
+        )
+        for anchor in right
+    ]
+    result: list[ProfileAnchor] = []
+    for anchor in sorted(mapped, key=lambda item: item.position):
+        if not result or not math.isclose(
+            result[-1].position, anchor.position, abs_tol=1e-9
+        ):
+            result.append(anchor)
+            continue
+        previous = result[-1]
+        if join_policy == "right":
+            result[-1] = anchor
+            continue
+        if join_policy == "average":
+            result[-1] = ProfileAnchor(
+                previous.position,
+                _average_profile_value(previous.width, anchor.width),
+                _average_profile_value(previous.visibility, anchor.visibility),
+            )
+            continue
+        result[-1] = ProfileAnchor(
+            previous.position,
+            _prefer_profile_value(previous.width, anchor.width),
+            _prefer_profile_value(previous.visibility, anchor.visibility),
+        )
+    return tuple(result)
+
+
+def _average_profile_value(
+    left: ProfileValue | None, right: ProfileValue | None
+) -> ProfileValue | None:
+    if left is None:
+        return right
+    if right is None:
+        return left
+    return ProfileValue(
+        (left.value + right.value) / 2.0,
+        "manual" if left.source == right.source == "manual" else "auto",
+        min(left.confidence, right.confidence),
+        left.confirmed and right.confirmed,
+    )
 
 
 def _merge_optional_min(left: float | None, right: float | None) -> float | None:

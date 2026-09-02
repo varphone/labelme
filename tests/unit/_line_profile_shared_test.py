@@ -7,6 +7,8 @@ from labelme._line_profile import ProfileAnchor
 from labelme._line_profile import ProfileValue
 from labelme._line_profile import evaluate_profile
 from labelme._line_profile import remove_profile_property
+from labelme._line_profile import reverse_profile
+from labelme._line_profile import split_profile
 from labelme._line_profile import update_profile_anchor
 
 
@@ -66,3 +68,16 @@ def test_updating_shared_anchor_preserves_other_property() -> None:
     assert profile.anchors[0].width is not None
     assert profile.anchors[0].width.value == 8.0
     assert profile.anchors[0].visibility is not None
+
+
+def test_geometry_transforms_move_shared_positions_once() -> None:
+    profile = _profile()
+
+    reversed_profile = reverse_profile(profile)
+    left, right = split_profile(profile, 0.5)
+
+    assert reversed_profile.anchors[0].position == pytest.approx(0.5)
+    assert reversed_profile.anchors[0].visibility is not None
+    assert left.anchors[0].width is not None
+    assert left.anchors[0].visibility is not None
+    assert right.anchors[0].visibility is not None
