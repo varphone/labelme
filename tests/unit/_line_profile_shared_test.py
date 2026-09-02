@@ -32,6 +32,8 @@ def test_shared_anchor_json_round_trip_keeps_independent_properties() -> None:
 
     assert raw["schema_version"] == 2
     assert len(raw["anchors"]) == 2
+    assert "width_anchors" not in raw
+    assert "visibility_anchors" not in raw
     assert raw["anchors"][0]["width"]["value"] == 4.0
     assert raw["anchors"][1]["width"] is None
     assert LineProfile.from_json_obj(raw) == profile

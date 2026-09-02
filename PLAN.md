@@ -737,12 +737,12 @@ ProfileAnchor(
 - [x] 实现非法 profile 的非破坏性读取状态，不让整个 Annotation 丢失；
 - [x] 保存未修改的非法 profile 时保留原始扩展数据；
 - [x] 用户清除或替换非法 profile 后才写入新的合法数据；
-- [ ] 实现 `schema_version=2` 的严格格式校验；
+- [x] 实现 `schema_version=2` 的严格格式校验；
 - [x] 明确未来 schema 版本的不可编辑错误提示；
 - [x] 验证 profile 不能附加到非-linestrip Shape；
 - [x] 验证 JSON `null`、整数、浮点、布尔值和字符串错误类型；
 - [x] 验证临时文件、原子替换、权限保留和写入失败恢复；
-- [ ] 增加无 profile、统一格式、未知字段、非法 profile 和中断保存测试；
+- [x] 增加无 profile、统一格式、未知字段、非法 profile 和中断保存测试；
 
 ### 18.4 阶段 3：中心线弧长与 profile 变换
 
@@ -902,7 +902,7 @@ ProfileAnchor(
 
 首期功能只有同时满足以下条件才算完成：
 
-- [ ] 统一锚点数据模型、JSON 编解码和非法数据策略已确定并测试通过；
+- [x] 统一锚点数据模型、JSON 编解码和非法数据策略已确定并测试通过；
 - [ ] 没有 profile 的 Annotation File、未知字段和普通 linestrip 回归测试全部通过；
 - [x] 中心线所有已支持编辑操作都不会丢失或错误重定位 profile；
 - [x] 圆形宽度手柄可在不同缩放级别下稳定选择、拖动和输入；
