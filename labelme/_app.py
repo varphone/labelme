@@ -3465,8 +3465,20 @@ class MainWindow(QtWidgets.QMainWindow):
     def _on_scroll_request(self, delta: int, orientation: Qt.Orientation) -> None:
         units = -delta * 0.1  # natural scroll
         bar = self._canvas_widgets.scroll_bars[orientation]
-        value = bar.value() + bar.singleStep() * units
-        self.set_scroll_value(orientation, value)
+        old_value = bar.value()
+        requested_value = old_value + bar.singleStep() * units
+        # _move_canvas_view lets the scrollbar consume the movement first and
+        # carries any remainder into view_offset, so wheel scrolling can reach
+        # the same blank space as middle-button Pan and Minimap navigation.
+        step = old_value - requested_value
+        self._move_canvas_view(
+            step=(
+                QtCore.QPointF(step, 0.0)
+                if orientation == Qt.Orientation.Horizontal
+                else QtCore.QPointF(0.0, step)
+            ),
+            constrain_to_center=False,
+        )
 
     def _on_pan_request(self, step: QtCore.QPoint) -> None:
         # Pan moves the viewport opposite to the cursor delta so the image
