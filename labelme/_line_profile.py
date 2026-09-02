@@ -34,22 +34,6 @@ CURRENT_SCHEMA_VERSION = 2
 DEFAULT_PARAMETERIZATION: Parameterization = "normalized_arc_length"
 
 
-class WidthAnchorDict(TypedDict):
-    position: float
-    width: float
-    source: AnchorSource
-    confidence: float
-    confirmed: bool
-
-
-class VisibilityAnchorDict(TypedDict):
-    position: float
-    visibility: float
-    source: AnchorSource
-    confidence: float
-    confirmed: bool
-
-
 class ProfileValueDict(TypedDict):
     value: float
     source: AnchorSource
@@ -68,8 +52,6 @@ class LineProfileDict(TypedDict):
     path_mode: PathMode
     parameterization: Parameterization
     anchors: list[ProfileAnchorDict]
-    width_anchors: list[WidthAnchorDict]
-    visibility_anchors: list[VisibilityAnchorDict]
     min_width: float | None
     max_width: float | None
     measurement_version: str | None
@@ -117,19 +99,58 @@ class ProfileAnchor:
 Anchor = WidthAnchor | VisibilityAnchor
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True, init=False)
 class LineProfile:
     schema_version: int = CURRENT_SCHEMA_VERSION
     path_mode: PathMode = "continuous"
     parameterization: Parameterization = DEFAULT_PARAMETERIZATION
-    width_anchors: tuple[WidthAnchor, ...] = ()
-    visibility_anchors: tuple[VisibilityAnchor, ...] = ()
     min_width: float | None = None
     max_width: float | None = None
     measurement_version: str | None = None
     reviewed: bool = False
     measurement_overrides: tuple[tuple[MeasurementOverrideKey, float], ...] = ()
     anchors: tuple[ProfileAnchor, ...] = ()
+
+    def __init__(
+        self,
+        schema_version: int = CURRENT_SCHEMA_VERSION,
+        path_mode: PathMode = "continuous",
+        parameterization: Parameterization = DEFAULT_PARAMETERIZATION,
+        *,
+        anchors: Sequence[ProfileAnchor] = (),
+        min_width: float | None = None,
+        max_width: float | None = None,
+        measurement_version: str | None = None,
+        reviewed: bool = False,
+        measurement_overrides: Sequence[tuple[MeasurementOverrideKey, float]] = (),
+        width_anchors: Sequence[WidthAnchor] = (),
+        visibility_anchors: Sequence[VisibilityAnchor] = (),
+    ) -> None:
+        if anchors and (width_anchors or visibility_anchors):
+            raise ValueError("use anchors instead of legacy anchor arrays")
+        canonical = tuple(anchors) or _merge_legacy_anchors(
+            width_anchors, visibility_anchors
+        )
+        object.__setattr__(self, "schema_version", schema_version)
+        object.__setattr__(self, "path_mode", path_mode)
+        object.__setattr__(self, "parameterization", parameterization)
+        object.__setattr__(self, "min_width", min_width)
+        object.__setattr__(self, "max_width", max_width)
+        object.__setattr__(self, "measurement_version", measurement_version)
+        object.__setattr__(self, "reviewed", reviewed)
+        object.__setattr__(self, "measurement_overrides", tuple(measurement_overrides))
+        object.__setattr__(self, "anchors", canonical)
+        self.__post_init__()
+
+    @property
+    def width_anchors(self) -> tuple[WidthAnchor, ...]:
+        """Compatibility view; the canonical state is ``anchors``."""
+        return _legacy_width_anchors(self.anchors)
+
+    @property
+    def visibility_anchors(self) -> tuple[VisibilityAnchor, ...]:
+        """Compatibility view; the canonical state is ``anchors``."""
+        return _legacy_visibility_anchors(self.anchors)
 
     def __post_init__(self) -> None:
         if isinstance(self.schema_version, bool) or not isinstance(
@@ -159,37 +180,6 @@ class LineProfile:
         max_width = _optional_positive_float(self.max_width, "max_width")
         if min_width is not None and max_width is not None and min_width > max_width:
             raise ValueError("min_width must not exceed max_width")
-        for anchor in self.width_anchors:
-            _validate_width_anchor(anchor=anchor)
-            if min_width is not None and anchor.width < min_width:
-                raise ValueError("width anchor is below min_width")
-            if max_width is not None and anchor.width > max_width:
-                raise ValueError("width anchor exceeds max_width")
-        for anchor in self.visibility_anchors:
-            _validate_visibility_anchor(anchor=anchor)
-        _validate_positions(
-            positions=[anchor.position for anchor in self.width_anchors],
-            field="width_anchors",
-        )
-        _validate_positions(
-            positions=[anchor.position for anchor in self.visibility_anchors],
-            field="visibility_anchors",
-        )
-        if self.anchors and not self.width_anchors and not self.visibility_anchors:
-            _validate_shared_anchors(
-                self.anchors, min_width=min_width, max_width=max_width
-            )
-            object.__setattr__(
-                self, "width_anchors", _legacy_width_anchors(self.anchors)
-            )
-            object.__setattr__(
-                self, "visibility_anchors", _legacy_visibility_anchors(self.anchors)
-            )
-        object.__setattr__(
-            self,
-            "anchors",
-            _merge_legacy_anchors(self.width_anchors, self.visibility_anchors),
-        )
         _validate_shared_anchors(self.anchors, min_width=min_width, max_width=max_width)
 
     @classmethod
@@ -221,37 +211,6 @@ class LineProfile:
                 ),
                 anchors=anchors,
             )
-        width_anchors = tuple(
-            _width_anchor_from_json(item, index=index)
-            for index, item in enumerate(_required_list(value, "width_anchors"))
-        )
-        visibility_anchors = tuple(
-            _visibility_anchor_from_json(item, index=index)
-            for index, item in enumerate(_required_list(value, "visibility_anchors"))
-        )
-        min_width = _optional_number(value, "min_width")
-        max_width = _optional_number(value, "max_width")
-        measurement_version = value.get("measurement_version")
-        if measurement_version is not None and not isinstance(measurement_version, str):
-            raise ValueError("measurement_version must be str or null")
-        reviewed = value.get("reviewed")
-        if not isinstance(reviewed, bool):
-            raise ValueError("reviewed must be bool")
-        measurement_overrides = _measurement_overrides_from_json(
-            value.get("measurement_overrides")
-        )
-        return cls(
-            schema_version=schema_version,
-            path_mode=cast(PathMode, path_mode),
-            parameterization=cast(Parameterization, parameterization),
-            width_anchors=width_anchors,
-            visibility_anchors=visibility_anchors,
-            min_width=min_width,
-            max_width=max_width,
-            measurement_version=measurement_version,
-            reviewed=reviewed,
-            measurement_overrides=measurement_overrides,
-        )
 
     def to_json_obj(self) -> LineProfileDict:
         if self.schema_version == 2:
@@ -268,38 +227,7 @@ class LineProfile:
             if self.measurement_overrides:
                 result["measurement_overrides"] = dict(self.measurement_overrides)
             return result
-        result: LineProfileDict = {
-            "schema_version": self.schema_version,
-            "path_mode": self.path_mode,
-            "parameterization": self.parameterization,
-            "width_anchors": [
-                {
-                    "position": anchor.position,
-                    "width": anchor.width,
-                    "source": anchor.source,
-                    "confidence": anchor.confidence,
-                    "confirmed": anchor.confirmed,
-                }
-                for anchor in self.width_anchors
-            ],
-            "visibility_anchors": [
-                {
-                    "position": anchor.position,
-                    "visibility": anchor.visibility,
-                    "source": anchor.source,
-                    "confidence": anchor.confidence,
-                    "confirmed": anchor.confirmed,
-                }
-                for anchor in self.visibility_anchors
-            ],
-            "min_width": self.min_width,
-            "max_width": self.max_width,
-            "measurement_version": self.measurement_version,
-            "reviewed": self.reviewed,
-        }
-        if self.measurement_overrides:
-            result["measurement_overrides"] = dict(self.measurement_overrides)
-        return result
+        raise ValueError("unsupported line_profile schema version")
 
     def evaluate_width(self, position: float) -> float | None:
         _validate_position(position, field="position")
@@ -1034,26 +962,26 @@ def insert_visibility_anchor(
 
 def remove_width_anchor(profile: LineProfile, index: int) -> LineProfile:
     """Remove a width anchor while retaining the rest of the profile."""
-    if not 0 <= index < len(profile.width_anchors):
+    indices = [
+        anchor_index
+        for anchor_index, anchor in enumerate(profile.anchors)
+        if anchor.width is not None
+    ]
+    if not 0 <= index < len(indices):
         raise IndexError("width anchor index is out of range")
-    return dataclasses.replace(
-        profile,
-        width_anchors=(
-            profile.width_anchors[:index] + profile.width_anchors[index + 1 :]
-        ),
-    )
+    return remove_profile_property(profile, indices[index], "width")
 
 
 def remove_visibility_anchor(profile: LineProfile, index: int) -> LineProfile:
     """Remove a visibility anchor while retaining the rest of the profile."""
-    if not 0 <= index < len(profile.visibility_anchors):
+    indices = [
+        anchor_index
+        for anchor_index, anchor in enumerate(profile.anchors)
+        if anchor.visibility is not None
+    ]
+    if not 0 <= index < len(indices):
         raise IndexError("visibility anchor index is out of range")
-    return dataclasses.replace(
-        profile,
-        visibility_anchors=(
-            profile.visibility_anchors[:index] + profile.visibility_anchors[index + 1 :]
-        ),
-    )
+    return remove_profile_property(profile, indices[index], "visibility")
 
 
 def remove_profile_property(
@@ -1105,8 +1033,6 @@ def _replace_profile_anchors(
     return dataclasses.replace(
         profile,
         anchors=ordered,
-        width_anchors=_legacy_width_anchors(ordered),
-        visibility_anchors=_legacy_visibility_anchors(ordered),
     )
 
 
@@ -1232,13 +1158,9 @@ def _fallback_tangent(points: Sequence[Sequence[float]]) -> tuple[float, float]:
 def _scale_profile(profile: LineProfile, *, offset: float, scale: float) -> LineProfile:
     return dataclasses.replace(
         profile,
-        width_anchors=tuple(
+        anchors=tuple(
             dataclasses.replace(anchor, position=offset + anchor.position * scale)
-            for anchor in profile.width_anchors
-        ),
-        visibility_anchors=tuple(
-            dataclasses.replace(anchor, position=offset + anchor.position * scale)
-            for anchor in profile.visibility_anchors
+            for anchor in profile.anchors
         ),
     )
 
