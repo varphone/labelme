@@ -672,7 +672,26 @@ class Canvas(QtWidgets.QWidget):
                 messages.append(self.tr("Enter or Space to finalize"))
         else:
             assert self.mode == _CanvasMode.EDIT
-            messages.append(self.tr("Editing shapes"))
+            if len(self.selected_shapes) == 1:
+                shape = self.selected_shapes[0]
+                shape_name = {
+                    "polygon": self.tr("Polygon"),
+                    "rectangle": self.tr("Rectangle"),
+                    "oriented_rectangle": self.tr("Oriented Rectangle"),
+                    "point": self.tr("Point"),
+                    "line": self.tr("Line"),
+                    "circle": self.tr("Circle"),
+                    "linestrip": self.tr("LineStrip"),
+                    "points": self.tr("Points"),
+                    "bezier2": self.tr("Quadratic Bezier"),
+                    "bezier3": self.tr("Cubic Bezier"),
+                    "catmull_rom": self.tr("猫氏样条"),
+                    "bspline": self.tr("B样条"),
+                    "mask": self.tr("Mask"),
+                }[shape.shape_type]
+                messages.append(self.tr("Editing shape: {0}").format(shape_name))
+            else:
+                messages.append(self.tr("Editing shapes"))
         if extra_messages:
             messages.extend(extra_messages)
         self.status_updated.emit(" • ".join(messages))

@@ -105,6 +105,10 @@
         <translation>正在编辑形状</translation>
     </message>
     <message>
+        <source>Editing shape: {0}</source>
+        <translation>正在编辑形状：{0}</translation>
+    </message>
+    <message>
         <source>Click start point for line</source>
         <translation>单击确定直线起点</translation>
     </message>
