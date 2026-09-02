@@ -243,7 +243,7 @@ def test_profile_schema_migration_is_explicit_and_idempotent() -> None:
     assert migrated == raw
     assert migrated is not raw
     with pytest.raises(ValueError, match="no line_profile migration"):
-        migrate_line_profile_json({**raw, "schema_version": 2})
+        migrate_line_profile_json({**raw, "schema_version": 3})
 
 
 def test_profile_anchor_insert_and_remove_preserve_interpolated_values() -> None:
