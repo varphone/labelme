@@ -2208,6 +2208,16 @@ class Canvas(QtWidgets.QWidget):
     ) -> QPointF:
         return (point + self._compute_image_origin_offset(area=area)) * self.scale
 
+    def viewport_image_rect(
+        self, *, top_left: QPointF, bottom_right: QPointF
+    ) -> QRectF:
+        """Convert viewport corners from canvas coordinates to image space."""
+        first = self.transform_widget_point_to_image(top_left)
+        last = self.transform_widget_point_to_image(bottom_right)
+        return QRectF(first, last).normalized().intersected(
+            QRectF(0, 0, self.pixmap.width(), self.pixmap.height())
+        )
+
     def _compute_image_origin_offset(self, area: QtCore.QSize | None = None) -> QPointF:
         if area is None:
             area = super().size()
