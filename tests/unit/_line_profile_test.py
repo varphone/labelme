@@ -26,39 +26,39 @@ from labelme._line_profile import split_profile
 
 def _profile_json() -> dict:
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "path_mode": "continuous",
         "parameterization": "normalized_arc_length",
-        "width_anchors": [
+        "anchors": [
             {
                 "position": 0.0,
-                "width": 4.0,
-                "source": "auto",
-                "confidence": 0.8,
-                "confirmed": False,
+                "width": {
+                    "value": 4.0,
+                    "source": "auto",
+                    "confidence": 0.8,
+                    "confirmed": False,
+                },
+                "visibility": {
+                    "value": 1.0,
+                    "source": "auto",
+                    "confidence": 0.7,
+                    "confirmed": False,
+                },
             },
             {
                 "position": 1.0,
-                "width": 8.0,
-                "source": "manual",
-                "confidence": 1.0,
-                "confirmed": True,
-            },
-        ],
-        "visibility_anchors": [
-            {
-                "position": 0.0,
-                "visibility": 1.0,
-                "source": "auto",
-                "confidence": 0.7,
-                "confirmed": False,
-            },
-            {
-                "position": 1.0,
-                "visibility": 0.5,
-                "source": "manual",
-                "confidence": 1.0,
-                "confirmed": True,
+                "width": {
+                    "value": 8.0,
+                    "source": "manual",
+                    "confidence": 1.0,
+                    "confirmed": True,
+                },
+                "visibility": {
+                    "value": 0.5,
+                    "source": "manual",
+                    "confidence": 1.0,
+                    "confirmed": True,
+                },
             },
         ],
         "min_width": 2.0,
@@ -85,8 +85,7 @@ def test_line_profile_interpolates_and_clamps() -> None:
 
 def test_line_profile_without_anchors_returns_no_measurement() -> None:
     raw = _profile_json()
-    raw["width_anchors"] = []
-    raw["visibility_anchors"] = []
+    raw["anchors"] = []
 
     profile = LineProfile.from_json_obj(raw)
 
@@ -97,7 +96,7 @@ def test_line_profile_without_anchors_returns_no_measurement() -> None:
 @pytest.mark.parametrize(
     "field,value",
     [
-        ("schema_version", 2),
+        ("schema_version", 1),
         ("path_mode", "invalid"),
         ("parameterization", "pixel_distance"),
         ("reviewed", "yes"),
@@ -114,11 +113,11 @@ def test_line_profile_rejects_unsupported_fields(field: str, value: object) -> N
 @pytest.mark.parametrize(
     "mutator",
     [
-        lambda raw: raw["width_anchors"][0].update({"position": 1.1}),
-        lambda raw: raw["width_anchors"][1].update({"position": 0.0}),
-        lambda raw: raw["width_anchors"][0].update({"width": 0.0}),
-        lambda raw: raw["width_anchors"][0].update({"confidence": 2.0}),
-        lambda raw: raw["visibility_anchors"][0].update({"visibility": -0.1}),
+        lambda raw: raw["anchors"][0].update({"position": 1.1}),
+        lambda raw: raw["anchors"][1].update({"position": 0.0}),
+        lambda raw: raw["anchors"][0]["width"].update({"value": 0.0}),
+        lambda raw: raw["anchors"][0]["width"].update({"confidence": 2.0}),
+        lambda raw: raw["anchors"][0]["visibility"].update({"value": -0.1}),
         lambda raw: raw.update({"min_width": 9.0, "max_width": 8.0}),
     ],
 )
@@ -273,9 +272,9 @@ def test_profile_measurement_overrides_round_trip_and_validate() -> None:
     profile = LineProfile.from_json_obj(raw)
 
     assert dict(profile.measurement_overrides) == raw["measurement_overrides"]
-    assert profile.to_json_obj()["measurement_overrides"] == raw[
-        "measurement_overrides"
-    ]
+    assert (
+        profile.to_json_obj()["measurement_overrides"] == raw["measurement_overrides"]
+    )
     with pytest.raises(ValueError, match="unsupported measurement override"):
         LineProfile.from_json_obj(
             {**_profile_json(), "measurement_overrides": {"x": 1}}

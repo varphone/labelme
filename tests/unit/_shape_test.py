@@ -30,19 +30,21 @@ def _make_profiled_linestrip() -> Shape:
         points=np.array([[0.0, 0.0], [10.0, 0.0]], dtype=np.float64),
         line_profile=LineProfile.from_json_obj(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "path_mode": "continuous",
                 "parameterization": "normalized_arc_length",
-                "width_anchors": [
+                "anchors": [
                     {
                         "position": 0.5,
-                        "width": 4.0,
-                        "source": "manual",
-                        "confidence": 1.0,
-                        "confirmed": True,
+                        "width": {
+                            "value": 4.0,
+                            "source": "manual",
+                            "confidence": 1.0,
+                            "confirmed": True,
+                        },
+                        "visibility": None,
                     }
                 ],
-                "visibility_anchors": [],
                 "min_width": None,
                 "max_width": None,
                 "measurement_version": None,
