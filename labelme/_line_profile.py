@@ -176,11 +176,17 @@ class LineProfile:
             field="visibility_anchors",
         )
         if self.anchors and not self.width_anchors and not self.visibility_anchors:
-            object.__setattr__(self, "width_anchors", _legacy_width_anchors(self.anchors))
-            object.__setattr__(self, "visibility_anchors", _legacy_visibility_anchors(self.anchors))
-        object.__setattr__(self, "anchors", _merge_legacy_anchors(
-            self.width_anchors, self.visibility_anchors
-        ))
+            object.__setattr__(
+                self, "width_anchors", _legacy_width_anchors(self.anchors)
+            )
+            object.__setattr__(
+                self, "visibility_anchors", _legacy_visibility_anchors(self.anchors)
+            )
+        object.__setattr__(
+            self,
+            "anchors",
+            _merge_legacy_anchors(self.width_anchors, self.visibility_anchors),
+        )
         _validate_shared_anchors(self.anchors, min_width=min_width, max_width=max_width)
 
     @classmethod
@@ -218,16 +224,12 @@ class LineProfile:
         )
         visibility_anchors = tuple(
             _visibility_anchor_from_json(item, index=index)
-            for index, item in enumerate(
-                _required_list(value, "visibility_anchors")
-            )
+            for index, item in enumerate(_required_list(value, "visibility_anchors"))
         )
         min_width = _optional_number(value, "min_width")
         max_width = _optional_number(value, "max_width")
         measurement_version = value.get("measurement_version")
-        if measurement_version is not None and not isinstance(
-            measurement_version, str
-        ):
+        if measurement_version is not None and not isinstance(measurement_version, str):
             raise ValueError("measurement_version must be str or null")
         reviewed = value.get("reviewed")
         if not isinstance(reviewed, bool):
@@ -322,7 +324,11 @@ class LineProfile:
         return sum(anchor.visibility is not None for anchor in self.anchors)
 
 
-def validate_profile(profile: LineProfile) -> None:
+def validate_profile(
+    profile: LineProfile,
+    shape: object | None = None,
+    image_size: tuple[int, int] | None = None,
+) -> None:
     """Validate a profile explicitly at application boundaries.
 
     ``LineProfile`` validates itself on construction; this named function keeps
@@ -332,6 +338,20 @@ def validate_profile(profile: LineProfile) -> None:
     if not isinstance(profile, LineProfile):
         raise TypeError("profile must be a LineProfile")
     profile.__post_init__()
+    if shape is not None:
+        shape_type = getattr(shape, "shape_type", None)
+        if isinstance(shape, dict):
+            shape_type = shape.get("shape_type")
+        if shape_type != "linestrip":
+            raise ValueError("line_profile is only supported for linestrip")
+        points = getattr(shape, "points", None)
+        if isinstance(shape, dict):
+            points = shape.get("points")
+        if points is not None and len(points) < 2:
+            raise ValueError("a profile requires a centerline with at least two points")
+    if image_size is not None:
+        if len(image_size) != 2 or any(size <= 0 for size in image_size):
+            raise ValueError("image_size must contain two positive dimensions")
 
 
 def evaluate_profile(
@@ -416,19 +436,43 @@ def _merge_legacy_anchors(
     width_anchors: Sequence[WidthAnchor],
     visibility_anchors: Sequence[VisibilityAnchor],
 ) -> tuple[ProfileAnchor, ...]:
-    positions = sorted({anchor.position for anchor in (*width_anchors, *visibility_anchors)})
+    positions = sorted(
+        {anchor.position for anchor in (*width_anchors, *visibility_anchors)}
+    )
     result: list[ProfileAnchor] = []
     for position in positions:
-        width = next((a for a in width_anchors if math.isclose(a.position, position, abs_tol=1e-9)), None)
+        width = next(
+            (
+                a
+                for a in width_anchors
+                if math.isclose(a.position, position, abs_tol=1e-9)
+            ),
+            None,
+        )
         visibility = next(
-            (a for a in visibility_anchors if math.isclose(a.position, position, abs_tol=1e-9)),
+            (
+                a
+                for a in visibility_anchors
+                if math.isclose(a.position, position, abs_tol=1e-9)
+            ),
             None,
         )
         result.append(
             ProfileAnchor(
                 position=position,
-                width=None if width is None else ProfileValue(width.width, width.source, width.confidence, width.confirmed),
-                visibility=None if visibility is None else ProfileValue(visibility.visibility, visibility.source, visibility.confidence, visibility.confirmed),
+                width=None
+                if width is None
+                else ProfileValue(
+                    width.width, width.source, width.confidence, width.confirmed
+                ),
+                visibility=None
+                if visibility is None
+                else ProfileValue(
+                    visibility.visibility,
+                    visibility.source,
+                    visibility.confidence,
+                    visibility.confirmed,
+                ),
             )
         )
     return tuple(result)
@@ -436,22 +480,43 @@ def _merge_legacy_anchors(
 
 def _legacy_width_anchors(anchors: Sequence[ProfileAnchor]) -> tuple[WidthAnchor, ...]:
     return tuple(
-        WidthAnchor(a.position, a.width.value, a.width.source, a.width.confidence, a.width.confirmed)
-        for a in anchors if a.width is not None
+        WidthAnchor(
+            a.position,
+            a.width.value,
+            a.width.source,
+            a.width.confidence,
+            a.width.confirmed,
+        )
+        for a in anchors
+        if a.width is not None
     )
 
 
-def _legacy_visibility_anchors(anchors: Sequence[ProfileAnchor]) -> tuple[VisibilityAnchor, ...]:
+def _legacy_visibility_anchors(
+    anchors: Sequence[ProfileAnchor],
+) -> tuple[VisibilityAnchor, ...]:
     return tuple(
-        VisibilityAnchor(a.position, a.visibility.value, a.visibility.source, a.visibility.confidence, a.visibility.confirmed)
-        for a in anchors if a.visibility is not None
+        VisibilityAnchor(
+            a.position,
+            a.visibility.value,
+            a.visibility.source,
+            a.visibility.confidence,
+            a.visibility.confirmed,
+        )
+        for a in anchors
+        if a.visibility is not None
     )
 
 
 def _validate_shared_anchors(
-    anchors: Sequence[ProfileAnchor], *, min_width: float | None, max_width: float | None
+    anchors: Sequence[ProfileAnchor],
+    *,
+    min_width: float | None,
+    max_width: float | None,
 ) -> None:
-    _validate_positions(positions=[anchor.position for anchor in anchors], field="anchors")
+    _validate_positions(
+        positions=[anchor.position for anchor in anchors], field="anchors"
+    )
     for index, anchor in enumerate(anchors):
         if anchor.width is None and anchor.visibility is None:
             raise ValueError(f"anchors[{index}] must contain width or visibility")
@@ -462,7 +527,9 @@ def _validate_shared_anchors(
             if max_width is not None and anchor.width.value > max_width:
                 raise ValueError("width anchor exceeds max_width")
         if anchor.visibility is not None:
-            _validate_profile_value(anchor.visibility, field=f"anchors[{index}].visibility")
+            _validate_profile_value(
+                anchor.visibility, field=f"anchors[{index}].visibility"
+            )
 
 
 def _validate_profile_value(value: ProfileValue, *, field: str) -> None:
@@ -544,9 +611,7 @@ def position_to_point(
         if distance <= end or index == len(points) - 2:
             segment_length = end - start
             fraction = (
-                0.0
-                if segment_length == 0
-                else (distance - start) / segment_length
+                0.0 if segment_length == 0 else (distance - start) / segment_length
             )
             return (
                 float(
@@ -612,11 +677,15 @@ def profile_boundary_points(
         raise ValueError("samples must be at least 2")
     lengths = cumulative_lengths(points)
     total = lengths[-1]
-    vertex_positions = [
-        length / total
-        for index, length in enumerate(lengths[1:-1], start=1)
-        if length > lengths[index - 1] and lengths[index + 1] > length
-    ] if total > 0 else []
+    vertex_positions = (
+        [
+            length / total
+            for index, length in enumerate(lengths[1:-1], start=1)
+            if length > lengths[index - 1] and lengths[index + 1] > length
+        ]
+        if total > 0
+        else []
+    )
     sample_count = max(samples, len(vertex_positions) + 2)
     positions = [index / (sample_count - 1) for index in range(sample_count)]
     used_indices: set[int] = set()
@@ -627,9 +696,7 @@ def profile_boundary_points(
         ):
             continue
         candidates = (
-            index
-            for index in range(1, sample_count - 1)
-            if index not in used_indices
+            index for index in range(1, sample_count - 1) if index not in used_indices
         )
         index = min(
             candidates,
@@ -720,13 +787,16 @@ def _profile_corner_boundary_points(
         if abs(denominator) < 1e-9:
             result.append(incoming_point)
             continue
-        distance_along_incoming = _vector_cross(
-            (
-                outgoing_point[0] - incoming_point[0],
-                outgoing_point[1] - incoming_point[1],
-            ),
-            outgoing,
-        ) / denominator
+        distance_along_incoming = (
+            _vector_cross(
+                (
+                    outgoing_point[0] - incoming_point[0],
+                    outgoing_point[1] - incoming_point[1],
+                ),
+                outgoing,
+            )
+            / denominator
+        )
         intersection = (
             incoming_point[0] + incoming[0] * distance_along_incoming,
             incoming_point[1] + incoming[1] * distance_along_incoming,
@@ -872,9 +942,7 @@ def extend_profile(
     )
 
 
-def resample_profile(
-    profile: LineProfile, positions: Sequence[float]
-) -> LineProfile:
+def resample_profile(profile: LineProfile, positions: Sequence[float]) -> LineProfile:
     """Sample both curves at fixed normalized positions without changing values."""
     normalized_positions = [float(position) for position in positions]
     _validate_positions(positions=normalized_positions, field="positions")
@@ -906,14 +974,19 @@ def insert_width_anchor(
 ) -> LineProfile:
     """Insert one width anchor, deriving its value from the current curve."""
     _validate_position(position, field="position")
-    if any(math.isclose(anchor.position, position, abs_tol=1e-9) for anchor in profile.width_anchors):
+    if any(
+        math.isclose(anchor.position, position, abs_tol=1e-9)
+        for anchor in profile.width_anchors
+    ):
         raise ValueError("width anchor position already exists")
     value = profile.evaluate_width(position) if width is None else width
     if value is None:
         raise ValueError("cannot insert a width anchor into an empty curve")
     value_obj = ProfileValue(value, source, confidence, confirmed)
     shared = list(profile.anchors)
-    existing = next((a for a in shared if math.isclose(a.position, position, abs_tol=1e-9)), None)
+    existing = next(
+        (a for a in shared if math.isclose(a.position, position, abs_tol=1e-9)), None
+    )
     if existing is None:
         shared.append(ProfileAnchor(position, width=value_obj))
     else:
@@ -932,22 +1005,25 @@ def insert_visibility_anchor(
 ) -> LineProfile:
     """Insert one visibility anchor, deriving its value from the current curve."""
     _validate_position(position, field="position")
-    if any(math.isclose(anchor.position, position, abs_tol=1e-9) for anchor in profile.visibility_anchors):
+    if any(
+        math.isclose(anchor.position, position, abs_tol=1e-9)
+        for anchor in profile.visibility_anchors
+    ):
         raise ValueError("visibility anchor position already exists")
-    value = (
-        profile.evaluate_visibility(position)
-        if visibility is None
-        else visibility
-    )
+    value = profile.evaluate_visibility(position) if visibility is None else visibility
     if value is None:
         raise ValueError("cannot insert a visibility anchor into an empty curve")
     value_obj = ProfileValue(value, source, confidence, confirmed)
     shared = list(profile.anchors)
-    existing = next((a for a in shared if math.isclose(a.position, position, abs_tol=1e-9)), None)
+    existing = next(
+        (a for a in shared if math.isclose(a.position, position, abs_tol=1e-9)), None
+    )
     if existing is None:
         shared.append(ProfileAnchor(position, visibility=value_obj))
     else:
-        shared[shared.index(existing)] = dataclasses.replace(existing, visibility=value_obj)
+        shared[shared.index(existing)] = dataclasses.replace(
+            existing, visibility=value_obj
+        )
     return _replace_profile_anchors(profile, shared)
 
 
@@ -970,8 +1046,7 @@ def remove_visibility_anchor(profile: LineProfile, index: int) -> LineProfile:
     return dataclasses.replace(
         profile,
         visibility_anchors=(
-            profile.visibility_anchors[:index]
-            + profile.visibility_anchors[index + 1 :]
+            profile.visibility_anchors[:index] + profile.visibility_anchors[index + 1 :]
         ),
     )
 
@@ -1040,7 +1115,9 @@ def _deduplicate_shared_anchors(
             result[-1] = ProfileAnchor(
                 position=previous.position,
                 width=_prefer_profile_value(previous.width, anchor.width),
-                visibility=_prefer_profile_value(previous.visibility, anchor.visibility),
+                visibility=_prefer_profile_value(
+                    previous.visibility, anchor.visibility
+                ),
             )
         else:
             result.append(anchor)
@@ -1320,13 +1397,9 @@ def _resample_anchor_set(
         if original is not None:
             result.append(dataclasses.replace(original, position=position))
         elif make_anchor is WidthAnchor:
-            result.append(
-                WidthAnchor(position, value, "auto", 0.0, False)
-            )
+            result.append(WidthAnchor(position, value, "auto", 0.0, False))
         else:
-            result.append(
-                VisibilityAnchor(position, value, "auto", 0.0, False)
-            )
+            result.append(VisibilityAnchor(position, value, "auto", 0.0, False))
     return tuple(result)
 
 
@@ -1408,9 +1481,7 @@ def _merge_anchor_sets(
         anchor for anchor in mapped_left if math.isclose(anchor.position, left_scale)
     ]
     at_join_right = [
-        anchor
-        for anchor in mapped_right
-        if math.isclose(anchor.position, right_offset)
+        anchor for anchor in mapped_right if math.isclose(anchor.position, right_offset)
     ]
     if at_join_left and at_join_right:
         left_anchor, right_anchor = at_join_left[-1], at_join_right[0]
@@ -1419,16 +1490,13 @@ def _merge_anchor_sets(
         elif join_policy == "average":
             value_name = "width" if hasattr(left_anchor, "width") else "visibility"
             average = (
-                getattr(left_anchor, value_name)
-                + getattr(right_anchor, value_name)
+                getattr(left_anchor, value_name) + getattr(right_anchor, value_name)
             ) / 2
             mapped_left[-1] = dataclasses.replace(
                 left_anchor,
                 **{
                     value_name: average,
-                    "confidence": min(
-                        left_anchor.confidence, right_anchor.confidence
-                    ),
+                    "confidence": min(left_anchor.confidence, right_anchor.confidence),
                 },
             )
             mapped_right.remove(right_anchor)
