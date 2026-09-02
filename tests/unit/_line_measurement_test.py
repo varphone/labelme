@@ -6,6 +6,7 @@ import pytest
 from labelme._line_measurement import MeasurementParameters
 from labelme._line_measurement import MeasurementSample
 from labelme._line_measurement import _recommend_neighbor_widths
+from labelme._line_measurement import _sample_positions
 from labelme._line_measurement import measure_line_profile
 
 
@@ -53,6 +54,104 @@ def test_measure_line_profile_recovers_width_when_centerline_is_off_center() -> 
     middle = result.samples[len(result.samples) // 2]
     assert middle.width > 14.0
     assert middle.visibility > 0.9
+
+
+def test_measure_line_profile_ignores_one_sided_glare_when_finding_width() -> None:
+    image = np.full((100, 100), 20, dtype=np.uint8)
+    image[17:24, 8:92] = 220
+    image[24:40, 8:92] = 255
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [91.0, 20.0]],
+        parameters=MeasurementParameters(sample_spacing=100, search_radius=20),
+    )
+
+    assert result.samples[0].width == pytest.approx(7.0, abs=1.0)
+
+
+def test_measure_line_profile_ignores_one_sided_glare_for_dark_line() -> None:
+    image = np.full((100, 100), 220, dtype=np.uint8)
+    image[17:24, 8:92] = 20
+    image[24:40, 8:92] = 255
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [91.0, 20.0]],
+        parameters=MeasurementParameters(sample_spacing=100, search_radius=20),
+    )
+
+    assert result.samples[0].width == pytest.approx(7.0, abs=1.0)
+
+
+def test_measure_line_profile_corrects_a_diffuse_asymmetric_glare_edge() -> None:
+    image = np.full((100, 100), 20, dtype=np.uint8)
+    image[17:24, 8:92] = 220
+    image[24:34, 8:92] = np.linspace(220, 255, 10, dtype=np.uint8)[:, None]
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [91.0, 20.0]],
+        parameters=MeasurementParameters(sample_spacing=100, search_radius=20),
+    )
+
+    sample = result.samples[0]
+    assert sample.width == pytest.approx(7.0, abs=1.0)
+    assert sample.confidence < 0.5
+    assert sample.reason == "asymmetric_edges"
+
+
+def test_measure_line_profile_merges_a_short_dark_notch_in_the_laser_envelope() -> None:
+    image = np.full((100, 100), 20, dtype=np.uint8)
+    image[17:20, 8:92] = 220
+    image[20:23, 8:92] = 20
+    image[23:27, 8:92] = 220
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 22.0], [91.0, 22.0]],
+        parameters=MeasurementParameters(sample_spacing=100, search_radius=20),
+    )
+
+    assert result.samples[0].width == pytest.approx(10.0, abs=1.0)
+
+
+def test_measure_line_profile_stabilizes_a_localized_glare_width_run() -> None:
+    image = np.full((100, 120), 20, dtype=np.uint8)
+    image[17:24, 8:112] = 220
+    image[24:34, 35:75] = np.linspace(220, 255, 10, dtype=np.uint8)[:, None]
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [111.0, 20.0]],
+        parameters=MeasurementParameters(sample_spacing=16, search_radius=20),
+    )
+
+    assert max(sample.width for sample in result.samples) < 9.0
+    assert any(sample.reason == "asymmetric_edges" for sample in result.samples)
+
+
+def test_measurement_samples_every_polyline_turn() -> None:
+    image = np.full((80, 80), 100, dtype=np.uint8)
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [48.0, 20.0], [48.0, 60.0]],
+        parameters=MeasurementParameters(sample_spacing=100, search_radius=8),
+    )
+
+    assert [sample.position for sample in result.samples] == pytest.approx(
+        [0.0, 0.5, 1.0]
+    )
+
+
+def test_sample_positions_deduplicate_repeated_vertices() -> None:
+    positions = _sample_positions(
+        points=[[2.0, 2.0], [2.0, 2.0], [20.0, 2.0]],
+        sample_spacing=100,
+    )
+
+    assert positions == pytest.approx([0.0, 1.0])
 
 
 def test_measure_line_profile_does_not_call_a_dim_line_perfectly_visible() -> None:
@@ -143,6 +242,33 @@ def test_low_confidence_width_uses_neighbor_recommendation_without_acceptance() 
     assert recommended[1].width == pytest.approx(6.0)
     assert recommended[1].confidence == 0.1
     assert recommended[1].reason == "low_contrast"
+
+
+def test_isolated_reliable_width_outlier_uses_neighbor_recommendation() -> None:
+    samples = (
+        MeasurementSample(0.0, 4.0, 1.0, 0.9),
+        MeasurementSample(0.5, 14.0, 1.0, 0.9),
+        MeasurementSample(1.0, 4.0, 1.0, 0.9),
+    )
+
+    recommended = _recommend_neighbor_widths(samples=samples)
+
+    assert recommended[1].width == pytest.approx(4.0)
+    assert recommended[1].confidence == 0.49
+    assert recommended[1].reason == "width_outlier"
+
+
+def test_isolated_narrow_width_uses_consistent_neighbouring_widths() -> None:
+    samples = (
+        MeasurementSample(0.0, 5.5, 1.0, 0.9),
+        MeasurementSample(0.5, 2.0, 1.0, 0.9),
+        MeasurementSample(1.0, 4.5, 1.0, 0.9),
+    )
+
+    recommended = _recommend_neighbor_widths(samples=samples)
+
+    assert recommended[1].width == pytest.approx(5.0)
+    assert recommended[1].reason == "width_outlier"
 
 
 def test_measurement_can_cancel_between_samples() -> None:

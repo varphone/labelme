@@ -8,6 +8,7 @@ from collections.abc import Sequence
 import numpy as np
 from numpy.typing import NDArray
 
+from ._line_profile import cumulative_lengths
 from ._line_profile import position_to_point
 
 MEASUREMENT_VERSION = "line-profile-measurement-v3"
@@ -66,16 +67,19 @@ def measure_line_profile(
     total_length = _polyline_length(points)
     if total_length == 0:
         return LineMeasurement(MEASUREMENT_VERSION, ())
-    count = max(2, int(math.ceil(total_length / parameters.sample_spacing)) + 1)
+    positions = _sample_positions(
+        points=points,
+        sample_spacing=parameters.sample_spacing,
+    )
     samples_list: list[MeasurementSample] = []
-    for index in range(count):
+    for position in positions:
         if cancel_check is not None and cancel_check():
             return None
         samples_list.append(
             _measure_sample(
                 gray=gray,
                 points=points,
-                position=index / (count - 1),
+                position=position,
                 parameters=parameters,
                 intensity_scale=intensity_scale,
             )
@@ -84,6 +88,34 @@ def measure_line_profile(
     return LineMeasurement(
         MEASUREMENT_VERSION, _recommend_neighbor_widths(samples=samples)
     )
+
+
+def _sample_positions(
+    *, points: Sequence[Sequence[float]], sample_spacing: float
+) -> tuple[float, ...]:
+    """Return regular sample positions plus every non-degenerate vertex.
+
+    A fixed-distance grid can skip short segments and sharp turns entirely.
+    Keeping the normalized arc position of each vertex makes the generated
+    profile preserve the geometry of the annotated linestrip, while the
+    de-duplication step avoids invalid duplicate anchors for repeated points.
+    """
+    lengths = cumulative_lengths(points)
+    total_length = lengths[-1]
+    if total_length == 0:
+        return ()
+    count = max(2, int(math.ceil(total_length / sample_spacing)) + 1)
+    regular = [float(position) for position in np.linspace(0.0, 1.0, count)]
+    vertices = [
+        length / total_length
+        for length in lengths[1:-1]
+        if 0.0 < length < total_length
+    ]
+    positions: list[float] = []
+    for position in sorted((*regular, *vertices)):
+        if not positions or not math.isclose(position, positions[-1], abs_tol=1e-12):
+            positions.append(position)
+    return tuple(positions)
 
 
 def _measure_sample(
@@ -192,7 +224,19 @@ def _measure_sample(
         )
 
     threshold = signal * parameters.contrast_factor
+    support_radius = min(
+        parameters.search_radius,
+        max(8.0, min(16.0, parameters.search_radius * 0.5)),
+    )
     evidence = valid & (signed_residual >= threshold)
+    # Keep the envelope tied to the annotated normal, not to whichever local
+    # lobe happens to win the center-pixel search.
+    evidence &= np.abs(offsets) <= support_radius
+    evidence, bridged_evidence = _bridge_evidence_gaps(
+        evidence=evidence,
+        offsets=offsets,
+        max_gap=max(2.0, min(6.0, parameters.search_radius * 0.2)),
+    )
     left = center_index
     while left > 0 and evidence[left - 1]:
         left -= 1
@@ -221,8 +265,42 @@ def _measure_sample(
         if right + 1 < len(offsets)
         else float(offsets[right])
     )
+    # A glare patch can keep one side above the contrast threshold even after
+    # the actual line edge.  In that case the first strong transition away
+    # from the center is the useful boundary: the line-to-glare step must not
+    # be mistaken for extra line width all the way to the glare edge.
+    edge_gradient_threshold = max(3.0 * noise, 0.12 * signal)
+    gradient = np.abs(np.gradient(signed_residual, offsets))
+    if not bridged_evidence:
+        left_gradient_index = _first_gradient_edge(
+            gradient=gradient,
+            center_index=center_index,
+            direction=-1,
+            threshold=edge_gradient_threshold,
+        )
+        if left_gradient_index is not None and left_gradient_index > left:
+            left_edge = float(offsets[left_gradient_index])
+        right_gradient_index = _first_gradient_edge(
+            gradient=gradient,
+            center_index=center_index,
+            direction=1,
+            threshold=edge_gradient_threshold,
+        )
+        if right_gradient_index is not None and right_gradient_index < right:
+            right_edge = float(offsets[right_gradient_index])
     width = max(0.0, right_edge - left_edge)
     width = max(parameters.min_width, min(parameters.max_width, width))
+    width, asymmetric_edges = _correct_asymmetric_width(
+        # The strongest pixel is allowed to move inside the stripe when the
+        # annotation is slightly off-center. Use the annotated normal itself
+        # as the symmetry prior instead of letting that pixel shift the two
+        # half-widths and make a clean stripe look asymmetric.
+        center_offset=0.0,
+        left_edge=left_edge,
+        right_edge=right_edge,
+        min_width=parameters.min_width,
+        max_width=parameters.max_width,
+    )
 
     # Visibility combines local signal-to-noise and stripe/background contrast.
     # The separate display-intensity factor below prevents a dim bright stripe
@@ -265,14 +343,20 @@ def _measure_sample(
             ),
         )
         visibility *= display_factor
-    gradient = np.abs(np.gradient(signed_residual, offsets))
     edge_quality = min(
         1.0,
         float(np.mean((gradient[left], gradient[right])))
         / max(signal / max(width, 1.0), 1e-9),
     )
     confidence = max(0.0, min(1.0, 0.8 * visibility + 0.2 * edge_quality))
-    reason = None if confidence >= 0.5 else "low_confidence"
+    if asymmetric_edges:
+        # The narrow half is a useful width estimate, but the sample is not a
+        # trustworthy visibility/edge sample. Let neighbouring reliable
+        # samples stabilize a short glare-contaminated run of anchors.
+        confidence = min(confidence, 0.49)
+    reason = "asymmetric_edges" if asymmetric_edges else None
+    if reason is None and confidence < 0.5:
+        reason = "low_confidence"
     return MeasurementSample(position, width, visibility, confidence, reason)
 
 
@@ -300,15 +384,12 @@ def _intensity_scale(image: NDArray[np.generic]) -> float:
 def _recommend_neighbor_widths(
     *, samples: tuple[MeasurementSample, ...]
 ) -> tuple[MeasurementSample, ...]:
-    """Fill uncertain widths from nearby reliable samples without raising confidence."""
+    """Stabilize uncertain and isolated outlier widths from reliable neighbours."""
     reliable = tuple(sample for sample in samples if sample.confidence >= 0.5)
     if not reliable:
         return samples
     result: list[MeasurementSample] = []
     for sample in samples:
-        if sample.confidence >= 0.5:
-            result.append(sample)
-            continue
         left = next(
             (
                 candidate
@@ -327,15 +408,96 @@ def _recommend_neighbor_widths(
         )
         if left is not None and right is not None:
             ratio = (sample.position - left.position) / (right.position - left.position)
-            width = left.width + ratio * (right.width - left.width)
+            recommended_width = left.width + ratio * (right.width - left.width)
         else:
-            nearest = min(
-                reliable,
-                key=lambda candidate: abs(candidate.position - sample.position),
-            )
-            width = nearest.width
-        result.append(dataclasses.replace(sample, width=width))
+            recommended_width = None
+
+        if sample.confidence >= 0.5:
+            if (
+                recommended_width is not None
+                and _is_isolated_width_outlier(
+                    width=sample.width,
+                    recommended_width=recommended_width,
+                    left_width=left.width,
+                    right_width=right.width,
+                )
+            ):
+                result.append(
+                    dataclasses.replace(
+                        sample,
+                        width=recommended_width,
+                        confidence=min(sample.confidence, 0.49),
+                        reason="width_outlier",
+                    )
+                )
+            else:
+                result.append(sample)
+            continue
+
+        if recommended_width is not None:
+            result.append(dataclasses.replace(sample, width=recommended_width))
+            continue
+        nearest = min(
+            reliable,
+            key=lambda candidate: abs(candidate.position - sample.position),
+        )
+        result.append(dataclasses.replace(sample, width=nearest.width))
     return tuple(result)
+
+
+def _is_isolated_width_outlier(
+    *,
+    width: float,
+    recommended_width: float,
+    left_width: float,
+    right_width: float,
+) -> bool:
+    """Identify an isolated width jump while allowing real local changes."""
+    difference = abs(width - recommended_width)
+    ratio = max(width, recommended_width) / max(min(width, recommended_width), 1e-9)
+    neighbour_ratio = max(left_width, right_width) / max(
+        min(left_width, right_width), 1e-9
+    )
+    return (
+        neighbour_ratio <= 2.0
+        and ratio >= 1.75
+        and difference >= max(1.5, 0.4 * recommended_width)
+    )
+
+
+def _correct_asymmetric_width(
+    *,
+    center_offset: float,
+    left_edge: float,
+    right_edge: float,
+    min_width: float,
+    max_width: float,
+) -> tuple[float, bool]:
+    """Reject a diffuse one-sided edge caused by glare or another artifact.
+
+    The annotated centerline is expected to pass through the stripe. When one
+    measured half is much wider than the other, using the full span lets a
+    reflection pull the width toward its own far edge. The narrower half is
+    the more conservative boundary estimate; mark it as low confidence so
+    neighbouring reliable samples can smooth the result along the profile.
+    """
+    left_span = max(0.0, center_offset - left_edge)
+    right_span = max(0.0, right_edge - center_offset)
+    narrow_span = min(left_span, right_span)
+    wide_span = max(left_span, right_span)
+    minimum_reliable_span = max(1.0, 0.5 * min_width)
+    if narrow_span < minimum_reliable_span:
+        # A clipped or edge-truncated narrow side is not evidence of glare;
+        # retain the measured span until both sides provide a usable boundary.
+        return max(min_width, min(max_width, left_span + right_span)), False
+
+    asymmetry_ratio = wide_span / max(narrow_span, 1e-9)
+    asymmetry_gap = wide_span - narrow_span
+    if asymmetry_ratio < 2.0 or asymmetry_gap < max(3.0, 0.5 * narrow_span):
+        return max(min_width, min(max_width, left_span + right_span)), False
+
+    corrected_width = max(min_width, min(max_width, 2.0 * narrow_span))
+    return corrected_width, True
 
 
 def _sample_bilinear(
@@ -401,6 +563,46 @@ def _threshold_crossing(
         return (left_offset + right_offset) / 2.0
     fraction = (threshold - left_value) / denominator
     return left_offset + max(0.0, min(1.0, fraction)) * (right_offset - left_offset)
+
+
+def _first_gradient_edge(
+    *,
+    gradient: NDArray[np.float64],
+    center_index: int,
+    direction: int,
+    threshold: float,
+) -> int | None:
+    index = center_index + direction
+    while 0 <= index < len(gradient):
+        toward_center = index - direction
+        toward_outside = index + direction
+        is_peak = gradient[index] >= gradient[toward_center]
+        if 0 <= toward_outside < len(gradient):
+            is_peak = is_peak and gradient[index] >= gradient[toward_outside]
+        if gradient[index] >= threshold and is_peak:
+            return index
+        index += direction
+    return None
+
+
+def _bridge_evidence_gaps(
+    *,
+    evidence: NDArray[np.bool_],
+    offsets: NDArray[np.float64],
+    max_gap: float,
+) -> tuple[NDArray[np.bool_], bool]:
+    """Join short dark notches inside one locally supported laser envelope."""
+    result = evidence.copy()
+    true_indices = np.flatnonzero(evidence)
+    if len(true_indices) < 2:
+        return result, False
+    bridged = False
+    for left, right in zip(true_indices, true_indices[1:]):
+        if offsets[right] - offsets[left] <= max_gap:
+            if not evidence[left + 1 : right].all():
+                result[left : right + 1] = True
+                bridged = True
+    return result, bridged
 
 
 def _polyline_length(points: Sequence[Sequence[float]]) -> float:

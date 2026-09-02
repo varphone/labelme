@@ -381,25 +381,63 @@ def profile_boundary_points(
 ) -> tuple[tuple[tuple[float, float], ...], tuple[tuple[float, float], ...]]:
     """Sample left and right boundaries without creating annotation Shapes.
 
-    Each sample uses the normal of the centerline segment containing its arc
-    position. Connecting samples around a sharp vertex is therefore a
-    bevel-like join; the renderer never extends a miter beyond the requested
-    half-width. The first and last samples use the end-segment normal, which
-    gives the resulting polygon a butt cap.
+    Samples use the normal of the centerline segment containing their arc
+    position. Centerline vertices are included in the sample positions and use
+    the intersection of the two adjacent offset edges, so a sharp turn keeps
+    its mitered envelope instead of drawing a diagonal bevel through the turn.
+    The first and last samples use the end-segment normal, which gives the
+    resulting polygon a butt cap.
     """
     if samples < 2:
         raise ValueError("samples must be at least 2")
     lengths = cumulative_lengths(points)
     total = lengths[-1]
+    vertex_positions = [
+        length / total
+        for index, length in enumerate(lengths[1:-1], start=1)
+        if length > lengths[index - 1] and lengths[index + 1] > length
+    ] if total > 0 else []
+    sample_count = max(samples, len(vertex_positions) + 2)
+    positions = [index / (sample_count - 1) for index in range(sample_count)]
+    used_indices: set[int] = set()
+    for vertex_position in vertex_positions:
+        if any(
+            math.isclose(position, vertex_position, abs_tol=1e-12)
+            for position in positions
+        ):
+            continue
+        candidates = (
+            index
+            for index in range(1, sample_count - 1)
+            if index not in used_indices
+        )
+        index = min(
+            candidates,
+            key=lambda candidate: abs(positions[candidate] - vertex_position),
+            default=None,
+        )
+        if index is not None:
+            positions[index] = vertex_position
+            used_indices.add(index)
+    positions.sort()
     left: list[tuple[float, float]] = []
     right: list[tuple[float, float]] = []
-    for index in range(samples):
-        position = index / (samples - 1)
+    for position in positions:
         width = profile.evaluate_width(position)
         center = position_to_point(points, position)
         if width is None:
             left.append(center)
             right.append(center)
+            continue
+        corner = _profile_corner_boundary_points(
+            points=points,
+            lengths=lengths,
+            position=position,
+            half_width=width / 2.0,
+        )
+        if corner is not None:
+            left.append(corner[0])
+            right.append(corner[1])
             continue
         dx, dy = _segment_tangent_at_position(points, lengths, position * total)
         length = math.hypot(dx, dy)
@@ -415,6 +453,87 @@ def profile_boundary_points(
         left.append((center[0] + nx * half_width, center[1] + ny * half_width))
         right.append((center[0] - nx * half_width, center[1] - ny * half_width))
     return tuple(left), tuple(right)
+
+
+def _profile_corner_boundary_points(
+    *,
+    points: Sequence[Sequence[float]],
+    lengths: Sequence[float],
+    position: float,
+    half_width: float,
+) -> tuple[tuple[float, float], tuple[float, float]] | None:
+    """Return both offset-edge intersections at an interior polyline vertex."""
+    if half_width <= 0.0:
+        return None
+    distance = position * lengths[-1]
+    vertex_index = next(
+        (
+            index
+            for index in range(1, len(points) - 1)
+            if math.isclose(distance, lengths[index], abs_tol=1e-9)
+            and lengths[index] > lengths[index - 1]
+            and lengths[index + 1] > lengths[index]
+        ),
+        None,
+    )
+    if vertex_index is None:
+        return None
+    center = (float(points[vertex_index][0]), float(points[vertex_index][1]))
+    incoming = _unit_direction(points[vertex_index - 1], points[vertex_index])
+    outgoing = _unit_direction(points[vertex_index], points[vertex_index + 1])
+    if incoming is None or outgoing is None:
+        return None
+
+    result: list[tuple[float, float]] = []
+    for side in (1.0, -1.0):
+        incoming_normal = (-incoming[1] * side, incoming[0] * side)
+        outgoing_normal = (-outgoing[1] * side, outgoing[0] * side)
+        incoming_point = (
+            center[0] + incoming_normal[0] * half_width,
+            center[1] + incoming_normal[1] * half_width,
+        )
+        outgoing_point = (
+            center[0] + outgoing_normal[0] * half_width,
+            center[1] + outgoing_normal[1] * half_width,
+        )
+        denominator = _vector_cross(incoming, outgoing)
+        if abs(denominator) < 1e-9:
+            result.append(incoming_point)
+            continue
+        distance_along_incoming = _vector_cross(
+            (
+                outgoing_point[0] - incoming_point[0],
+                outgoing_point[1] - incoming_point[1],
+            ),
+            outgoing,
+        ) / denominator
+        intersection = (
+            incoming_point[0] + incoming[0] * distance_along_incoming,
+            incoming_point[1] + incoming[1] * distance_along_incoming,
+        )
+        # A nearly reversing or extremely acute turn can create an impractical
+        # miter spike. Keep those cases bounded; ordinary right-angle turns
+        # remain fully mitered and include the corner envelope.
+        if math.dist(intersection, center) > 4.0 * half_width:
+            result.append(incoming_point)
+        else:
+            result.append(intersection)
+    return result[0], result[1]
+
+
+def _unit_direction(
+    start: Sequence[float], end: Sequence[float]
+) -> tuple[float, float] | None:
+    dx = float(end[0]) - float(start[0])
+    dy = float(end[1]) - float(start[1])
+    length = math.hypot(dx, dy)
+    if length == 0.0:
+        return None
+    return dx / length, dy / length
+
+
+def _vector_cross(left: Sequence[float], right: Sequence[float]) -> float:
+    return left[0] * right[1] - left[1] * right[0]
 
 
 def profile_boundary_polygon(
