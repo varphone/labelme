@@ -314,6 +314,29 @@ def nearest_edge_index(
         )
         if nearest is None:
             return None
+        if shape.shape_type == "bspline":
+            # A B-spline does not generally pass through its control points.
+            # Use the control polygon to decide which knot interval an
+            # inserted point belongs to; the sampled curve alone has no
+            # one-to-one relationship with the control points (especially
+            # when there are only four of them).
+            control_starts = shape.points[:-1] * scale
+            control_ends = shape.points[1:] * scale
+            control_segments = control_ends - control_starts
+            control_lengths = (control_segments * control_segments).sum(axis=1)
+            control_t = np.clip(
+                ((scaled_point - control_starts) * control_segments).sum(axis=1)
+                / np.where(control_lengths == 0, 1.0, control_lengths),
+                0.0,
+                1.0,
+            )
+            control_projections = control_starts + control_t[:, None] * control_segments
+            control_index = int(
+                np.argmin(
+                    np.linalg.norm(scaled_point - control_projections, axis=1)
+                )
+            )
+            return control_index + 1
         # Sampling creates many segments per knot interval. Canvas insertion
         # expects the index of the following knot, not the sampled segment.
         return min(nearest // 24 + 1, len(shape.points) - 1)
