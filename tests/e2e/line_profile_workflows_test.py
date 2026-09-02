@@ -18,7 +18,8 @@ from labelme._label_file import ShapeDict
 from labelme._label_file import read_label_file
 from labelme._label_file import write_label_file
 from labelme._line_profile import LineProfile
-from labelme._line_profile import WidthAnchor
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
 from labelme._shape import Shape
 
 from .conftest import MainWinFactory
@@ -156,7 +157,21 @@ def test_profile_preview_zoom_and_undo_preserve_centerline(
         shape_type="linestrip",
         points=np.array([[10.0, 20.0], [180.0, 20.0]], dtype=np.float64),
         line_profile=LineProfile(
-            width_anchors=(WidthAnchor(0.0, 12.0, "manual", 1.0, True),)
+            anchors=(
+                ProfileAnchor(
+                    0.0,
+                    width=ProfileValue(12.0, "manual", 1.0, True),
+                    visibility=ProfileValue(1.0, "manual", 1.0, True),
+                ),
+                ProfileAnchor(
+                    0.5,
+                    visibility=ProfileValue(0.5, "auto", 0.4, False),
+                ),
+                ProfileAnchor(
+                    1.0,
+                    width=ProfileValue(18.0, "auto", 0.8, False),
+                ),
+            )
         ),
     )
     win._load_shapes([shape])
@@ -171,6 +186,19 @@ def test_profile_preview_zoom_and_undo_preserve_centerline(
             )
             is not None
         )
+        assert (
+            win._canvas_widgets.canvas._find_line_profile_anchor_at_point(
+                QPointF(95.0, 20.0)
+            )
+            is not None
+        )
+
+    win._active_line_profile_anchor_kind = "width"
+    win._active_line_profile_anchor_index = 0
+    win.delete_line_profile_anchor()
+    assert shape.line_profile is not None
+    assert shape.line_profile.anchors[0].width is None
+    assert shape.line_profile.anchors[0].visibility is not None
 
     win.clear_selected_line_profile()
     assert shape.line_profile is None
@@ -203,7 +231,12 @@ def test_continuous_frame_profile_copy_requires_mapping_and_does_not_write_previ
         "mask": None,
         "other_data": {},
         "line_profile": LineProfile(
-            width_anchors=(WidthAnchor(0.0, 12.0, "manual", 1.0, True),)
+            anchors=(
+                ProfileAnchor(
+                    0.0,
+                    width=ProfileValue(12.0, "manual", 1.0, True),
+                ),
+            )
         ),
     }
     target_shape: ShapeDict = {**source_shape}
