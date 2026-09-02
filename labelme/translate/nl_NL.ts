@@ -122,15 +122,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>Klik en sleep om de profielbreedte aan te passen</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>Klik en sleep om het breedteanker te verplaatsen</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>Klik en sleep om het zichtbaarheidsanker te verplaatsen</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -189,49 +189,84 @@
     </message>
 </context>
 <context>
-    <name>LineProfileVisibilityWidget</name>
+    <name>LineProfilePanel</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>Selecteer een lijnstrook om het breedte- en zichtbaarheidsprofiel te bewerken.</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>Profielacties</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>Anker</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>Positie</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Breedte</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>Zichtbaarheid</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatisch</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Handmatig</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Bevestigd</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Zichtbaarheid</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Bron</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Betrouwbaarheid</translation>
     </message>
 </context>
 <context>
     <name>LineProfileWidthWidget</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Automatic</source>
+        <translation>Automatisch</translation>
     </message>
     <message>
-        <source>Position</source>
-        <translation>Position</translation>
+        <source>Manual</source>
+        <translation>Handmatig</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Bevestigd</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Breedte</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Bron</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Betrouwbaarheid</translation>
     </message>
 </context>
 <context>
@@ -539,6 +574,30 @@ Shapes</source>
         <translation>Label &amp;bewerken</translation>
     </message>
     <message>
+        <source>Measure</source>
+        <translation>Meten</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>Voorbeeld</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Invoegen</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>Parameters</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>Vorige kopiëren</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Wissen</translation>
+    </message>
+    <message>
         <source>Delete &amp;Image and Label File</source>
         <translation>&amp;Afbeelding en labelbestand verwijderen</translation>
     </message>
@@ -572,11 +631,11 @@ Shapes</source>
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>Lijnprofiel meten</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>Breedte en zichtbaarheid langs de geselecteerde lijnstrook meten</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
@@ -595,6 +654,22 @@ Shapes</source>
         <translation>De geselecteerde bestanden en hun labelbestanden naar een map kopiëren</translation>
     </message>
     <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>Fill Missing Line Profiles</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>Measure selected annotations that do not have profile anchors</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>Rebuild Line Profiles</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>Force remeasure all selected line-profile annotations</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Label van geselecteerde vorm wijzigen</translation>
     </message>
@@ -608,43 +683,43 @@ Shapes</source>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>Profielanker invoegen</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>Een geïnterpoleerd profielanker invoegen</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>Profielanker verwijderen</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>Het actieve profielanker verwijderen</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>Lijnprofiel wissen</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>Profielmetadata verwijderen en de middellijn behouden</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>Meetparameters voor lijnprofiel</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>Standaard meetwaarden voor deze lijnstrook overschrijven</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>Profielen uit het vorige frame kopiëren</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>Alleen compatibele lijnprofielen uit het vorige frame kopiëren</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
@@ -656,11 +731,11 @@ Shapes</source>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>Voorbeeld van lijnprofiel tonen</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>Grenzen en handgrepen van het variabele profiel tonen</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -685,6 +760,10 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s gestart.</translation>
+    </message>
+    <message>
+        <source>Line Profile</source>
+        <translation>Lijnprofiel</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -739,12 +818,44 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
         <translation>Invalid Measurement Parameters</translation>
     </message>
     <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>No selected files have label annotations to measure</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>fill missing line profiles</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>rebuild line profiles</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>Batch Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>{0} in {1} selected label files?</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>Measuring line profiles…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>Batch line-profile measurement failed: {0}</translation>
+    </message>
+    <message>
         <source>Measuring line profile…</source>
         <translation>Measuring line profile…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>Lijnprofielmeting</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
@@ -752,7 +863,7 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>Lijnprofielmeting accepteren</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
@@ -869,6 +980,10 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Deze afbeelding en het labelbestand definitief verwijderen? Deze actie kan niet ongedaan worden gemaakt.</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>Batch Line Profile</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>

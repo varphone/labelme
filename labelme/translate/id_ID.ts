@@ -122,15 +122,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>Klik dan seret untuk menyesuaikan lebar profil</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>Klik dan seret untuk memindahkan jangkar lebar</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>Klik dan seret untuk memindahkan jangkar visibilitas</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -189,49 +189,84 @@
     </message>
 </context>
 <context>
-    <name>LineProfileVisibilityWidget</name>
+    <name>LineProfilePanel</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>Pilih garis bersegmen untuk mengedit profil lebar dan visibilitasnya.</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>Aksi Profil</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>Jangkar</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>Posisi</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Lebar</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>Visibilitas</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Otomatis</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Manual</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Dikonfirmasi</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Visibilitas</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Sumber</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Keyakinan</translation>
     </message>
 </context>
 <context>
     <name>LineProfileWidthWidget</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Automatic</source>
+        <translation>Otomatis</translation>
     </message>
     <message>
-        <source>Position</source>
-        <translation>Position</translation>
+        <source>Manual</source>
+        <translation>Manual</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Dikonfirmasi</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Lebar</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Sumber</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Keyakinan</translation>
     </message>
 </context>
 <context>
@@ -514,6 +549,30 @@
         <translation>&amp;Edit Label</translation>
     </message>
     <message>
+        <source>Measure</source>
+        <translation>Ukur</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>Pratinjau</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Sisipkan</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>Parameter</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>Salin Sebelumnya</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Bersihkan</translation>
+    </message>
+    <message>
         <source>Delete &amp;Image and Label File</source>
         <translation>Hapus &amp;gambar dan file label</translation>
     </message>
@@ -547,11 +606,11 @@
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>Ukur Profil Garis</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>Ukur lebar dan visibilitas garis bersegmen yang dipilih</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
@@ -570,6 +629,22 @@
         <translation>Salin file yang dipilih dan file labelnya ke direktori</translation>
     </message>
     <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>Fill Missing Line Profiles</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>Measure selected annotations that do not have profile anchors</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>Rebuild Line Profiles</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>Force remeasure all selected line-profile annotations</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Ubah label bentuk yang dipilih</translation>
     </message>
@@ -583,43 +658,43 @@
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>Sisipkan Jangkar Profil</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>Sisipkan jangkar profil terinterpolasi</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>Hapus Jangkar Profil</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>Hapus jangkar profil aktif</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>Bersihkan Profil Garis</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>Hapus metadata profil dan pertahankan garis tengah</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>Parameter Pengukuran Profil Garis</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>Timpa pengaturan pengukuran bawaan untuk garis ini</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>Salin Profil dari Bingkai Sebelumnya</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>Salin hanya profil garis yang kompatibel dari bingkai sebelumnya</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
@@ -631,11 +706,11 @@
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>Tampilkan Pratinjau Profil Garis</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>Tampilkan batas dan pegangan profil dengan lebar bervariasi</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -660,6 +735,10 @@
     <message>
         <source>%s started.</source>
         <translation>%s dimulai.</translation>
+    </message>
+    <message>
+        <source>Line Profile</source>
+        <translation>Profil Garis</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -714,12 +793,44 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
         <translation>Invalid Measurement Parameters</translation>
     </message>
     <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>No selected files have label annotations to measure</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>fill missing line profiles</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>rebuild line profiles</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>Batch Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>{0} in {1} selected label files?</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>Measuring line profiles…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>Batch line-profile measurement failed: {0}</translation>
+    </message>
+    <message>
         <source>Measuring line profile…</source>
         <translation>Measuring line profile…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>Pengukuran Profil Garis</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
@@ -727,7 +838,7 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>Terima Pengukuran Profil Garis</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
@@ -844,6 +955,10 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Hapus permanen gambar ini dan file labelnya? Tindakan ini tidak dapat dibatalkan.</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>Batch Line Profile</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>

@@ -122,15 +122,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>拖动以调整配置宽度</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>拖动以移动宽度锚点</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>拖动以移动可见度锚点</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -189,49 +189,84 @@
     </message>
 </context>
 <context>
-    <name>LineProfileVisibilityWidget</name>
+    <name>LineProfilePanel</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>选择一条折线以编辑其宽度和可见度配置。</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>配置操作</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>锚点</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>位置</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>宽度</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>可见度</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>自动</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手动</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>已确认</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>可见度</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>来源</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>置信度</translation>
     </message>
 </context>
 <context>
     <name>LineProfileWidthWidget</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Automatic</source>
+        <translation>自动</translation>
     </message>
     <message>
-        <source>Position</source>
-        <translation>Position</translation>
+        <source>Manual</source>
+        <translation>手动</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>已确认</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>宽度</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>来源</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>置信度</translation>
     </message>
 </context>
 <context>
@@ -539,6 +574,30 @@ Shapes</source>
         <translation>编辑标签(&amp;E)</translation>
     </message>
     <message>
+        <source>Measure</source>
+        <translation>测量</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>预览</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>插入</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>参数</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>复制上一帧</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>清除</translation>
+    </message>
+    <message>
         <source>Delete &amp;Image and Label File</source>
         <translation>删除&amp;图像和标注文件</translation>
     </message>
@@ -572,11 +631,11 @@ Shapes</source>
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>测量线条配置</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>测量选中折线上的宽度和可见度</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
@@ -595,6 +654,22 @@ Shapes</source>
         <translation>将选中的文件及其标注文件复制到指定目录</translation>
     </message>
     <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>补齐缺失的线剖面</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>测量没有剖面锚点的选中标注</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>重建线剖面</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>强制重新测量所有选中的线剖面标注</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>修改所选形状的标签</translation>
     </message>
@@ -608,43 +683,43 @@ Shapes</source>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>插入配置锚点</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>插入插值配置锚点</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>删除配置锚点</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>删除当前配置锚点</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>清除线条配置</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>删除配置元数据并保留中心线</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>线条配置测量参数</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>覆盖此折线的默认测量参数</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>从上一帧复制配置</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>仅从上一帧复制兼容的线条配置</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
@@ -656,11 +731,11 @@ Shapes</source>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>显示线条配置预览</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>显示可变宽度配置的边界和控制点</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -685,6 +760,10 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s 已启动。</translation>
+    </message>
+    <message>
+        <source>Line Profile</source>
+        <translation>线条配置</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -739,12 +818,44 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Invalid Measurement Parameters</translation>
     </message>
     <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>所选文件中没有可测量的标注文件</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>补齐缺失的线剖面</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>重建线剖面</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>批量测量线剖面</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>在选中的 {1} 个标注文件中{0}？</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>正在测量线剖面…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>批量测量完成：{0} 个文件，{1} 条线条，跳过 {2} 个，失败 {3} 个，取消 {4} 个</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>批量线剖面测量失败：{0}</translation>
+    </message>
+    <message>
         <source>Measuring line profile…</source>
         <translation>Measuring line profile…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>线条配置测量</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
@@ -752,7 +863,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>接受线条配置测量</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
@@ -869,6 +980,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>永久删除此图像及其标注文件?此操作无法撤消。</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>批量线剖面</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>

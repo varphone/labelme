@@ -122,15 +122,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>Haz clic y arrastra para ajustar la anchura del perfil</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>Haz clic y arrastra para mover el anclaje de anchura</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>Haz clic y arrastra para mover el anclaje de visibilidad</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -189,49 +189,84 @@
     </message>
 </context>
 <context>
-    <name>LineProfileVisibilityWidget</name>
+    <name>LineProfilePanel</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>Selecciona una polilínea para editar su perfil de anchura y visibilidad.</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>Acciones del perfil</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>Anclaje</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>Posición</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Anchura</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>Visibilidad</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Automático</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Manual</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmado</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Visibilidad</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Origen</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Confianza</translation>
     </message>
 </context>
 <context>
     <name>LineProfileWidthWidget</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Automatic</source>
+        <translation>Automático</translation>
     </message>
     <message>
-        <source>Position</source>
-        <translation>Position</translation>
+        <source>Manual</source>
+        <translation>Manual</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmado</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Anchura</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Origen</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Confianza</translation>
     </message>
 </context>
 <context>
@@ -539,6 +574,30 @@ Shapes</source>
         <translation>&amp;Editar etiqueta</translation>
     </message>
     <message>
+        <source>Measure</source>
+        <translation>Medir</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>Vista previa</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Insertar</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>Parámetros</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>Copiar anterior</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Borrar</translation>
+    </message>
+    <message>
         <source>Delete &amp;Image and Label File</source>
         <translation>Eliminar &amp;imagen y archivo de etiquetas</translation>
     </message>
@@ -572,11 +631,11 @@ Shapes</source>
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>Medir el perfil de línea</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>Medir la anchura y visibilidad de la polilínea seleccionada</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
@@ -595,6 +654,22 @@ Shapes</source>
         <translation>Copiar los archivos seleccionados y sus archivos de etiquetas a un directorio</translation>
     </message>
     <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>Fill Missing Line Profiles</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>Measure selected annotations that do not have profile anchors</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>Rebuild Line Profiles</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>Force remeasure all selected line-profile annotations</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modificar la etiqueta de la forma seleccionada</translation>
     </message>
@@ -608,43 +683,43 @@ Shapes</source>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>Insertar anclaje del perfil</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>Insertar un anclaje de perfil interpolado</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>Eliminar anclaje del perfil</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>Eliminar el anclaje de perfil activo</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>Borrar el perfil de línea</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>Eliminar los metadatos del perfil y conservar la línea central</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>Parámetros de medición del perfil de línea</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>Reemplazar los valores de medición predeterminados de esta polilínea</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>Copiar perfiles del fotograma anterior</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>Copiar solo perfiles de línea compatibles del fotograma anterior</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
@@ -656,11 +731,11 @@ Shapes</source>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>Mostrar vista previa del perfil de línea</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>Mostrar límites y controles del perfil de anchura variable</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -685,6 +760,10 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s iniciado.</translation>
+    </message>
+    <message>
+        <source>Line Profile</source>
+        <translation>Perfil de línea</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -739,12 +818,44 @@ Cambie el modelo de AI Text-to-Annotation a &apos;SAM3 (smart)&apos; o establezc
         <translation>Invalid Measurement Parameters</translation>
     </message>
     <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>No selected files have label annotations to measure</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>fill missing line profiles</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>rebuild line profiles</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>Batch Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>{0} in {1} selected label files?</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>Measuring line profiles…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>Batch line-profile measurement failed: {0}</translation>
+    </message>
+    <message>
         <source>Measuring line profile…</source>
         <translation>Measuring line profile…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>Medición del perfil de línea</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
@@ -752,7 +863,7 @@ Cambie el modelo de AI Text-to-Annotation a &apos;SAM3 (smart)&apos; o establezc
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>Aceptar medición del perfil de línea</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
@@ -869,6 +980,10 @@ Cambie el modelo de AI Text-to-Annotation a &apos;SAM3 (smart)&apos; o establezc
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>¿Eliminar permanentemente esta imagen y su archivo de etiquetas? Esta acción no se puede deshacer.</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>Batch Line Profile</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>

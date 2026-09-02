@@ -122,15 +122,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>Nhấp và kéo để điều chỉnh độ rộng biên dạng</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>Nhấp và kéo để di chuyển điểm neo độ rộng</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>Nhấp và kéo để di chuyển điểm neo khả năng hiển thị</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -189,49 +189,84 @@
     </message>
 </context>
 <context>
-    <name>LineProfileVisibilityWidget</name>
+    <name>LineProfilePanel</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>Chọn đường gấp khúc để chỉnh sửa biên dạng độ rộng và khả năng hiển thị.</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>Thao tác biên dạng</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>Điểm neo</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>Vị trí</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Độ rộng</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>Khả năng hiển thị</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Tự động</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Thủ công</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Đã xác nhận</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Khả năng hiển thị</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Nguồn</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Độ tin cậy</translation>
     </message>
 </context>
 <context>
     <name>LineProfileWidthWidget</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Automatic</source>
+        <translation>Tự động</translation>
     </message>
     <message>
-        <source>Position</source>
-        <translation>Position</translation>
+        <source>Manual</source>
+        <translation>Thủ công</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Đã xác nhận</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Độ rộng</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Nguồn</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Độ tin cậy</translation>
     </message>
 </context>
 <context>
@@ -539,6 +574,30 @@ Shapes</source>
         <translation>Chỉnh sửa Nhãn(&amp;E)</translation>
     </message>
     <message>
+        <source>Measure</source>
+        <translation>Đo</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>Xem trước</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Chèn</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>Tham số</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>Sao chép trước đó</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Xóa trắng</translation>
+    </message>
+    <message>
         <source>Delete &amp;Image and Label File</source>
         <translation>Xóa &amp;hình ảnh và tệp chú thích</translation>
     </message>
@@ -572,11 +631,11 @@ Shapes</source>
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>Đo biên dạng đường</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>Đo độ rộng và khả năng hiển thị dọc theo đường gấp khúc đã chọn</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
@@ -595,6 +654,22 @@ Shapes</source>
         <translation>Sao chép các tệp đã chọn và tệp chú thích của chúng vào thư mục</translation>
     </message>
     <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>Fill Missing Line Profiles</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>Measure selected annotations that do not have profile anchors</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>Rebuild Line Profiles</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>Force remeasure all selected line-profile annotations</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Sửa đổi nhãn của hình dạng đã chọn</translation>
     </message>
@@ -608,43 +683,43 @@ Shapes</source>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>Chèn điểm neo biên dạng</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>Chèn điểm neo biên dạng nội suy</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>Xóa điểm neo biên dạng</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>Xóa điểm neo biên dạng đang hoạt động</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>Xóa biên dạng đường</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>Xóa siêu dữ liệu biên dạng và giữ đường trung tâm</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>Tham số đo biên dạng đường</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>Ghi đè giá trị đo mặc định cho đường này</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>Sao chép biên dạng từ khung trước</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>Chỉ sao chép biên dạng tương thích từ khung trước</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
@@ -656,11 +731,11 @@ Shapes</source>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>Hiển thị xem trước biên dạng đường</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>Hiển thị biên và tay nắm biên dạng độ rộng thay đổi</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -685,6 +760,10 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s đã khởi động.</translation>
+    </message>
+    <message>
+        <source>Line Profile</source>
+        <translation>Biên dạng đường</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -739,12 +818,44 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
         <translation>Invalid Measurement Parameters</translation>
     </message>
     <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>No selected files have label annotations to measure</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>fill missing line profiles</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>rebuild line profiles</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>Batch Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>{0} in {1} selected label files?</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>Measuring line profiles…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>Batch line-profile measurement failed: {0}</translation>
+    </message>
+    <message>
         <source>Measuring line profile…</source>
         <translation>Measuring line profile…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>Đo biên dạng đường</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
@@ -752,7 +863,7 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>Chấp nhận phép đo biên dạng đường</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
@@ -869,6 +980,10 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Xóa vĩnh viễn hình ảnh này và tệp chú thích của nó? Hành động này không thể hoàn tác.</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>Batch Line Profile</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>

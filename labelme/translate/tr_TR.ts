@@ -122,15 +122,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>Profil genişliğini ayarlamak için tıklayıp sürükleyin</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>Genişlik çapasını taşımak için tıklayıp sürükleyin</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>Görünürlük çapasını taşımak için tıklayıp sürükleyin</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -189,49 +189,84 @@
     </message>
 </context>
 <context>
-    <name>LineProfileVisibilityWidget</name>
+    <name>LineProfilePanel</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>Genişlik ve görünürlük profilini düzenlemek için bir çizgi şeridi seçin.</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>Profil işlemleri</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>Çapa</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>Konum</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Genişlik</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>Görünürlük</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Otomatik</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>El ile</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Onaylandı</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Görünürlük</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Kaynak</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Güven</translation>
     </message>
 </context>
 <context>
     <name>LineProfileWidthWidget</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Automatic</source>
+        <translation>Otomatik</translation>
     </message>
     <message>
-        <source>Position</source>
-        <translation>Position</translation>
+        <source>Manual</source>
+        <translation>El ile</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Onaylandı</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>Genişlik</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Kaynak</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>Güven</translation>
     </message>
 </context>
 <context>
@@ -542,6 +577,30 @@ Shapes</source>
         <translation>Etiketi &amp;Düzenle</translation>
     </message>
     <message>
+        <source>Measure</source>
+        <translation>Ölç</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>Önizleme</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Ekle</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>Parametreler</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>Öncekini kopyala</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Temizle</translation>
+    </message>
+    <message>
         <source>Delete &amp;Image and Label File</source>
         <translation>&amp;Görseli ve etiket dosyasını sil</translation>
     </message>
@@ -575,11 +634,11 @@ Shapes</source>
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>Çizgi Profilini Ölç</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>Seçilen çizgi şeridi boyunca genişlik ve görünürlüğü ölç</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
@@ -598,6 +657,22 @@ Shapes</source>
         <translation>Seçili dosyaları ve etiket dosyalarını bir dizine kopyala</translation>
     </message>
     <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>Fill Missing Line Profiles</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>Measure selected annotations that do not have profile anchors</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>Rebuild Line Profiles</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>Force remeasure all selected line-profile annotations</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Seçili şeklin etiketini değiştir</translation>
     </message>
@@ -611,43 +686,43 @@ Shapes</source>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>Profil Çapası Ekle</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>Araya eklenmiş profil çapası ekle</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>Profil Çapasını Sil</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>Etkin profil çapasını sil</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>Çizgi Profilini Temizle</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>Profil üst verilerini kaldır ve merkez çizgiyi koru</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>Çizgi Profili Ölçüm Parametreleri</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>Bu çizgi şeridinin varsayılan ölçüm değerlerini geçersiz kıl</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>Önceki Kareden Profilleri Kopyala</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>Önceki kareden yalnızca uyumlu çizgi profillerini kopyala</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
@@ -659,11 +734,11 @@ Shapes</source>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>Çizgi Profili Önizlemesini Göster</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>Değişken genişlikli profil sınırlarını ve tutamaçlarını göster</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -688,6 +763,10 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s başlatıldı.</translation>
+    </message>
+    <message>
+        <source>Line Profile</source>
+        <translation>Çizgi profili</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -742,12 +821,44 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
         <translation>Invalid Measurement Parameters</translation>
     </message>
     <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>No selected files have label annotations to measure</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>fill missing line profiles</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>rebuild line profiles</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>Batch Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>{0} in {1} selected label files?</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>Measuring line profiles…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>Batch line-profile measurement failed: {0}</translation>
+    </message>
+    <message>
         <source>Measuring line profile…</source>
         <translation>Measuring line profile…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>Çizgi Profili Ölçümü</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
@@ -755,7 +866,7 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>Çizgi Profili Ölçümünü Kabul Et</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
@@ -872,6 +983,10 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>Bu görsel ve etiket dosyası kalıcı olarak silinsin mi? Bu işlem geri alınamaz.</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>Batch Line Profile</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>

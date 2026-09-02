@@ -122,15 +122,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>クリックしてドラッグし、プロファイル幅を調整</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>クリックしてドラッグし、幅アンカーを移動</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>クリックしてドラッグし、可視性アンカーを移動</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -189,49 +189,84 @@
     </message>
 </context>
 <context>
-    <name>LineProfileVisibilityWidget</name>
+    <name>LineProfilePanel</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>幅と可視性のプロファイルを編集する折れ線を選択してください。</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>プロファイル操作</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>アンカー</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>位置</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>幅</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>可視性</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手動</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>確認済み</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>可視性</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>ソース</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>信頼度</translation>
     </message>
 </context>
 <context>
     <name>LineProfileWidthWidget</name>
     <message>
-        <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <source>Automatic</source>
+        <translation>自動</translation>
     </message>
     <message>
-        <source>Position</source>
-        <translation>Position</translation>
+        <source>Manual</source>
+        <translation>手動</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>確認済み</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>幅</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>ソース</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>信頼度</translation>
     </message>
 </context>
 <context>
@@ -553,6 +588,30 @@ Shapes</source>
         <translation>ラベルを編集(&amp;E)</translation>
     </message>
     <message>
+        <source>Measure</source>
+        <translation>測定</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>プレビュー</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>挿入</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>パラメーター</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>前のフレームをコピー</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>クリア</translation>
+    </message>
+    <message>
         <source>Delete &amp;Image and Label File</source>
         <translation>&amp;画像とラベルファイルを削除</translation>
     </message>
@@ -586,11 +645,11 @@ Shapes</source>
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>ラインプロファイルを測定</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>選択した折れ線に沿って幅と可視性を測定</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
@@ -609,6 +668,22 @@ Shapes</source>
         <translation>選択したファイルとそのラベルファイルをディレクトリにコピーします</translation>
     </message>
     <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>Fill Missing Line Profiles</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>Measure selected annotations that do not have profile anchors</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>Rebuild Line Profiles</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>Force remeasure all selected line-profile annotations</translation>
+    </message>
+    <message>
         <source>Modify the label of the selected shape</source>
         <translation>選択した図形のラベルを変更</translation>
     </message>
@@ -622,43 +697,43 @@ Shapes</source>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>プロファイルアンカーを挿入</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>補間されたプロファイルアンカーを挿入</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>プロファイルアンカーを削除</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>アクティブなプロファイルアンカーを削除</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>ラインプロファイルをクリア</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>プロファイルのメタデータを削除して中心線を保持</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>ラインプロファイル測定パラメーター</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>この折れ線の測定既定値を上書き</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>前のフレームからプロファイルをコピー</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>互換性のあるプロファイルだけを前のフレームからコピー</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
@@ -670,11 +745,11 @@ Shapes</source>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>ラインプロファイルのプレビューを表示</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>可変幅プロファイルの境界とハンドルを表示</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -699,6 +774,10 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s を起動しました</translation>
+    </message>
+    <message>
+        <source>Line Profile</source>
+        <translation>ラインプロファイル</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -753,12 +832,44 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
         <translation>Invalid Measurement Parameters</translation>
     </message>
     <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>No selected files have label annotations to measure</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>fill missing line profiles</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>rebuild line profiles</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>Batch Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>{0} in {1} selected label files?</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>Measuring line profiles…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>Batch line-profile measurement failed: {0}</translation>
+    </message>
+    <message>
         <source>Measuring line profile…</source>
         <translation>Measuring line profile…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>ラインプロファイルの測定</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
@@ -766,7 +877,7 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>ラインプロファイルの測定を確定</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
@@ -883,6 +994,10 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
         <translation>この画像とラベルファイルを完全に削除しますか?この操作は元に戻せません。</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>Batch Line Profile</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
