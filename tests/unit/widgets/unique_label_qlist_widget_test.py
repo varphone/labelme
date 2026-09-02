@@ -5,6 +5,7 @@ from PySide6 import QtGui
 from PySide6.QtCore import Qt
 from pytestqt.qtbot import QtBot
 
+from labelme._widgets.label_list_widget import LABEL_COLOR_ROLE
 from labelme._widgets.unique_label_qlist_widget import UniqueLabelQListWidget
 
 
@@ -50,6 +51,26 @@ def test_add_label_item_rejects_duplicate_label(
         widget.add_label_item(label="cat", color=(0, 255, 0))
 
     assert widget.count() == 1
+
+
+def test_rename_label_item_preserves_row_and_selection(
+    widget: UniqueLabelQListWidget,
+) -> None:
+    widget.add_label_item(label="cat", color=(255, 0, 0))
+    widget.add_label_item(label="dog", color=(0, 255, 0))
+    item = widget.item(0)
+    assert item is not None
+    widget.setCurrentItem(item)
+
+    widget.rename_label_item(item=item, label="kitten", color=(0, 0, 255))
+
+    assert widget.row(item) == 0
+    assert widget.currentItem() is item
+    assert item.text() == "kitten"
+    assert item.data(Qt.ItemDataRole.UserRole) == "kitten"
+    assert item.data(LABEL_COLOR_ROLE) == QtGui.QColor(0, 0, 255)
+    assert widget.find_label_item(label="cat") is None
+    assert widget.find_label_item(label="kitten") is item
 
 
 def test_find_label_item_returns_none_for_unknown_label(

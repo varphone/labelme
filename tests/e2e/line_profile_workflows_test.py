@@ -6,6 +6,10 @@ import numpy as np
 import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtCore import QSize
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QLabel
+from PySide6.QtWidgets import QToolBar
+from PySide6.QtWidgets import QToolButton
 from pytestqt.qtbot import QtBot
 
 from labelme import _app
@@ -19,6 +23,121 @@ from labelme._shape import Shape
 
 from .conftest import MainWinFactory
 from .conftest import show_window_and_wait_for_imagedata
+
+
+@pytest.mark.gui
+def test_line_profile_panel_is_docked_before_annotation_panels(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+) -> None:
+    win = main_win(
+        file_or_dir=str(data_path / "raw" / "2011_000003.jpg"),
+        size=QSize(1200, 800),
+    )
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+
+    profile_dock = win._docks.line_profile_dock
+    panel = win._docks.line_profile_panel
+    assert profile_dock.isVisible()
+    assert win.dockWidgetArea(profile_dock) == Qt.DockWidgetArea.RightDockWidgetArea
+    assert panel.isAncestorOf(panel.width_widget)
+    assert panel.isAncestorOf(panel.visibility_widget)
+    assert not panel.position_widget.isEnabled()
+    assert panel.position_widget.parentWidget() is not panel.width_widget
+    assert panel.position_widget.parentWidget() is not panel.visibility_widget
+    assert all(
+        label.text() != "Position"
+        for widget in (panel.width_widget, panel.visibility_widget)
+        for label in widget.findChildren(QLabel)
+    )
+    existing_docks = (
+        win._docks.flag_dock,
+        win._docks.label_dock,
+        win._docks.shape_dock,
+        win._docks.file_dock,
+    )
+    assert all(
+        profile_dock.geometry().right() < dock.geometry().left()
+        for dock in existing_docks
+    )
+    assert profile_dock.geometry().top() <= min(
+        dock.geometry().top() for dock in existing_docks
+    )
+    assert profile_dock.geometry().bottom() >= max(
+        dock.geometry().bottom() for dock in existing_docks
+    )
+    assert [dock.geometry().top() for dock in existing_docks] == sorted(
+        dock.geometry().top() for dock in existing_docks
+    )
+    assert all(not win.tabifiedDockWidgets(dock) for dock in existing_docks)
+
+    file_menu = win._build_file_list_context_menu()
+    batch_action = next(
+        action
+        for action in file_menu.actions()
+        if action.menu() is not None and action.text() == "Batch Line Profile"
+    )
+    batch_menu = batch_action.menu()
+    assert batch_menu is not None
+    assert [action.text() for action in batch_menu.actions()] == [
+        "Fill Missing Line Profiles",
+        "Rebuild Line Profiles",
+    ]
+    file_menu.deleteLater()
+
+    action_texts = {
+        button.property("lineProfileSourceAction").text()
+        for button in panel.findChildren(QToolButton)
+        if button.defaultAction() is not None
+    }
+    assert "Measure Line Profile" in action_texts
+    assert "Insert Profile Anchor" in action_texts
+    assert "Clear Line Profile" in action_texts
+    panel_buttons = {
+        button.text(): button
+        for button in panel.findChildren(QToolButton)
+        if button.defaultAction() is not None
+    }
+    assert [
+        button.text()
+        for button in panel.findChildren(QToolButton)
+        if button.defaultAction() is not None
+    ] == [
+        "Preview",
+        "Measure",
+        "Insert",
+        "Delete",
+        "Clear",
+        "Copy Previous",
+        "Parameters",
+    ]
+    assert {
+        "Measure",
+        "Preview",
+        "Insert",
+        "Delete",
+        "Parameters",
+        "Clear",
+    } <= panel_buttons.keys()
+    assert all(not button.icon().isNull() for button in panel_buttons.values())
+    preview_button = panel_buttons["Preview"]
+    assert win._actions.show_line_profile_preview.isChecked()
+    preview_button.click()
+    qtbot.wait(10)
+    assert not win._actions.show_line_profile_preview.isChecked()
+    preview_button.click()
+    qtbot.wait(10)
+    assert win._actions.show_line_profile_preview.isChecked()
+
+    tools_toolbar = win.findChild(QToolBar, "ToolsToolBar")
+    assert tools_toolbar is not None
+    assert panel.width_widget not in tools_toolbar.findChildren(
+        type(panel.width_widget)
+    )
+    assert panel.visibility_widget not in tools_toolbar.findChildren(
+        type(panel.visibility_widget)
+    )
 
 
 @pytest.mark.gui
