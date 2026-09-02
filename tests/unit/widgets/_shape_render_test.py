@@ -53,12 +53,22 @@ def _render(shape: Shape, *, show_label: bool, scale: float = 1.0) -> QtGui.QIma
     return image
 
 
-@pytest.mark.parametrize("shape_type", ["catmull_rom", "bspline"])
-def test_open_spline_is_not_filled_when_selected(shape_type: ShapeType) -> None:
+@pytest.mark.parametrize(
+    "shape_type", ["line", "linestrip", "bezier2", "bezier3", "catmull_rom", "bspline"]
+)
+def test_line_shapes_are_not_filled_when_selected(shape_type: ShapeType) -> None:
+    points = {
+        "line": [[20, 80], [100, 20]],
+        "linestrip": [[20, 80], [60, 20], [100, 80]],
+        "bezier2": [[20, 80], [60, 20], [100, 80]],
+        "bezier3": [[20, 80], [40, 20], [80, 20], [100, 80]],
+        "catmull_rom": [[20, 80], [60, 20], [100, 80]],
+        "bspline": [[20, 80], [60, 20], [100, 80]],
+    }[shape_type]
     shape = Shape(
         shape_type=shape_type,
-        points=np.array([[20, 80], [60, 20], [100, 80]], dtype=np.float64),
-        closed=False,
+        points=np.array(points, dtype=np.float64),
+        closed=True,
     )
     image = QtGui.QImage(120, 100, QtGui.QImage.Format.Format_ARGB32)
     image.fill(QtGui.QColor(255, 255, 255))
