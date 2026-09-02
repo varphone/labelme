@@ -3470,8 +3470,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _on_pan_request(self, step: QtCore.QPoint) -> None:
         # Pan moves the viewport opposite to the cursor delta so the image
-        # tracks the grabbed point one-for-one in widget pixels.
-        self._move_canvas_view(step=QtCore.QPointF(step))
+        # tracks the grabbed point one-for-one in widget pixels. Keep the
+        # offset policy consistent with Minimap navigation: users may move
+        # the image beyond the viewport edge while zoomed in.
+        self._move_canvas_view(
+            step=QtCore.QPointF(step), constrain_to_center=False
+        )
 
     def _move_canvas_view(
         self, step: QtCore.QPointF, *, constrain_to_center: bool = True
