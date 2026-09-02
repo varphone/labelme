@@ -1246,7 +1246,8 @@ class Canvas(QtWidgets.QWidget):
             if modifiers == Qt.KeyboardModifier.ControlModifier:
                 self._finalize()
         elif mode in BEZIER_SHAPE_TYPES:
-            current = current.add_point(self._line.points[1])
+            clicked_point = self._line.points[-1]
+            current = current.add_point(clicked_point)
             if len(current.points) == bezier_degree(mode) + 1:
                 # The drawing gesture is start, end, then control point(s),
                 # while Bezier data is stored in the conventional start,
@@ -1260,7 +1261,7 @@ class Canvas(QtWidgets.QWidget):
             self._current = current
             self._line = dataclasses.replace(
                 self._line,
-                points=current.points + (self._line.points[1],),
+                points=current.points + (clicked_point,),
                 point_labels=current.point_labels + (1,),
             )
             if len(current.points) == bezier_degree(mode) + 1:
