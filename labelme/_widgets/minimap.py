@@ -77,6 +77,8 @@ class MinimapWidget(QtWidgets.QFrame):
     def _image_to_minimap(self, point: QtCore.QPointF) -> QtCore.QPointF:
         image_rect = self._image_rect()
         map_rect = self._map_rect()
+        if image_rect.isEmpty() or map_rect.isEmpty():
+            return QtCore.QPointF()
         return map_rect.topLeft() + QtCore.QPointF(
             point.x() / image_rect.width() * map_rect.width(),
             point.y() / image_rect.height() * map_rect.height(),
@@ -85,6 +87,8 @@ class MinimapWidget(QtWidgets.QFrame):
     def _minimap_to_image(self, point: QtCore.QPointF) -> QtCore.QPointF:
         image_rect = self._image_rect()
         map_rect = self._map_rect()
+        if image_rect.isEmpty() or map_rect.isEmpty():
+            return QtCore.QPointF()
         x = (point.x() - map_rect.left()) / map_rect.width()
         y = (point.y() - map_rect.top()) / map_rect.height()
         return QtCore.QPointF(
@@ -144,6 +148,9 @@ class MinimapWidget(QtWidgets.QFrame):
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
+            if self._map_rect().isEmpty():
+                event.accept()
+                return
             self._dragging = True
             self.center_requested.emit(self._minimap_to_image(event.position()))
             event.accept()
@@ -152,6 +159,9 @@ class MinimapWidget(QtWidgets.QFrame):
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent) -> None:
         if self._dragging:
+            if self._map_rect().isEmpty():
+                event.accept()
+                return
             self.center_requested.emit(self._minimap_to_image(event.position()))
             event.accept()
             return
