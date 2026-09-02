@@ -15,8 +15,8 @@ class MinimapWidget(QtWidgets.QFrame):
     center_requested = QtCore.Signal(QtCore.QPointF)
 
     _MARGIN = 10
-    _WIDTH = 220
-    _HEIGHT = 160
+    _WIDTH = 180
+    _HEIGHT = 120
 
     def __init__(
         self, *, canvas: Canvas, viewport: QtWidgets.QWidget
@@ -30,7 +30,12 @@ class MinimapWidget(QtWidgets.QFrame):
         self.setMouseTracking(True)
         viewport.installEventFilter(self)
         self._dragging = False
+        self._show_shape_outlines = True
         self._position_in_viewport()
+
+    def set_show_shape_outlines(self, value: bool) -> None:
+        self._show_shape_outlines = value
+        self.update()
 
     def eventFilter(self, watched: QtCore.QObject, event: QtCore.QEvent) -> bool:
         if watched is self.viewport and event.type() == QtCore.QEvent.Type.Resize:
@@ -108,11 +113,12 @@ class MinimapWidget(QtWidgets.QFrame):
         painter.setRenderHint(QtGui.QPainter.RenderHint.SmoothPixmapTransform)
         painter.drawPixmap(map_rect, pixmap, QtCore.QRectF(pixmap.rect()))
 
-        shape_pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 220))
-        shape_pen.setWidth(1)
-        painter.setPen(shape_pen)
-        for shape in self.canvas.shapes:
-            self._paint_shape(painter=painter, shape=shape)
+        if self._show_shape_outlines:
+            shape_pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 220))
+            shape_pen.setWidth(1)
+            painter.setPen(shape_pen)
+            for shape in self.canvas.shapes:
+                self._paint_shape(painter=painter, shape=shape)
 
         view = self._viewport_image_rect()
         view_top_left = self._image_to_minimap(view.topLeft())

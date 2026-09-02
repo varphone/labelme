@@ -113,6 +113,15 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         kind="bool",
     ),
     Setting(
+        key_path=("minimap", "show_shape_outlines"),
+        group="Drawing and canvas",
+        label=cast(
+            str,
+            QT_TRANSLATE_NOOP("SettingsDialog", "Show annotation outlines in Minimap"),
+        ),
+        kind="bool",
+    ),
+    Setting(
         key_path=("shape_color", "mode"),
         group="Drawing and canvas",
         label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Shape Color Mode")),

@@ -203,6 +203,7 @@ class _Actions(NamedTuple):
     hide_all: QtGui.QAction
     show_all: QtGui.QAction
     toggle_all: QtGui.QAction
+    show_minimap: QtGui.QAction
     open_dir: QtGui.QAction
     zoom_widget_action: QtWidgets.QWidgetAction
     circle_radius_action: QtWidgets.QWidgetAction
@@ -913,6 +914,13 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Toggle all shapes"),
             enabled=False,
         )
+        show_minimap = action(
+            text=self.tr("Show Minimap"),
+            tip=self.tr("Show or hide the canvas minimap"),
+            checkable=True,
+            checked=True,
+        )
+        show_minimap.toggled.connect(self._canvas_widgets.minimap.setVisible)
         show_line_profile_preview = action(
             text=self.tr("Show Line Profile Preview"),
             icon="phosphor/eye.svg",
@@ -1104,6 +1112,7 @@ class MainWindow(QtWidgets.QMainWindow):
             hide_all=hide_all,
             show_all=show_all,
             toggle_all=toggle_all,
+            show_minimap=show_minimap,
             open_dir=open_dir,
             zoom_widget_action=zoom_widget_action,
             circle_radius_action=circle_radius_action,
@@ -1207,6 +1216,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.hide_all,
                 self._actions.show_all,
                 self._actions.toggle_all,
+                None,
+                self._actions.show_minimap,
                 self._actions.show_line_profile_preview,
                 None,
                 self._actions.zoom_in,
@@ -1422,6 +1433,9 @@ class MainWindow(QtWidgets.QMainWindow):
             Qt.Orientation.Horizontal: scroll_area.horizontalScrollBar(),
         }
         minimap = MinimapWidget(canvas=canvas, viewport=scroll_area.viewport())
+        minimap.set_show_shape_outlines(
+            self._config["minimap"]["show_shape_outlines"]
+        )
         minimap.center_requested.connect(self._center_canvas_on_image_point)
         for bar in scroll_bars.values():
             bar.valueChanged.connect(minimap.update)
@@ -4423,6 +4437,10 @@ class MainWindow(QtWidgets.QMainWindow):
             canvas = self._canvas_widgets.canvas
             canvas.set_show_labels(self._config["shape"]["show_labels"])
             canvas.update()
+        elif key_path == ("minimap", "show_shape_outlines"):
+            self._canvas_widgets.minimap.set_show_shape_outlines(
+                self._config["minimap"]["show_shape_outlines"]
+            )
         elif key_path == ("mask_polygonization", "detail"):
             detail = self._config["mask_polygonization"]["detail"]
             self._ai_annotation.set_polygon_detail(detail)
