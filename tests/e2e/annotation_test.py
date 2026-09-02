@@ -387,8 +387,15 @@ def test_annotate_shape_types(
         assert all(shape.group_id is None for shape in shapes)
     if expected_shape_type in ("bezier2", "bezier3"):
         assert all(not shape.closed for shape in shapes)
+    shape = shapes[0]
     if expected_num_points is not None:
         assert len(shapes[0].points) == expected_num_points
+    if expected_shape_type == "bezier2":
+        assert shape.points[1, 1] < shape.points[2, 1]
+        assert (shape.points[1] != shape.points[2]).any()
+    elif expected_shape_type == "bezier3":
+        assert (shape.points[1] != shape.points[2]).any()
+        assert (shape.points[2] != shape.points[3]).any()
 
     win._save_label_file()
     assert_labelfile_sanity(out_file)
