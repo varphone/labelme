@@ -1604,8 +1604,11 @@ class Canvas(QtWidgets.QWidget):
         for shape in shapes:
             if shape.shape_type != "linestrip" or shape.line_profile is None:
                 continue
-            for index, anchor in enumerate(shape.line_profile.width_anchors):
-                radius = max(0.0, anchor.width / 2.0)
+            for index, anchor in enumerate(shape.line_profile.anchors):
+                if anchor.width is None:
+                    continue
+                width = anchor.width
+                radius = max(0.0, width.value / 2.0)
                 circle = _line_profile_circle_shape(
                     points=shape.points,
                     position=anchor.position,
@@ -1641,7 +1644,10 @@ class Canvas(QtWidgets.QWidget):
                             "width",
                         )
                     )
-            for index, anchor in enumerate(shape.line_profile.visibility_anchors):
+            for index, anchor in enumerate(shape.line_profile.anchors):
+                if anchor.visibility is None:
+                    continue
+                visibility = anchor.visibility
                 marker = _line_profile_circle_shape(
                     points=shape.points,
                     position=anchor.position,
@@ -1894,7 +1900,7 @@ class Canvas(QtWidgets.QWidget):
         profile = shape.line_profile
         if shape.shape_type != "linestrip" or profile is None:
             return
-        if profile.width_anchors:
+        if any(anchor.width is not None for anchor in profile.anchors):
             boundary = profile_boundary_polygon(
                 profile, shape.points, samples=max(16, min(128, len(shape.points) * 16))
             )
@@ -1912,8 +1918,11 @@ class Canvas(QtWidgets.QWidget):
                 path.lineTo(QtCore.QPointF(*point) * self.scale)
             path.closeSubpath()
             painter.drawPath(path)
-        for index, anchor in enumerate(profile.width_anchors):
-            radius = max(0.0, anchor.width / 2.0)
+        for index, anchor in enumerate(profile.anchors):
+            if anchor.width is None:
+                continue
+            width = anchor.width
+            radius = max(0.0, width.value / 2.0)
             circle = _line_profile_circle_shape(
                 points=shape.points,
                 position=anchor.position,
@@ -1924,8 +1933,8 @@ class Canvas(QtWidgets.QWidget):
                 and self.active_line_profile_anchor_kind == "width"
             )
             color = _line_profile_anchor_color(
-                confirmed=anchor.confirmed,
-                confidence=anchor.confidence,
+                confirmed=width.confirmed,
+                confidence=width.confidence,
                 fallback=(230, 180, 40),
             )
             if active:
@@ -1955,7 +1964,10 @@ class Canvas(QtWidgets.QWidget):
                     rotation_highlight=None,
                 ),
             )
-        for index, anchor in enumerate(profile.visibility_anchors):
+        for index, anchor in enumerate(profile.anchors):
+            if anchor.visibility is None:
+                continue
+            visibility = anchor.visibility
             marker = _line_profile_circle_shape(
                 points=shape.points,
                 position=anchor.position,
@@ -1966,8 +1978,8 @@ class Canvas(QtWidgets.QWidget):
                 and self.active_line_profile_anchor_kind == "visibility"
             )
             color = _line_profile_anchor_color(
-                confirmed=anchor.confirmed,
-                confidence=anchor.confidence,
+                confirmed=visibility.confirmed,
+                confidence=visibility.confidence,
                 fallback=(150, 90, 220),
             )
             if active:

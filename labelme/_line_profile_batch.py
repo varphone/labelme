@@ -15,8 +15,8 @@ from ._line_measurement import MeasurementParameters
 from ._line_measurement import MeasurementSample
 from ._line_measurement import measure_line_profile
 from ._line_profile import LineProfile
-from ._line_profile import VisibilityAnchor
-from ._line_profile import WidthAnchor
+from ._line_profile import ProfileAnchor
+from ._line_profile import ProfileValue
 from ._utils.image import img_data_to_arr
 
 
@@ -164,7 +164,11 @@ def _measure_annotation_file(
             options.only_unreviewed
             and profile is not None
             and profile.reviewed
-            and all(anchor.confidence >= 0.5 for anchor in profile.width_anchors)
+            and all(
+                value is None or value.confidence >= 0.5
+                for anchor in profile.anchors
+                for value in (anchor.width, anchor.visibility)
+            )
         ):
             continue
         measurement = measure_line_profile(
@@ -246,69 +250,35 @@ def _profile_from_measurement(
     *,
     existing: LineProfile | None = None,
 ) -> LineProfile:
-    manual_width = (
-        ()
-        if existing is None
-        else tuple(
-            anchor
-            for anchor in existing.width_anchors
-            if anchor.source == "manual" and anchor.confirmed
+    manual = {
+        anchor.position: anchor
+        for anchor in (() if existing is None else existing.anchors)
+    }
+    measured: list[ProfileAnchor] = []
+    for sample in samples:
+        current = next(
+            (anchor for position, anchor in manual.items() if abs(position - sample.position) <= 1e-6),
+            None,
         )
-    )
-    manual_visibility = (
-        ()
-        if existing is None
-        else tuple(
-            anchor
-            for anchor in existing.visibility_anchors
-            if anchor.source == "manual" and anchor.confirmed
+        width = None if current is not None and current.width is not None and current.width.confirmed else ProfileValue(sample.width, "auto", sample.confidence, False)
+        visibility = None if current is not None and current.visibility is not None and current.visibility.confirmed else ProfileValue(sample.visibility, "auto", sample.confidence, False)
+        measured.append(ProfileAnchor(sample.position, width, visibility))
+    merged: list[ProfileAnchor] = []
+    for anchor in (*manual.values(), *measured):
+        existing_at_position = next(
+            (item for item in merged if abs(item.position - anchor.position) <= 1e-6),
+            None,
         )
-    )
+        if existing_at_position is None:
+            merged.append(anchor)
+            continue
+        width = existing_at_position.width or anchor.width
+        visibility = existing_at_position.visibility or anchor.visibility
+        merged[merged.index(existing_at_position)] = ProfileAnchor(
+            existing_at_position.position, width, visibility
+        )
     return LineProfile(
-        width_anchors=tuple(
-            sorted(
-                (
-                    *manual_width,
-                    *(
-                        WidthAnchor(
-                            position=sample.position,
-                            width=sample.width,
-                            source="auto",
-                            confidence=sample.confidence,
-                            confirmed=False,
-                        )
-                        for sample in samples
-                        if not any(
-                            abs(anchor.position - sample.position) <= 1e-6
-                            for anchor in manual_width
-                        )
-                    ),
-                ),
-                key=lambda anchor: anchor.position,
-            )
-        ),
-        visibility_anchors=tuple(
-            sorted(
-                (
-                    *manual_visibility,
-                    *(
-                        VisibilityAnchor(
-                            position=sample.position,
-                            visibility=sample.visibility,
-                            source="auto",
-                            confidence=sample.confidence,
-                            confirmed=False,
-                        )
-                        for sample in samples
-                        if not any(
-                            abs(anchor.position - sample.position) <= 1e-6
-                            for anchor in manual_visibility
-                        )
-                    ),
-                ),
-                key=lambda anchor: anchor.position,
-            )
-        ),
+        anchors=tuple(sorted(merged, key=lambda anchor: anchor.position)),
         min_width=None if existing is None else existing.min_width,
         max_width=None if existing is None else existing.max_width,
         measurement_version=MEASUREMENT_VERSION,
@@ -320,7 +290,7 @@ def _profile_from_measurement(
 
 def _profile_has_anchors(profile: object) -> bool:
     return isinstance(profile, LineProfile) and bool(
-        profile.width_anchors or profile.visibility_anchors
+        profile.anchors
     )
 
 
