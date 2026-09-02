@@ -770,7 +770,7 @@ class MainWindow(QtWidgets.QMainWindow):
             text=self.tr("Quadratic Bezier"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier2"),
             shortcut=shortcuts["create_bezier2"],
-            icon="phosphor/line-segment.svg",
+            icon="phosphor/bezier-quadratic.svg",
             tip=self.tr("Start drawing a quadratic Bezier curve (3 points)"),
             enabled=False,
         )
@@ -778,7 +778,7 @@ class MainWindow(QtWidgets.QMainWindow):
             text=self.tr("Cubic Bezier"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier3"),
             shortcut=shortcuts["create_bezier3"],
-            icon="phosphor/line-segment.svg",
+            icon="phosphor/bezier-cubic.svg",
             tip=self.tr("Start drawing a cubic Bezier curve (4 points)"),
             enabled=False,
         )
