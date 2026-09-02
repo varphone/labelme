@@ -53,6 +53,35 @@ def _render(shape: Shape, *, show_label: bool, scale: float = 1.0) -> QtGui.QIma
     return image
 
 
+@pytest.mark.parametrize("shape_type", ["catmull_rom", "bspline"])
+def test_open_spline_is_not_filled_when_selected(shape_type: ShapeType) -> None:
+    shape = Shape(
+        shape_type=shape_type,
+        points=np.array([[20, 80], [60, 20], [100, 80]], dtype=np.float64),
+        closed=False,
+    )
+    image = QtGui.QImage(120, 100, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtGui.QColor(255, 255, 255))
+    painter = QtGui.QPainter(image)
+    render_shape(
+        painter=painter,
+        shape=shape,
+        context=ShapeRenderContext(
+            scale=1.0,
+            palette=Palette.from_rgb(rgb=(255, 0, 0)),
+            point_size=8,
+            point_type="round",
+            selected=True,
+            fill=True,
+            highlight=None,
+            rotation_highlight=None,
+        ),
+    )
+    painter.end()
+
+    assert image.pixelColor(60, 50) == QtGui.QColor(255, 255, 255)
+
+
 def _diff_rows(a: QtGui.QImage, b: QtGui.QImage, *, bottom: int) -> int:
     # Only the label text differs between renders; everything else (outline,
     # vertices) is identical, so the per-pixel diff isolates the text. Restrict

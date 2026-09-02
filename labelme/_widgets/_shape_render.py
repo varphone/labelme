@@ -211,14 +211,7 @@ def _paint_shape_points(
         highlighted=context.rotation_highlight is not None,
         palette=palette,
     )
-    if context.fill and shape.shape_type not in [
-        "line",
-        "linestrip",
-        "bezier2",
-        "bezier3",
-        "points",
-        "mask",
-    ]:
+    if context.fill and shape.closed and shape.shape_type not in ["points", "mask"]:
         fill = palette.select_fill if context.selected else palette.fill
         painter.fillPath(paths.line, fill)
     if paths.orientation_arrow.length() > 0:
