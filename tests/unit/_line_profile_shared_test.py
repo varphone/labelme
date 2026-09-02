@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+from labelme._line_measurement import MeasurementSample
 from labelme._line_profile import LineProfile
 from labelme._line_profile import ProfileAnchor
 from labelme._line_profile import ProfileValue
@@ -81,3 +82,13 @@ def test_geometry_transforms_move_shared_positions_once() -> None:
     assert left.anchors[0].width is not None
     assert left.anchors[0].visibility is not None
     assert right.anchors[0].visibility is not None
+
+
+def test_measurement_sample_can_emit_one_optional_profile_property() -> None:
+    sample = MeasurementSample(0.25, 8.0, 0.6, 0.9)
+
+    anchor = sample.to_profile_anchor(include_visibility=False)
+
+    assert anchor.width is not None
+    assert anchor.width.value == 8.0
+    assert anchor.visibility is None

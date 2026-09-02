@@ -16,7 +16,6 @@ from ._line_measurement import MeasurementSample
 from ._line_measurement import measure_line_profile
 from ._line_profile import LineProfile
 from ._line_profile import ProfileAnchor
-from ._line_profile import ProfileValue
 from ._utils.image import img_data_to_arr
 
 
@@ -262,19 +261,20 @@ def _profile_from_measurement(
             ),
             None,
         )
+        measured_anchor = sample.to_profile_anchor()
         width = (
             None
             if current is not None
             and current.width is not None
             and current.width.confirmed
-            else ProfileValue(sample.width, "auto", sample.confidence, False)
+            else measured_anchor.width
         )
         visibility = (
             None
             if current is not None
             and current.visibility is not None
             and current.visibility.confirmed
-            else ProfileValue(sample.visibility, "auto", sample.confidence, False)
+            else measured_anchor.visibility
         )
         measured.append(ProfileAnchor(sample.position, width, visibility))
     merged: list[ProfileAnchor] = []

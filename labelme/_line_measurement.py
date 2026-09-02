@@ -8,6 +8,8 @@ from collections.abc import Sequence
 import numpy as np
 from numpy.typing import NDArray
 
+from ._line_profile import ProfileAnchor
+from ._line_profile import ProfileValue
 from ._line_profile import cumulative_lengths
 from ._line_profile import position_to_point
 
@@ -40,6 +42,27 @@ class MeasurementSample:
     visibility: float
     confidence: float
     reason: str | None = None
+
+    def to_profile_anchor(
+        self,
+        *,
+        include_width: bool = True,
+        include_visibility: bool = True,
+    ) -> ProfileAnchor:
+        """Convert one sample without coupling width and visibility presence."""
+        return ProfileAnchor(
+            position=self.position,
+            width=(
+                None
+                if not include_width
+                else ProfileValue(self.width, "auto", self.confidence, False)
+            ),
+            visibility=(
+                None
+                if not include_visibility
+                else ProfileValue(self.visibility, "auto", self.confidence, False)
+            ),
+        )
 
 
 @dataclasses.dataclass(frozen=True)
@@ -107,9 +130,7 @@ def _sample_positions(
     count = max(2, int(math.ceil(total_length / sample_spacing)) + 1)
     regular = [float(position) for position in np.linspace(0.0, 1.0, count)]
     vertices = [
-        length / total_length
-        for length in lengths[1:-1]
-        if 0.0 < length < total_length
+        length / total_length for length in lengths[1:-1] if 0.0 < length < total_length
     ]
     positions: list[float] = []
     for position in sorted((*regular, *vertices)):
@@ -413,14 +434,11 @@ def _recommend_neighbor_widths(
             recommended_width = None
 
         if sample.confidence >= 0.5:
-            if (
-                recommended_width is not None
-                and _is_isolated_width_outlier(
-                    width=sample.width,
-                    recommended_width=recommended_width,
-                    left_width=left.width,
-                    right_width=right.width,
-                )
+            if recommended_width is not None and _is_isolated_width_outlier(
+                width=sample.width,
+                recommended_width=recommended_width,
+                left_width=left.width,
+                right_width=right.width,
             ):
                 result.append(
                     dataclasses.replace(
