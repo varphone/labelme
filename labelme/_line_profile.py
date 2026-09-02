@@ -305,7 +305,11 @@ class LineProfile:
         _validate_position(position, field="position")
         return _interpolate(
             position=position,
-            anchors=[(anchor.position, anchor.width) for anchor in self.width_anchors],
+            anchors=[
+                (anchor.position, anchor.width.value)
+                for anchor in self.anchors
+                if anchor.width is not None
+            ],
         )
 
     def evaluate_visibility(self, position: float) -> float | None:
@@ -313,8 +317,9 @@ class LineProfile:
         return _interpolate(
             position=position,
             anchors=[
-                (anchor.position, anchor.visibility)
-                for anchor in self.visibility_anchors
+                (anchor.position, anchor.visibility.value)
+                for anchor in self.anchors
+                if anchor.visibility is not None
             ],
         )
 
@@ -928,20 +933,14 @@ def extend_profile(
     if start_position >= end_position:
         raise ValueError("start_position must be less than end_position")
     scale = end_position - start_position
-    return dataclasses.replace(
+    return _replace_profile_anchors(
         profile,
-        width_anchors=tuple(
+        [
             dataclasses.replace(
                 anchor, position=start_position + anchor.position * scale
             )
-            for anchor in profile.width_anchors
-        ),
-        visibility_anchors=tuple(
-            dataclasses.replace(
-                anchor, position=start_position + anchor.position * scale
-            )
-            for anchor in profile.visibility_anchors
-        ),
+            for anchor in profile.anchors
+        ],
     )
 
 
@@ -949,21 +948,37 @@ def resample_profile(profile: LineProfile, positions: Sequence[float]) -> LinePr
     """Sample both curves at fixed normalized positions without changing values."""
     normalized_positions = [float(position) for position in positions]
     _validate_positions(positions=normalized_positions, field="positions")
-    return dataclasses.replace(
-        profile,
-        width_anchors=_resample_anchor_set(
-            profile.width_anchors,
-            profile.evaluate_width,
-            normalized_positions,
-            WidthAnchor,
-        ),
-        visibility_anchors=_resample_anchor_set(
-            profile.visibility_anchors,
-            profile.evaluate_visibility,
-            normalized_positions,
-            VisibilityAnchor,
-        ),
-    )
+    anchors: list[ProfileAnchor] = []
+    for position in normalized_positions:
+        original = next(
+            (
+                anchor
+                for anchor in profile.anchors
+                if math.isclose(anchor.position, position, abs_tol=1e-9)
+            ),
+            None,
+        )
+        width = (
+            original.width
+            if original is not None
+            else _auto_profile_value(profile.evaluate_width(position), "width")
+        )
+        visibility = (
+            original.visibility
+            if original is not None
+            else _auto_profile_value(
+                profile.evaluate_visibility(position), "visibility"
+            )
+        )
+        if width is not None or visibility is not None:
+            anchors.append(ProfileAnchor(position, width, visibility))
+    return _replace_profile_anchors(profile, anchors)
+
+
+def _auto_profile_value(value: float | None, property_name: str) -> ProfileValue | None:
+    if value is None:
+        return None
+    return ProfileValue(value, "auto", 0.0, False)
 
 
 def insert_width_anchor(
