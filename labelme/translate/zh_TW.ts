@@ -735,7 +735,7 @@ Shapes</source>
     </message>
     <message>
         <source>Quadratic Bezier</source>
-        <translation>Quadratic Bezier</translation>
+        <translation>二階曲線</translation>
     </message>
     <message>
         <source>Start drawing a quadratic Bezier curve (3 points)</source>
@@ -743,7 +743,7 @@ Shapes</source>
     </message>
     <message>
         <source>Cubic Bezier</source>
-        <translation>Cubic Bezier</translation>
+        <translation>三階曲線</translation>
     </message>
     <message>
         <source>Start drawing a cubic Bezier curve (4 points)</source>
