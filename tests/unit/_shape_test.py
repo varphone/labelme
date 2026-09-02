@@ -61,9 +61,9 @@ def test_shape_vertex_edit_remaps_profile_and_copy_is_independent() -> None:
     shape.move_vertex(i=1, pos=(20.0, 0.0))
 
     assert shape.line_profile is not None
-    assert shape.line_profile.width_anchors[0].position == pytest.approx(0.25)
+    assert shape.line_profile.anchors[0].position == pytest.approx(0.25)
     assert copied.line_profile is not None
-    assert copied.line_profile.width_anchors[0].position == pytest.approx(0.5)
+    assert copied.line_profile.anchors[0].position == pytest.approx(0.5)
 
 
 def test_shape_translation_does_not_change_profile() -> None:

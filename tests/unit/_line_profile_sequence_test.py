@@ -4,7 +4,8 @@ import numpy as np
 import pytest
 
 from labelme._line_profile import LineProfile
-from labelme._line_profile import WidthAnchor
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
 from labelme._line_profile_sequence import compare_frames
 from labelme._line_profile_sequence import frame_sort_key
 from labelme._line_profile_sequence import transfer_frame_profiles
@@ -23,7 +24,7 @@ def _shape(label: str, x: float, profile: LineProfile | None) -> Shape:
 
 def test_frame_mapping_validates_and_transfers_only_profile_data() -> None:
     profile = LineProfile(
-        width_anchors=(WidthAnchor(0.0, 4.0, "manual", 1.0, True),)
+        anchors=(ProfileAnchor(0.0, ProfileValue(4.0, "manual", 1.0, True)),)
     )
     previous = [_shape("stripe", 0.0, profile)]
     current = [_shape("stripe", 1.0, None)]
@@ -49,7 +50,7 @@ def test_frame_comparison_reports_centerline_and_curve_differences() -> None:
             "stripe",
             0.0,
             LineProfile(
-                width_anchors=(WidthAnchor(0.0, 4.0, "auto", 0.8, False),)
+                anchors=(ProfileAnchor(0.0, ProfileValue(4.0, "auto", 0.8, False)),)
             ),
         )
     ]
@@ -58,7 +59,7 @@ def test_frame_comparison_reports_centerline_and_curve_differences() -> None:
             "stripe",
             3.0,
             LineProfile(
-                width_anchors=(WidthAnchor(0.0, 6.0, "auto", 0.8, False),)
+                anchors=(ProfileAnchor(0.0, ProfileValue(6.0, "auto", 0.8, False)),)
             ),
         )
     ]
