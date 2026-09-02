@@ -217,9 +217,7 @@ def _measure_annotation_file(
         status,
         processed,
         output_filename=(
-            None
-            if not processed or options.dry_run or target is None
-            else str(target)
+            None if not processed or options.dry_run or target is None else str(target)
         ),
         backup_filename=(None if options.dry_run else backup_filename),
     )
@@ -257,11 +255,27 @@ def _profile_from_measurement(
     measured: list[ProfileAnchor] = []
     for sample in samples:
         current = next(
-            (anchor for position, anchor in manual.items() if abs(position - sample.position) <= 1e-6),
+            (
+                anchor
+                for position, anchor in manual.items()
+                if abs(position - sample.position) <= 1e-6
+            ),
             None,
         )
-        width = None if current is not None and current.width is not None and current.width.confirmed else ProfileValue(sample.width, "auto", sample.confidence, False)
-        visibility = None if current is not None and current.visibility is not None and current.visibility.confirmed else ProfileValue(sample.visibility, "auto", sample.confidence, False)
+        width = (
+            None
+            if current is not None
+            and current.width is not None
+            and current.width.confirmed
+            else ProfileValue(sample.width, "auto", sample.confidence, False)
+        )
+        visibility = (
+            None
+            if current is not None
+            and current.visibility is not None
+            and current.visibility.confirmed
+            else ProfileValue(sample.visibility, "auto", sample.confidence, False)
+        )
         measured.append(ProfileAnchor(sample.position, width, visibility))
     merged: list[ProfileAnchor] = []
     for anchor in (*manual.values(), *measured):
@@ -289,9 +303,7 @@ def _profile_from_measurement(
 
 
 def _profile_has_anchors(profile: object) -> bool:
-    return isinstance(profile, LineProfile) and bool(
-        profile.anchors
-    )
+    return isinstance(profile, LineProfile) and bool(profile.anchors)
 
 
 def _parameters_for_profile(

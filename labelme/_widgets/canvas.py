@@ -175,9 +175,10 @@ class Canvas(QtWidgets.QWidget):
     _hovered_rotation: int | None
     active_line_profile_anchor_kind: Literal["width", "visibility"] | None
     active_line_profile_anchor_index: int | None
-    _line_profile_drag: tuple[
-        Shape, Literal["width", "visibility"], int, Literal["position", "width"]
-    ] | None
+    _line_profile_drag: (
+        tuple[Shape, Literal["width", "visibility"], int, Literal["position", "width"]]
+        | None
+    )
     _line_profile_hover: tuple[Literal["width", "visibility"], int, int] | None
 
     zoom_request = QtCore.Signal(int, QPointF)
@@ -1573,12 +1574,15 @@ class Canvas(QtWidgets.QWidget):
 
     def _find_line_profile_anchor_at_point(
         self, point: QPointF
-    ) -> tuple[
-        Shape,
-        Literal["width", "visibility"],
-        int,
-        Literal["position", "width"],
-    ] | None:
+    ) -> (
+        tuple[
+            Shape,
+            Literal["width", "visibility"],
+            int,
+            Literal["position", "width"],
+        ]
+        | None
+    ):
         # Preview visibility also controls whether profile anchors participate
         # in interaction. A hidden anchor must not mask the linestrip vertex
         # underneath it when the user edits the original annotation.
@@ -1647,7 +1651,6 @@ class Canvas(QtWidgets.QWidget):
             for index, anchor in enumerate(shape.line_profile.anchors):
                 if anchor.visibility is None:
                     continue
-                visibility = anchor.visibility
                 marker = _line_profile_circle_shape(
                     points=shape.points,
                     position=anchor.position,
@@ -1940,10 +1943,11 @@ class Canvas(QtWidgets.QWidget):
             if active:
                 color = self.palette().color(QtGui.QPalette.ColorRole.Highlight)
                 color.setAlpha(255)
-            hovered_handle = (
-                self._line_profile_hover == ("width", index, 0)
-                or self._line_profile_hover == ("width", index, 1)
-            )
+            hovered_handle = self._line_profile_hover == (
+                "width",
+                index,
+                0,
+            ) or self._line_profile_hover == ("width", index, 1)
             render_shape(
                 painter=painter,
                 shape=circle,
@@ -1955,9 +1959,7 @@ class Canvas(QtWidgets.QWidget):
                     selected=True,
                     fill=True,
                     highlight=(
-                        VertexHighlight(
-                            index=self._line_profile_hover[2], mode="move"
-                        )
+                        VertexHighlight(index=self._line_profile_hover[2], mode="move")
                         if hovered_handle and self._line_profile_hover is not None
                         else None
                     ),
@@ -2602,9 +2604,7 @@ def _line_profile_circle_shape(
     )
 
 
-def _line_profile_point_distance(
-    *, point: QPointF, target: Sequence[float]
-) -> float:
+def _line_profile_point_distance(*, point: QPointF, target: Sequence[float]) -> float:
     return math.hypot(point.x() - target[0], point.y() - target[1])
 
 
