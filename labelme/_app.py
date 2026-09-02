@@ -62,6 +62,7 @@ from ._line_profile import point_to_position
 from ._line_profile import position_to_point
 from ._line_profile import remove_visibility_anchor
 from ._line_profile import remove_width_anchor
+from ._line_profile import remove_profile_property
 from ._line_profile import reverse_profile
 from ._line_profile import update_profile_anchor
 from ._line_profile_batch import BatchOptions
@@ -2513,11 +2514,7 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         shape = selected[0]
         profile = shape.line_profile
-        anchors = (
-            profile.width_anchors
-            if self._active_line_profile_anchor_kind == "width"
-            else profile.visibility_anchors
-        )
+        anchors = profile.anchors
         if not anchors:
             return
         position = self._profile_anchor_position_for_insert(anchors)
@@ -2531,8 +2528,10 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         shape.line_profile = updated_profile
         self._canvas_widgets.canvas.backup_shapes()
-        self._active_line_profile_anchor_index = min(
-            self._active_line_profile_anchor_index + 1, len(anchors)
+        self._active_line_profile_anchor_index = next(
+            (index for index, anchor in enumerate(updated_profile.anchors)
+             if math.isclose(anchor.position, position, abs_tol=1e-9)),
+            min(self._active_line_profile_anchor_index + 1, len(updated_profile.anchors) - 1),
         )
         self.mark_dirty()
         self._sync_line_profile_widgets()
@@ -2544,12 +2543,10 @@ class MainWindow(QtWidgets.QMainWindow):
         shape = selected[0]
         profile = shape.line_profile
         try:
-            updated_profile = (
-                remove_width_anchor(profile, self._active_line_profile_anchor_index)
-                if self._active_line_profile_anchor_kind == "width"
-                else remove_visibility_anchor(
-                    profile, self._active_line_profile_anchor_index
-                )
+            updated_profile = remove_profile_property(
+                profile,
+                self._active_line_profile_anchor_index,
+                self._active_line_profile_anchor_kind,
             )
         except IndexError:
             return
