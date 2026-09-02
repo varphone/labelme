@@ -30,7 +30,7 @@ _MEASUREMENT_OVERRIDE_KEYS = frozenset(
     }
 )
 
-CURRENT_SCHEMA_VERSION = 1
+CURRENT_SCHEMA_VERSION = 2
 DEFAULT_PARAMETERIZATION: Parameterization = "normalized_arc_length"
 
 
@@ -50,10 +50,24 @@ class VisibilityAnchorDict(TypedDict):
     confirmed: bool
 
 
+class ProfileValueDict(TypedDict):
+    value: float
+    source: AnchorSource
+    confidence: float
+    confirmed: bool
+
+
+class ProfileAnchorDict(TypedDict):
+    position: float
+    width: ProfileValueDict | None
+    visibility: ProfileValueDict | None
+
+
 class LineProfileDict(TypedDict):
     schema_version: int
     path_mode: PathMode
     parameterization: Parameterization
+    anchors: list[ProfileAnchorDict]
     width_anchors: list[WidthAnchorDict]
     visibility_anchors: list[VisibilityAnchorDict]
     min_width: float | None
@@ -81,6 +95,25 @@ class VisibilityAnchor:
     confirmed: bool
 
 
+@dataclasses.dataclass(frozen=True)
+class ProfileValue:
+    """Metadata and value for one independently measured profile property."""
+
+    value: float
+    source: AnchorSource
+    confidence: float
+    confirmed: bool
+
+
+@dataclasses.dataclass(frozen=True)
+class ProfileAnchor:
+    """A shared position carrying optional width and visibility observations."""
+
+    position: float
+    width: ProfileValue | None = None
+    visibility: ProfileValue | None = None
+
+
 Anchor = WidthAnchor | VisibilityAnchor
 
 
@@ -96,13 +129,14 @@ class LineProfile:
     measurement_version: str | None = None
     reviewed: bool = False
     measurement_overrides: tuple[tuple[MeasurementOverrideKey, float], ...] = ()
+    anchors: tuple[ProfileAnchor, ...] = ()
 
     def __post_init__(self) -> None:
         if isinstance(self.schema_version, bool) or not isinstance(
             self.schema_version, int
         ):
             raise ValueError("schema_version must be an int")
-        if self.schema_version != CURRENT_SCHEMA_VERSION:
+        if self.schema_version not in (1, CURRENT_SCHEMA_VERSION):
             raise ValueError(
                 f"unsupported line_profile schema_version: {self.schema_version}"
             )
@@ -141,6 +175,13 @@ class LineProfile:
             positions=[anchor.position for anchor in self.visibility_anchors],
             field="visibility_anchors",
         )
+        if self.anchors and not self.width_anchors and not self.visibility_anchors:
+            object.__setattr__(self, "width_anchors", _legacy_width_anchors(self.anchors))
+            object.__setattr__(self, "visibility_anchors", _legacy_visibility_anchors(self.anchors))
+        object.__setattr__(self, "anchors", _merge_legacy_anchors(
+            self.width_anchors, self.visibility_anchors
+        ))
+        _validate_shared_anchors(self.anchors, min_width=min_width, max_width=max_width)
 
     @classmethod
     def from_json_obj(cls, value: object) -> LineProfile:
@@ -153,6 +194,24 @@ class LineProfile:
         parameterization = _required_literal(
             value, "parameterization", (DEFAULT_PARAMETERIZATION,)
         )
+        if schema_version == 2:
+            anchors = tuple(
+                _profile_anchor_from_json(item, index=index)
+                for index, item in enumerate(_required_list(value, "anchors"))
+            )
+            return cls(
+                schema_version=schema_version,
+                path_mode=cast(PathMode, path_mode),
+                parameterization=cast(Parameterization, parameterization),
+                min_width=_optional_number(value, "min_width"),
+                max_width=_optional_number(value, "max_width"),
+                measurement_version=value.get("measurement_version"),
+                reviewed=value.get("reviewed"),
+                measurement_overrides=_measurement_overrides_from_json(
+                    value.get("measurement_overrides")
+                ),
+                anchors=anchors,
+            )
         width_anchors = tuple(
             _width_anchor_from_json(item, index=index)
             for index, item in enumerate(_required_list(value, "width_anchors"))
@@ -190,6 +249,20 @@ class LineProfile:
         )
 
     def to_json_obj(self) -> LineProfileDict:
+        if self.schema_version == 2:
+            result: LineProfileDict = {
+                "schema_version": self.schema_version,
+                "path_mode": self.path_mode,
+                "parameterization": self.parameterization,
+                "anchors": [_profile_anchor_to_json(anchor) for anchor in self.anchors],
+                "min_width": self.min_width,
+                "max_width": self.max_width,
+                "measurement_version": self.measurement_version,
+                "reviewed": self.reviewed,
+            }
+            if self.measurement_overrides:
+                result["measurement_overrides"] = dict(self.measurement_overrides)
+            return result
         result: LineProfileDict = {
             "schema_version": self.schema_version,
             "path_mode": self.path_mode,
@@ -240,6 +313,33 @@ class LineProfile:
             ],
         )
 
+    @property
+    def width_anchor_count(self) -> int:
+        return sum(anchor.width is not None for anchor in self.anchors)
+
+    @property
+    def visibility_anchor_count(self) -> int:
+        return sum(anchor.visibility is not None for anchor in self.anchors)
+
+
+def validate_profile(profile: LineProfile) -> None:
+    """Validate a profile explicitly at application boundaries.
+
+    ``LineProfile`` validates itself on construction; this named function keeps
+    validation available to codecs and result-acceptance services without
+    duplicating the invariants.
+    """
+    if not isinstance(profile, LineProfile):
+        raise TypeError("profile must be a LineProfile")
+    profile.__post_init__()
+
+
+def evaluate_profile(
+    profile: LineProfile, position: float
+) -> tuple[float | None, float | None]:
+    """Evaluate width and visibility independently at one shared position."""
+    return profile.evaluate_width(position), profile.evaluate_visibility(position)
+
 
 def migrate_line_profile_json(value: object) -> dict[str, Any]:
     """Apply explicit, idempotent schema migrations to a JSON object.
@@ -251,11 +351,131 @@ def migrate_line_profile_json(value: object) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError("line_profile must be an object")
     version = _required_int(value, "schema_version")
-    if version != CURRENT_SCHEMA_VERSION:
+    if version not in (1, CURRENT_SCHEMA_VERSION):
         raise ValueError(
             f"no line_profile migration is available for schema_version {version}"
         )
     return dict(value)
+
+
+def _profile_value_to_json(value: ProfileValue) -> ProfileValueDict:
+    return {
+        "value": value.value,
+        "source": value.source,
+        "confidence": value.confidence,
+        "confirmed": value.confirmed,
+    }
+
+
+def _profile_anchor_to_json(anchor: ProfileAnchor) -> ProfileAnchorDict:
+    return {
+        "position": anchor.position,
+        "width": None if anchor.width is None else _profile_value_to_json(anchor.width),
+        "visibility": (
+            None
+            if anchor.visibility is None
+            else _profile_value_to_json(anchor.visibility)
+        ),
+    }
+
+
+def _profile_value_from_json(value: object, *, field: str) -> ProfileValue | None:
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise ValueError(f"{field} must be an object or null")
+    source = _required_literal(value, "source", ("auto", "manual"))
+    confirmed = value.get("confirmed")
+    if not isinstance(confirmed, bool):
+        raise ValueError(f"{field}.confirmed must be bool")
+    return ProfileValue(
+        value=_required_number(value, "value"),
+        source=cast(AnchorSource, source),
+        confidence=_required_number(value, "confidence"),
+        confirmed=confirmed,
+    )
+
+
+def _profile_anchor_from_json(value: object, *, index: int) -> ProfileAnchor:
+    field = f"anchors[{index}]"
+    if not isinstance(value, dict):
+        raise ValueError(f"{field} must be an object")
+    anchor = ProfileAnchor(
+        position=_required_number(value, "position"),
+        width=_profile_value_from_json(value.get("width"), field=f"{field}.width"),
+        visibility=_profile_value_from_json(
+            value.get("visibility"), field=f"{field}.visibility"
+        ),
+    )
+    if anchor.width is None and anchor.visibility is None:
+        raise ValueError(f"{field} must contain width or visibility")
+    return anchor
+
+
+def _merge_legacy_anchors(
+    width_anchors: Sequence[WidthAnchor],
+    visibility_anchors: Sequence[VisibilityAnchor],
+) -> tuple[ProfileAnchor, ...]:
+    positions = sorted({anchor.position for anchor in (*width_anchors, *visibility_anchors)})
+    result: list[ProfileAnchor] = []
+    for position in positions:
+        width = next((a for a in width_anchors if math.isclose(a.position, position, abs_tol=1e-9)), None)
+        visibility = next(
+            (a for a in visibility_anchors if math.isclose(a.position, position, abs_tol=1e-9)),
+            None,
+        )
+        result.append(
+            ProfileAnchor(
+                position=position,
+                width=None if width is None else ProfileValue(width.width, width.source, width.confidence, width.confirmed),
+                visibility=None if visibility is None else ProfileValue(visibility.visibility, visibility.source, visibility.confidence, visibility.confirmed),
+            )
+        )
+    return tuple(result)
+
+
+def _legacy_width_anchors(anchors: Sequence[ProfileAnchor]) -> tuple[WidthAnchor, ...]:
+    return tuple(
+        WidthAnchor(a.position, a.width.value, a.width.source, a.width.confidence, a.width.confirmed)
+        for a in anchors if a.width is not None
+    )
+
+
+def _legacy_visibility_anchors(anchors: Sequence[ProfileAnchor]) -> tuple[VisibilityAnchor, ...]:
+    return tuple(
+        VisibilityAnchor(a.position, a.visibility.value, a.visibility.source, a.visibility.confidence, a.visibility.confirmed)
+        for a in anchors if a.visibility is not None
+    )
+
+
+def _validate_shared_anchors(
+    anchors: Sequence[ProfileAnchor], *, min_width: float | None, max_width: float | None
+) -> None:
+    _validate_positions(positions=[anchor.position for anchor in anchors], field="anchors")
+    for index, anchor in enumerate(anchors):
+        if anchor.width is None and anchor.visibility is None:
+            raise ValueError(f"anchors[{index}] must contain width or visibility")
+        if anchor.width is not None:
+            _validate_profile_value(anchor.width, field=f"anchors[{index}].width")
+            if min_width is not None and anchor.width.value < min_width:
+                raise ValueError("width anchor is below min_width")
+            if max_width is not None and anchor.width.value > max_width:
+                raise ValueError("width anchor exceeds max_width")
+        if anchor.visibility is not None:
+            _validate_profile_value(anchor.visibility, field=f"anchors[{index}].visibility")
+
+
+def _validate_profile_value(value: ProfileValue, *, field: str) -> None:
+    if not math.isfinite(value.value):
+        raise ValueError(f"{field}.value must be finite")
+    _validate_confidence(value.confidence)
+    _validate_source(value.source)
+    if not isinstance(value.confirmed, bool):
+        raise ValueError(f"{field}.confirmed must be bool")
+    if field.endswith(".width") and value.value <= 0:
+        raise ValueError(f"{field}.value must be positive")
+    if field.endswith(".visibility") and not 0.0 <= value.value <= 1.0:
+        raise ValueError(f"{field}.value must be within [0, 1]")
 
 
 def _measurement_overrides_from_json(
@@ -577,28 +797,25 @@ def remap_profile(
         raise ValueError("old_points and new_points must not be empty")
     if _is_translation(old_points=old_points, new_points=new_points):
         return profile
-    width_anchors = _remap_width_anchors(profile.width_anchors, old_points, new_points)
-    visibility_anchors = _remap_visibility_anchors(
-        profile.visibility_anchors, old_points, new_points
-    )
-    return dataclasses.replace(
-        profile,
-        width_anchors=width_anchors,
-        visibility_anchors=visibility_anchors,
-    )
+    remapped = [
+        dataclasses.replace(
+            anchor,
+            position=point_to_position(
+                new_points, position_to_point(old_points, anchor.position)
+            ),
+        )
+        for anchor in profile.anchors
+    ]
+    return _replace_profile_anchors(profile, _deduplicate_shared_anchors(remapped))
 
 
 def reverse_profile(profile: LineProfile) -> LineProfile:
-    return dataclasses.replace(
+    return _replace_profile_anchors(
         profile,
-        width_anchors=tuple(
+        [
             dataclasses.replace(anchor, position=1.0 - anchor.position)
-            for anchor in reversed(profile.width_anchors)
-        ),
-        visibility_anchors=tuple(
-            dataclasses.replace(anchor, position=1.0 - anchor.position)
-            for anchor in reversed(profile.visibility_anchors)
-        ),
+            for anchor in reversed(profile.anchors)
+        ],
     )
 
 
@@ -689,23 +906,19 @@ def insert_width_anchor(
 ) -> LineProfile:
     """Insert one width anchor, deriving its value from the current curve."""
     _validate_position(position, field="position")
-    if any(
-        math.isclose(anchor.position, position, abs_tol=1e-9)
-        for anchor in profile.width_anchors
-    ):
+    if any(math.isclose(anchor.position, position, abs_tol=1e-9) for anchor in profile.width_anchors):
         raise ValueError("width anchor position already exists")
     value = profile.evaluate_width(position) if width is None else width
     if value is None:
         raise ValueError("cannot insert a width anchor into an empty curve")
-    anchor = WidthAnchor(position, value, source, confidence, confirmed)
-    return dataclasses.replace(
-        profile,
-        width_anchors=tuple(
-            sorted(
-                (*profile.width_anchors, anchor), key=lambda item: item.position
-            )
-        ),
-    )
+    value_obj = ProfileValue(value, source, confidence, confirmed)
+    shared = list(profile.anchors)
+    existing = next((a for a in shared if math.isclose(a.position, position, abs_tol=1e-9)), None)
+    if existing is None:
+        shared.append(ProfileAnchor(position, width=value_obj))
+    else:
+        shared[shared.index(existing)] = dataclasses.replace(existing, width=value_obj)
+    return _replace_profile_anchors(profile, shared)
 
 
 def insert_visibility_anchor(
@@ -719,10 +932,7 @@ def insert_visibility_anchor(
 ) -> LineProfile:
     """Insert one visibility anchor, deriving its value from the current curve."""
     _validate_position(position, field="position")
-    if any(
-        math.isclose(anchor.position, position, abs_tol=1e-9)
-        for anchor in profile.visibility_anchors
-    ):
+    if any(math.isclose(anchor.position, position, abs_tol=1e-9) for anchor in profile.visibility_anchors):
         raise ValueError("visibility anchor position already exists")
     value = (
         profile.evaluate_visibility(position)
@@ -731,16 +941,14 @@ def insert_visibility_anchor(
     )
     if value is None:
         raise ValueError("cannot insert a visibility anchor into an empty curve")
-    anchor = VisibilityAnchor(position, value, source, confidence, confirmed)
-    return dataclasses.replace(
-        profile,
-        visibility_anchors=tuple(
-            sorted(
-                (*profile.visibility_anchors, anchor),
-                key=lambda item: item.position,
-            )
-        ),
-    )
+    value_obj = ProfileValue(value, source, confidence, confirmed)
+    shared = list(profile.anchors)
+    existing = next((a for a in shared if math.isclose(a.position, position, abs_tol=1e-9)), None)
+    if existing is None:
+        shared.append(ProfileAnchor(position, visibility=value_obj))
+    else:
+        shared[shared.index(existing)] = dataclasses.replace(existing, visibility=value_obj)
+    return _replace_profile_anchors(profile, shared)
 
 
 def remove_width_anchor(profile: LineProfile, index: int) -> LineProfile:
@@ -766,6 +974,89 @@ def remove_visibility_anchor(profile: LineProfile, index: int) -> LineProfile:
             + profile.visibility_anchors[index + 1 :]
         ),
     )
+
+
+def remove_profile_property(
+    profile: LineProfile, index: int, property_name: Literal["width", "visibility"]
+) -> LineProfile:
+    """Remove one property while retaining the shared anchor when possible."""
+    if property_name not in ("width", "visibility"):
+        raise ValueError("property_name must be 'width' or 'visibility'")
+    if not 0 <= index < len(profile.anchors):
+        raise IndexError("profile anchor index is out of range")
+    anchor = profile.anchors[index]
+    updated = dataclasses.replace(anchor, **{property_name: None})
+    anchors = list(profile.anchors)
+    if updated.width is None and updated.visibility is None:
+        del anchors[index]
+    else:
+        anchors[index] = updated
+    return _replace_profile_anchors(profile, anchors)
+
+
+def update_profile_anchor(
+    profile: LineProfile,
+    index: int,
+    *,
+    position: float | None = None,
+    width: ProfileValue | None | object = ...,
+    visibility: ProfileValue | None | object = ...,
+) -> LineProfile:
+    """Update a shared anchor without losing its other optional property."""
+    if not 0 <= index < len(profile.anchors):
+        raise IndexError("profile anchor index is out of range")
+    anchor = profile.anchors[index]
+    updated = dataclasses.replace(
+        anchor,
+        position=anchor.position if position is None else position,
+        width=anchor.width if width is ... else width,
+        visibility=anchor.visibility if visibility is ... else visibility,
+    )
+    anchors = list(profile.anchors)
+    anchors[index] = updated
+    return _replace_profile_anchors(profile, anchors)
+
+
+def _replace_profile_anchors(
+    profile: LineProfile, anchors: Sequence[ProfileAnchor]
+) -> LineProfile:
+    """Create a profile from one canonical, sorted shared-anchor sequence."""
+    ordered = tuple(sorted(anchors, key=lambda anchor: anchor.position))
+    return dataclasses.replace(
+        profile,
+        anchors=ordered,
+        width_anchors=_legacy_width_anchors(ordered),
+        visibility_anchors=_legacy_visibility_anchors(ordered),
+    )
+
+
+def _deduplicate_shared_anchors(
+    anchors: Sequence[ProfileAnchor],
+) -> tuple[ProfileAnchor, ...]:
+    result: list[ProfileAnchor] = []
+    for anchor in sorted(anchors, key=lambda item: item.position):
+        if result and math.isclose(result[-1].position, anchor.position, abs_tol=1e-9):
+            previous = result[-1]
+            result[-1] = ProfileAnchor(
+                position=previous.position,
+                width=_prefer_profile_value(previous.width, anchor.width),
+                visibility=_prefer_profile_value(previous.visibility, anchor.visibility),
+            )
+        else:
+            result.append(anchor)
+    return tuple(result)
+
+
+def _prefer_profile_value(
+    left: ProfileValue | None, right: ProfileValue | None
+) -> ProfileValue | None:
+    if left is None:
+        return right
+    if right is None:
+        return left
+    left_rank = (int(left.confirmed), int(left.source == "manual"), left.confidence)
+    right_rank = (int(right.confirmed), int(right.source == "manual"), right.confidence)
+    return right if right_rank > left_rank else left
 
 
 def split_profile(

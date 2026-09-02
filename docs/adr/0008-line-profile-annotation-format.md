@@ -19,11 +19,12 @@ tools. The format also needs to remain readable by older LabelMe versions.
   vertices can remap the profile deterministically.
 - Store width as the full diameter. The Canvas may display a circular handle
   using half that value, but serialization always uses `width`.
-- Keep width and visibility anchors as separate sorted sequences. Each anchor
-  carries `position`, its value, `source`, `confidence`, and `confirmed`.
-- Use explicit `schema_version` and `measurement_version` fields. Version 1 has
-  no heuristic migration; unsupported or malformed profiles remain as raw data
-  with a load error and are not silently discarded.
+- Store one sorted `anchors` sequence. Each shared anchor has one `position`
+  and optional `width` and `visibility` values; each value carries its own
+  `source`, `confidence`, and `confirmed` metadata.
+- Use explicit `schema_version=2` and `measurement_version` fields. The
+  unified `anchors` format is strict; unsupported or malformed profiles remain
+  as raw data with a load error and are not silently discarded.
 - Do not create ordinary `circle`, `point`, polygon, or mask Shapes for profile
   handles or previews.
 
