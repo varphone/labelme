@@ -7,6 +7,10 @@ Labelme supports two open Bezier annotation shapes:
 - `bezier3` is a cubic (third-order) curve with four points: start, first
   control, second control, and end.
 
+When drawing, click the start point first, the end point second, and then the
+control point(s). The saved JSON uses the conventional start, control point(s),
+end order described above.
+
 The points are stored in the normal Labelme `points` field, in that order. The
 `shape_type` field identifies the curve degree. For example:
 

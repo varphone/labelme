@@ -165,8 +165,8 @@ def test_ai_points_mode_keeps_selected_sam3_and_rejects_click(
         ),
         pytest.param(
             "bezier2",
-            [(0.25, 0.75), (0.5, 0.25)],
-            (0.75, 0.75),
+            [(0.25, 0.75), (0.75, 0.75)],
+            (0.5, 0.25),
             Qt.KeyboardModifier.NoModifier,
             3,
             None,
@@ -174,8 +174,8 @@ def test_ai_points_mode_keeps_selected_sam3_and_rejects_click(
         ),
         pytest.param(
             "bezier3",
-            [(0.25, 0.75), (0.35, 0.25), (0.65, 0.25)],
-            (0.75, 0.75),
+            [(0.25, 0.75), (0.75, 0.75), (0.35, 0.25)],
+            (0.65, 0.25),
             Qt.KeyboardModifier.NoModifier,
             4,
             None,
