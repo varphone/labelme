@@ -1287,6 +1287,16 @@ class Canvas(QtWidgets.QWidget):
                 self._finalize()
         elif mode in BEZIER_SHAPE_TYPES:
             current = current.add_point(self._line.points[1])
+            if len(current.points) == bezier_degree(mode) + 1:
+                # The drawing gesture is start, end, then control point(s),
+                # while Bezier data is stored in the conventional start,
+                # control point(s), end order.
+                point_order = (0, 2, 1) if mode == "bezier2" else (0, 2, 3, 1)
+                current = dataclasses.replace(
+                    current,
+                    points=tuple(current.points[i] for i in point_order),
+                    point_labels=tuple(current.point_labels[i] for i in point_order),
+                )
             self._current = current
             self._line = dataclasses.replace(
                 self._line,
@@ -2107,6 +2117,36 @@ class Canvas(QtWidgets.QWidget):
     def _render_draft(
         self, painter: QtGui.QPainter, draft: _DraftShape, highlighted: bool
     ) -> None:
+        if draft.shape_type in BEZIER_SHAPE_TYPES:
+            point_count = len(draft.points)
+            if point_count == 3:
+                # During creation the points are collected as start, end,
+                # control. Render the curve using the canonical order.
+                draft = dataclasses.replace(
+                    draft,
+                    points=(draft.points[0], draft.points[2], draft.points[1]),
+                    point_labels=(
+                        draft.point_labels[0],
+                        draft.point_labels[2],
+                        draft.point_labels[1],
+                    ),
+                )
+            elif point_count == 4:
+                draft = dataclasses.replace(
+                    draft,
+                    points=(
+                        draft.points[0],
+                        draft.points[2],
+                        draft.points[3],
+                        draft.points[1],
+                    ),
+                    point_labels=(
+                        draft.point_labels[0],
+                        draft.point_labels[2],
+                        draft.point_labels[3],
+                        draft.point_labels[1],
+                    ),
+                )
         shape = _draft_to_shape(draft)
         context = self._draft_render_context(
             selected=False,
