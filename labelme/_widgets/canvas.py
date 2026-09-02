@@ -27,6 +27,8 @@ from .. import _ai_models
 from .. import _automation
 from .. import _shape
 from .. import _utils
+from .._line_profile import LINE_PROFILE_SHAPE_TYPES
+from .._line_profile import line_profile_points
 from .._line_profile import point_to_position
 from .._line_profile import position_to_point
 from .._line_profile import profile_boundary_polygon
@@ -1662,18 +1664,22 @@ class Canvas(QtWidgets.QWidget):
         shapes = self.selected_shapes or [
             shape
             for shape in self.shapes
-            if shape.visible and shape.shape_type == "linestrip"
+            if shape.visible and shape.shape_type in LINE_PROFILE_SHAPE_TYPES
         ]
         for shape in shapes:
-            if shape.shape_type != "linestrip" or shape.line_profile is None:
+            if (
+                shape.shape_type not in LINE_PROFILE_SHAPE_TYPES
+                or shape.line_profile is None
+            ):
                 continue
+            centerline = line_profile_points(shape.points, shape.shape_type)
             for index, anchor in enumerate(shape.line_profile.anchors):
                 if anchor.width is None:
                     continue
                 width = anchor.width
                 radius = max(0.0, width.value / 2.0)
                 circle = _line_profile_circle_shape(
-                    points=shape.points,
+                    points=centerline,
                     position=anchor.position,
                     radius=radius,
                 )
@@ -1711,7 +1717,7 @@ class Canvas(QtWidgets.QWidget):
                 if anchor.visibility is None:
                     continue
                 marker = _line_profile_circle_shape(
-                    points=shape.points,
+                    points=centerline,
                     position=anchor.position,
                     radius=None,
                 )
@@ -1960,11 +1966,12 @@ class Canvas(QtWidgets.QWidget):
             return
         shape = self.selected_shapes[0]
         profile = shape.line_profile
-        if shape.shape_type != "linestrip" or profile is None:
+        if shape.shape_type not in LINE_PROFILE_SHAPE_TYPES or profile is None:
             return
+        centerline = line_profile_points(shape.points, shape.shape_type)
         if any(anchor.width is not None for anchor in profile.anchors):
             boundary = profile_boundary_polygon(
-                profile, shape.points, samples=max(16, min(128, len(shape.points) * 16))
+                profile, centerline, samples=max(16, min(128, len(centerline) * 16))
             )
             boundary_color = QtGui.QColor(
                 self._resolve_palette(shape.label).select_line
@@ -1986,7 +1993,7 @@ class Canvas(QtWidgets.QWidget):
             width = anchor.width
             radius = max(0.0, width.value / 2.0)
             circle = _line_profile_circle_shape(
-                points=shape.points,
+                points=centerline,
                 position=anchor.position,
                 radius=radius,
             )
@@ -2030,7 +2037,7 @@ class Canvas(QtWidgets.QWidget):
                 continue
             visibility = anchor.visibility
             marker = _line_profile_circle_shape(
-                points=shape.points,
+                points=centerline,
                 position=anchor.position,
                 radius=None,
             )

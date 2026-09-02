@@ -194,8 +194,17 @@ def _load_shape_json_obj(shape_json_obj: dict) -> ShapeDict:
     if "line_profile" in shape_json_obj:
         raw_line_profile = shape_json_obj["line_profile"]
         try:
-            if shape_type != "linestrip":
-                raise ValueError("line_profile is only supported for linestrip")
+            if shape_type not in (
+                "line",
+                "linestrip",
+                "bezier2",
+                "bezier3",
+                "catmull_rom",
+                "bspline",
+            ):
+                raise ValueError(
+                    "line_profile is only supported for open line and curve shapes"
+                )
             line_profile = LineProfile.from_json_obj(raw_line_profile)
         except ValueError as e:
             line_profile_error = str(e)

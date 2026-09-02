@@ -121,6 +121,18 @@ def spline_sample_points(
         return np.asarray(curve(parameters), dtype=np.float64)
 
 
+def line_profile_centerline(
+    points: npt.ArrayLike, shape_type: ShapeType
+) -> npt.NDArray[np.float64]:
+    """Return the sampled polyline used for line-profile geometry."""
+    array = np.asarray(points, dtype=np.float64).reshape(-1, 2)
+    if shape_type in BEZIER_SHAPE_TYPES:
+        return bezier_sample_points(array, samples=128)
+    if shape_type in SPLINE_SHAPE_TYPES:
+        return spline_sample_points(array, shape_type, samples_per_segment=32)
+    return array
+
+
 @dataclasses.dataclass(eq=False)
 class Shape:
     label: str | None = None
@@ -217,12 +229,19 @@ class Shape:
         old_points: npt.NDArray[np.float64],
         new_points: npt.NDArray[np.float64],
     ) -> LineProfile | None:
-        if self.line_profile is None or self.shape_type != "linestrip":
+        if self.line_profile is None or self.shape_type not in (
+            "line",
+            "linestrip",
+            "bezier2",
+            "bezier3",
+            "catmull_rom",
+            "bspline",
+        ):
             return self.line_profile
         return remap_profile(
             profile=self.line_profile,
-            old_points=old_points,
-            new_points=new_points,
+            old_points=line_profile_centerline(old_points, self.shape_type),
+            new_points=line_profile_centerline(new_points, self.shape_type),
         )
 
     def copy(self) -> Shape:

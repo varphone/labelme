@@ -602,7 +602,7 @@ def test_shape_codec_preserves_profile_on_unsupported_shape_type() -> None:
         shape_json_obj={
             "label": "stripe",
             "points": [[0.0, 0.0], [10.0, 0.0]],
-            "shape_type": "line",
+            "shape_type": "rectangle",
             "line_profile": raw_profile,
         }
     )
