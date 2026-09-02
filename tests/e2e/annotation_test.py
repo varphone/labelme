@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from PySide6.QtCore import QPoint
 from PySide6.QtCore import Qt
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QComboBox
@@ -17,6 +16,7 @@ from labelme._shape import Shape
 from ..conftest import assert_labelfile_sanity
 from ..conftest import close_or_pause
 from .conftest import MainWinFactory
+from .conftest import click_canvas_fraction
 from .conftest import show_window_and_wait_for_imagedata
 
 # Smallest available model (~40MB) to keep download and inference fast
@@ -325,14 +325,6 @@ def test_annotate_shape_types(
     if ai_output_format is not None:
         canvas.set_ai_output_format(ai_output_format)
 
-    canvas_size = canvas.size()
-
-    def to_pos(xy: tuple[float, float]) -> QPoint:
-        return QPoint(
-            int(canvas_size.width() * xy[0]),
-            int(canvas_size.height() * xy[1]),
-        )
-
     win._switch_canvas_mode(edit=False, create_mode=create_mode)
     qtbot.wait(50)
 
@@ -340,11 +332,12 @@ def test_annotate_shape_types(
         xy: tuple[float, float],
         modifier: Qt.KeyboardModifier = Qt.KeyboardModifier.NoModifier,
     ) -> None:
-        pos = to_pos(xy)
-        qtbot.mouseMove(canvas, pos=pos)
-        qtbot.wait(50)
-        qtbot.mouseClick(canvas, Qt.MouseButton.LeftButton, modifier, pos=pos)
-        qtbot.wait(50)
+        click_canvas_fraction(
+            qtbot=qtbot,
+            canvas=canvas,
+            xy=xy,
+            modifier=modifier,
+        )
 
     for xy in setup_clicks:
         click(xy=xy)

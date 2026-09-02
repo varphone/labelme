@@ -903,7 +903,7 @@ ProfileAnchor(
 首期功能只有同时满足以下条件才算完成：
 
 - [x] 统一锚点数据模型、JSON 编解码和非法数据策略已确定并测试通过；
-- [ ] 没有 profile 的 Annotation File、未知字段和普通 linestrip 回归测试全部通过；
+- [x] 没有 profile 的 Annotation File、未知字段和普通 linestrip 回归测试全部通过；
 - [x] 中心线所有已支持编辑操作都不会丢失或错误重定位 profile；
 - [x] 圆形宽度手柄可在不同缩放级别下稳定选择、拖动和输入；
 - [x] 宽度、可见程度、来源、可信度和审核状态可往返保存；
