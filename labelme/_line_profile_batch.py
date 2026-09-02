@@ -33,6 +33,7 @@ class BatchOptions:
     # A caller can show the dry-run report and decide whether writes may start.
     confirm_check: Callable[[BatchReport], bool] | None = None
     backup_dir: str | None = None
+    progress_callback: Callable[[int, int], None] | None = None
     # The caller persists the last completed ordinal and passes it back after
     # cancellation; this keeps restart policy outside the file writer.
     resume_from: int = 0
@@ -94,28 +95,32 @@ def measure_annotation_files(
         if index < options.resume_from:
             continue
         if options.cancel_check is not None and options.cancel_check():
-            results.append(BatchItemResult(filename, "canceled"))
+            result = BatchItemResult(filename, "canceled")
+            results.append(result)
+            _report_batch_progress(options, index + 1, len(filenames))
             break
         for attempt in range(options.retry_count + 1):
             try:
-                results.append(
-                    _measure_annotation_file(
-                        filename=filename, output_dir=output_dir, options=options
-                    )
+                result = _measure_annotation_file(
+                    filename=filename, output_dir=output_dir, options=options
                 )
+                results.append(result)
+                _report_batch_progress(options, index + 1, len(filenames))
                 break
             except _BatchCanceled:
-                results.append(BatchItemResult(filename, "canceled"))
+                result = BatchItemResult(filename, "canceled")
+                results.append(result)
+                _report_batch_progress(options, index + 1, len(filenames))
                 return BatchReport(tuple(results))
             except Exception as e:
                 if attempt == options.retry_count:
-                    results.append(
-                        BatchItemResult(
-                            filename,
-                            "failed",
-                            error=f"{type(e).__name__}: {e}",
-                        )
+                    result = BatchItemResult(
+                        filename,
+                        "failed",
+                        error=f"{type(e).__name__}: {e}",
                     )
+                    results.append(result)
+                    _report_batch_progress(options, index + 1, len(filenames))
     return BatchReport(tuple(results), is_preview=options.dry_run)
 
 
@@ -153,7 +158,7 @@ def _measure_annotation_file(
             skipped_invalid = True
             continue
         profile = shape.get("line_profile")
-        if options.only_missing and profile is not None:
+        if options.only_missing and _profile_has_anchors(profile):
             continue
         if (
             options.only_unreviewed
@@ -163,9 +168,14 @@ def _measure_annotation_file(
         ):
             continue
         measurement = measure_line_profile(
-            image, shape["points"], parameters=options.parameters
+            image,
+            shape["points"],
+            parameters=_parameters_for_profile(options.parameters, profile),
         )
-        shape["line_profile"] = _profile_from_measurement(measurement.samples)
+        shape["line_profile"] = _profile_from_measurement(
+            measurement.samples,
+            existing=profile,
+        )
         processed += 1
     if processed and not options.dry_run:
         target = (
@@ -232,28 +242,96 @@ def rollback_batch(report: BatchReport) -> tuple[str, ...]:
 
 
 def _profile_from_measurement(
-    samples: tuple[MeasurementSample, ...]
+    samples: tuple[MeasurementSample, ...],
+    *,
+    existing: LineProfile | None = None,
 ) -> LineProfile:
+    manual_width = (
+        ()
+        if existing is None
+        else tuple(
+            anchor
+            for anchor in existing.width_anchors
+            if anchor.source == "manual" and anchor.confirmed
+        )
+    )
+    manual_visibility = (
+        ()
+        if existing is None
+        else tuple(
+            anchor
+            for anchor in existing.visibility_anchors
+            if anchor.source == "manual" and anchor.confirmed
+        )
+    )
     return LineProfile(
         width_anchors=tuple(
-            WidthAnchor(
-                position=sample.position,
-                width=sample.width,
-                source="auto",
-                confidence=sample.confidence,
-                confirmed=False,
+            sorted(
+                (
+                    *manual_width,
+                    *(
+                        WidthAnchor(
+                            position=sample.position,
+                            width=sample.width,
+                            source="auto",
+                            confidence=sample.confidence,
+                            confirmed=False,
+                        )
+                        for sample in samples
+                        if not any(
+                            abs(anchor.position - sample.position) <= 1e-6
+                            for anchor in manual_width
+                        )
+                    ),
+                ),
+                key=lambda anchor: anchor.position,
             )
-            for sample in samples
         ),
         visibility_anchors=tuple(
-            VisibilityAnchor(
-                position=sample.position,
-                visibility=sample.visibility,
-                source="auto",
-                confidence=sample.confidence,
-                confirmed=False,
+            sorted(
+                (
+                    *manual_visibility,
+                    *(
+                        VisibilityAnchor(
+                            position=sample.position,
+                            visibility=sample.visibility,
+                            source="auto",
+                            confidence=sample.confidence,
+                            confirmed=False,
+                        )
+                        for sample in samples
+                        if not any(
+                            abs(anchor.position - sample.position) <= 1e-6
+                            for anchor in manual_visibility
+                        )
+                    ),
+                ),
+                key=lambda anchor: anchor.position,
             )
-            for sample in samples
         ),
+        min_width=None if existing is None else existing.min_width,
+        max_width=None if existing is None else existing.max_width,
         measurement_version=MEASUREMENT_VERSION,
+        measurement_overrides=()
+        if existing is None
+        else existing.measurement_overrides,
     )
+
+
+def _profile_has_anchors(profile: object) -> bool:
+    return isinstance(profile, LineProfile) and bool(
+        profile.width_anchors or profile.visibility_anchors
+    )
+
+
+def _parameters_for_profile(
+    parameters: MeasurementParameters, profile: object
+) -> MeasurementParameters:
+    if not isinstance(profile, LineProfile) or not profile.measurement_overrides:
+        return parameters
+    return dataclasses.replace(parameters, **dict(profile.measurement_overrides))
+
+
+def _report_batch_progress(options: BatchOptions, completed: int, total: int) -> None:
+    if options.progress_callback is not None:
+        options.progress_callback(completed, total)

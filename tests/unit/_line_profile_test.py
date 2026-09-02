@@ -5,6 +5,7 @@ from collections.abc import Callable
 import pytest
 
 from labelme._line_profile import LineProfile
+from labelme._line_profile import WidthAnchor
 from labelme._line_profile import crop_profile
 from labelme._line_profile import cumulative_lengths
 from labelme._line_profile import extend_profile
@@ -198,6 +199,25 @@ def test_profile_boundary_points_use_full_width_and_local_normals() -> None:
 
     assert left[1] == pytest.approx((5.0, 3.0))
     assert right[1] == pytest.approx((5.0, -3.0))
+
+
+def test_profile_boundary_points_miter_a_right_angle_corner() -> None:
+    profile = LineProfile(
+        width_anchors=(
+            # Keep the width constant so the corner geometry is isolated.
+            WidthAnchor(0.0, 6.0, "manual", 1.0, True),
+            WidthAnchor(1.0, 6.0, "manual", 1.0, True),
+        )
+    )
+
+    left, right = profile_boundary_points(
+        profile,
+        [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0]],
+        samples=9,
+    )
+
+    assert left[4] == pytest.approx((7.0, 3.0))
+    assert right[4] == pytest.approx((13.0, -3.0))
 
 
 def test_profile_crop_extend_and_resample_preserve_curve_values() -> None:
