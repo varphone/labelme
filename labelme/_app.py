@@ -62,6 +62,8 @@ from ._line_profile import position_to_point
 from ._line_profile import remove_visibility_anchor
 from ._line_profile import remove_width_anchor
 from ._line_profile import reverse_profile
+from ._line_profile_batch import BatchOptions
+from ._line_profile_batch import BatchReport
 from ._line_profile_sequence import compare_frames
 from ._line_profile_sequence import transfer_frame_profiles
 from ._line_profile_sequence import validate_frame_mapping
@@ -78,8 +80,8 @@ from ._widgets import LabelDialog
 from ._widgets import LabelListWidget
 from ._widgets import LabelListWidgetItem
 from ._widgets import LineMeasurementWorker
-from ._widgets import LineProfileVisibilityWidget
-from ._widgets import LineProfileWidthWidget
+from ._widgets import LineProfileBatchWorker
+from ._widgets import LineProfilePanel
 from ._widgets import Palette
 from ._widgets import SettingsDialog
 from ._widgets import StatusStats
@@ -129,6 +131,8 @@ class _ViewportState(NamedTuple):
 
 
 class _DockWidgets(NamedTuple):
+    line_profile_dock: QtWidgets.QDockWidget
+    line_profile_panel: LineProfilePanel
     flag_dock: QtWidgets.QDockWidget
     flag_list: QtWidgets.QListWidget
     shape_dock: QtWidgets.QDockWidget
@@ -159,6 +163,8 @@ class _Actions(NamedTuple):
     measure_line_profile: QtGui.QAction
     delete_selected_files: QtGui.QAction
     export_selected_files: QtGui.QAction
+    batch_fill_line_profiles: QtGui.QAction
+    batch_rebuild_line_profiles: QtGui.QAction
     delete: QtGui.QAction
     edit: QtGui.QAction
     duplicate: QtGui.QAction
@@ -196,8 +202,6 @@ class _Actions(NamedTuple):
     open_dir: QtGui.QAction
     zoom_widget_action: QtWidgets.QWidgetAction
     circle_radius_action: QtWidgets.QWidgetAction
-    line_profile_width_action: QtWidgets.QWidgetAction
-    line_profile_visibility_action: QtWidgets.QWidgetAction
     show_line_profile_preview: QtGui.QAction
     insert_line_profile_anchor: QtGui.QAction
     delete_line_profile_anchor: QtGui.QAction
@@ -228,6 +232,10 @@ class MainWindow(QtWidgets.QMainWindow):
     _line_measurement_worker: LineMeasurementWorker | None
     _line_measurement_progress: QProgressDialog | None
     _line_measurement_token: tuple[int, bytes, int | None] | None
+    _line_profile_batch_thread: QThread | None
+    _line_profile_batch_worker: LineProfileBatchWorker | None
+    _line_profile_batch_progress: QProgressDialog | None
+    _line_profile_batch_current_image_path: str | None
 
     _text_osam_session: _automation.OsamSession | None = None
     _is_changed: bool = False
@@ -280,6 +288,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self._line_measurement_worker = None
         self._line_measurement_progress = None
         self._line_measurement_token = None
+        self._line_profile_batch_thread = None
+        self._line_profile_batch_worker = None
+        self._line_profile_batch_progress = None
+        self._line_profile_batch_current_image_path = None
 
         self._shape_clipboard = ShapeClipboard(self)
 
@@ -297,6 +309,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self._canvas_widgets = self._setup_canvas()
 
         self._actions = self._setup_actions()
+        self._docks.line_profile_panel.set_actions(
+            (
+                (self._actions.show_line_profile_preview, self.tr("Preview")),
+                (self._actions.measure_line_profile, self.tr("Measure")),
+                None,
+                (self._actions.insert_line_profile_anchor, self.tr("Insert")),
+                (self._actions.delete_line_profile_anchor, self.tr("Delete")),
+                None,
+                (self._actions.clear_line_profile, self.tr("Clear")),
+                (
+                    self._actions.copy_profiles_from_previous_frame,
+                    self.tr("Copy Previous"),
+                ),
+                (
+                    self._actions.line_profile_measurement_parameters,
+                    self.tr("Parameters"),
+                ),
+            )
+        )
         self._persistent_actions = {
             ("auto_save",): self._actions.save_auto,
             ("with_image_data",): self._actions.save_with_image_data,
@@ -520,6 +551,7 @@ class MainWindow(QtWidgets.QMainWindow):
         measure_line_profile = action(
             text=self.tr("Measure Line Profile"),
             slot=self.measure_selected_line_profile,
+            icon="phosphor/line-segments.svg",
             tip=self.tr("Measure width and visibility along the selected linestrip"),
             enabled=False,
         )
@@ -532,6 +564,22 @@ class MainWindow(QtWidgets.QMainWindow):
             text=self.tr("Export Selected Files"),
             slot=self.export_selected_files,
             tip=self.tr("Copy the selected files and their label files to a directory"),
+        )
+        batch_fill_line_profiles = action(
+            text=self.tr("Fill Missing Line Profiles"),
+            slot=self.fill_selected_line_profiles,
+            icon="phosphor/circle.svg",
+            tip=self.tr(
+                "Measure selected annotations that do not have profile anchors"
+            ),
+            enabled=False,
+        )
+        batch_rebuild_line_profiles = action(
+            text=self.tr("Rebuild Line Profiles"),
+            slot=self.rebuild_selected_line_profiles,
+            icon="phosphor/arrow-u-up-left.svg",
+            tip=self.tr("Force remeasure all selected line-profile annotations"),
+            enabled=False,
         )
         delete = action(
             self.tr("Delete Shapes"),
@@ -618,30 +666,35 @@ class MainWindow(QtWidgets.QMainWindow):
         insert_line_profile_anchor = action(
             text=self.tr("Insert Profile Anchor"),
             slot=self.insert_line_profile_anchor,
+            icon="phosphor/line-segment.svg",
             tip=self.tr("Insert an interpolated profile anchor"),
             enabled=False,
         )
         delete_line_profile_anchor = action(
             text=self.tr("Delete Profile Anchor"),
             slot=self.delete_line_profile_anchor,
+            icon="phosphor/trash.svg",
             tip=self.tr("Delete the active profile anchor"),
             enabled=False,
         )
         clear_line_profile = action(
             text=self.tr("Clear Line Profile"),
             slot=self.clear_selected_line_profile,
+            icon="phosphor/x-circle.svg",
             tip=self.tr("Remove profile metadata and keep the centerline"),
             enabled=False,
         )
         line_profile_measurement_parameters = action(
             text=self.tr("Line Profile Measurement Parameters"),
             slot=self.edit_line_profile_measurement_parameters,
+            icon="phosphor/sliders-horizontal.svg",
             tip=self.tr("Override measurement defaults for this linestrip"),
             enabled=False,
         )
         copy_profiles_from_previous_frame = action(
             text=self.tr("Copy Profiles from Previous Frame"),
             slot=self.copy_profiles_from_previous_frame,
+            icon="phosphor/copy.svg",
             tip=self.tr("Copy only compatible line profiles from the previous frame"),
             enabled=False,
         )
@@ -842,6 +895,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         show_line_profile_preview = action(
             text=self.tr("Show Line Profile Preview"),
+            icon="phosphor/eye.svg",
             tip=self.tr("Show variable-width profile boundaries and handles"),
             checkable=True,
             checked=True,
@@ -877,20 +931,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self._canvas_widgets.canvas.line_profile_anchor_drag_finished.connect(
             self._on_line_profile_anchor_drag_finished
         )
-
-        line_profile_width_widget = LineProfileWidthWidget(self)
-        line_profile_width_widget.profile_committed.connect(
-            self._on_line_profile_width_committed
-        )
-        line_profile_width_action = QtWidgets.QWidgetAction(self)
-        line_profile_width_action.setDefaultWidget(line_profile_width_widget)
-
-        line_profile_visibility_widget = LineProfileVisibilityWidget(self)
-        line_profile_visibility_widget.visibility_committed.connect(
-            self._on_line_profile_visibility_committed
-        )
-        line_profile_visibility_action = QtWidgets.QWidgetAction(self)
-        line_profile_visibility_action.setDefaultWidget(line_profile_visibility_widget)
 
         self._zoom_mode = _ZoomMode.FIT_WINDOW
         fit_window.setChecked(True)
@@ -1002,6 +1042,8 @@ class MainWindow(QtWidgets.QMainWindow):
             measure_line_profile=measure_line_profile,
             delete_selected_files=delete_selected_files,
             export_selected_files=export_selected_files,
+            batch_fill_line_profiles=batch_fill_line_profiles,
+            batch_rebuild_line_profiles=batch_rebuild_line_profiles,
             delete=delete,
             edit=edit,
             duplicate=duplicate,
@@ -1039,8 +1081,6 @@ class MainWindow(QtWidgets.QMainWindow):
             open_dir=open_dir,
             zoom_widget_action=zoom_widget_action,
             circle_radius_action=circle_radius_action,
-            line_profile_width_action=line_profile_width_action,
-            line_profile_visibility_action=line_profile_visibility_action,
             show_line_profile_preview=show_line_profile_preview,
             insert_line_profile_anchor=insert_line_profile_anchor,
             delete_line_profile_anchor=delete_line_profile_anchor,
@@ -1128,6 +1168,7 @@ class MainWindow(QtWidgets.QMainWindow):
         _utils.add_actions(
             view_menu,
             (
+                self._docks.line_profile_dock.toggleViewAction(),
                 self._docks.flag_dock.toggleViewAction(),
                 self._docks.label_dock.toggleViewAction(),
                 self._docks.shape_dock.toggleViewAction(),
@@ -1205,8 +1246,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     self._actions.zoom_widget_action,
                     None,
                     self._actions.circle_radius_action,
-                    self._actions.line_profile_width_action,
-                    self._actions.line_profile_visibility_action,
                     None,
                     select_ai_model,
                     None,
@@ -1268,7 +1307,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #
         # Bump this when dock/toolbar layout changes to reset window state
         # for users upgrading from an older version.
-        SETTINGS_VERSION: int = 1
+        SETTINGS_VERSION: int = 2
         if self._window_state.value("settingsVersion", 0, type=int) != SETTINGS_VERSION:
             self._reset_layout()
             self._window_state.setValue("settingsVersion", SETTINGS_VERSION)
@@ -1390,6 +1429,29 @@ class MainWindow(QtWidgets.QMainWindow):
         )
 
     def _setup_dock_widgets(self) -> _DockWidgets:
+        line_profile_panel = LineProfilePanel(self)
+        line_profile_panel.width_widget.profile_committed.connect(
+            self._on_line_profile_width_committed
+        )
+        line_profile_panel.width_widget.position_committed.connect(
+            self._on_line_profile_anchor_position_committed
+        )
+        line_profile_panel.visibility_widget.visibility_committed.connect(
+            self._on_line_profile_visibility_committed
+        )
+        line_profile = QtWidgets.QDockWidget(self.tr("Line Profile"), self)
+        line_profile.setObjectName("LineProfile")
+        line_profile.setFeatures(
+            QtWidgets.QDockWidget.DockWidgetFeature.DockWidgetClosable
+            | QtWidgets.QDockWidget.DockWidgetFeature.DockWidgetMovable
+            | QtWidgets.QDockWidget.DockWidgetFeature.DockWidgetFloatable
+        )
+        line_profile_scroll = QtWidgets.QScrollArea(self)
+        line_profile_scroll.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
+        line_profile_scroll.setWidgetResizable(True)
+        line_profile_scroll.setWidget(line_profile_panel)
+        line_profile.setWidget(line_profile_scroll)
+
         flag_list = QtWidgets.QListWidget()
         flag = QtWidgets.QDockWidget(self.tr("Flags"), self)
         flag.setObjectName("Flags")
@@ -1412,8 +1474,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         unique_label_list = UniqueLabelQListWidget()
         unique_label_list.setToolTip(
-            self.tr("Select label to start annotating for it. Press 'Esc' to deselect.")
+            self.tr(
+                "Select a label to start annotating for it. "
+                "Double-click or right-click to rename it. Press 'Esc' to deselect."
+            )
         )
+        unique_label_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        unique_label_list.customContextMenuRequested.connect(
+            self.show_unique_label_list_menu
+        )
+        unique_label_list.itemDoubleClicked.connect(self._rename_label)
         if self._config["labels"]:
             for lbl in self._config["labels"]:
                 unique_label_list.add_label_item(
@@ -1472,9 +1542,18 @@ class MainWindow(QtWidgets.QMainWindow):
             dock_widget.setFeatures(features)
             if self._config[config_key]["show"] is False:
                 dock_widget.setVisible(False)
-            self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dock_widget)
+        # Establish the existing right-side dock container first, preserving
+        # its original top-to-bottom order. The new editor is then split from
+        # that container as a single full-height column on its left.
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, line_profile)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, flag)
+        self.splitDockWidget(line_profile, flag, Qt.Orientation.Horizontal)
+        for dock_widget in (file, shape, label):
+            self.splitDockWidget(flag, dock_widget, Qt.Orientation.Vertical)
 
         return _DockWidgets(
+            line_profile_dock=line_profile,
+            line_profile_panel=line_profile_panel,
             flag_dock=flag,
             flag_list=flag_list,
             shape_dock=shape,
@@ -1825,6 +1904,104 @@ class MainWindow(QtWidgets.QMainWindow):
         finally:
             self._label_list_menu_origin = None
 
+    def show_unique_label_list_menu(self, point: QtCore.QPoint) -> None:
+        item = self._docks.unique_label_list.itemAt(point)
+        if item is None:
+            return
+
+        self._docks.unique_label_list.setCurrentItem(item)
+        menu = QtWidgets.QMenu(self)
+        rename = menu.addAction(self.tr("Rename Label"))
+        rename.triggered.connect(lambda: self._rename_label(item))
+        menu.exec(  # ty: ignore[invalid-argument-type]
+            self._docks.unique_label_list.mapToGlobal(point)
+        )
+
+    def _rename_label_in_other_files(self, old_label: str, new_label: str) -> bool:
+        current_label_path = (
+            None
+            if self._label_file_path is None
+            else Path(self._label_file_path).resolve()
+        )
+        staged: list[tuple[str, Annotation, int, int]] = []
+
+        for row in range(self._docks.file_list.count()):
+            file_item = self._docks.file_list.item(row)
+            assert file_item is not None
+            label_path = _resolve_label_path(
+                image_or_label_path=file_item.text(),
+                output_dir=self._output_dir,
+            )
+            if not QtCore.QFile.exists(label_path):
+                continue
+            if current_label_path is not None and Path(label_path).resolve() == (
+                current_label_path
+            ):
+                continue
+
+            annotation = self._read_annotation_file(label_path=label_path)
+            if annotation is None:
+                return False
+            if not any(shape["label"] == old_label for shape in annotation.shapes):
+                continue
+
+            image = QtGui.QImage.fromData(annotation.image_data)
+            if image.isNull():
+                self.show_error_message(
+                    self.tr("Error reading label data"),
+                    self.tr("Could not read the image stored in <b>{}</b>.").format(
+                        label_path
+                    ),
+                )
+                return False
+            shapes = [
+                cast(
+                    ShapeDict,
+                    {
+                        **shape,
+                        "label": (
+                            new_label
+                            if shape["label"] == old_label
+                            else shape["label"]
+                        ),
+                    },
+                )
+                for shape in annotation.shapes
+            ]
+            staged.append(
+                (
+                    label_path,
+                    dataclasses.replace(annotation, shapes=shapes),
+                    image.height(),
+                    image.width(),
+                )
+            )
+
+        for label_path, annotation, image_height, image_width in staged:
+            try:
+                write_label_file(
+                    filename=label_path,
+                    annotation=annotation,
+                    image_height=image_height,
+                    image_width=image_width,
+                    save_image_data=self._config["with_image_data"],
+                )
+            except (LabelFileError, OSError, ValueError) as error:
+                self.show_error_message(
+                    self.tr("Error saving label data"),
+                    self.tr("<b>{}</b>").format(error),
+                )
+                return False
+
+        if staged:
+            self.show_status_message(
+                self.tr("Renamed label in {0} other annotation files").format(
+                    len(staged)
+                ),
+                5000,
+            )
+        return True
+
     def validate_label(self, label: str) -> bool:
         policy = self._config["validate_label"]
         if policy is None:
@@ -1837,6 +2014,95 @@ class MainWindow(QtWidgets.QMainWindow):
         return _is_valid_label(
             label=label, existing_labels=existing_labels, policy=policy
         )
+
+    def _rename_label(self, value: object | None = None) -> None:
+        unique_label_list = self._docks.unique_label_list
+        item = (
+            value
+            if isinstance(value, QtWidgets.QListWidgetItem)
+            else (unique_label_list.currentItem() or None)
+        )
+        if item is None or unique_label_list.row(item) < 0:
+            logger.warning("No label is selected, so cannot rename label.")
+            return
+
+        old_label = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(old_label, str):
+            return
+
+        new_label, accepted = QtWidgets.QInputDialog.getText(
+            self,
+            self.tr("Rename Label"),
+            self.tr("New label:"),
+            QtWidgets.QLineEdit.EchoMode.Normal,
+            old_label,
+        )
+        new_label = new_label.strip()
+        if not accepted or not new_label or new_label == old_label:
+            return
+
+        existing_item = unique_label_list.find_label_item(new_label)
+        if existing_item is not None and existing_item is not item:
+            self.show_error_message(
+                self.tr("Invalid label"),
+                self.tr("A label named '{}' already exists.").format(new_label),
+            )
+            return
+        configured_labels = self._config["labels"] or []
+        is_configured_label = old_label in configured_labels
+        if not self.validate_label(new_label) and not is_configured_label:
+            self.show_error_message(
+                self.tr("Invalid label"),
+                self.tr("Invalid label '{}' with validation type '{}'").format(
+                    new_label, self._config["validate_label"]
+                ),
+            )
+            return
+
+        if not self._rename_label_in_other_files(
+            old_label=old_label,
+            new_label=new_label,
+        ):
+            return
+
+        renamed_configured_labels = [
+            new_label if label == old_label else label for label in configured_labels
+        ]
+        if renamed_configured_labels != configured_labels:
+            if self._is_settings_editable and not self._try_set_overrides(
+                overrides=[(("labels",), renamed_configured_labels)]
+            ):
+                return
+            self._set_setting_value(
+                key_path=("labels",), value=renamed_configured_labels
+            )
+
+        canvas = self._canvas_widgets.canvas
+        changed_shapes = [shape for shape in canvas.shapes if shape.label == old_label]
+        if changed_shapes:
+            canvas.backup_shapes()
+
+        new_color = self._get_rgb_by_label(
+            label=new_label,
+            unique_label_list=unique_label_list,
+        )
+        unique_label_list.rename_label_item(
+            item=item,
+            label=new_label,
+            color=new_color,
+        )
+        for shape in changed_shapes:
+            shape.label = new_label
+            annotation_item = self._docks.label_list.find_item_by_shape(shape)
+            annotation_item.set_label(
+                text=format_shape_label(shape),
+                color=new_color,
+            )
+        self._label_dialog.rename_label_history(old_label, new_label)
+        if renamed_configured_labels != configured_labels:
+            self._sync_setting_controls(key_path=("labels",))
+        canvas.update()
+        self.mark_dirty()
 
     def _edit_label(self, value: object | None = None) -> None:
         items = self._docks.label_list.selected_items()
@@ -2040,14 +2306,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self._sync_circle_radius_widget()
 
     def _sync_line_profile_widgets(self) -> None:
-        width_widget = cast(
-            LineProfileWidthWidget,
-            self._actions.line_profile_width_action.defaultWidget(),
-        )
-        visibility_widget = cast(
-            LineProfileVisibilityWidget,
-            self._actions.line_profile_visibility_action.defaultWidget(),
-        )
+        width_widget = self._docks.line_profile_panel.width_widget
+        visibility_widget = self._docks.line_profile_panel.visibility_widget
+        position_widget = self._docks.line_profile_panel.position_widget
         selected = self._canvas_widgets.canvas.selected_shapes
         if len(selected) != 1:
             self._sync_line_profile_anchor_actions(available=False)
@@ -2056,6 +2317,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
             width_widget.set_profile(None)
             visibility_widget.set_anchor(None)
+            position_widget.setEnabled(False)
             return
         profile = selected[0].line_profile
         if profile is None:
@@ -2065,6 +2327,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
             width_widget.set_profile(None)
             visibility_widget.set_anchor(None)
+            position_widget.setEnabled(False)
             return
         width_widget.set_profile(
             None
@@ -2107,6 +2370,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._actions.clear_line_profile.setEnabled(True)
             self._actions.line_profile_measurement_parameters.setEnabled(True)
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
+            position_widget.setEnabled(False)
             return
         self._active_line_profile_anchor_index = min(
             self._active_line_profile_anchor_index, len(anchors) - 1
@@ -2148,6 +2412,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     anchor.confirmed,
                 )
             )
+        width_widget.set_position(selected_anchor_position)
+        position_widget.setEnabled(True)
         self._sync_line_profile_anchor_actions(available=True)
         self._actions.clear_line_profile.setEnabled(True)
         self._actions.line_profile_measurement_parameters.setEnabled(True)
@@ -2155,6 +2421,75 @@ class MainWindow(QtWidgets.QMainWindow):
     def _sync_line_profile_anchor_actions(self, *, available: bool) -> None:
         self._actions.insert_line_profile_anchor.setEnabled(available)
         self._actions.delete_line_profile_anchor.setEnabled(available)
+
+    def _on_line_profile_anchor_position_committed(self, position: float) -> None:
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if len(selected) != 1:
+            return
+        shape = selected[0]
+        profile = shape.line_profile
+        if profile is None:
+            return
+        active_anchors = (
+            profile.width_anchors
+            if self._active_line_profile_anchor_kind == "width"
+            else profile.visibility_anchors
+        )
+        if not active_anchors:
+            return
+        active_index = min(
+            self._active_line_profile_anchor_index, len(active_anchors) - 1
+        )
+        selected_position = active_anchors[active_index].position
+        updated_active_anchor = dataclasses.replace(
+            active_anchors[active_index], position=position
+        )
+        width_index = _nearest_line_profile_anchor_index(
+            profile.width_anchors, selected_position
+        )
+        visibility_index = _nearest_line_profile_anchor_index(
+            profile.visibility_anchors, selected_position
+        )
+        width_anchors = list(profile.width_anchors)
+        visibility_anchors = list(profile.visibility_anchors)
+        if width_index is not None:
+            width_anchors[width_index] = dataclasses.replace(
+                width_anchors[width_index], position=position
+            )
+        if visibility_index is not None:
+            visibility_anchors[visibility_index] = dataclasses.replace(
+                visibility_anchors[visibility_index], position=position
+            )
+        width_anchors.sort(key=lambda anchor: anchor.position)
+        visibility_anchors.sort(key=lambda anchor: anchor.position)
+        if any(
+            left.position >= right.position
+            for anchors in (width_anchors, visibility_anchors)
+            for left, right in zip(anchors, anchors[1:])
+        ):
+            self._sync_line_profile_widgets()
+            return
+        try:
+            updated_profile = dataclasses.replace(
+                profile,
+                width_anchors=tuple(width_anchors),
+                visibility_anchors=tuple(visibility_anchors),
+            )
+        except ValueError:
+            self._sync_line_profile_widgets()
+            return
+        shape.line_profile = updated_profile
+        self._canvas_widgets.canvas.backup_shapes()
+        active_anchors = (
+            updated_profile.width_anchors
+            if self._active_line_profile_anchor_kind == "width"
+            else updated_profile.visibility_anchors
+        )
+        self._active_line_profile_anchor_index = active_anchors.index(
+            updated_active_anchor
+        )
+        self.mark_dirty()
+        self._sync_line_profile_widgets()
 
     def clear_selected_line_profile(self) -> None:
         selected = self._canvas_widgets.canvas.selected_shapes
@@ -2515,6 +2850,156 @@ class MainWindow(QtWidgets.QMainWindow):
             self._line_measurement_thread.quit()
         if self._line_measurement_progress is not None:
             self._line_measurement_progress.close()
+
+    def _cancel_line_profile_batch(self) -> None:
+        if self._line_profile_batch_worker is not None:
+            self._line_profile_batch_worker.cancel()
+        if self._line_profile_batch_thread is not None:
+            self._line_profile_batch_thread.requestInterruption()
+            self._line_profile_batch_thread.quit()
+        if self._line_profile_batch_progress is not None:
+            self._line_profile_batch_progress.close()
+
+    def _selected_line_profile_label_paths(self) -> list[str]:
+        paths: list[str] = []
+        for item in self._docks.file_list.selectedItems():
+            label_path = _resolve_label_path(
+                image_or_label_path=item.text(), output_dir=self._output_dir
+            )
+            if Path(label_path).is_file():
+                paths.append(label_path)
+        return paths
+
+    def fill_selected_line_profiles(self) -> None:
+        self._start_batch_line_profile_measurement(only_missing=True)
+
+    def rebuild_selected_line_profiles(self) -> None:
+        self._start_batch_line_profile_measurement(only_missing=False)
+
+    def _start_batch_line_profile_measurement(self, *, only_missing: bool) -> None:
+        if (
+            self._line_profile_batch_thread is not None
+            or self._line_measurement_thread is not None
+        ):
+            return
+        if not self._can_continue():
+            return
+        label_paths = self._selected_line_profile_label_paths()
+        if not label_paths:
+            self.show_status_message(
+                self.tr("No selected files have label annotations to measure")
+            )
+            return
+        operation = (
+            self.tr("fill missing line profiles")
+            if only_missing
+            else self.tr("rebuild line profiles")
+        )
+        confirmation = QMessageBox.question(
+            self,
+            self.tr("Batch Line Profile Measurement"),
+            self.tr("{0} in {1} selected label files?").format(
+                operation, len(label_paths)
+            ),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if confirmation != QMessageBox.StandardButton.Yes:
+            return
+
+        options = BatchOptions(
+            only_missing=only_missing,
+            parameters=self._line_measurement_parameters(),
+        )
+        progress = QProgressDialog(
+            self.tr("Measuring line profiles…"),
+            self.tr("Cancel"),
+            0,
+            len(label_paths),
+            self,
+        )
+        progress.setWindowTitle(self.tr("Batch Line Profile Measurement"))
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setAutoClose(False)
+        progress.setAutoReset(False)
+        thread = QThread(self)
+        worker = LineProfileBatchWorker()
+        worker.moveToThread(thread)
+        output_dir = None if self._output_dir is None else str(self._output_dir)
+        thread.started.connect(
+            lambda: worker.run(label_paths, output_dir, options)
+        )
+        worker.progress.connect(
+            lambda completed, total: progress.setRange(0, total)
+        )
+        worker.progress.connect(lambda completed, _total: progress.setValue(completed))
+        worker.succeeded.connect(self._on_batch_line_profile_result)
+        worker.failed.connect(self._on_batch_line_profile_failed)
+        worker.succeeded.connect(thread.quit)
+        worker.failed.connect(thread.quit)
+        thread.finished.connect(worker.deleteLater)
+        thread.finished.connect(thread.deleteLater)
+        thread.finished.connect(self._on_batch_line_profile_finished)
+        progress.canceled.connect(lambda: worker.cancel())
+        self._line_profile_batch_thread = thread
+        self._line_profile_batch_worker = worker
+        self._line_profile_batch_progress = progress
+        self._line_profile_batch_current_image_path = self._file_list_image_path
+        self._actions.batch_fill_line_profiles.setEnabled(False)
+        self._actions.batch_rebuild_line_profiles.setEnabled(False)
+        progress.show()
+        thread.start()
+
+    def _on_batch_line_profile_result(self, report: object) -> None:
+        if not isinstance(report, BatchReport):
+            return
+        processed = sum(item.status == "processed" for item in report.items)
+        processed_shapes = sum(item.processed_shapes for item in report.items)
+        skipped = sum(item.status.startswith("skipped") for item in report.items)
+        failed = len(report.failed)
+        canceled = len(report.canceled)
+        self.show_status_message(
+            self.tr(
+                "Batch measurement complete: {0} files, {1} linestrips, "
+                "{2} skipped, {3} failed, {4} canceled"
+            ).format(processed, processed_shapes, skipped, failed, canceled),
+            10000,
+        )
+        current_path = self._line_profile_batch_current_image_path
+        if current_path is None:
+            return
+        current_label = Path(
+            _resolve_label_path(
+                image_or_label_path=current_path,
+                output_dir=self._output_dir,
+            )
+        ).resolve()
+        if any(
+            item.status == "processed"
+            and Path(item.filename).resolve() == current_label
+            for item in report.items
+        ):
+            self._is_changed = False
+            self._load_file(image_or_label_path=current_path)
+
+    def _on_batch_line_profile_failed(self, message: str) -> None:
+        self.show_status_message(
+            self.tr("Batch line-profile measurement failed: {0}").format(message),
+            10000,
+        )
+
+    def _on_batch_line_profile_finished(self) -> None:
+        if self._line_profile_batch_progress is not None:
+            self._line_profile_batch_progress.close()
+            self._line_profile_batch_progress.deleteLater()
+        self._line_profile_batch_progress = None
+        self._line_profile_batch_worker = None
+        self._line_profile_batch_thread = None
+        self._line_profile_batch_current_image_path = None
+        has_selection = bool(self._docks.file_list.selectedItems())
+        self._actions.batch_fill_line_profiles.setEnabled(has_selection)
+        self._actions.batch_rebuild_line_profiles.setEnabled(has_selection)
 
     def measure_selected_line_profile(self) -> None:
         selected = self._canvas_widgets.canvas.selected_shapes
@@ -3480,6 +3965,7 @@ class MainWindow(QtWidgets.QMainWindow):
             a0.ignore()
             return
         self._cancel_line_measurement()
+        self._cancel_line_profile_batch()
         self._window_state.setValue(WINDOW_SIZE_KEY, self.size())
         self._window_state.setValue(WINDOW_POSITION_KEY, self.pos())
         self._window_state.setValue(WINDOW_LAYOUT_KEY, self.saveState())
@@ -3731,14 +4217,27 @@ class MainWindow(QtWidgets.QMainWindow):
             self._docks.file_list.setFocus()
 
     def _show_file_list_context_menu(self, point: QtCore.QPoint) -> None:
+        menu = self._build_file_list_context_menu()
+        menu.exec(self._docks.file_list.mapToGlobal(point))  # ty: ignore[invalid-argument-type]
+
+    def _build_file_list_context_menu(self) -> QtWidgets.QMenu:
         selected = self._docks.file_list.selectedItems()
         has_selection = len(selected) > 0
         self._actions.delete_selected_files.setEnabled(has_selection)
         self._actions.export_selected_files.setEnabled(has_selection)
+        batch_available = (
+            has_selection and self._line_profile_batch_thread is None
+        )
+        self._actions.batch_fill_line_profiles.setEnabled(batch_available)
+        self._actions.batch_rebuild_line_profiles.setEnabled(batch_available)
         menu = QtWidgets.QMenu(self)
         menu.addAction(self._actions.delete_selected_files)
         menu.addAction(self._actions.export_selected_files)
-        menu.exec(self._docks.file_list.mapToGlobal(point))  # ty: ignore[invalid-argument-type]
+        menu.addSeparator()
+        batch_menu = menu.addMenu(self.tr("Batch Line Profile"))
+        batch_menu.addAction(self._actions.batch_fill_line_profiles)
+        batch_menu.addAction(self._actions.batch_rebuild_line_profiles)
+        return menu
 
     def delete_selected_files(self) -> None:
         items = self._docks.file_list.selectedItems()
