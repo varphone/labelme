@@ -905,22 +905,9 @@ def crop_profile(
     _validate_position(end_position, field="end_position")
     if start_position >= end_position:
         raise ValueError("start_position must be less than end_position")
-    return dataclasses.replace(
+    return _replace_profile_anchors(
         profile,
-        width_anchors=_crop_anchor_set(
-            profile.width_anchors,
-            profile.evaluate_width,
-            start_position,
-            end_position,
-            WidthAnchor,
-        ),
-        visibility_anchors=_crop_anchor_set(
-            profile.visibility_anchors,
-            profile.evaluate_visibility,
-            start_position,
-            end_position,
-            VisibilityAnchor,
-        ),
+        _crop_shared_anchors(profile, start_position, end_position),
     )
 
 
@@ -1391,6 +1378,30 @@ def _crop_anchor_set(
                 )
             )
     return _deduplicate_anchors(selected)
+
+
+def _crop_shared_anchors(
+    profile: LineProfile, start_position: float, end_position: float
+) -> list[ProfileAnchor]:
+    selected = [
+        dataclasses.replace(
+            anchor,
+            position=(anchor.position - start_position)
+            / (end_position - start_position),
+        )
+        for anchor in profile.anchors
+        if start_position <= anchor.position <= end_position
+    ]
+    for boundary, normalized in ((start_position, 0.0), (end_position, 1.0)):
+        if any(math.isclose(anchor.position, normalized) for anchor in selected):
+            continue
+        width = _auto_profile_value(profile.evaluate_width(boundary), "width")
+        visibility = _auto_profile_value(
+            profile.evaluate_visibility(boundary), "visibility"
+        )
+        if width is not None or visibility is not None:
+            selected.append(ProfileAnchor(normalized, width, visibility))
+    return list(_deduplicate_shared_anchors(selected))
 
 
 def _resample_anchor_set(
