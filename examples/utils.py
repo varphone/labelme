@@ -74,6 +74,26 @@ def decode_img_data_as_rgb(img_data: bytes) -> NDArray[np.uint8]:
     return np.array(PIL.Image.open(io.BytesIO(img_data)).convert("RGB"))
 
 
+def _bezier_sample_points(
+    points: list[list[float]], samples: int = 64
+) -> list[tuple[float, float]]:
+    control = np.asarray(points, dtype=np.float64)
+    if len(control) not in (3, 4):
+        raise ValueError(f"Bezier curves require 3 or 4 points, got {len(control)}")
+    t = np.linspace(0.0, 1.0, samples)[:, None]
+    u = 1.0 - t
+    if len(control) == 3:
+        curve = u**2 * control[0] + 2.0 * u * t * control[1] + t**2 * control[2]
+    else:
+        curve = (
+            u**3 * control[0]
+            + 3.0 * u**2 * t * control[1]
+            + 3.0 * u * t**2 * control[2]
+            + t**3 * control[3]
+        )
+    return [tuple(point) for point in curve]
+
+
 def img_b64_to_arr(img_b64: str | bytes) -> NDArray[np.uint8]:
     return img_data_to_arr(base64.b64decode(img_b64))
 
@@ -107,6 +127,11 @@ def shape_to_mask(
     elif shape_type == "linestrip":
         # joint="curve" rounds the joints so wide lines have no notch at turns.
         draw.line(xy=xy, fill=1, width=line_width, joint="curve")  # ty: ignore[invalid-argument-type]
+    elif shape_type in ("bezier2", "bezier3"):
+        assert len(xy) == (3 if shape_type == "bezier2" else 4)
+        draw.line(
+            xy=_bezier_sample_points(points=points), fill=1, width=line_width
+        )  # ty: ignore[invalid-argument-type]
     elif shape_type == "point":
         assert len(xy) == 1, "Shape of shape_type=point must have 1 points"
         cx, cy = xy[0]

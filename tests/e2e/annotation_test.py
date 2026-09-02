@@ -164,6 +164,24 @@ def test_ai_points_mode_keeps_selected_sam3_and_rejects_click(
             id="linestrip",
         ),
         pytest.param(
+            "bezier2",
+            [(0.25, 0.75), (0.5, 0.25)],
+            (0.75, 0.75),
+            Qt.KeyboardModifier.NoModifier,
+            3,
+            None,
+            id="bezier2",
+        ),
+        pytest.param(
+            "bezier3",
+            [(0.25, 0.75), (0.35, 0.25), (0.65, 0.25)],
+            (0.75, 0.75),
+            Qt.KeyboardModifier.NoModifier,
+            4,
+            None,
+            id="bezier3",
+        ),
+        pytest.param(
             "ai_points_to_shape",
             [],
             (0.5, 0.5),
@@ -332,6 +350,8 @@ def test_annotate_shape_types(
     assert shape.shape_type == expected_shape_type
     assert shape.group_id is None
     assert shape.flags == {}
+    if expected_shape_type in ("bezier2", "bezier3"):
+        assert shape.closed is False
     assert (shape.mask is not None) == (expected_shape_type == "mask")
     if expected_num_points is not None:
         assert len(shape.points) == expected_num_points

@@ -95,6 +95,8 @@ canvas:
     line: false
     point: false
     linestrip: false
+    bezier2: false
+    bezier3: false
     ai_points_to_shape: false
     ai_box_to_shape: true
 shortcuts:
@@ -121,6 +123,8 @@ shortcuts:
   create_line:
   create_point:
   create_linestrip:
+  create_bezier2:
+  create_bezier3:
   edit_shape: Ctrl+J
   delete_shape: Delete
   duplicate_shape: Ctrl+D

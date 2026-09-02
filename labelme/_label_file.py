@@ -70,6 +70,8 @@ def _validate_shape_semantics(
         "circle": 2,
         "mask": 2,
         "oriented_rectangle": 4,
+        "bezier2": 3,
+        "bezier3": 4,
     }
     expected_point_count = EXACT_POINT_COUNT_BY_SHAPE_TYPE.get(shape_type)
     if expected_point_count is not None and len(points) != expected_point_count:

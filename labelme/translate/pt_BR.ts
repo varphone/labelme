@@ -105,6 +105,10 @@
         <translation>Clique no próximo ponto ou Ctrl/Cmd+Clique para finalizar (linha contínua)</translation>
     </message>
     <message>
+        <source>Click start point for quadratic Bezier curve</source>
+        <translation>Click start point for quadratic Bezier curve</translation>
+    </message>
+    <message>
         <source>Click center point for circle</source>
         <translation>Clique no ponto central do círculo</translation>
     </message>
@@ -159,6 +163,18 @@
     <message>
         <source>Click opposite corner to segment object</source>
         <translation>Clique no canto oposto para segmentar o objeto</translation>
+    </message>
+    <message>
+        <source>Click control point for Bezier curve</source>
+        <translation>Click control point for Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click end point for quadratic Bezier curve</source>
+        <translation>Click end point for quadratic Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click second control point for cubic Bezier curve</source>
+        <translation>Click second control point for cubic Bezier curve</translation>
     </message>
     <message>
         <source>Click first corner for oriented rectangle</source>
@@ -278,10 +294,6 @@
     <message>
         <source>Annotation List</source>
         <translation>Lista de Anotações</translation>
-    </message>
-    <message>
-        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
-        <translation>Selecione um rótulo para começar a anotar. Pressione &apos;Esc&apos; para desmarcar.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -722,6 +734,22 @@ Shapes</source>
         <translation>Copiar apenas perfis compatíveis do quadro anterior</translation>
     </message>
     <message>
+        <source>Quadratic Bezier</source>
+        <translation>Quadratic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a quadratic Bezier curve (3 points)</source>
+        <translation>Start drawing a quadratic Bezier curve (3 points)</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>Cubic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a cubic Bezier curve (4 points)</source>
+        <translation>Start drawing a cubic Bezier curve (4 points)</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Preencher Polígono ao Desenhar</translation>
     </message>
@@ -766,6 +794,10 @@ Shapes</source>
         <translation>Perfil da linha</translation>
     </message>
     <message>
+        <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Saída de máscara indisponível</translation>
     </message>
@@ -778,8 +810,36 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 Mude o modelo de AI Text-to-Annotation para &apos;SAM3 (smart)&apos; ou defina o formato de saída como &apos;Rectangle&apos;.</translation>
     </message>
     <message>
+        <source>Rename Label</source>
+        <translation>Rename Label</translation>
+    </message>
+    <message>
+        <source>Error reading label data</source>
+        <translation>Error reading label data</translation>
+    </message>
+    <message>
+        <source>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</source>
+        <translation>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;{}&lt;/b&gt;</source>
+        <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Renamed label in {0} other annotation files</translation>
+    </message>
+    <message>
+        <source>New label:</source>
+        <translation>New label:</translation>
+    </message>
+    <message>
         <source>Invalid label</source>
         <translation>Rótulo inválido</translation>
+    </message>
+    <message>
+        <source>A label named &apos;{}&apos; already exists.</source>
+        <translation>A label named &apos;{}&apos; already exists.</translation>
     </message>
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>

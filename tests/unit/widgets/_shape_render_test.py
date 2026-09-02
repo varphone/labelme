@@ -85,6 +85,12 @@ def _shape(shape_type: ShapeType, points: list[list[float]]) -> Shape:
             (0.0, 0.0, 10.0, 5.0),
         ),
         ("polygon", [[0, 0], [10, 0], [10, 5], [0, 5]], (0.0, 0.0, 10.0, 5.0)),
+        ("bezier2", [[0, 0], [5, 10], [10, 0]], (0.0, 0.0, 10.0, 5.0)),
+        (
+            "bezier3",
+            [[0, 0], [0, 10], [10, 10], [10, 0]],
+            (0.0, 0.0, 10.0, 7.5),
+        ),
         # A single point bounds to a zero-size rect at its own location.
         ("point", [[100, 100]], (100.0, 100.0, 0.0, 0.0)),
     ],
@@ -107,6 +113,8 @@ def test_bounds_spans_the_shape(
         ("mask", [[5, 5]]),
         ("circle", [[5, 5]]),
         ("oriented_rectangle", [[0, 0], [10, 0], [10, 5]]),
+        ("bezier2", [[0, 0], [5, 10]]),
+        ("bezier3", [[0, 0], [5, 10], [10, 0]]),
         ("polygon", []),
     ],
 )
@@ -115,6 +123,32 @@ def test_bounds_is_empty_for_incomplete_shape(
 ) -> None:
     shape = _shape(shape_type=shape_type, points=points)
     assert bounds(shape=shape).getRect() == (0.0, 0.0, 0.0, 0.0)
+
+
+@pytest.mark.parametrize("shape_type", ["bezier2", "bezier3"])
+def test_bezier_hit_testing_uses_curve_not_control_polygon(
+    shape_type: ShapeType,
+) -> None:
+    points = (
+        [[0.0, 0.0], [5.0, 10.0], [10.0, 0.0]]
+        if shape_type == "bezier2"
+        else [[0.0, 0.0], [0.0, 10.0], [10.0, 10.0], [10.0, 0.0]]
+    )
+    shape = _shape(shape_type=shape_type, points=points)
+    assert is_hit_by_point(
+        shape=shape,
+        point=np.array([5.0, 5.0 if shape_type == "bezier2" else 7.5]),
+        scale=1.0,
+        point_size=8,
+        epsilon=1.0,
+    )
+    assert not is_hit_by_point(
+        shape=shape,
+        point=np.array([5.0, 10.0]),
+        scale=1.0,
+        point_size=8,
+        epsilon=1.0,
+    )
 
 
 @pytest.mark.gui

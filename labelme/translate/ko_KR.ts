@@ -105,6 +105,10 @@
         <translation>다음 점을 클릭하거나 Ctrl/Cmd+클릭으로 완료 (연속선)</translation>
     </message>
     <message>
+        <source>Click start point for quadratic Bezier curve</source>
+        <translation>Click start point for quadratic Bezier curve</translation>
+    </message>
+    <message>
         <source>Click center point for circle</source>
         <translation>원의 중심점 클릭</translation>
     </message>
@@ -159,6 +163,18 @@
     <message>
         <source>Click opposite corner to segment object</source>
         <translation>대각 모서리를 클릭하여 객체를 세그먼트</translation>
+    </message>
+    <message>
+        <source>Click control point for Bezier curve</source>
+        <translation>Click control point for Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click end point for quadratic Bezier curve</source>
+        <translation>Click end point for quadratic Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click second control point for cubic Bezier curve</source>
+        <translation>Click second control point for cubic Bezier curve</translation>
     </message>
     <message>
         <source>Click first corner for oriented rectangle</source>
@@ -278,10 +294,6 @@
     <message>
         <source>Annotation List</source>
         <translation>주석 목록</translation>
-    </message>
-    <message>
-        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
-        <translation>주석을 시작할 레이블을 선택하세요. &apos;Esc&apos;를 눌러 선택 해제합니다.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -722,6 +734,22 @@ Shapes</source>
         <translation>이전 프레임에서 호환되는 프로필만 복사</translation>
     </message>
     <message>
+        <source>Quadratic Bezier</source>
+        <translation>Quadratic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a quadratic Bezier curve (3 points)</source>
+        <translation>Start drawing a quadratic Bezier curve (3 points)</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>Cubic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a cubic Bezier curve (4 points)</source>
+        <translation>Start drawing a cubic Bezier curve (4 points)</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>그리기 다각형 채우기</translation>
     </message>
@@ -766,6 +794,10 @@ Shapes</source>
         <translation>라인 프로필</translation>
     </message>
     <message>
+        <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>마스크 출력을 사용할 수 없음</translation>
     </message>
@@ -778,8 +810,36 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나 출력 형식을 &apos;Rectangle&apos;(으)로 설정하세요.</translation>
     </message>
     <message>
+        <source>Rename Label</source>
+        <translation>Rename Label</translation>
+    </message>
+    <message>
+        <source>Error reading label data</source>
+        <translation>Error reading label data</translation>
+    </message>
+    <message>
+        <source>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</source>
+        <translation>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;{}&lt;/b&gt;</source>
+        <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Renamed label in {0} other annotation files</translation>
+    </message>
+    <message>
+        <source>New label:</source>
+        <translation>New label:</translation>
+    </message>
+    <message>
         <source>Invalid label</source>
         <translation>잘못된 레이블</translation>
+    </message>
+    <message>
+        <source>A label named &apos;{}&apos; already exists.</source>
+        <translation>A label named &apos;{}&apos; already exists.</translation>
     </message>
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>

@@ -105,6 +105,10 @@
         <translation>单击添加下一个顶点；按住 Ctrl/Cmd 并单击以结束折线</translation>
     </message>
     <message>
+        <source>Click start point for quadratic Bezier curve</source>
+        <translation>单击确定二阶贝塞尔曲线起点</translation>
+    </message>
+    <message>
         <source>Click center point for circle</source>
         <translation>单击确定圆心</translation>
     </message>
@@ -159,6 +163,18 @@
     <message>
         <source>Click opposite corner to segment object</source>
         <translation>单击对角以分割对象</translation>
+    </message>
+    <message>
+        <source>Click control point for Bezier curve</source>
+        <translation>单击确定贝塞尔曲线控制点</translation>
+    </message>
+    <message>
+        <source>Click end point for quadratic Bezier curve</source>
+        <translation>单击确定二阶贝塞尔曲线终点</translation>
+    </message>
+    <message>
+        <source>Click second control point for cubic Bezier curve</source>
+        <translation>单击确定三阶贝塞尔曲线第二个控制点</translation>
     </message>
     <message>
         <source>Click first corner for oriented rectangle</source>
@@ -278,10 +294,6 @@
     <message>
         <source>Annotation List</source>
         <translation>标注列表</translation>
-    </message>
-    <message>
-        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
-        <translation>选择标签以开始标注；按 &apos;Esc&apos; 取消选择。</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -722,6 +734,22 @@ Shapes</source>
         <translation>仅从上一帧复制兼容的线条配置</translation>
     </message>
     <message>
+        <source>Quadratic Bezier</source>
+        <translation>二阶贝塞尔曲线</translation>
+    </message>
+    <message>
+        <source>Start drawing a quadratic Bezier curve (3 points)</source>
+        <translation>开始绘制二阶贝塞尔曲线（3 个点）</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>三阶贝塞尔曲线</translation>
+    </message>
+    <message>
+        <source>Start drawing a cubic Bezier curve (4 points)</source>
+        <translation>开始绘制三阶贝塞尔曲线（4 个点）</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>填充正在绘制的多边形</translation>
     </message>
@@ -766,6 +794,10 @@ Shapes</source>
         <translation>线条配置</translation>
     </message>
     <message>
+        <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>掩膜输出不可用</translation>
     </message>
@@ -778,8 +810,36 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 请将 AI Text-to-Annotation 模型切换为 &apos;SAM3 (smart)&apos;，或将输出格式设置为 &apos;Rectangle&apos;。</translation>
     </message>
     <message>
+        <source>Rename Label</source>
+        <translation>Rename Label</translation>
+    </message>
+    <message>
+        <source>Error reading label data</source>
+        <translation>Error reading label data</translation>
+    </message>
+    <message>
+        <source>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</source>
+        <translation>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;{}&lt;/b&gt;</source>
+        <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Renamed label in {0} other annotation files</translation>
+    </message>
+    <message>
+        <source>New label:</source>
+        <translation>New label:</translation>
+    </message>
+    <message>
         <source>Invalid label</source>
         <translation>标签无效</translation>
+    </message>
+    <message>
+        <source>A label named &apos;{}&apos; already exists.</source>
+        <translation>A label named &apos;{}&apos; already exists.</translation>
     </message>
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>

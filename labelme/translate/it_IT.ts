@@ -105,6 +105,10 @@
         <translation>Clicca sul punto successivo o Ctrl/Cmd+Clicca per terminare la polilinea</translation>
     </message>
     <message>
+        <source>Click start point for quadratic Bezier curve</source>
+        <translation>Click start point for quadratic Bezier curve</translation>
+    </message>
+    <message>
         <source>Click center point for circle</source>
         <translation>Clicca sul punto centrale del cerchio</translation>
     </message>
@@ -159,6 +163,18 @@
     <message>
         <source>Click opposite corner to segment object</source>
         <translation>Fare clic sull&apos;angolo opposto per segmentare l&apos;oggetto</translation>
+    </message>
+    <message>
+        <source>Click control point for Bezier curve</source>
+        <translation>Click control point for Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click end point for quadratic Bezier curve</source>
+        <translation>Click end point for quadratic Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click second control point for cubic Bezier curve</source>
+        <translation>Click second control point for cubic Bezier curve</translation>
     </message>
     <message>
         <source>Click first corner for oriented rectangle</source>
@@ -278,10 +294,6 @@
     <message>
         <source>Annotation List</source>
         <translation>Lista annotazioni</translation>
-    </message>
-    <message>
-        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
-        <translation>Seleziona un&apos;etichetta per iniziare ad annotare. Premi &apos;Esc&apos; per deselezionare.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -728,6 +740,22 @@ forme</translation>
         <translation>Copia solo i profili compatibili dal fotogramma precedente</translation>
     </message>
     <message>
+        <source>Quadratic Bezier</source>
+        <translation>Quadratic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a quadratic Bezier curve (3 points)</source>
+        <translation>Start drawing a quadratic Bezier curve (3 points)</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>Cubic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a cubic Bezier curve (4 points)</source>
+        <translation>Start drawing a cubic Bezier curve (4 points)</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>Riempire poligono in disegno</translation>
     </message>
@@ -772,6 +800,10 @@ forme</translation>
         <translation>Profilo linea</translation>
     </message>
     <message>
+        <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Output maschera non disponibile</translation>
     </message>
@@ -784,8 +816,36 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure imposta il formato di output su &apos;Rectangle&apos;.</translation>
     </message>
     <message>
+        <source>Rename Label</source>
+        <translation>Rename Label</translation>
+    </message>
+    <message>
+        <source>Error reading label data</source>
+        <translation>Error reading label data</translation>
+    </message>
+    <message>
+        <source>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</source>
+        <translation>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;{}&lt;/b&gt;</source>
+        <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Renamed label in {0} other annotation files</translation>
+    </message>
+    <message>
+        <source>New label:</source>
+        <translation>New label:</translation>
+    </message>
+    <message>
         <source>Invalid label</source>
         <translation>Etichetta non valida</translation>
+    </message>
+    <message>
+        <source>A label named &apos;{}&apos; already exists.</source>
+        <translation>A label named &apos;{}&apos; already exists.</translation>
     </message>
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>

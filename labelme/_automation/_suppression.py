@@ -9,6 +9,7 @@ import PIL.ImageDraw
 from numpy.typing import NDArray
 
 from .._shape import Shape
+from .._shape import bezier_sample_points
 from ._geometry import _round_bbox_to_int
 from ._geometry import shape_to_xyxy_bbox
 from ._shape_builders import Detection
@@ -233,6 +234,15 @@ def _rasterize_shape(
         draw = PIL.ImageDraw.Draw(image)
         points_local = [tuple(point) for point in (shape.points - [xmin, ymin])]
         draw.polygon(points_local, fill=1)
+        return np.asarray(image, dtype=np.bool_)
+    if shape.shape_type in ("bezier2", "bezier3"):
+        image = PIL.Image.new("L", (width, height), 0)
+        draw = PIL.ImageDraw.Draw(image)
+        sampled = bezier_sample_points(shape.points) - [xmin, ymin]
+        points_local = [
+            tuple(point) for point in sampled
+        ]
+        draw.line(points_local, fill=1, width=1)
         return np.asarray(image, dtype=np.bool_)
     raise ValueError(f"Unsupported shape_type: {shape.shape_type!r}")
 
