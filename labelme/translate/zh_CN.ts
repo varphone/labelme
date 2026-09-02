@@ -12,6 +12,22 @@
         <translation>在 &apos;AI-Points&apos; 和 &apos;AI-Box&apos; 模式下，AI 会提供标注建议</translation>
     </message>
     <message>
+        <source>Polygon detail</source>
+        <translation>多边形细节</translation>
+    </message>
+    <message>
+        <source>Adjust polygon detail</source>
+        <translation>调整多边形细节</translation>
+    </message>
+    <message>
+        <source>Smoother</source>
+        <translation>更平滑</translation>
+    </message>
+    <message>
+        <source>More detail</source>
+        <translation>更多细节</translation>
+    </message>
+    <message>
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>请选择 &apos;AI-Points&apos; 或 &apos;AI-Box&apos; 模式以启用 AI 辅助标注</translation>
     </message>
@@ -750,12 +766,36 @@ Shapes</source>
         <translation>开始绘制三阶贝塞尔曲线（4 个点）</translation>
     </message>
     <message>
+        <source>猫氏样条</source>
+        <translation>猫氏样条</translation>
+    </message>
+    <message>
+        <source>Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation.</source>
+        <translation>开始绘制猫氏样条曲线；按住 Ctrl 并单击结束创建。</translation>
+    </message>
+    <message>
+        <source>B样条</source>
+        <translation>B 样条</translation>
+    </message>
+    <message>
+        <source>Start drawing a B-spline. Ctrl+LeftClick ends creation.</source>
+        <translation>开始绘制 B 样条曲线；按住 Ctrl 并单击结束创建。</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>填充正在绘制的多边形</translation>
     </message>
     <message>
         <source>Fill polygon while drawing</source>
         <translation>绘制过程中填充多边形</translation>
+    </message>
+    <message>
+        <source>Show Minimap</source>
+        <translation>显示小地图</translation>
+    </message>
+    <message>
+        <source>Show or hide the canvas minimap</source>
+        <translation>显示或隐藏画布小地图</translation>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
@@ -795,7 +835,7 @@ Shapes</source>
     </message>
     <message>
         <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
-        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
+        <translation>请选择一个标签开始标注。双击或右键单击可重命名；按 Esc 取消选择。</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -811,15 +851,15 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Rename Label</source>
-        <translation>Rename Label</translation>
+        <translation>重命名标签</translation>
     </message>
     <message>
         <source>Error reading label data</source>
-        <translation>Error reading label data</translation>
+        <translation>读取标签数据时出错</translation>
     </message>
     <message>
         <source>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</source>
-        <translation>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</translation>
+        <translation>无法读取存储在 &lt;b&gt;{}&lt;/b&gt; 中的图像。</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -827,11 +867,11 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>已在另外 {0} 个标注文件中重命名标签</translation>
     </message>
     <message>
         <source>New label:</source>
-        <translation>New label:</translation>
+        <translation>新标签：</translation>
     </message>
     <message>
         <source>Invalid label</source>
@@ -839,7 +879,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>A label named &apos;{}&apos; already exists.</source>
-        <translation>A label named &apos;{}&apos; already exists.</translation>
+        <translation>名为“{}”的标签已存在。</translation>
     </message>
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
@@ -851,31 +891,31 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Sample spacing</source>
-        <translation>Sample spacing</translation>
+        <translation>采样间距</translation>
     </message>
     <message>
         <source>Search radius</source>
-        <translation>Search radius</translation>
+        <translation>搜索半径</translation>
     </message>
     <message>
         <source>Minimum width</source>
-        <translation>Minimum width</translation>
+        <translation>最小宽度</translation>
     </message>
     <message>
         <source>Maximum width</source>
-        <translation>Maximum width</translation>
+        <translation>最大宽度</translation>
     </message>
     <message>
         <source>Contrast factor</source>
-        <translation>Contrast factor</translation>
+        <translation>对比度系数</translation>
     </message>
     <message>
         <source>Override global measurement settings</source>
-        <translation>Override global measurement settings</translation>
+        <translation>覆盖全局测量设置</translation>
     </message>
     <message>
         <source>Invalid Measurement Parameters</source>
-        <translation>Invalid Measurement Parameters</translation>
+        <translation>测量参数无效</translation>
     </message>
     <message>
         <source>No selected files have label annotations to measure</source>
@@ -911,7 +951,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Measuring line profile…</source>
-        <translation>Measuring line profile…</translation>
+        <translation>正在测量线剖面…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
@@ -919,7 +959,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Measurement result is out of date</source>
-        <translation>Measurement result is out of date</translation>
+        <translation>测量结果已过期</translation>
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
@@ -927,15 +967,15 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
-        <translation>Measurement produced {0} samples. Accept automatic width and visibility anchors?</translation>
+        <translation>测量生成了 {0} 个样本。是否接受自动宽度和可见性锚点？</translation>
     </message>
     <message>
         <source>Only accept samples with confidence &gt;= 0.5</source>
-        <translation>Only accept samples with confidence &gt;= 0.5</translation>
+        <translation>仅接受置信度 &gt;= 0.5 的样本</translation>
     </message>
     <message>
         <source>Line profile measurement failed: {0}</source>
-        <translation>Line profile measurement failed: {0}</translation>
+        <translation>线剖面测量失败：{0}</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -967,33 +1007,33 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Previous frame profiles are incompatible: {0}</source>
-        <translation>Previous frame profiles are incompatible: {0}</translation>
+        <translation>上一帧的线剖面不兼容：{0}</translation>
     </message>
     <message>
         <source>Shape {0} ({1}): centerline difference {2:.2f} px</source>
-        <translation>Shape {0} ({1}): centerline difference {2:.2f} px</translation>
+        <translation>形状 {0}（{1}）：中心线差异 {2:.2f} 像素</translation>
     </message>
     <message>
         <source>unlabeled</source>
-        <translation>unlabeled</translation>
+        <translation>未标注</translation>
     </message>
     <message>
         <source>Shape {0}: width difference {1}, visibility difference {2}</source>
-        <translation>Shape {0}: width difference {1}, visibility difference {2}</translation>
+        <translation>形状 {0}：宽度差异 {1}，可见性差异 {2}</translation>
     </message>
     <message>
         <source>n/a</source>
-        <translation>n/a</translation>
+        <translation>不适用</translation>
     </message>
     <message>
         <source>Frame Profile Transfer Preview</source>
-        <translation>Frame Profile Transfer Preview</translation>
+        <translation>帧线剖面传递预览</translation>
     </message>
     <message>
         <source>Copy profiles from the previous frame?
 
 {0}</source>
-        <translation>Copy profiles from the previous frame?
+        <translation>是否从上一帧复制线剖面？
 
 {0}</translation>
     </message>
@@ -1292,7 +1332,7 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>Line profile measurement</source>
-        <translation>Line profile measurement</translation>
+        <translation>线剖面测量</translation>
     </message>
     <message>
         <source>Save automatically</source>
@@ -1305,6 +1345,42 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>将图像嵌入标签 JSON 文件中。</translation>
+    </message>
+    <message>
+        <source>Show annotation outlines in Minimap</source>
+        <translation>在小地图中显示标注轮廓</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>形状颜色模式</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>自动</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>统一</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>按标签</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>自动调色板偏移</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>统一模式颜色</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>按标签模式的备用颜色</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>单个标签的颜色仍可在配置文件中编辑。</translation>
     </message>
     <message>
         <source>Snap cursor to annotation points</source>
@@ -1368,31 +1444,31 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>Sample spacing</source>
-        <translation>Sample spacing</translation>
+        <translation>采样间距</translation>
     </message>
     <message>
         <source>Pixels along the centerline.</source>
-        <translation>Pixels along the centerline.</translation>
+        <translation>沿中心线的像素数。</translation>
     </message>
     <message>
         <source>Search radius</source>
-        <translation>Search radius</translation>
+        <translation>搜索半径</translation>
     </message>
     <message>
         <source>Pixels sampled on each normal.</source>
-        <translation>Pixels sampled on each normal.</translation>
+        <translation>沿每条法线采样的像素范围。</translation>
     </message>
     <message>
         <source>Minimum width</source>
-        <translation>Minimum width</translation>
+        <translation>最小宽度</translation>
     </message>
     <message>
         <source>Maximum width</source>
-        <translation>Maximum width</translation>
+        <translation>最大宽度</translation>
     </message>
     <message>
         <source>Contrast factor</source>
-        <translation>Contrast factor</translation>
+        <translation>对比度系数</translation>
     </message>
     <message>
         <source>Default model</source>
@@ -1435,6 +1511,14 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Sam3</translation>
     </message>
     <message>
+        <source>Polygon detail</source>
+        <translation>多边形细节</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>值越高，越能保留掩膜边界细节，并减少小区域。</translation>
+    </message>
+    <message>
         <source>Suppress existing Shape matches</source>
         <translation>抑制与已有形状匹配的结果</translation>
     </message>
@@ -1460,7 +1544,7 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>BETA</source>
-        <translation>BETA</translation>
+        <translation>测试版</translation>
     </message>
     <message>
         <source>(none)</source>
@@ -1493,6 +1577,13 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Predefined image flags</source>
         <translation>预定义图像标记</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB：{red}、{green}、{blue}</translation>
     </message>
 </context>
 <context>
