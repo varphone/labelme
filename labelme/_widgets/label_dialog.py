@@ -237,6 +237,19 @@ class LabelDialog(QtWidgets.QDialog):
             if self._sort_labels:
                 self.label_list.sortItems()
 
+    def rename_label_history(self, old_label: str, new_label: str) -> None:
+        """Replace a label in session history and the dialog's visible list."""
+        self._label_history = [
+            new_label if label == old_label else label for label in self._label_history
+        ]
+
+        for item in self.label_list.findItems(
+            old_label, QtCore.Qt.MatchFlag.MatchExactly
+        ):
+            item.setText(new_label)
+        if self._sort_labels:
+            self.label_list.sortItems()
+
     def set_predefined_labels(self, labels: list[str]) -> None:
         history_extras = [h for h in self._label_history if h not in labels]
         all_labels = list(dict.fromkeys(labels)) + history_extras

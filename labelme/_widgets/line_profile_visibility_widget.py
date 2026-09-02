@@ -15,22 +15,22 @@ class LineProfileVisibilityWidget(QtWidgets.QWidget):
 
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
         super().__init__(parent)
-        self._position = self._make_spin_box(0.0, 1.0)
+        self._position: float = 0.0
         self._visibility = self._make_spin_box(0.0, 1.0)
         self._source = QtWidgets.QComboBox(self)
-        self._source.addItems(["auto", "manual"])
+        self._source.addItem(self.tr("Automatic"), "auto")
+        self._source.addItem(self.tr("Manual"), "manual")
         self._confirmed = QtWidgets.QCheckBox(self.tr("Confirmed"), self)
         self._confidence = self._make_spin_box(0.0, 1.0)
 
         layout = QtWidgets.QFormLayout(self)
-        layout.addRow(self.tr("Position"), self._position)
         layout.addRow(self.tr("Visibility"), self._visibility)
         layout.addRow(self.tr("Source"), self._source)
         layout.addRow(self.tr("Confidence"), self._confidence)
         layout.addRow(self._confirmed)
-        for widget in (self._position, self._visibility, self._confidence):
+        for widget in (self._visibility, self._confidence):
             widget.editingFinished.connect(self._on_editing_finished)
-        self._source.currentTextChanged.connect(self._on_editing_finished)
+        self._source.currentIndexChanged.connect(self._on_editing_finished)
         self._confirmed.toggled.connect(self._on_editing_finished)
         self.set_anchor(None)
 
@@ -51,15 +51,14 @@ class LineProfileVisibilityWidget(QtWidgets.QWidget):
             return
         position, visibility, source, confidence, confirmed = values
         blockers = [
-            QtCore.QSignalBlocker(self._position),
             QtCore.QSignalBlocker(self._visibility),
             QtCore.QSignalBlocker(self._source),
             QtCore.QSignalBlocker(self._confidence),
             QtCore.QSignalBlocker(self._confirmed),
         ]
-        self._position.setValue(position)
+        self._position = position
         self._visibility.setValue(visibility)
-        self._source.setCurrentText(source)
+        self._source.setCurrentIndex(self._source.findData(source))
         self._confidence.setValue(confidence)
         self._confirmed.setChecked(confirmed)
         del blockers
@@ -68,9 +67,9 @@ class LineProfileVisibilityWidget(QtWidgets.QWidget):
         if not self.isEnabled():
             return
         self.visibility_committed.emit(
-            self._position.value(),
+            self._position,
             self._visibility.value(),
-            self._source.currentText(),
+            self._source.currentData(),
             self._confidence.value(),
             self._confirmed.isChecked(),
         )
