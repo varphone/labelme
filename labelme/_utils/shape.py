@@ -14,6 +14,7 @@ import PIL.ImageDraw
 from numpy.typing import NDArray
 
 from labelme._line_profile import LineProfile
+from labelme._shape import bezier_sample_points
 
 
 class ShapeDict(TypedDict):
@@ -58,6 +59,14 @@ def shape_to_mask(
     elif shape_type == "linestrip":
         # joint="curve" rounds the joints so wide lines have no notch at turns.
         draw.line(xy=xy, fill=1, width=line_width, joint="curve")  # ty: ignore[invalid-argument-type]
+    elif shape_type in ("bezier2", "bezier3"):
+        assert len(xy) == (3 if shape_type == "bezier2" else 4), (
+            f"Shape of shape_type={shape_type} has an invalid point count"
+        )
+        curve = bezier_sample_points(np.asarray(points, dtype=np.float64))
+        draw.line(
+            xy=[tuple(point) for point in curve], fill=1, width=line_width
+        )  # ty: ignore[invalid-argument-type]
     elif shape_type == "point":
         assert len(xy) == 1, "Shape of shape_type=point must have 1 points"
         cx, cy = xy[0]

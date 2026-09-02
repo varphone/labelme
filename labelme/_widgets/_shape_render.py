@@ -191,7 +191,14 @@ def _paint_shape_points(
         highlighted=context.rotation_highlight is not None,
         palette=palette,
     )
-    if context.fill and shape.shape_type not in ["line", "linestrip", "points", "mask"]:
+    if context.fill and shape.shape_type not in [
+        "line",
+        "linestrip",
+        "bezier2",
+        "bezier3",
+        "points",
+        "mask",
+    ]:
         fill = palette.select_fill if context.selected else palette.fill
         painter.fillPath(paths.line, fill)
     if paths.orientation_arrow.length() > 0:
@@ -363,6 +370,26 @@ def _build_shape_points_paths(
             _build_shape_point_path(
                 path=paths.vertices, shape=shape, context=context, vertex_index=i
             )
+    elif shape.shape_type in ("bezier2", "bezier3"):
+        if len(points) > 0:
+            paths.line.moveTo(QtCore.QPointF(*(points[0] * scale)))
+        if shape.shape_type == "bezier2" and len(points) >= 3:
+            paths.line.quadTo(
+                QtCore.QPointF(*(points[1] * scale)),
+                QtCore.QPointF(*(points[2] * scale)),
+            )
+        elif shape.shape_type == "bezier3" and len(points) >= 4:
+            paths.line.cubicTo(
+                QtCore.QPointF(*(points[1] * scale)),
+                QtCore.QPointF(*(points[2] * scale)),
+                QtCore.QPointF(*(points[3] * scale)),
+            )
+        elif len(points) > 1:
+            paths.line.lineTo(QtCore.QPointF(*(points[-1] * scale)))
+        for i in range(len(points)):
+            _build_shape_point_path(
+                path=paths.vertices, shape=shape, context=context, vertex_index=i
+            )
     elif shape.shape_type == "points":
         assert len(points) == len(shape.point_labels)
         for i, point_label in enumerate(shape.point_labels):
@@ -390,7 +417,7 @@ def is_hit_by_point(
     point_size: int,
     epsilon: float,
 ) -> bool:
-    if shape.shape_type in ("line", "linestrip"):
+    if shape.shape_type in ("line", "linestrip", "bezier2", "bezier3"):
         return (
             nearest_edge_index(shape=shape, point=point, scale=scale, epsilon=epsilon)
             is not None
@@ -437,6 +464,20 @@ def _build_image_path(*, shape: Shape) -> QtGui.QPainterPath:
             for p in points[1:]:
                 out.lineTo(QtCore.QPointF(*p))
             out.lineTo(QtCore.QPointF(*points[0]))
+    elif shape.shape_type == "bezier2":
+        if len(points) == 3:
+            out.moveTo(QtCore.QPointF(*points[0]))
+            out.quadTo(
+                QtCore.QPointF(*points[1]), QtCore.QPointF(*points[2])
+            )
+    elif shape.shape_type == "bezier3":
+        if len(points) == 4:
+            out.moveTo(QtCore.QPointF(*points[0]))
+            out.cubicTo(
+                QtCore.QPointF(*points[1]),
+                QtCore.QPointF(*points[2]),
+                QtCore.QPointF(*points[3]),
+            )
     else:
         if len(points) > 0:
             out.moveTo(QtCore.QPointF(*points[0]))

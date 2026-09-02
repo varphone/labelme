@@ -10,7 +10,9 @@ import skimage
 from loguru import logger
 from numpy.typing import NDArray
 
+from .._shape import BEZIER_SHAPE_TYPES
 from .._shape import Shape
+from .._shape import bezier_sample_points
 
 
 class Circle(NamedTuple):
@@ -55,13 +57,20 @@ def shape_to_xyxy_bbox(*, shape: Shape) -> NDArray[np.float32] | None:
         "mask": 2,
         "polygon": 3,
         "oriented_rectangle": 4,
+        "bezier2": 3,
+        "bezier3": 4,
     }
     if shape.shape_type not in minimum_points_by_shape_type:
         raise ValueError(f"Unsupported shape_type: {shape.shape_type!r}")
     if len(shape.points) < minimum_points_by_shape_type[shape.shape_type]:
         return None
-    xmin, ymin = shape.points.min(axis=0)
-    xmax, ymax = shape.points.max(axis=0)
+    points = (
+        bezier_sample_points(shape.points)
+        if shape.shape_type in BEZIER_SHAPE_TYPES
+        else shape.points
+    )
+    xmin, ymin = points.min(axis=0)
+    xmax, ymax = points.max(axis=0)
     return np.array([xmin, ymin, xmax, ymax], dtype=np.float32)
 
 
