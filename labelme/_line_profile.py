@@ -136,7 +136,7 @@ class LineProfile:
             self.schema_version, int
         ):
             raise ValueError("schema_version must be an int")
-        if self.schema_version not in (1, CURRENT_SCHEMA_VERSION):
+        if self.schema_version != CURRENT_SCHEMA_VERSION:
             raise ValueError(
                 f"unsupported line_profile schema_version: {self.schema_version}"
             )
@@ -176,6 +176,9 @@ class LineProfile:
             field="visibility_anchors",
         )
         if self.anchors and not self.width_anchors and not self.visibility_anchors:
+            _validate_shared_anchors(
+                self.anchors, min_width=min_width, max_width=max_width
+            )
             object.__setattr__(
                 self, "width_anchors", _legacy_width_anchors(self.anchors)
             )
@@ -371,7 +374,7 @@ def migrate_line_profile_json(value: object) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError("line_profile must be an object")
     version = _required_int(value, "schema_version")
-    if version not in (1, CURRENT_SCHEMA_VERSION):
+    if version != CURRENT_SCHEMA_VERSION:
         raise ValueError(
             f"no line_profile migration is available for schema_version {version}"
         )
