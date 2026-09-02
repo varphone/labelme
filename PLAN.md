@@ -715,7 +715,7 @@ ProfileAnchor(
 
 - [x] 新增独立的 Qt-free profile 模块，建议命名为 `labelme/_line_profile.py`；
 - [x] 定义 `LineProfile`、`ProfileAnchor` 和 `ProfileValue` 数据类型；
-- [ ] 删除独立的宽度锚点/可见程度锚点类型及其并行数组；
+- [x] 删除独立的宽度锚点/可见程度锚点类型及其并行数组；
 - [x] 明确可变编辑对象与序列化快照之间的边界；
 - [x] 为共享锚点提供确定性的排序、复制和深拷贝行为；
 - [x] 实现 `validate_profile`，覆盖共享位置、属性缺失、属性范围、有限数值、重复位置和模式约束；

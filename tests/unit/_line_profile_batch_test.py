@@ -10,7 +10,8 @@ from labelme._label_file import ShapeDict
 from labelme._label_file import read_label_file
 from labelme._label_file import write_label_file
 from labelme._line_profile import LineProfile
-from labelme._line_profile import WidthAnchor
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
 from labelme._line_profile_batch import BatchOptions
 from labelme._line_profile_batch import measure_annotation_files
 from labelme._line_profile_batch import preview_annotation_files
@@ -233,7 +234,7 @@ def test_fill_skips_existing_profiles_and_rebuild_preserves_manual_anchors(
     missing = tmp_path / "missing.json"
     existing = tmp_path / "existing.json"
     manual_profile = LineProfile(
-        width_anchors=(WidthAnchor(0.5, 12.0, "manual", 1.0, True),)
+        anchors=(ProfileAnchor(0.5, width=ProfileValue(12.0, "manual", 1.0, True)),)
     )
     write_input(missing, None)
     write_input(existing, manual_profile)
@@ -253,5 +254,9 @@ def test_fill_skips_existing_profiles_and_rebuild_preserves_manual_anchors(
     assert rebuild.items[0].status == "processed"
     rebuilt_profile = read_label_file(str(existing)).shapes[0]["line_profile"]
     assert rebuilt_profile is not None
-    assert manual_profile.width_anchors[0] in rebuilt_profile.width_anchors
-    assert len(rebuilt_profile.width_anchors) > 1
+    assert any(
+        anchor.width == manual_profile.anchors[0].width
+        for anchor in rebuilt_profile.anchors
+        if anchor.width is not None
+    )
+    assert sum(anchor.width is not None for anchor in rebuilt_profile.anchors) > 1

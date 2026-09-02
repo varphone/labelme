@@ -5,7 +5,8 @@ from collections.abc import Callable
 import pytest
 
 from labelme._line_profile import LineProfile
-from labelme._line_profile import WidthAnchor
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
 from labelme._line_profile import crop_profile
 from labelme._line_profile import cumulative_lengths
 from labelme._line_profile import extend_profile
@@ -153,8 +154,9 @@ def test_remap_profile_projects_anchors_after_vertex_edit() -> None:
         new_points=[[0.0, 0.0], [20.0, 0.0]],
     )
 
-    assert [anchor.position for anchor in remapped.width_anchors] == [0.0, 0.5]
-    assert [anchor.width for anchor in remapped.width_anchors] == [4.0, 8.0]
+    width_anchors = [anchor for anchor in remapped.anchors if anchor.width is not None]
+    assert [anchor.position for anchor in width_anchors] == [0.0, 0.5]
+    assert [anchor.width.value for anchor in width_anchors] == [4.0, 8.0]
 
 
 def test_remap_profile_keeps_translation_positions_unchanged() -> None:
@@ -180,11 +182,11 @@ def test_reverse_split_and_merge_profiles() -> None:
         right_length=10.0,
     )
 
-    assert [anchor.position for anchor in reversed_profile.width_anchors] == [0.0, 1.0]
-    assert [anchor.position for anchor in left.width_anchors] == [0.0, 1.0]
-    assert [anchor.position for anchor in right.width_anchors] == [0.0, 1.0]
+    assert [a.position for a in reversed_profile.anchors if a.width] == [0.0, 1.0]
+    assert [a.position for a in left.anchors if a.width] == [0.0, 1.0]
+    assert [a.position for a in right.anchors if a.width] == [0.0, 1.0]
     assert merged is not None
-    assert [anchor.position for anchor in merged.width_anchors] == [0.0, 0.5, 1.0]
+    assert [a.position for a in merged.anchors if a.width] == [0.0, 0.5, 1.0]
 
 
 def test_profile_boundary_points_use_full_width_and_local_normals() -> None:
@@ -202,10 +204,10 @@ def test_profile_boundary_points_use_full_width_and_local_normals() -> None:
 
 def test_profile_boundary_points_miter_a_right_angle_corner() -> None:
     profile = LineProfile(
-        width_anchors=(
+        anchors=(
             # Keep the width constant so the corner geometry is isolated.
-            WidthAnchor(0.0, 6.0, "manual", 1.0, True),
-            WidthAnchor(1.0, 6.0, "manual", 1.0, True),
+            ProfileAnchor(0.0, ProfileValue(6.0, "manual", 1.0, True)),
+            ProfileAnchor(1.0, ProfileValue(6.0, "manual", 1.0, True)),
         )
     )
 
@@ -253,10 +255,17 @@ def test_profile_anchor_insert_and_remove_preserve_interpolated_values() -> None
 
     assert inserted.evaluate_width(0.5) == pytest.approx(6.0)
     assert inserted.evaluate_visibility(0.5) == pytest.approx(0.75)
-    assert len(inserted.width_anchors) == 3
-    assert len(inserted.visibility_anchors) == 3
-    assert len(remove_width_anchor(inserted, 1).width_anchors) == 2
-    assert len(remove_visibility_anchor(inserted, 1).visibility_anchors) == 2
+    assert sum(anchor.width is not None for anchor in inserted.anchors) == 3
+    assert sum(anchor.visibility is not None for anchor in inserted.anchors) == 3
+    removed_width = remove_width_anchor(inserted, 1)
+    assert sum(anchor.width is not None for anchor in removed_width.anchors) == 2
+    assert (
+        sum(
+            anchor.visibility is not None
+            for anchor in remove_visibility_anchor(inserted, 1).anchors
+        )
+        == 2
+    )
 
     with pytest.raises(ValueError, match="already exists"):
         insert_width_anchor(inserted, 0.5)

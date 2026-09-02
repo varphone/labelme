@@ -17,7 +17,8 @@ from pytestqt.qtbot import QtBot
 
 from labelme._automation._ai_assist import AiAssistProposal
 from labelme._line_profile import LineProfile
-from labelme._line_profile import WidthAnchor
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
 from labelme._line_profile import profile_boundary_points
 from labelme._line_profile import profile_boundary_polygon
 from labelme._shape import Shape
@@ -512,9 +513,9 @@ def test_shape_visibility_survives_backup_and_restore(canvas: Canvas) -> None:
 @pytest.mark.gui
 def test_profile_survives_canvas_backup_and_restore(canvas: Canvas) -> None:
     profile = LineProfile(
-        width_anchors=(
+        anchors=(
             # Full-width values are intentionally distinct from the geometry.
-            WidthAnchor(0.0, 4.0, "manual", 1.0, True),
+            ProfileAnchor(0.0, width=ProfileValue(4.0, "manual", 1.0, True)),
         )
     )
     shape = Shape(
@@ -537,7 +538,7 @@ def test_line_profile_preview_toggle_only_controls_profile_layer(
     canvas: Canvas,
 ) -> None:
     profile = LineProfile(
-        width_anchors=(WidthAnchor(0.0, 8.0, "auto", 0.8, False),)
+        anchors=(ProfileAnchor(0.0, width=ProfileValue(8.0, "auto", 0.8, False)),)
     )
     shape = Shape(
         label="profiled",
@@ -577,9 +578,9 @@ def test_line_profile_preview_toggle_only_controls_profile_layer(
 @pytest.mark.gui
 def test_profile_boundary_sampling_handles_an_acute_turn() -> None:
     profile = LineProfile(
-        width_anchors=(
-            WidthAnchor(0.0, 6.0, "auto", 0.8, False),
-            WidthAnchor(1.0, 10.0, "auto", 0.8, False),
+        anchors=(
+            ProfileAnchor(0.0, width=ProfileValue(6.0, "auto", 0.8, False)),
+            ProfileAnchor(1.0, width=ProfileValue(10.0, "auto", 0.8, False)),
         )
     )
 
@@ -607,7 +608,7 @@ def test_profile_anchor_hit_testing_scales_and_reports_status(
     canvas: Canvas,
 ) -> None:
     profile = LineProfile(
-        width_anchors=(WidthAnchor(0.0, 80.0, "manual", 1.0, True),)
+        anchors=(ProfileAnchor(0.0, width=ProfileValue(80.0, "manual", 1.0, True)),)
     )
     shape = Shape(
         label="profiled",
@@ -644,8 +645,10 @@ def test_profile_preview_handles_dense_anchors_edges_and_large_width(
     canvas: Canvas,
 ) -> None:
     profile = LineProfile(
-        width_anchors=tuple(
-            WidthAnchor(index / 20.0, 200.0 + index, "auto", 0.4, False)
+        anchors=tuple(
+            ProfileAnchor(
+                index / 20.0, width=ProfileValue(200.0 + index, "auto", 0.4, False)
+            )
             for index in range(21)
         )
     )
