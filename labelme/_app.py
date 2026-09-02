@@ -51,6 +51,7 @@ from ._line_measurement import LineMeasurement
 from ._line_measurement import MeasurementParameters
 from ._line_profile import AnchorSource
 from ._line_profile import LineProfile
+from ._line_profile import ProfileAnchor
 from ._line_profile import ProfileValue
 from ._line_profile import VisibilityAnchor
 from ._line_profile import WidthAnchor
@@ -3011,61 +3012,50 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         accept_only_high_confidence = high_confidence_only.isChecked()
         existing = shape.line_profile
-        manual_width = (
-            []
-            if existing is None
-            else [
-                anchor
-                for anchor in existing.width_anchors
-                if anchor.source == "manual" and anchor.confirmed
-            ]
-        )
-        manual_visibility = (
-            []
-            if existing is None
-            else [
-                anchor
-                for anchor in existing.visibility_anchors
-                if anchor.source == "manual" and anchor.confirmed
-            ]
-        )
-        width_anchors = list(manual_width)
-        visibility_anchors = list(manual_visibility)
+        anchors = {
+            anchor.position: anchor
+            for anchor in (() if existing is None else existing.anchors)
+            if anchor.width is not None
+            and anchor.width.source == "manual"
+            and anchor.width.confirmed
+            or anchor.visibility is not None
+            and anchor.visibility.source == "manual"
+            and anchor.visibility.confirmed
+        }
         for sample in result.samples:
             if accept_only_high_confidence and sample.confidence < 0.5:
                 continue
-            if not any(
-                math.isclose(anchor.position, sample.position, abs_tol=1e-6)
-                for anchor in manual_width
-            ):
-                width_anchors.append(
-                    WidthAnchor(
-                        position=sample.position,
-                        width=sample.width,
-                        source="auto",
-                        confidence=sample.confidence,
-                        confirmed=False,
-                    )
-                )
-            if not any(
-                math.isclose(anchor.position, sample.position, abs_tol=1e-6)
-                for anchor in manual_visibility
-            ):
-                visibility_anchors.append(
-                    VisibilityAnchor(
-                        position=sample.position,
-                        visibility=sample.visibility,
-                        source="auto",
-                        confidence=sample.confidence,
-                        confirmed=False,
-                    )
-                )
+            current = next(
+                (
+                    anchor
+                    for position, anchor in anchors.items()
+                    if math.isclose(position, sample.position, abs_tol=1e-6)
+                ),
+                None,
+            )
+            width_value = (
+                current.width
+                if current is not None
+                and current.width is not None
+                and current.width.source == "manual"
+                and current.width.confirmed
+                else ProfileValue(sample.width, "auto", sample.confidence, False)
+            )
+            visibility_value = (
+                current.visibility
+                if current is not None
+                and current.visibility is not None
+                and current.visibility.source == "manual"
+                and current.visibility.confirmed
+                else ProfileValue(sample.visibility, "auto", sample.confidence, False)
+            )
+            existing_position = sample.position if current is None else current.position
+            anchors[existing_position] = ProfileAnchor(
+                existing_position, width_value, visibility_value
+            )
         try:
             profile = LineProfile(
-                width_anchors=tuple(sorted(width_anchors, key=lambda x: x.position)),
-                visibility_anchors=tuple(
-                    sorted(visibility_anchors, key=lambda x: x.position)
-                ),
+                anchors=tuple(sorted(anchors.values(), key=lambda x: x.position)),
                 min_width=None if existing is None else existing.min_width,
                 max_width=None if existing is None else existing.max_width,
                 measurement_version=result.measurement_version,
