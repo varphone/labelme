@@ -157,20 +157,32 @@ def test_profile_preview_zoom_and_undo_preserve_centerline(
         shape_type="linestrip",
         points=np.array([[10.0, 20.0], [180.0, 20.0]], dtype=np.float64),
         line_profile=LineProfile(
-            anchors=(
-                ProfileAnchor(
-                    0.0,
-                    width=ProfileValue(12.0, "manual", 1.0, True),
-                    visibility=ProfileValue(1.0, "manual", 1.0, True),
-                ),
-                ProfileAnchor(
-                    0.5,
-                    visibility=ProfileValue(0.5, "auto", 0.4, False),
-                ),
-                ProfileAnchor(
-                    1.0,
-                    width=ProfileValue(18.0, "auto", 0.8, False),
-                ),
+            anchors=tuple(
+                sorted(
+                    (
+                        ProfileAnchor(
+                            0.0,
+                            width=ProfileValue(12.0, "manual", 1.0, True),
+                            visibility=ProfileValue(1.0, "manual", 1.0, True),
+                        ),
+                        *(
+                            ProfileAnchor(
+                                position,
+                                width=ProfileValue(20.0, "auto", 0.7, False),
+                            )
+                            for position in (0.1, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8, 0.9)
+                        ),
+                        ProfileAnchor(
+                            0.5,
+                            visibility=ProfileValue(0.5, "auto", 0.4, False),
+                        ),
+                        ProfileAnchor(
+                            1.0,
+                            width=ProfileValue(80.0, "auto", 0.8, False),
+                        ),
+                    ),
+                    key=lambda anchor: anchor.position,
+                )
             )
         ),
     )
@@ -199,6 +211,11 @@ def test_profile_preview_zoom_and_undo_preserve_centerline(
     assert shape.line_profile is not None
     assert shape.line_profile.anchors[0].width is None
     assert shape.line_profile.anchors[0].visibility is not None
+    win._active_line_profile_anchor_kind = "visibility"
+    win._active_line_profile_anchor_index = 0
+    win.delete_line_profile_anchor()
+    assert shape.line_profile is not None
+    assert all(anchor.position != 0.0 for anchor in shape.line_profile.anchors)
 
     win.clear_selected_line_profile()
     assert shape.line_profile is None
