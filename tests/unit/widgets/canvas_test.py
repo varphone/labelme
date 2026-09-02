@@ -568,6 +568,10 @@ def test_line_profile_preview_toggle_only_controls_profile_layer(
     assert render_profile() > 0
     canvas.set_show_line_profile_preview(False)
     assert render_profile() == 0
+    canvas._refresh_hover_state(QPointF(10.0, 25.0))
+    assert canvas._find_line_profile_anchor_at_point(QPointF(10.0, 25.0)) is None
+    assert canvas.hovered_shape is canvas.shapes[0]
+    assert canvas._hovered_vertex == 0
 
 
 @pytest.mark.gui
@@ -625,6 +629,14 @@ def test_profile_anchor_hit_testing_scales_and_reports_status(
         )
 
     assert any("anchor" in status.lower() for status in statuses)
+
+    canvas._refresh_hover_state(QPointF(0.0, 25.0))
+    assert canvas._line_profile_hover == ("width", 0, 0)
+    canvas._refresh_hover_state(QPointF(0.0, 65.0))
+    assert canvas._line_profile_hover == ("width", 0, 1)
+    radius_handle = canvas._find_line_profile_anchor_at_point(QPointF(0.0, 65.0))
+    assert radius_handle is not None
+    assert radius_handle[1:] == ("width", 0, "width")
 
 
 @pytest.mark.gui
