@@ -53,8 +53,6 @@ from ._line_profile import AnchorSource
 from ._line_profile import LineProfile
 from ._line_profile import ProfileAnchor
 from ._line_profile import ProfileValue
-from ._line_profile import VisibilityAnchor
-from ._line_profile import WidthAnchor
 from ._line_profile import cumulative_lengths
 from ._line_profile import insert_visibility_anchor
 from ._line_profile import insert_width_anchor
@@ -5134,7 +5132,7 @@ def _line_measurement_token(
 
 
 def _nearest_line_profile_anchor_index(
-    anchors: tuple[WidthAnchor, ...] | tuple[VisibilityAnchor, ...],
+    anchors: tuple[ProfileAnchor, ...],
     position: float,
 ) -> int | None:
     if not anchors:
