@@ -157,6 +157,9 @@ def _paint_shape_mask(
 @dataclasses.dataclass(frozen=True)
 class _ShapePaths:
     line: QtGui.QPainterPath = dataclasses.field(default_factory=QtGui.QPainterPath)
+    control_polygon: QtGui.QPainterPath = dataclasses.field(
+        default_factory=QtGui.QPainterPath
+    )
     vertices: QtGui.QPainterPath = dataclasses.field(default_factory=QtGui.QPainterPath)
     negative_vertices: QtGui.QPainterPath = dataclasses.field(
         default_factory=QtGui.QPainterPath
@@ -177,6 +180,21 @@ def _paint_shape_points(
 ) -> None:
     palette = context.palette
     paths = _build_shape_points_paths(shape=shape, context=context)
+    color = palette.select_line if context.selected else palette.line
+    line_pen = QtGui.QPen(color)
+    line_pen.setWidth(PEN_WIDTH)
+    line_pen.setStyle(context.line_style)
+
+    if paths.control_polygon.length() > 0:
+        control_color = QtGui.QColor(color)
+        control_color.setAlpha(160)
+        control_pen = QtGui.QPen(control_color)
+        control_pen.setWidth(1)
+        control_pen.setStyle(QtCore.Qt.PenStyle.DashLine)
+        control_pen.setDashPattern([2, 3])
+        painter.setPen(control_pen)
+        painter.drawPath(paths.control_polygon)
+        painter.setPen(line_pen)
 
     painter.drawPath(paths.line)
     _paint_filled_vertices(
@@ -373,6 +391,10 @@ def _build_shape_points_paths(
     elif shape.shape_type in ("bezier2", "bezier3"):
         if len(points) > 0:
             paths.line.moveTo(QtCore.QPointF(*(points[0] * scale)))
+        if len(points) > 1:
+            paths.control_polygon.moveTo(QtCore.QPointF(*(points[0] * scale)))
+            for point in points[1:]:
+                paths.control_polygon.lineTo(QtCore.QPointF(*(point * scale)))
         if shape.shape_type == "bezier2" and len(points) >= 3:
             paths.line.quadTo(
                 QtCore.QPointF(*(points[1] * scale)),

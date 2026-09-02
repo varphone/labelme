@@ -8,6 +8,7 @@ from labelme._shape import Shape
 from labelme._shape import ShapeType
 from labelme._widgets._shape_render import Palette
 from labelme._widgets._shape_render import ShapeRenderContext
+from labelme._widgets._shape_render import _build_shape_points_paths
 from labelme._widgets._shape_render import bounds
 from labelme._widgets._shape_render import is_hit_by_point
 from labelme._widgets._shape_render import render_shape
@@ -149,6 +150,28 @@ def test_bezier_hit_testing_uses_curve_not_control_polygon(
         point_size=8,
         epsilon=1.0,
     )
+
+
+@pytest.mark.parametrize("shape_type", ["bezier2", "bezier3"])
+def test_bezier_render_includes_control_polygon(shape_type: ShapeType) -> None:
+    points = (
+        [[0.0, 0.0], [5.0, 10.0], [10.0, 0.0]]
+        if shape_type == "bezier2"
+        else [[0.0, 0.0], [0.0, 10.0], [10.0, 10.0], [10.0, 0.0]]
+    )
+    shape = _shape(shape_type=shape_type, points=points)
+    context = ShapeRenderContext(
+        scale=1.0,
+        palette=Palette.from_rgb(rgb=(255, 0, 0)),
+        point_size=8,
+        point_type="round",
+        selected=False,
+        fill=False,
+        highlight=None,
+        rotation_highlight=None,
+    )
+    paths = _build_shape_points_paths(shape=shape, context=context)
+    assert paths.control_polygon.length() > 0
 
 
 @pytest.mark.gui
