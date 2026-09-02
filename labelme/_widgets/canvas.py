@@ -1609,6 +1609,7 @@ class Canvas(QtWidgets.QWidget):
     def select_shapes(self, shapes: list[Shape]) -> None:
         self.selection_changed.emit(shapes)
         self.update()
+        self._update_status()
 
     def _select_shape_point(
         self, point: QPointF, multiple_selection_mode: bool
