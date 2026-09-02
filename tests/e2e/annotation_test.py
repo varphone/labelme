@@ -210,6 +210,24 @@ def test_ai_points_mode_keeps_selected_sam3_and_rejects_click(
             id="bezier3",
         ),
         pytest.param(
+            "catmull_rom",
+            [(0.2, 0.7), (0.4, 0.25), (0.65, 0.75)],
+            (0.85, 0.35),
+            Qt.KeyboardModifier.ControlModifier,
+            4,
+            None,
+            id="catmull_rom",
+        ),
+        pytest.param(
+            "bspline",
+            [(0.2, 0.7), (0.4, 0.25), (0.65, 0.75)],
+            (0.85, 0.35),
+            Qt.KeyboardModifier.ControlModifier,
+            4,
+            None,
+            id="bspline",
+        ),
+        pytest.param(
             "ai_points_to_shape",
             [],
             (0.5, 0.5),
@@ -385,7 +403,12 @@ def test_annotate_shape_types(
         assert all(shape.group_id == shapes[0].group_id for shape in shapes)
     else:
         assert all(shape.group_id is None for shape in shapes)
-    if expected_shape_type in ("bezier2", "bezier3"):
+    if expected_shape_type in (
+        "bezier2",
+        "bezier3",
+        "catmull_rom",
+        "bspline",
+    ):
         assert all(not shape.closed for shape in shapes)
     shape = shapes[0]
     if expected_num_points is not None:

@@ -33,6 +33,7 @@ from .._line_profile import profile_boundary_polygon
 from .._line_profile import split_profile
 from .._shape import BEZIER_SHAPE_TYPES
 from .._shape import POLYLINE_SHAPE_TYPES
+from .._shape import SPLINE_SHAPE_TYPES
 from .._shape import Shape
 from .._shape import ShapeType
 from .._shape import bezier_degree
@@ -120,6 +121,8 @@ _CreateMode = Literal[
     "linestrip",
     "bezier2",
     "bezier3",
+    "catmull_rom",
+    "bspline",
     "ai_points_to_shape",
     "ai_box_to_shape",
 ]
@@ -140,6 +143,8 @@ _CREATE_MODE_TO_SHAPE_TYPE: Final[dict[_CreateMode, ShapeType]] = {
     "linestrip": "linestrip",
     "bezier2": "bezier2",
     "bezier3": "bezier3",
+    "catmull_rom": "catmull_rom",
+    "bspline": "bspline",
     "ai_points_to_shape": "points",
     "ai_box_to_shape": "rectangle",
 }
@@ -260,6 +265,8 @@ class Canvas(QtWidgets.QWidget):
                 "linestrip": False,
                 "bezier2": False,
                 "bezier3": False,
+                "catmull_rom": False,
+                "bspline": False,
                 "ai_points_to_shape": False,
                 "ai_box_to_shape": True,
             },
@@ -686,7 +693,7 @@ class Canvas(QtWidgets.QWidget):
                 return self.tr("Click start point for line")
             else:
                 return self.tr("Click end point for line")
-        if self.create_mode == "linestrip":
+        if self.create_mode in ("linestrip",) + SPLINE_SHAPE_TYPES:
             if is_new:
                 return self.tr("Click start point for linestrip")
             else:
@@ -865,7 +872,7 @@ class Canvas(QtWidgets.QWidget):
         current = self._current
         assert current is not None
         mode = self.create_mode
-        if mode in POLYLINE_SHAPE_TYPES:
+        if mode in POLYLINE_SHAPE_TYPES + SPLINE_SHAPE_TYPES:
             self._line = dataclasses.replace(
                 self._line, points=(current.points[-1], pos), point_labels=(1, 1)
             )
@@ -1277,7 +1284,7 @@ class Canvas(QtWidgets.QWidget):
             assert len(current.points) == 1
             self._current = dataclasses.replace(current, points=self._line.points)
             self._finalize()
-        elif mode == "linestrip":
+        elif mode in ("linestrip",) + SPLINE_SHAPE_TYPES:
             current = current.add_point(self._line.points[1])
             self._current = current
             self._line = dataclasses.replace(
@@ -1557,6 +1564,8 @@ class Canvas(QtWidgets.QWidget):
             return False
         if self.create_mode == "ai_points_to_shape":
             return True
+        if self.create_mode in SPLINE_SHAPE_TYPES:
+            return len(self._current.points) >= 3
         if self.create_mode == "linestrip":
             return len(self._current.points) >= 2
         if self.create_mode == "oriented_rectangle":
@@ -2258,7 +2267,7 @@ class Canvas(QtWidgets.QWidget):
                 shapes=proposal.matching_existing_shapes
             )
         else:
-            if self.create_mode not in BEZIER_SHAPE_TYPES:
+            if self.create_mode not in BEZIER_SHAPE_TYPES + SPLINE_SHAPE_TYPES:
                 self._current = self._current.close()
             if _is_degenerate_draft(self._current):
                 self.degenerate_shape_rejected.emit()
@@ -2445,7 +2454,7 @@ class Canvas(QtWidgets.QWidget):
             self._cancel_current_shape()
             return
         self._current = _shape_to_draft(self.shapes.pop()).open()
-        if self.create_mode in POLYLINE_SHAPE_TYPES:
+        if self.create_mode in POLYLINE_SHAPE_TYPES + SPLINE_SHAPE_TYPES:
             self._line = dataclasses.replace(
                 self._line,
                 points=(self._current.points[-1], self._current.points[0]),
@@ -2572,6 +2581,8 @@ def _is_degenerate_draft(draft: _DraftShape) -> bool:
         return len({(p.x(), p.y()) for p in points}) < 3
     if shape_type == "linestrip":
         return len({(p.x(), p.y()) for p in points}) < 2
+    if shape_type in SPLINE_SHAPE_TYPES:
+        return len(points) < 3 or len({(p.x(), p.y()) for p in points}) < 3
     if shape_type == "rectangle":
         return (
             len(points) != 2

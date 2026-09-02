@@ -10,6 +10,7 @@ from typing import TypeAlias
 
 import numpy as np
 import numpy.typing as npt
+import scipy.interpolate
 from loguru import logger
 
 from ._line_profile import LineProfile
@@ -26,11 +27,14 @@ ShapeType: TypeAlias = Literal[
     "points",
     "bezier2",
     "bezier3",
+    "catmull_rom",
+    "bspline",
     "mask",
 ]
 
 POLYLINE_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("polygon", "linestrip")
 BEZIER_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("bezier2", "bezier3")
+SPLINE_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("catmull_rom", "bspline")
 
 
 def bezier_degree(shape_type: ShapeType) -> int:
@@ -69,6 +73,54 @@ def bezier_sample_points(
     return np.array([bezier_point(points, t) for t in np.linspace(0.0, 1.0, samples)])
 
 
+def spline_sample_points(
+    points: npt.NDArray[np.float64],
+    shape_type: ShapeType,
+    samples_per_segment: int = 24,
+) -> npt.NDArray[np.float64]:
+    """Sample an open multi-knot Catmull-Rom or cubic B-spline curve."""
+    points = np.asarray(points, dtype=np.float64).reshape(-1, 2)
+    if len(points) < 3:
+        return points.copy()
+    if shape_type not in SPLINE_SHAPE_TYPES:
+        raise ValueError(f"Not a spline shape: {shape_type!r}")
+    if samples_per_segment < 2:
+        raise ValueError("samples_per_segment must be at least 2")
+
+    sampled: list[npt.NDArray[np.float64]] = []
+    if shape_type == "catmull_rom":
+        padded = np.vstack((points[0], points, points[-1]))
+        for i in range(len(points) - 1):
+            p0, p1, p2, p3 = padded[i : i + 4]
+            for t in np.linspace(0.0, 1.0, samples_per_segment, endpoint=False):
+                t2, t3 = t * t, t * t * t
+                sampled.append(
+                    0.5
+                    * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2
+                       + (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
+                )
+        sampled.append(points[-1])
+        return np.asarray(sampled)
+    else:
+        # Clamped B-spline. Its degree adapts to the number of knots so the
+        # three-point minimum still produces a proper smooth curve.
+        degree = min(3, len(points) - 1)
+        interior_count = len(points) - degree - 1
+        knots = np.concatenate(
+            (
+                np.zeros(degree + 1),
+                np.arange(1, interior_count + 1, dtype=np.float64),
+                np.full(degree + 1, interior_count + 1, dtype=np.float64),
+            )
+        )
+        curve = scipy.interpolate.BSpline(knots, points, degree)
+        parameters = np.linspace(
+            knots[degree], knots[-degree - 1],
+            (len(points) - degree) * samples_per_segment + 1,
+        )
+        return np.asarray(curve(parameters), dtype=np.float64)
+
+
 @dataclasses.dataclass(eq=False)
 class Shape:
     label: str | None = None
@@ -98,7 +150,7 @@ class Shape:
             self.point_labels = np.ones(len(self.points), dtype=np.int_)
 
     def can_add_point(self) -> bool:
-        return self.shape_type in POLYLINE_SHAPE_TYPES
+        return self.shape_type in POLYLINE_SHAPE_TYPES + SPLINE_SHAPE_TYPES
 
     def insert_point(self, i: int, point: npt.ArrayLike, label: int = 1) -> None:
         if not self.can_add_point():
@@ -124,6 +176,8 @@ class Shape:
         if self.shape_type == "polygon" and len(self.points) <= 3:
             return False
         if self.shape_type == "linestrip" and len(self.points) <= 2:
+            return False
+        if self.shape_type in SPLINE_SHAPE_TYPES and len(self.points) <= 3:
             return False
         return True
 
@@ -225,6 +279,25 @@ def nearest_edge_index(
         projections = starts + t[:, None] * segments
         distances = np.linalg.norm(scaled_point - projections, axis=1)
         return _nearest_index_within_epsilon(distances=distances, epsilon=epsilon)
+    if shape.shape_type in SPLINE_SHAPE_TYPES:
+        curve = spline_sample_points(shape.points, shape.shape_type)
+        scaled_point = point * scale
+        scaled_curve = curve * scale
+        segments = scaled_curve[1:] - scaled_curve[:-1]
+        length_squared = (segments * segments).sum(axis=1)
+        starts = scaled_curve[:-1]
+        t = np.clip(((scaled_point - starts) * segments).sum(axis=1) /
+                    np.where(length_squared == 0, 1.0, length_squared), 0.0, 1.0)
+        projections = starts + t[:, None] * segments
+        nearest = _nearest_index_within_epsilon(
+            distances=np.linalg.norm(scaled_point - projections, axis=1),
+            epsilon=epsilon,
+        )
+        if nearest is None:
+            return None
+        # Sampling creates many segments per knot interval. Canvas insertion
+        # expects the index of the following knot, not the sampled segment.
+        return min(nearest // 24 + 1, len(shape.points) - 1)
     scaled_point = point * scale
     scaled_points = shape.points * scale
     starts = np.roll(scaled_points, 1, axis=0)
