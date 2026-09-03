@@ -82,6 +82,7 @@ from ._widgets import LabelListWidgetItem
 from ._widgets import LineMeasurementWorker
 from ._widgets import LineProfileBatchWorker
 from ._widgets import LineProfilePanel
+from ._widgets import MinimapWidget
 from ._widgets import Palette
 from ._widgets import SettingsDialog
 from ._widgets import StatusStats
@@ -121,6 +122,7 @@ class _CanvasWidgets(NamedTuple):
     canvas: Canvas
     zoom_widget: ZoomWidget
     scroll_bars: dict[Qt.Orientation, QtWidgets.QScrollBar]
+    minimap: MinimapWidget
 
 
 class _ViewportState(NamedTuple):
@@ -201,6 +203,7 @@ class _Actions(NamedTuple):
     hide_all: QtGui.QAction
     show_all: QtGui.QAction
     toggle_all: QtGui.QAction
+    show_minimap: QtGui.QAction
     open_dir: QtGui.QAction
     zoom_widget_action: QtWidgets.QWidgetAction
     circle_radius_action: QtWidgets.QWidgetAction
@@ -917,6 +920,13 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Toggle all shapes"),
             enabled=False,
         )
+        show_minimap = action(
+            text=self.tr("Show Minimap"),
+            tip=self.tr("Show or hide the canvas minimap"),
+            checkable=True,
+            checked=True,
+        )
+        show_minimap.toggled.connect(self._canvas_widgets.minimap.setVisible)
         show_line_profile_preview = action(
             text=self.tr("Show Line Profile Preview"),
             icon="phosphor/eye.svg",
@@ -1114,6 +1124,7 @@ class MainWindow(QtWidgets.QMainWindow):
             hide_all=hide_all,
             show_all=show_all,
             toggle_all=toggle_all,
+            show_minimap=show_minimap,
             open_dir=open_dir,
             zoom_widget_action=zoom_widget_action,
             circle_radius_action=circle_radius_action,
@@ -1216,6 +1227,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.hide_all,
                 self._actions.show_all,
                 self._actions.toggle_all,
+                None,
+                self._actions.show_minimap,
                 self._actions.show_line_profile_preview,
                 None,
                 self._actions.zoom_in,
@@ -1428,6 +1441,17 @@ class MainWindow(QtWidgets.QMainWindow):
             Qt.Orientation.Vertical: scroll_area.verticalScrollBar(),
             Qt.Orientation.Horizontal: scroll_area.horizontalScrollBar(),
         }
+        minimap = MinimapWidget(canvas=canvas, viewport=scroll_area.viewport())
+        minimap.set_show_shape_outlines(
+            self._config["minimap"]["show_shape_outlines"]
+        )
+        minimap.center_requested.connect(self._center_canvas_on_image_point)
+        for bar in scroll_bars.values():
+            bar.valueChanged.connect(minimap.update)
+        zoom_widget.valueChanged.connect(minimap.update)
+        canvas.new_shape.connect(minimap.update)
+        canvas.shape_moved.connect(minimap.update)
+        canvas.selection_changed.connect(lambda _: minimap.update())
         canvas.scroll_request.connect(self._on_scroll_request)
         canvas.pan_request.connect(self._on_pan_request)
 
@@ -1459,6 +1483,7 @@ class MainWindow(QtWidgets.QMainWindow):
             canvas=canvas,
             zoom_widget=zoom_widget,
             scroll_bars=scroll_bars,
+            minimap=minimap,
         )
 
     def _setup_dock_widgets(self) -> _DockWidgets:
@@ -3442,6 +3467,21 @@ class MainWindow(QtWidgets.QMainWindow):
             ),
             constrain_to_center=constrain_to_center,
         )
+        self._canvas_widgets.minimap.update()
+
+    def _center_canvas_on_image_point(self, point: QtCore.QPointF) -> None:
+        canvas = self._canvas_widgets.canvas
+        scroll_area = self.centralWidget()
+        assert isinstance(scroll_area, QtWidgets.QScrollArea)
+        viewport = scroll_area.viewport()
+        viewport_center = QtCore.QPointF(viewport.rect().center())
+        current = canvas.mapFrom(viewport, viewport_center.toPoint())
+        target = canvas.transform_image_point_to_widget(
+            point, area=canvas.sizeHint()
+        )
+        self._move_canvas_view(
+            step=-(target - current), constrain_to_center=False
+        )
 
     def set_scroll_value(self, *, orientation: Qt.Orientation, value: float) -> None:
         self._canvas_widgets.scroll_bars[orientation].setValue(int(value))
@@ -3877,6 +3917,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self._canvas_widgets.canvas.adjustSize()
         self._canvas_widgets.canvas.update()
+        self._canvas_widgets.minimap.update()
 
     def _adjust_scale(self) -> None:
         if self._zoom_mode == _ZoomMode.FIT_WINDOW:
@@ -4407,6 +4448,10 @@ class MainWindow(QtWidgets.QMainWindow):
             canvas = self._canvas_widgets.canvas
             canvas.set_show_labels(value=self._config["shape"]["show_labels"])
             canvas.update()
+        elif key_path == ("minimap", "show_shape_outlines"):
+            self._canvas_widgets.minimap.set_show_shape_outlines(
+                self._config["minimap"]["show_shape_outlines"]
+            )
         elif key_path == ("mask_polygonization", "detail"):
             detail = self._config["mask_polygonization"]["detail"]
             self._ai_annotation.set_polygon_detail(detail)
