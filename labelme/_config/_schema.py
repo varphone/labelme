@@ -343,10 +343,9 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         label=cast(
             str, QT_TRANSLATE_NOOP("SettingsDialog", "Width filter strength")
         ),
-        kind="float",
-        minimum=1.0,
-        maximum=100.0,
-        decimals=0,
+        kind="int",
+        minimum=1,
+        maximum=100,
         note=cast(
             str,
             QT_TRANSLATE_NOOP(

@@ -444,6 +444,11 @@ class SettingsDialog(QtWidgets.QDialog):
                 setting=setting, value=value, items=enum_items, min_width=140
             )
         if setting.kind == "int":
+            # ``width_filter_strength`` used to be stored as a float. Accept an
+            # integral value from an existing user config while presenting it
+            # through the integer slider from now on.
+            if isinstance(value, float) and value.is_integer():
+                value = int(value)
             assert isinstance(value, int)
             if setting.minimum is None and setting.maximum is None:
                 # Qt's integer widgets are 32-bit, but Config Files accept Python ints.
@@ -577,6 +582,8 @@ class SettingsDialog(QtWidgets.QDialog):
         elif isinstance(editor, QtWidgets.QComboBox):
             editor.setCurrentIndex(max(editor.findData(value), 0))
         elif isinstance(editor, IntegerSlider):
+            if isinstance(value, float) and value.is_integer():
+                value = int(value)
             assert isinstance(value, int)
             editor.set_value(value)
         elif isinstance(editor, QtWidgets.QLineEdit):

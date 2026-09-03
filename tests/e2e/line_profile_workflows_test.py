@@ -143,6 +143,34 @@ def test_line_profile_panel_is_docked_before_annotation_panels(
 
 
 @pytest.mark.gui
+def test_line_profile_parameters_are_available_before_measurement(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+) -> None:
+    win = main_win(
+        file_or_dir=str(data_path / "raw" / "2011_000003.jpg"),
+        size=QSize(900, 700),
+    )
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+    shape = Shape(
+        label="line",
+        shape_type="linestrip",
+        points=np.array([[10.0, 20.0], [180.0, 20.0]], dtype=np.float64),
+    )
+    win._load_shapes([shape], replace=True)
+    win._canvas_widgets.canvas.select_shapes(shapes=[shape])
+
+    assert win._actions.line_profile_measurement_parameters.isEnabled()
+    button = next(
+        button
+        for button in win._docks.line_profile_panel.findChildren(QToolButton)
+        if button.text() == "Parameters"
+    )
+    assert button.isEnabled()
+
+
+@pytest.mark.gui
 def test_profile_preview_zoom_and_undo_preserve_centerline(
     main_win: MainWinFactory,
     qtbot: QtBot,

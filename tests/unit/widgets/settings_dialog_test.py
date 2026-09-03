@@ -98,6 +98,34 @@ def test_polygon_detail_slider_applies_integer_value(
     assert (("mask_polygonization", "detail"), 60) in applied
 
 
+def test_line_profile_width_filter_strength_uses_slider(
+    *, dialog: SettingsDialog, applied: Applied
+) -> None:
+    slider = dialog._editors[("line_profile_measurement", "width_filter_strength")]
+    assert isinstance(slider, IntegerSlider)
+    assert slider.value == 20
+
+    slider.set_value(65)
+
+    assert (("line_profile_measurement", "width_filter_strength"), 65) in applied
+
+
+def test_line_profile_width_filter_slider_accepts_legacy_float_config(
+    *, qtbot: QtBot, applied: Applied
+) -> None:
+    dialog = _make_dialog(
+        qtbot=qtbot,
+        applied=applied,
+        overrides={"line_profile_measurement": {"width_filter_strength": 35.0}},
+        succeed=True,
+        previewed=None,
+    )
+    slider = dialog._editors[("line_profile_measurement", "width_filter_strength")]
+
+    assert isinstance(slider, IntegerSlider)
+    assert slider.value == 35
+
+
 def test_unbounded_integer_edit_accepts_python_ints(
     *, qtbot: QtBot, applied: Applied
 ) -> None:
