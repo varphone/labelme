@@ -26,6 +26,8 @@ MeasurementOverrideKey = Literal[
     "min_width",
     "max_width",
     "contrast_factor",
+    "width_filter_strength",
+    "fixed_width",
 ]
 _MEASUREMENT_OVERRIDE_KEYS = frozenset(
     {
@@ -34,6 +36,8 @@ _MEASUREMENT_OVERRIDE_KEYS = frozenset(
         "min_width",
         "max_width",
         "contrast_factor",
+        "width_filter_strength",
+        "fixed_width",
     }
 )
 
@@ -423,6 +427,14 @@ def _validate_measurement_overrides(
         if key == "contrast_factor":
             if not 0.0 <= value <= 1.0:
                 raise ValueError("contrast_factor override must be within [0, 1]")
+        elif key == "width_filter_strength":
+            if not 1.0 <= value <= 100.0:
+                raise ValueError(
+                    "width_filter_strength override must be within [1, 100]"
+                )
+        elif key == "fixed_width":
+            if value < 0.0:
+                raise ValueError("fixed_width override must not be negative")
         elif value <= 0.0:
             raise ValueError(f"measurement override {key!r} must be positive")
         values[key] = value

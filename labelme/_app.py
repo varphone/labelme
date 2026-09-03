@@ -2774,6 +2774,10 @@ class MainWindow(QtWidgets.QMainWindow):
             "min_width": float(global_values.get("min_width", 1.0)),
             "max_width": float(global_values.get("max_width", 256.0)),
             "contrast_factor": float(global_values.get("contrast_factor", 0.35)),
+            "width_filter_strength": float(
+                global_values.get("width_filter_strength", 20.0)
+            ),
+            "fixed_width": float(global_values.get("fixed_width", 0.0)),
         }
         values.update(dict(profile.measurement_overrides))
         specifications = (
@@ -2782,6 +2786,13 @@ class MainWindow(QtWidgets.QMainWindow):
             ("min_width", self.tr("Minimum width"), 0.1, 4096.0, 1),
             ("max_width", self.tr("Maximum width"), 0.1, 4096.0, 1),
             ("contrast_factor", self.tr("Contrast factor"), 0.0, 1.0, 2),
+            (
+                "width_filter_strength",
+                self.tr("Width filter strength"),
+                1.0,
+                100.0,
+                0,
+            ),
         )
         dialog = QtWidgets.QDialog(self)
         dialog.setWindowTitle(self.tr("Line Profile Measurement Parameters"))
@@ -2798,16 +2809,43 @@ class MainWindow(QtWidgets.QMainWindow):
             editor.setRange(minimum, maximum)
             editor.setDecimals(decimals)
             editor.setValue(values[key])
-            editor.setSuffix(" px" if key != "contrast_factor" else "")
+            editor.setSuffix(
+                "%"
+                if key == "width_filter_strength"
+                else " px"
+                if key != "contrast_factor"
+                else ""
+            )
             editors[key] = editor
             form.addRow(label, editor)
+
+        fixed_width_enabled = QtWidgets.QCheckBox(
+            self.tr("Use fixed width"), dialog
+        )
+        fixed_width = QtWidgets.QDoubleSpinBox(dialog)
+        fixed_width.setRange(0.1, 4096.0)
+        fixed_width.setDecimals(1)
+        fixed_width.setSuffix(" px")
+        fixed_width.setValue(max(0.1, values["fixed_width"]))
+        fixed_width_row = QtWidgets.QWidget(dialog)
+        fixed_width_layout = QtWidgets.QHBoxLayout(fixed_width_row)
+        fixed_width_layout.setContentsMargins(0, 0, 0, 0)
+        fixed_width_layout.addWidget(fixed_width_enabled)
+        fixed_width_layout.addWidget(fixed_width)
+        form.addRow(self.tr("Fixed width"), fixed_width_row)
+        fixed_width_enabled.setChecked(values["fixed_width"] > 0.0)
         layout.addLayout(form)
 
         def sync_enabled(enabled: bool) -> None:
             for editor in editors.values():
                 editor.setEnabled(enabled)
+            fixed_width_enabled.setEnabled(enabled)
+            fixed_width.setEnabled(enabled and fixed_width_enabled.isChecked())
 
         override.toggled.connect(sync_enabled)
+        fixed_width_enabled.toggled.connect(
+            lambda checked: fixed_width.setEnabled(override.isChecked() and checked)
+        )
         sync_enabled(override.isChecked())
         buttons = QtWidgets.QDialogButtonBox(
             QtWidgets.QDialogButtonBox.StandardButton.Ok
@@ -2823,8 +2861,24 @@ class MainWindow(QtWidgets.QMainWindow):
             updated_overrides: tuple[tuple[str, float], ...] = ()
         else:
             raw_values = {key: editor.value() for key, editor in editors.items()}
+            raw_values["fixed_width"] = (
+                fixed_width.value() if fixed_width_enabled.isChecked() else 0.0
+            )
             try:
-                MeasurementParameters(**raw_values)
+                validated_fixed_width = (
+                    None
+                    if raw_values["fixed_width"] <= 0.0
+                    else raw_values["fixed_width"]
+                )
+                MeasurementParameters(
+                    sample_spacing=raw_values["sample_spacing"],
+                    search_radius=raw_values["search_radius"],
+                    min_width=raw_values["min_width"],
+                    max_width=raw_values["max_width"],
+                    contrast_factor=raw_values["contrast_factor"],
+                    width_filter_strength=raw_values["width_filter_strength"],
+                    fixed_width=validated_fixed_width,
+                )
             except ValueError as error:
                 QMessageBox.warning(
                     self,
@@ -3285,6 +3339,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 min_width=float(merged_values.get("min_width", 1.0)),
                 max_width=float(merged_values.get("max_width", 256.0)),
                 contrast_factor=float(merged_values.get("contrast_factor", 0.35)),
+                width_filter_strength=float(
+                    merged_values.get("width_filter_strength", 20.0)
+                ),
+                fixed_width=(
+                    None
+                    if float(merged_values.get("fixed_width", 0.0)) <= 0.0
+                    else float(merged_values["fixed_width"])
+                ),
             )
         except (TypeError, ValueError):
             return MeasurementParameters()

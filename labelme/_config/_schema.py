@@ -338,6 +338,39 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         decimals=2,
     ),
     Setting(
+        key_path=("line_profile_measurement", "width_filter_strength"),
+        group="Line profile measurement",
+        label=cast(
+            str, QT_TRANSLATE_NOOP("SettingsDialog", "Width filter strength")
+        ),
+        kind="float",
+        minimum=1.0,
+        maximum=100.0,
+        decimals=0,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "Sliding window length as a percentage of measured samples.",
+            ),
+        ),
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "fixed_width"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Fixed width")),
+        kind="float",
+        minimum=0.0,
+        maximum=4096.0,
+        decimals=1,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog", "Set to 0 to measure the width from the image."
+            ),
+        ),
+    ),
+    Setting(
         # Choices are the models' display names, matching the format
         # AiAssistedAnnotationWidget itself stores in ai.default (see
         # _ai_assisted_annotation_widget.py, where the dock combobox looks up

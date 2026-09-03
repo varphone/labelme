@@ -276,6 +276,8 @@ def test_profile_measurement_overrides_round_trip_and_validate() -> None:
     raw["measurement_overrides"] = {
         "sample_spacing": 4.0,
         "contrast_factor": 0.6,
+        "width_filter_strength": 50.0,
+        "fixed_width": 18.0,
     }
 
     profile = LineProfile.from_json_obj(raw)

@@ -826,6 +826,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Contrast factor</translation>
     </message>
     <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Use fixed width</source>
+        <translation>使用固定寬度</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
+    </message>
+    <message>
         <source>Override global measurement settings</source>
         <translation>Override global measurement settings</translation>
     </message>
@@ -1349,6 +1361,18 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Contrast factor</source>
         <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Sliding window length as a percentage of measured samples.</source>
+        <translation>滑動視窗長度佔測量樣本的百分比。</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
     </message>
     <message>
         <source>Default model</source>

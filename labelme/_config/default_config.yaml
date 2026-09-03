@@ -52,6 +52,8 @@ line_profile_measurement:
   min_width: 1.0
   max_width: 256.0
   contrast_factor: 0.35
+  width_filter_strength: 20.0
+  fixed_width: 0.0
 # main
 flag_dock:
   show: true
