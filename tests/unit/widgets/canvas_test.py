@@ -849,6 +849,37 @@ def test_finalize_releases_drawing_state(*, canvas: Canvas) -> None:
 
 
 @pytest.mark.gui
+def test_line_profile_render_geometry_is_cached_until_shape_changes(
+    *, canvas: Canvas
+) -> None:
+    shape = Shape(
+        shape_type="linestrip",
+        points=np.array([[10.0, 20.0], [80.0, 20.0]], dtype=np.float64),
+        line_profile=LineProfile(
+            anchors=(
+                ProfileAnchor(0.5, width=ProfileValue(8.0, "auto", 0.9, False)),
+            )
+        ),
+    )
+    canvas.load_shapes(shapes=[shape])
+    assert shape.line_profile is not None
+
+    first = canvas._line_profile_render_geometry_for_shape(
+        shape=shape, profile=shape.line_profile
+    )
+    second = canvas._line_profile_render_geometry_for_shape(
+        shape=shape, profile=shape.line_profile
+    )
+    assert first is second
+
+    shape.points[1, 1] = 30.0
+    third = canvas._line_profile_render_geometry_for_shape(
+        shape=shape, profile=shape.line_profile
+    )
+    assert third is not first
+
+
+@pytest.mark.gui
 def test_existing_shape_suppression_is_disabled_by_default(
     *,
     canvas: Canvas,
