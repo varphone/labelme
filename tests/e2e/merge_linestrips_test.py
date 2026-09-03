@@ -65,8 +65,8 @@ def _select_label_list_items(
     """Select items in the label list by their indices."""
     label_list.clearSelection()
     for idx in indices:
-        item = label_list.find_item_by_shape(canvas.shapes[idx])
-        label_list.select_item(item)
+        item = label_list.find_item_by_shape(shape=canvas.shapes[idx])
+        label_list.select_item(item=item)
 
 
 def test_merge_two_linestrips(

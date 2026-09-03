@@ -2208,7 +2208,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         for shape in changed_shapes:
             shape.label = new_label
-            annotation_item = self._docks.label_list.find_item_by_shape(shape)
+            annotation_item = self._docks.label_list.find_item_by_shape(shape=shape)
             annotation_item.set_label(
                 text=format_shape_label(shape),
                 color=new_color,
@@ -4774,7 +4774,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if result is None:
             return
         old_shape, left, right = result
-        self.remove_labels([old_shape])
+        self.remove_labels(shapes=[old_shape])
         self.add_label(shape=left)
         self.add_label(shape=right)
         canvas.deselect_shape()
@@ -4851,7 +4851,7 @@ class MainWindow(QtWidgets.QMainWindow):
             canvas.shapes.remove(shape)
         canvas.shapes.append(merged)
         canvas.backup_shapes()
-        self.remove_labels(shapes)
+        self.remove_labels(shapes=shapes)
         self.add_label(shape=merged)
         canvas.deselect_shape()
         canvas.select_shapes(shapes=[merged])
@@ -4891,11 +4891,10 @@ class MainWindow(QtWidgets.QMainWindow):
             flags=first.flags,
             description=first.description,
             points=merged_points,
-            point_labels=np.asarray([None] * len(merged_points), dtype=object),
             other_data=copy.deepcopy(first.other_data),
         )
         canvas.backup_shapes()
-        self.remove_labels(shapes)
+        self.remove_labels(shapes=shapes)
         self.add_label(shape=merged)
         canvas.deselect_shape()
         canvas.select_shapes(shapes=[merged])
