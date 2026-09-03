@@ -18,7 +18,6 @@ from typing import NamedTuple
 from typing import TypeAlias
 from typing import cast
 
-import natsort
 import numpy as np
 import osam
 from loguru import logger
@@ -87,6 +86,7 @@ WINDOW_LAYOUT_KEY: Final[str] = "window/state"
 
 class _StatusBarWidgets(NamedTuple):
     message: QtWidgets.QLabel
+    file_count: QtWidgets.QLabel
     stats: StatusStats
 
 
@@ -125,9 +125,14 @@ class _Actions(NamedTuple):
     open: QtGui.QAction
     close: QtGui.QAction
     delete_file: QtGui.QAction
+    delete_image_file: QtGui.QAction
     toggle_keep_prev_mode: QtGui.QAction
     toggle_keep_prev_brightness_contrast: QtGui.QAction
     toggle_snap_to_point: QtGui.QAction
+    copy_annotations_to_next: QtGui.QAction
+    merge_linestrips: QtGui.QAction
+    delete_selected_files: QtGui.QAction
+    export_selected_files: QtGui.QAction
     delete: QtGui.QAction
     edit: QtGui.QAction
     copy: QtGui.QAction
@@ -137,6 +142,7 @@ class _Actions(NamedTuple):
     undo: QtGui.QAction
     add_point_to_edge: QtGui.QAction
     remove_point: QtGui.QAction
+    split_linestrip: QtGui.QAction
     create_mode: QtGui.QAction
     edit_mode: QtGui.QAction
     create_rectangle_mode: QtGui.QAction
@@ -418,6 +424,14 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Delete current label file"),
             enabled=False,
         )
+        delete_image_file = action(
+            text=self.tr("Delete &Image and Label File"),
+            slot=self.delete_image_file,
+            shortcut=shortcuts["delete_image_file"],
+            icon="phosphor/file-x.svg",
+            tip=self.tr("Delete current image and its label file"),
+            enabled=False,
+        )
         keep_prev_action = action(
             text=self.tr("Keep Previous Annotation"),
             shortcut=shortcuts["toggle_keep_prev_mode"],
@@ -438,6 +452,34 @@ class MainWindow(QtWidgets.QMainWindow):
             ),
             checkable=True,
             checked=self._config["snap_to_point"],
+        )
+        copy_annotations_to_next = action(
+            text=self.tr("Copy Annotations to Next Unannotated File"),
+            slot=self.copy_annotations_to_next,
+            shortcut=shortcuts["copy_annotations_to_next"],
+            tip=self.tr(
+                "Save the current annotations to the next file that has no label file"
+            ),
+        )
+        merge_linestrips = action(
+            text=self.tr("Merge into Linestrip"),
+            slot=self.merge_linestrips,
+            shortcut=shortcuts["merge_linestrips"],
+            tip=self.tr(
+                "Combine the selected line and linestrip annotations "
+                "into a single linestrip"
+            ),
+            enabled=False,
+        )
+        delete_selected_files = action(
+            text=self.tr("Delete Selected Files"),
+            slot=self.delete_selected_files,
+            tip=self.tr("Permanently delete the selected files and their label files"),
+        )
+        export_selected_files = action(
+            text=self.tr("Export Selected Files"),
+            slot=self.export_selected_files,
+            tip=self.tr("Copy the selected files and their label files to a directory"),
         )
         delete = action(
             text=self.tr("Delete Shapes"),
@@ -510,7 +552,15 @@ class MainWindow(QtWidgets.QMainWindow):
         add_point_to_edge = action(
             text=self.tr("Add Point to Edge"),
             slot=self._canvas_widgets.canvas.add_point_to_edge,
+            shortcut=shortcuts["add_point_to_edge"],
             tip=self.tr("Insert a new point at the hovered polygon edge"),
+            enabled=False,
+        )
+        split_linestrip = action(
+            text=self.tr("Split Linestrip at Vertex"),
+            slot=self.split_linestrip,
+            shortcut=shortcuts["split_linestrip"],
+            tip=self.tr("Split the selected linestrip into two at the hovered vertex"),
             enabled=False,
         )
         create_mode = action(
@@ -736,6 +786,9 @@ class MainWindow(QtWidgets.QMainWindow):
         fit_window.setChecked(True)
 
         self._canvas_widgets.canvas.vertex_selected.connect(remove_point.setEnabled)
+        self._canvas_widgets.canvas.vertex_selected.connect(
+            self._sync_split_linestrip_enabled
+        )
         self._canvas_widgets.canvas.edge_selected.connect(add_point_to_edge.setEnabled)
 
         draw = [
@@ -787,6 +840,7 @@ class MainWindow(QtWidgets.QMainWindow):
             delete,
             add_point_to_edge,
             remove_point,
+            split_linestrip,
         )
         edit_menu = (
             separator(),
@@ -796,8 +850,16 @@ class MainWindow(QtWidgets.QMainWindow):
             separator(),
             edit,
             delete,
+            None,
+            undo,
+            undo_last_point,
+            None,
+            add_point_to_edge,
             remove_point,
-            separator(),
+            split_linestrip,
+            None,
+            copy_annotations_to_next,
+            merge_linestrips,
             keep_prev_action,
             toggle_snap_to_point,
         )
@@ -811,9 +873,14 @@ class MainWindow(QtWidgets.QMainWindow):
             open=open_,
             close=close,
             delete_file=delete_file,
+            delete_image_file=delete_image_file,
             toggle_keep_prev_mode=keep_prev_action,
             toggle_keep_prev_brightness_contrast=toggle_keep_prev_brightness_contrast,
             toggle_snap_to_point=toggle_snap_to_point,
+            copy_annotations_to_next=copy_annotations_to_next,
+            merge_linestrips=merge_linestrips,
+            delete_selected_files=delete_selected_files,
+            export_selected_files=export_selected_files,
             delete=delete,
             edit=edit,
             copy=copy,
@@ -822,6 +889,7 @@ class MainWindow(QtWidgets.QMainWindow):
             undo_last_point=undo_last_point,
             undo=undo,
             remove_point=remove_point,
+            split_linestrip=split_linestrip,
             add_point_to_edge=add_point_to_edge,
             create_mode=create_mode,
             edit_mode=edit_mode,
@@ -896,7 +964,10 @@ class MainWindow(QtWidgets.QMainWindow):
         view_menu = self.menuBar().addMenu(self.tr("&View"))
         help_menu = self.menuBar().addMenu(self.tr("&Help"))
         label_menu = QtWidgets.QMenu()
-        label_menu.addActions((self._actions.edit, self._actions.delete))
+        _utils.add_actions(
+            label_menu,
+            (self._actions.edit, self._actions.delete, self._actions.merge_linestrips),
+        )
         self._docks.label_list.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu
         )
@@ -917,7 +988,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.save_with_image_data,
                 self._actions.close,
                 self._actions.delete_file,
-                separator(),
+                self._actions.delete_image_file,
+                None,
                 open_config,
                 separator(),
                 quit_,
@@ -957,9 +1029,10 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self._canvas_widgets.canvas.context_menus.with_selection.addActions(
             (
-                action(text="&Copy here", slot=self.copy_shape),
-                action(text="&Move here", slot=self.move_shape),
-            )
+                action("&Copy here", self.copy_shape),
+                action("&Move here", self.move_shape),
+                self._actions.split_linestrip,
+            ),
         )
 
         return _Menus(
@@ -1095,11 +1168,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _setup_status_bar(self) -> _StatusBarWidgets:
         message = QtWidgets.QLabel(self.tr("%s started.") % __appname__)
+        file_count = QtWidgets.QLabel("")
         stats = StatusStats()
         self.statusBar().addWidget(message, 1)
+        self.statusBar().addWidget(file_count, 0)
         self.statusBar().addWidget(stats, 0)
         self.statusBar().show()
-        return _StatusBarWidgets(message=message, stats=stats)
+        return _StatusBarWidgets(message=message, file_count=file_count, stats=stats)
 
     def _setup_canvas(self) -> _CanvasWidgets:
         zoom_widget = ZoomWidget()
@@ -1168,6 +1243,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         canvas.shape_moved.connect(self.mark_dirty)
         canvas.selection_changed.connect(self._on_shape_selection_changed)
+        canvas.selection_changed.connect(self._sync_split_linestrip_enabled)
         canvas.drawing_polygon.connect(self._on_drawing_polygon_changed)
 
         self.setCentralWidget(scroll_area)
@@ -1219,7 +1295,13 @@ class MainWindow(QtWidgets.QMainWindow):
         file_search.setPlaceholderText(self.tr("Search Filename"))
         file_search.textChanged.connect(self._on_file_search_changed)
         file_list = QtWidgets.QListWidget()
+        file_list.setSelectionMode(
+            QtWidgets.QAbstractItemView.SelectionMode.ExtendedSelection
+        )
         file_list.currentItemChanged.connect(self._load_selected_image)
+        file_list.itemSelectionChanged.connect(self._file_list_selection_count_changed)
+        file_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        file_list.customContextMenuRequested.connect(self._show_file_list_context_menu)
         file_list_layout = QtWidgets.QVBoxLayout()
         file_list_layout.setContentsMargins(0, 0, 0, 0)
         file_list_layout.setSpacing(0)
@@ -1365,6 +1447,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for _, action in self._actions.draw:
             action.setEnabled(True)
         self._actions.delete_file.setEnabled(self.has_label_file())
+        self._actions.delete_image_file.setEnabled(self._image_path is not None)
 
     def update_action_states(self, *, value: bool = True) -> None:
         for action in (*self._actions.zoom, *self._actions.on_load_active):
@@ -1574,7 +1657,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 if isinstance(widget, QtWidgets.QToolButton):
                     widget.setStyleSheet(style)
 
-    def show_label_list_menu(self, point: QtCore.QPoint, /) -> None:
+    def show_label_list_menu(self, point: QtCore.QPoint) -> None:
+        selected = self._docks.label_list.selected_items()
+        selected_shapes = [s for item in selected if (s := item.shape()) is not None]
+        can_merge = len(selected_shapes) >= 2 and all(
+            s.shape_type in ("line", "linestrip") for s in selected_shapes
+        )
+        self._actions.merge_linestrips.setEnabled(can_merge)
         self._label_list_menu_origin = self._docks.label_list.mapToGlobal(point)
         try:
             # PySide6 type QMenu.exec() argument too narrowly
@@ -1717,6 +1806,15 @@ class MainWindow(QtWidgets.QMainWindow):
         ):
             self._restore_file_list_state(item=previous_item)
 
+    def _file_list_selection_count_changed(self) -> None:
+        count = len(self._docks.file_list.selectedItems())
+        if count > 1:
+            self._status_bar.file_count.setText(
+                self.tr("{count} files selected").format(count=count)
+            )
+        else:
+            self._status_bar.file_count.setText("")
+
     # React to canvas signals.
     def _on_shape_selection_changed(self, selected_shapes: list[Shape], /) -> None:
         self._docks.label_list.item_selection_changed.disconnect(
@@ -1780,7 +1878,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mark_dirty()
         self._sync_circle_radius_widget()
 
-    def add_label(self, *, shape: Shape) -> None:
+    def _sync_split_linestrip_enabled(self, *_: object) -> None:
+        self._actions.split_linestrip.setEnabled(
+            self._canvas_widgets.canvas.can_split_linestrip
+        )
+
+    def add_label(self, shape: Shape) -> None:
         assert shape.label is not None
         label_list_item = LabelListWidgetItem(shape=shape)
         self._docks.label_list.add_item(item=label_list_item)
@@ -2669,6 +2772,136 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mark_clean()
         self._reset_label_file_actions()
 
+    def delete_image_file(self) -> None:
+        if self._image_path is None:
+            return
+        msg = self.tr(
+            "Permanently delete this image and its label file? "
+            "This action cannot be undone."
+        )
+        if not self._confirm_deletion(message=msg):
+            return
+
+        image_path = Path(self._image_path)
+        annotation_path = Path(self.current_label_file_path())
+        # The files are going away, so there is nothing left to save; clearing
+        # the dirty flag keeps the subsequent navigation from prompting.
+        self._is_changed = False
+
+        for path in (annotation_path, image_path):
+            if path.exists():
+                path.unlink()
+                logger.info("File is removed: {}", path)
+
+        # Remove the entry from the file list and load the next file, or
+        # empty the workspace when the list is exhausted.
+        row = self._docks.file_list.currentRow()
+        self._docks.file_list.takeItem(row)
+        if self._docks.file_list.count() > 0:
+            next_row = min(max(row, 0), self._docks.file_list.count() - 1)
+            self._docks.file_list.setCurrentRow(next_row)
+        else:
+            self.reset_state()
+            self.mark_clean()
+            self.update_action_states(False)
+            self._canvas_widgets.canvas.setEnabled(False)
+            self._actions.save_as.setEnabled(False)
+            self._docks.file_list.setFocus()
+
+    def _show_file_list_context_menu(self, point: QtCore.QPoint) -> None:
+        selected = self._docks.file_list.selectedItems()
+        has_selection = len(selected) > 0
+        self._actions.delete_selected_files.setEnabled(has_selection)
+        self._actions.export_selected_files.setEnabled(has_selection)
+        menu = QtWidgets.QMenu(self)
+        menu.addAction(self._actions.delete_selected_files)
+        menu.addAction(self._actions.export_selected_files)
+        menu.exec(self._docks.file_list.mapToGlobal(point))  # ty: ignore[invalid-argument-type]
+
+    def delete_selected_files(self) -> None:
+        items = self._docks.file_list.selectedItems()
+        if not items:
+            return
+        count = len(items)
+        msg = self.tr(
+            "Permanently delete {count} files and their label files? "
+            "This action cannot be undone."
+        ).format(count=count)
+        if not self._confirm_deletion(message=msg):
+            return
+
+        current_item = self._docks.file_list.currentItem()
+        # Clear dirty state so the file-list removal cannot trigger an
+        # unsaved-changes prompt for each deleted entry.
+        self._is_changed = False
+        # Collect image paths and remove items from the list in reverse
+        # order so earlier indices stay valid.
+        for item in sorted(
+            items, key=lambda i: self._docks.file_list.row(i), reverse=True
+        ):
+            image_path = Path(item.text())
+            label_path = Path(
+                _resolve_label_path(
+                    image_or_label_path=str(image_path),
+                    output_dir=self._output_dir,
+                )
+            )
+            for path in (label_path, image_path):
+                if path.exists():
+                    path.unlink()
+                    logger.info("File is removed: {}", path)
+            self._docks.file_list.takeItem(self._docks.file_list.row(item))
+
+        if self._docks.file_list.count() > 0:
+            # Navigate to the nearest remaining file.
+            if current_item is not None and current_item in [
+                self._docks.file_list.item(i)
+                for i in range(self._docks.file_list.count())
+            ]:
+                self._docks.file_list.setCurrentItem(current_item)
+            else:
+                self._docks.file_list.setCurrentRow(0)
+        else:
+            self.reset_state()
+            self.mark_clean()
+            self.update_action_states(False)
+            self._canvas_widgets.canvas.setEnabled(False)
+            self._actions.save_as.setEnabled(False)
+            self._docks.file_list.setFocus()
+
+    def export_selected_files(self) -> None:
+        items = self._docks.file_list.selectedItems()
+        if not items:
+            return
+        target_dir = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            self.tr("Choose Export Directory"),
+            str(self._prev_opened_dir or Path.home()),
+        )
+        if not target_dir:
+            return
+        target = Path(target_dir)
+        exported = 0
+        for item in items:
+            image_path = Path(item.text())
+            label_path = Path(
+                _resolve_label_path(
+                    image_or_label_path=str(image_path),
+                    output_dir=self._output_dir,
+                )
+            )
+            for src in (image_path, label_path):
+                if src.exists():
+                    dest = target / src.name
+                    QtCore.QFile.copy(str(src), str(dest))
+                    exported += 1
+        self.show_status_message(
+            self.tr("Exported {count} files to {dir}").format(
+                count=len(items), dir=target_dir
+            ),
+            5000,
+        )
+
     @property
     def _is_settings_editable(self) -> bool:
         return self._config_file is not None and not self._config_overrides
@@ -3023,6 +3256,134 @@ class MainWindow(QtWidgets.QMainWindow):
             for action in self._actions.on_shapes_present:
                 action.setEnabled(False)
 
+    def split_linestrip(self) -> None:
+        canvas = self._canvas_widgets.canvas
+        result = canvas.split_linestrip()
+        if result is None:
+            return
+        old_shape, left, right = result
+        self.remove_labels([old_shape])
+        self.add_label(left)
+        self.add_label(right)
+        canvas.deselect_shape()
+        canvas.select_shapes([left, right])
+        canvas.update()
+        self.mark_dirty()
+
+    def merge_linestrips(self) -> None:
+        items = self._docks.label_list.selected_items()
+        shapes = [s for item in items if (s := item.shape()) is not None]
+        if len(shapes) < 2:
+            return
+        if any(s.shape_type not in ("line", "linestrip") for s in shapes):
+            return
+        # Merge in label-list order; reverse each shape when its far end is
+        # closer to the current tail than its near end, so the merged
+        # linestrip flows without backtracking.
+        ordered = [shapes[0]]
+        for shape in shapes[1:]:
+            tail = ordered[-1].points[-1]
+            if np.linalg.norm(shape.points[-1] - tail) < np.linalg.norm(
+                shape.points[0] - tail
+            ):
+                ordered.append(
+                    Shape(
+                        label=shape.label,
+                        group_id=shape.group_id,
+                        shape_type=shape.shape_type,
+                        flags=shape.flags,
+                        description=shape.description,
+                        points=shape.points[::-1].copy(),
+                        point_labels=shape.point_labels[::-1].copy(),
+                    )
+                )
+            else:
+                ordered.append(shape)
+        merged_points = np.concatenate([s.points for s in ordered])
+        merged_labels = np.concatenate([s.point_labels for s in ordered])
+        first = shapes[0]
+        merged = Shape(
+            label=first.label,
+            group_id=first.group_id,
+            shape_type="linestrip",
+            flags=first.flags,
+            description=first.description,
+            points=merged_points,
+            point_labels=merged_labels,
+        )
+        canvas = self._canvas_widgets.canvas
+        for shape in shapes:
+            if shape in canvas.selected_shapes:
+                canvas.selected_shapes.remove(shape)
+            canvas.shapes.remove(shape)
+        canvas.shapes.append(merged)
+        canvas.backup_shapes()
+        self.remove_labels(shapes)
+        self.add_label(merged)
+        canvas.deselect_shape()
+        canvas.select_shapes([merged])
+        canvas.update()
+        self.mark_dirty()
+
+    def copy_annotations_to_next(self) -> None:
+        if self._image_path is None:
+            return
+        canvas = self._canvas_widgets.canvas
+        if not canvas.shapes:
+            self.show_status_message(
+                self.tr("Current file has no annotations to copy"), 3000
+            )
+            return
+
+        file_list = self._docks.file_list
+        start = file_list.currentRow() + 1
+        for row in range(start, file_list.count()):
+            item = file_list.item(row)
+            if item is None:
+                continue
+            if item.checkState() == Qt.CheckState.Unchecked:
+                target_image_path = item.text()
+                target_label_path = _resolve_label_path(
+                    image_or_label_path=target_image_path,
+                    output_dir=self._output_dir,
+                )
+                shapes = [
+                    _shape_to_dict(s) for s in canvas.shapes if s.label is not None
+                ]
+                flags = self._read_flag_dock_states()
+                try:
+                    target_image = QtGui.QImage(target_image_path)
+                    annotation = Annotation(
+                        image_path=os.path.relpath(
+                            target_image_path,
+                            Path(target_label_path).parent,
+                        ),
+                        image_data=b"",
+                        shapes=shapes,
+                        flags=flags,
+                        other_data={},
+                    )
+                    write_label_file(
+                        filename=target_label_path,
+                        annotation=annotation,
+                        image_height=target_image.height(),
+                        image_width=target_image.width(),
+                        save_image_data=False,
+                    )
+                except (LabelFileError, OSError, ValueError) as e:
+                    self.show_error_message(
+                        self.tr("Error saving label data"),
+                        self.tr("<b>%s</b>") % e,
+                    )
+                    return
+                item.setCheckState(Qt.CheckState.Checked)
+                file_list.setCurrentRow(row)
+                return
+
+        self.show_status_message(
+            self.tr("No unannotated file found after the current file"), 3000
+        )
+
     def copy_shape(self) -> None:
         self._canvas_widgets.canvas.end_move(copy=True)
         for shape in self._canvas_widgets.canvas.selected_shapes:
@@ -3104,13 +3465,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def import_dropped_image_files(self, *, image_files: list[str]) -> None:
         extensions = _list_supported_image_extensions()
         already_loaded = set(self._loaded_image_paths)
-        new_files = [
-            path
-            for path in image_files
-            if path not in already_loaded and path.lower().endswith(extensions)
-        ]
-        if not new_files:
-            return
+        new_files = sorted(
+            (
+                path
+                for path in image_files
+                if path not in already_loaded and path.lower().endswith(extensions)
+            ),
+            key=_image_file_sort_key,
+        )
 
         self._loaded_image_paths.extend(new_files)
         self._refresh_file_list()
@@ -3375,11 +3737,15 @@ def _scan_image_files(*, root_dir: str) -> list[str]:
                 images.append(relative_path)
 
     logger.debug("found {:d} images in {!r}", len(images), root_dir)
-    try:
-        return natsort.os_sorted(images)
-    except OSError:
-        logger.warning(
-            "natsort.os_sorted failed (known macOS strxfrm bug), "
-            "falling back to locale-unaware natural sort"
-        )
-        return natsort.natsorted(images)
+    return sorted(images, key=_image_file_sort_key)
+
+
+def _image_file_sort_key(image_path: str) -> tuple[str, str, str]:
+    """Sort key for the file list: file name first, plain lexicographic.
+
+    Case-insensitive so hex digests (e.g. ``02be..`` vs ``2bd6..``) keep
+    their natural code-point order instead of being reordered by a
+    numeric-aware or locale-aware collation.
+    """
+    basename = os.path.basename(image_path)
+    return (basename.lower(), basename, image_path)

@@ -100,6 +100,7 @@ shortcuts:
   save_as: Ctrl+Shift+S
   save_to:
   delete_file: Ctrl+Delete
+  delete_image_file: Shift+Delete
   open_next: [D, Ctrl+Shift+D]
   open_prev: [A, Ctrl+Shift+A]
   zoom_in: [Ctrl++, Ctrl+=]
@@ -122,9 +123,13 @@ shortcuts:
   undo: Ctrl+Z
   undo_last_point: Ctrl+Z
   edit_label: Ctrl+E
+  add_point_to_edge: V
+  split_linestrip: B
+  copy_annotations_to_next: Shift+N
+  merge_linestrips: M
   toggle_keep_prev_mode: Ctrl+P
   toggle_snap_to_point: S
-  remove_selected_point: [Meta+H, Backspace]
+  remove_selected_point: [X, Backspace]
   show_all_shapes:
   hide_all_shapes:
   toggle_all_shapes: T
