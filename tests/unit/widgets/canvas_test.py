@@ -831,6 +831,24 @@ def test_finalize_with_empty_inference_resets_state_and_notifies(
 
 
 @pytest.mark.gui
+def test_finalize_releases_drawing_state(*, canvas: Canvas) -> None:
+    canvas.create_mode = "rectangle"
+    canvas._current = _DraftShape(
+        shape_type="rectangle",
+        points=(QPointF(0, 0), QPointF(10, 10)),
+        point_labels=(1, 1),
+    )
+    drawing_polygon_emissions: list[bool] = []
+    canvas.drawing_polygon.connect(drawing_polygon_emissions.append)
+
+    canvas._finalize()
+
+    assert drawing_polygon_emissions == [False]
+    assert canvas._current is None
+    assert len(canvas.shapes) == 1
+
+
+@pytest.mark.gui
 def test_existing_shape_suppression_is_disabled_by_default(
     *,
     canvas: Canvas,

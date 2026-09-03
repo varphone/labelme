@@ -2348,6 +2348,7 @@ class Canvas(QtWidgets.QWidget):
 
     def _reset_after_shape_creation(self) -> None:
         self._current = None
+        self.drawing_polygon.emit(False)  # noqa: FBT003 -- Qt signal payload is positional
         # new_shape's handler blocks on the modal label dialog, so paint the
         # committed shape synchronously first. Some modes, including point and
         # AI-Box, can finalize without a matching preview on screen.
