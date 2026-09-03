@@ -4893,6 +4893,11 @@ class MainWindow(QtWidgets.QMainWindow):
             points=merged_points,
             other_data=copy.deepcopy(first.other_data),
         )
+        for shape in shapes:
+            if shape in canvas.selected_shapes:
+                canvas.selected_shapes.remove(shape)
+            canvas.shapes.remove(shape)
+        canvas.shapes.append(merged)
         canvas.backup_shapes()
         self.remove_labels(shapes=shapes)
         self.add_label(shape=merged)

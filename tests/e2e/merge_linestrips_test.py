@@ -7,6 +7,7 @@ from PySide6.QtCore import Qt
 from pytestqt.qtbot import QtBot
 
 from labelme._app import MainWindow
+from labelme._shape import Shape
 from labelme._widgets.canvas import Canvas
 from labelme._widgets.label_list_widget import LabelListWidget
 
@@ -134,6 +135,41 @@ def test_merge_line_and_linestrip(
     assert merged.shape_type == "linestrip"
     # line (2 points) + linestrip (3 points) = 5 points
     assert len(merged.points) == 5
+
+
+def test_merge_two_polygons_keeps_selection_in_sync(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+) -> None:
+    win = main_win(file_or_dir=str(data_path / "raw/2011_000003.jpg"))
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+    canvas = win._canvas_widgets.canvas
+    shapes = [
+        Shape(
+            label="object",
+            shape_type="polygon",
+            points=[[100.0, 100.0], [180.0, 100.0], [140.0, 180.0]],
+        ),
+        Shape(
+            label="object",
+            shape_type="polygon",
+            points=[[240.0, 100.0], [320.0, 100.0], [280.0, 180.0]],
+        ),
+    ]
+    win._load_shapes(shapes, replace=True)
+
+    label_list = win._docks.label_list
+    _select_label_list_items(canvas, label_list, [0, 1])
+    win.merge_polygons()
+    qtbot.wait(50)
+
+    assert len(canvas.shapes) == 1
+    merged = canvas.shapes[0]
+    assert merged.shape_type == "polygon"
+    assert len(label_list) == 1
+    assert label_list[0].shape() is merged
+    assert label_list.selected_items() == [label_list[0]]
 
 
 def test_merge_reverses_shapes_to_avoid_backtracking(
