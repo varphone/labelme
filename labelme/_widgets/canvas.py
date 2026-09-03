@@ -666,7 +666,7 @@ class Canvas(QtWidgets.QWidget):
         i = self._last_hovered_vertex
         return i is not None and 0 < i < len(shape.points) - 1
 
-    def _update_status(self, *, extra_messages: list[str] | None = None) -> None:
+    def _update_status(self, *, extra_messages: list[str] | None) -> None:
         messages: list[str] = []
         if self.mode == _CanvasMode.CREATE:
             messages.append(self.tr("Creating %r") % self.create_mode)
@@ -1625,7 +1625,7 @@ class Canvas(QtWidgets.QWidget):
     def select_shapes(self, *, shapes: list[Shape]) -> None:
         self.selection_changed.emit(shapes)
         self.update()
-        self._update_status()
+        self._update_status(extra_messages=None)
 
     def _select_shape_point(
         self, point: QPointF, /, *, multiple_selection_mode: bool
