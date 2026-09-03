@@ -17,7 +17,10 @@ from pytestqt.qtbot import QtBot
 
 from labelme._automation._ai_assist import AiAssistProposal
 from labelme._line_profile import LineProfile
-from labelme._line_profile import WidthAnchor
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
+from labelme._line_profile import profile_boundary_points
+from labelme._line_profile import profile_boundary_polygon
 from labelme._shape import Shape
 from labelme._shape import ShapeType
 from labelme._widgets.canvas import Canvas
@@ -520,9 +523,9 @@ def test_shape_visibility_survives_backup_and_restore(*, canvas: Canvas) -> None
 @pytest.mark.gui
 def test_profile_survives_canvas_backup_and_restore(canvas: Canvas) -> None:
     profile = LineProfile(
-        width_anchors=(
+        anchors=(
             # Full-width values are intentionally distinct from the geometry.
-            WidthAnchor(0.0, 4.0, "manual", 1.0, True),
+            ProfileAnchor(0.0, width=ProfileValue(4.0, "manual", 1.0, True)),
         )
     )
     shape = Shape(
@@ -540,7 +543,164 @@ def test_profile_survives_canvas_backup_and_restore(canvas: Canvas) -> None:
     assert canvas.shapes[0].line_profile == profile
 
 
-def _make_rectangle(*, label: str | None) -> Shape:
+@pytest.mark.gui
+def test_line_profile_preview_toggle_only_controls_profile_layer(
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        anchors=(ProfileAnchor(0.0, width=ProfileValue(8.0, "auto", 0.8, False)),)
+    )
+    shape = Shape(
+        label="profiled",
+        shape_type="linestrip",
+        points=np.array([(10, 25), (80, 25)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes([shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+
+    def render_profile() -> int:
+        image = QtGui.QImage(
+            _WIDTH,
+            _HEIGHT,
+            QtGui.QImage.Format.Format_ARGB32,
+        )
+        image.fill(QtCore.Qt.GlobalColor.transparent)
+        painter = QtGui.QPainter(image)
+        canvas._draw_line_profile_layer(painter)
+        painter.end()
+        return sum(
+            image.pixelColor(x, y).alpha()
+            for x in range(_WIDTH)
+            for y in range(_HEIGHT)
+        )
+
+    canvas.set_show_line_profile_preview(True)
+    assert render_profile() > 0
+    canvas.set_show_line_profile_preview(False)
+    assert render_profile() == 0
+    canvas._refresh_hover_state(QPointF(10.0, 25.0))
+    assert canvas._find_line_profile_anchor_at_point(QPointF(10.0, 25.0)) is None
+    assert canvas.hovered_shape is canvas.shapes[0]
+    assert canvas._hovered_vertex == 0
+
+
+@pytest.mark.gui
+def test_profile_boundary_sampling_handles_an_acute_turn() -> None:
+    profile = LineProfile(
+        anchors=(
+            ProfileAnchor(0.0, width=ProfileValue(6.0, "auto", 0.8, False)),
+            ProfileAnchor(1.0, width=ProfileValue(10.0, "auto", 0.8, False)),
+        )
+    )
+
+    left, right = profile_boundary_points(
+        profile,
+        [[10.0, 10.0], [50.0, 10.0], [52.0, 40.0]],
+        samples=32,
+    )
+
+    assert len(left) == len(right) == 32
+    assert all(np.isfinite(point).all() for point in (*left, *right))
+
+    polygon = profile_boundary_polygon(
+        profile,
+        [[10.0, 10.0], [50.0, 10.0], [52.0, 40.0]],
+        samples=32,
+    )
+    assert len(polygon) == 64
+    assert polygon[0] == left[0]
+    assert polygon[-1] == right[0]
+
+
+@pytest.mark.gui
+def test_profile_anchor_hit_testing_scales_and_reports_status(
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        anchors=(ProfileAnchor(0.0, width=ProfileValue(80.0, "manual", 1.0, True)),)
+    )
+    shape = Shape(
+        label="profiled",
+        shape_type="linestrip",
+        points=np.array([(0.0, 25.0), (99.0, 25.0)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes([shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    statuses: list[str] = []
+    canvas.status_updated.connect(statuses.append)
+
+    for scale in (0.25, 1.0, 4.0):
+        canvas.scale = scale
+        canvas._refresh_hover_state(QPointF(0.0, 25.0))
+        assert (
+            canvas._find_line_profile_anchor_at_point(QPointF(0.0, 25.0))
+            is not None
+        )
+
+    assert any("anchor" in status.lower() for status in statuses)
+
+    canvas._refresh_hover_state(QPointF(0.0, 25.0))
+    assert canvas._line_profile_hover == ("width", 0, 0)
+    canvas._refresh_hover_state(QPointF(0.0, 65.0))
+    assert canvas._line_profile_hover == ("width", 0, 1)
+    radius_handle = canvas._find_line_profile_anchor_at_point(QPointF(0.0, 65.0))
+    assert radius_handle is not None
+    assert radius_handle[1:] == ("width", 0, "width")
+
+
+@pytest.mark.gui
+def test_profile_preview_handles_dense_anchors_edges_and_large_width(
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        anchors=tuple(
+            ProfileAnchor(
+                index / 20.0, width=ProfileValue(200.0 + index, "auto", 0.4, False)
+            )
+            for index in range(21)
+        )
+    )
+    shape = Shape(
+        label="dense",
+        shape_type="linestrip",
+        points=np.array(
+            [(0.0, 0.0), (30.0, 5.0), (99.0, 49.0)], dtype=np.float64
+        ),
+        line_profile=profile,
+    )
+    canvas.load_shapes([shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    canvas.scale = 4.0
+    image = QtGui.QImage(_WIDTH, _HEIGHT, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtCore.Qt.GlobalColor.transparent)
+    painter = QtGui.QPainter(image)
+    canvas._draw_line_profile_layer(painter)
+    painter.end()
+    assert image.isNull() is False
+    assert sum(
+        image.pixelColor(x, y).alpha() for x in range(_WIDTH) for y in range(_HEIGHT)
+    ) > 0
+
+
+@pytest.mark.gui
+def test_profile_anchor_hit_testing_does_not_change_plain_shape_behavior(
+    canvas: Canvas,
+) -> None:
+    shape = Shape(
+        label="plain",
+        shape_type="rectangle",
+        points=np.array([(10, 10), (40, 30)], dtype=np.float64),
+        closed=True,
+    )
+    canvas.load_shapes([shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+
+    assert canvas._find_line_profile_anchor_at_point(QPointF(20, 20)) is None
+
+
+def _make_rectangle(label: str | None) -> Shape:
     return Shape(
         label=label,
         shape_type="rectangle",

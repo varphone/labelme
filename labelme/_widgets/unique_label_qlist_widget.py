@@ -41,3 +41,16 @@ class UniqueLabelQListWidget(_EscapableQListWidget):
         item.setData(LABEL_COLOR_ROLE, QtGui.QColor(*color))
         item.setText(label)
         self.addItem(item)
+
+    def rename_label_item(
+        self,
+        item: QtWidgets.QListWidgetItem,
+        label: str,
+        color: tuple[int, int, int],
+    ) -> None:
+        """Update a label item without changing its row or selection."""
+        if self.item(self.row(item)) is not item:
+            raise ValueError("item does not belong to this label list")
+        item.setData(Qt.ItemDataRole.UserRole, label)
+        item.setData(LABEL_COLOR_ROLE, QtGui.QColor(*color))
+        item.setText(label)

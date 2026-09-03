@@ -30,19 +30,21 @@ def _make_profiled_linestrip() -> Shape:
         points=np.array([[0.0, 0.0], [10.0, 0.0]], dtype=np.float64),
         line_profile=LineProfile.from_json_obj(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "path_mode": "continuous",
                 "parameterization": "normalized_arc_length",
-                "width_anchors": [
+                "anchors": [
                     {
                         "position": 0.5,
-                        "width": 4.0,
-                        "source": "manual",
-                        "confidence": 1.0,
-                        "confirmed": True,
+                        "width": {
+                            "value": 4.0,
+                            "source": "manual",
+                            "confidence": 1.0,
+                            "confirmed": True,
+                        },
+                        "visibility": None,
                     }
                 ],
-                "visibility_anchors": [],
                 "min_width": None,
                 "max_width": None,
                 "measurement_version": None,
@@ -59,9 +61,9 @@ def test_shape_vertex_edit_remaps_profile_and_copy_is_independent() -> None:
     shape.move_vertex(i=1, pos=(20.0, 0.0))
 
     assert shape.line_profile is not None
-    assert shape.line_profile.width_anchors[0].position == pytest.approx(0.25)
+    assert shape.line_profile.anchors[0].position == pytest.approx(0.25)
     assert copied.line_profile is not None
-    assert copied.line_profile.width_anchors[0].position == pytest.approx(0.5)
+    assert copied.line_profile.anchors[0].position == pytest.approx(0.5)
 
 
 def test_shape_translation_does_not_change_profile() -> None:

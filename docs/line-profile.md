@@ -8,7 +8,7 @@ Shape type and does not replace the centerline with a polygon or mask.
 
 1. Draw or select a `linestrip`.
 2. Use **Measure Line Profile** to calculate automatic samples.
-3. Review the circular width handles and square visibility handles. Automatic
+3. Review the circular shared profile handles. Automatic
    results remain unconfirmed until accepted.
 4. Select an anchor to edit its position, value, source, confidence, or
    confirmation state. Insert and delete anchors from the Edit menu or the
@@ -22,27 +22,45 @@ and profile have not changed before a result can be accepted. Low-confidence
 samples may carry a neighboring-width recommendation, but their confidence is
 not raised automatically.
 
+The preview boundary uses the normal of the containing centerline segment. At a
+sharp turn, adjacent offset samples form a bevel-like join; no miter extension
+is generated. The outline is closed with perpendicular butt caps at both
+endpoints. This keeps the displayed boundary bounded by the requested width
+and does not create a polygon or mask annotation.
+
 ## File format
 
 The optional `line_profile` object contains:
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "path_mode": "continuous",
   "parameterization": "normalized_arc_length",
-  "width_anchors": [],
-  "visibility_anchors": [],
+  "anchors": [
+    {
+      "position": 0.0,
+      "width": {"value": 6.0, "source": "manual", "confidence": 1.0, "confirmed": true},
+      "visibility": null
+    }
+  ],
   "min_width": null,
   "max_width": null,
-  "measurement_version": "line-profile-measurement-v1",
+  "measurement_version": "line-profile-measurement-v3",
   "reviewed": false
 }
 ```
 
-Width is the full diameter in image pixels. Anchor positions are normalized
-arc-length values in `[0, 1]`; duplicate positions are invalid. `source` is
-`auto` or `manual`, `confidence` is in `[0, 1]`, and `confirmed` is a boolean.
+Width is the full diameter in image pixels. `anchors` is one sorted sequence;
+each shared position may contain a `width`, a `visibility`, or both. Anchor
+positions are normalized arc-length values in `[0, 1]`; duplicate positions
+are invalid. Each property stores its own `source` (`auto` or `manual`),
+`confidence` in `[0, 1]`, and `confirmed` boolean.
+The current automatic measurement version uses bilinear normal sampling,
+local background-trend removal, subpixel threshold crossings, and a visibility
+score that combines local signal-to-noise, stripe/background contrast, and
+displayed intensity for bright stripes. Existing profiles keep their stored
+`measurement_version`; remeasurement writes the current version.
 The fixed round-trip example is in
 [`docs/line_profile_example.json`](line_profile_example.json).
 

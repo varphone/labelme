@@ -29,12 +29,13 @@ from .. import _shape
 from .. import _utils
 from .._line_profile import point_to_position
 from .._line_profile import position_to_point
-from .._line_profile import profile_boundary_points
+from .._line_profile import profile_boundary_polygon
 from .._line_profile import split_profile
 from .._shape import POLYLINE_SHAPE_TYPES
 from .._shape import RECTANGLE_POINT_COUNT
 from .._shape import Shape
 from .._shape import ShapeType
+from .._shape import nearest_vertex_index
 from . import _canvas_interaction
 from ._canvas_interaction import CursorRole
 from ._canvas_interaction import HitKind
@@ -163,9 +164,11 @@ class Canvas(QtWidgets.QWidget):
     _hovered_rotation: int | None
     active_line_profile_anchor_kind: Literal["width", "visibility"] | None
     active_line_profile_anchor_index: int | None
-    _line_profile_drag: tuple[
-        Shape, Literal["width", "visibility"], int, Literal["position", "width"]
-    ] | None
+    _line_profile_drag: (
+        tuple[Shape, Literal["width", "visibility"], int, Literal["position", "width"]]
+        | None
+    )
+    _line_profile_hover: tuple[Literal["width", "visibility"], int, int] | None
 
     zoom_request = QtCore.Signal(int, QPointF)
     scroll_request = QtCore.Signal(int, Qt.Orientation)
@@ -275,6 +278,7 @@ class Canvas(QtWidgets.QWidget):
         self.active_line_profile_anchor_kind = None
         self.active_line_profile_anchor_index = None
         self._line_profile_drag = None
+        self._line_profile_hover = None
         self._draft_palette = _DEFAULT_PALETTE
         self._palette_cache = {}
         self.context_menus = _canvas_interaction.ContextMenuPair(
@@ -971,9 +975,28 @@ class Canvas(QtWidgets.QWidget):
         self.update()
         self._is_moving_shape = True
 
-    def _highlight_hover_shape(
-        self, *, pos: QPointF, status_messages: list[str]
-    ) -> None:
+    def _highlight_hover_shape(self, pos: QPointF, status_messages: list[str]) -> None:
+        profile_hit = self._find_line_profile_anchor_at_point(pos)
+        if profile_hit is not None:
+            shape, kind, _, mode = profile_hit
+            self._set_highlight(
+                hovered_shape=shape,
+                hovered_edge=None,
+                hovered_vertex=None,
+                hovered_rotation=None,
+            )
+            self._apply_cursor(CursorRole.HANDLE)
+            if kind == "width":
+                message = (
+                    self.tr("Click & drag to adjust profile width")
+                    if mode == "width"
+                    else self.tr("Click & drag to move width anchor")
+                )
+            else:
+                message = self.tr("Click & drag to move visibility anchor")
+            status_messages.append(message)
+            self.update()
+            return
         target = _canvas_interaction.find_hover_target(
             shapes=self.shapes,
             point=np.array([pos.x(), pos.y()]),
@@ -1561,12 +1584,21 @@ class Canvas(QtWidgets.QWidget):
 
     def _find_line_profile_anchor_at_point(
         self, point: QPointF
-    ) -> tuple[
-        Shape,
-        Literal["width", "visibility"],
-        int,
-        Literal["position", "width"],
-    ] | None:
+    ) -> (
+        tuple[
+            Shape,
+            Literal["width", "visibility"],
+            int,
+            Literal["position", "width"],
+        ]
+        | None
+    ):
+        # Preview visibility also controls whether profile anchors participate
+        # in interaction. A hidden anchor must not mask the linestrip vertex
+        # underneath it when the user edits the original annotation.
+        if not self._show_line_profile_preview:
+            self._line_profile_hover = None
+            return None
         if len(self.selected_shapes) > 1:
             return None
         candidates: list[
@@ -1586,31 +1618,81 @@ class Canvas(QtWidgets.QWidget):
         for shape in shapes:
             if shape.shape_type != "linestrip" or shape.line_profile is None:
                 continue
-            for index, anchor in enumerate(shape.line_profile.width_anchors):
-                center = position_to_point(shape.points, anchor.position)
-                dx, dy = point.x() - center[0], point.y() - center[1]
-                distance = math.hypot(dx, dy)
-                display_radius = max(4.0, min(18.0, anchor.width * self.scale / 2.0))
-                radius = display_radius / self.scale
-                threshold = max(radius, self._epsilon / self.scale)
-                if distance > threshold:
+            for index, anchor in enumerate(shape.line_profile.anchors):
+                if anchor.width is None:
                     continue
-                mode: Literal["position", "width"] = (
-                    "width" if distance >= radius * 0.65 else "position"
+                width = anchor.width
+                radius = max(0.0, width.value / 2.0)
+                circle = _line_profile_circle_shape(
+                    points=shape.points,
+                    position=anchor.position,
+                    radius=radius,
                 )
-                candidates.append((distance, shape, "width", index, mode))
-            for index, anchor in enumerate(shape.line_profile.visibility_anchors):
-                center = position_to_point(shape.points, anchor.position)
-                distance = math.hypot(
-                    point.x() - center[0], point.y() - center[1]
+                hit_index = nearest_vertex_index(
+                    shape=circle,
+                    point=np.array([point.x(), point.y()]),
+                    scale=self.scale,
+                    epsilon=self._epsilon,
                 )
-                if distance <= 7.0 / self.scale:
+                if hit_index == 0:
                     candidates.append(
-                        (distance, shape, "visibility", index, "position")
+                        (
+                            _line_profile_point_distance(
+                                point=point, target=circle.points[0]
+                            ),
+                            shape,
+                            "width",
+                            index,
+                            "position",
+                        )
+                    )
+                elif hit_index == 1:
+                    candidates.append(
+                        (
+                            _line_profile_point_distance(
+                                point=point, target=circle.points[1]
+                            ),
+                            shape,
+                            "width",
+                            index,
+                            "width",
+                        )
+                    )
+            for index, anchor in enumerate(shape.line_profile.anchors):
+                if anchor.visibility is None:
+                    continue
+                marker = _line_profile_circle_shape(
+                    points=shape.points,
+                    position=anchor.position,
+                    radius=None,
+                )
+                hit_index = nearest_vertex_index(
+                    shape=marker,
+                    point=np.array([point.x(), point.y()]),
+                    scale=self.scale,
+                    epsilon=self._epsilon,
+                )
+                if hit_index == 0:
+                    candidates.append(
+                        (
+                            _line_profile_point_distance(
+                                point=point, target=marker.points[0]
+                            ),
+                            shape,
+                            "visibility",
+                            index,
+                            "position",
+                        )
                     )
         if not candidates:
+            self._line_profile_hover = None
             return None
         _, shape, kind, index, mode = min(candidates, key=lambda item: item[0])
+        self._line_profile_hover = (
+            kind,
+            index,
+            0 if mode == "position" else 1,
+        )
         return shape, kind, index, mode
 
     def _record_drag_anchor(self, shapes: list[Shape], click: QPointF) -> None:
@@ -1834,55 +1916,109 @@ class Canvas(QtWidgets.QWidget):
         profile = shape.line_profile
         if shape.shape_type != "linestrip" or profile is None:
             return
-        if profile.width_anchors:
-            left, right = profile_boundary_points(
+        if any(anchor.width is not None for anchor in profile.anchors):
+            boundary = profile_boundary_polygon(
                 profile, shape.points, samples=max(16, min(128, len(shape.points) * 16))
             )
-            boundary_pen = QtGui.QPen(QtGui.QColor(80, 170, 255, 180))
+            boundary_color = QtGui.QColor(
+                self._resolve_palette(shape.label).select_line
+            )
+            boundary_color.setAlpha(180)
+            boundary_pen = QtGui.QPen(boundary_color)
             boundary_pen.setWidth(1)
             boundary_pen.setStyle(Qt.PenStyle.DashLine)
             painter.setPen(boundary_pen)
-            for boundary in (left, right):
-                path = QtGui.QPainterPath()
-                path.moveTo(QtCore.QPointF(*boundary[0]) * self.scale)
-                for point in boundary[1:]:
-                    path.lineTo(QtCore.QPointF(*point) * self.scale)
-                painter.drawPath(path)
-        for index, anchor in enumerate(profile.width_anchors):
-            center = position_to_point(shape.points, anchor.position)
-            radius = max(4.0, min(18.0, anchor.width * self.scale / 2.0))
-            if (
+            path = QtGui.QPainterPath()
+            path.moveTo(QtCore.QPointF(*boundary[0]) * self.scale)
+            for point in boundary[1:]:
+                path.lineTo(QtCore.QPointF(*point) * self.scale)
+            path.closeSubpath()
+            painter.drawPath(path)
+        for index, anchor in enumerate(profile.anchors):
+            if anchor.width is None:
+                continue
+            width = anchor.width
+            radius = max(0.0, width.value / 2.0)
+            circle = _line_profile_circle_shape(
+                points=shape.points,
+                position=anchor.position,
+                radius=radius,
+            )
+            active = (
                 index == self.active_line_profile_anchor_index
                 and self.active_line_profile_anchor_kind == "width"
-            ):
-                color = QtGui.QColor(40, 120, 255, 255)
-            elif anchor.confirmed:
-                color = QtGui.QColor(30, 190, 80, 230)
-            elif anchor.confidence < 0.5:
-                color = QtGui.QColor(220, 50, 50, 230)
-            else:
-                color = QtGui.QColor(230, 180, 40, 230)
-            painter.setPen(QtGui.QPen(color, 2))
-            painter.setBrush(QtGui.QColor(255, 255, 255, 80))
-            point = QtCore.QPointF(*center) * self.scale
-            painter.drawEllipse(point, radius, radius)
-        for index, anchor in enumerate(profile.visibility_anchors):
-            center = position_to_point(shape.points, anchor.position)
-            if (
+            )
+            color = _line_profile_anchor_color(
+                confirmed=width.confirmed,
+                confidence=width.confidence,
+                fallback=(230, 180, 40),
+            )
+            if active:
+                color = self.palette().color(QtGui.QPalette.ColorRole.Highlight)
+                color.setAlpha(255)
+            hovered_handle = self._line_profile_hover == (
+                "width",
+                index,
+                0,
+            ) or self._line_profile_hover == ("width", index, 1)
+            render_shape(
+                painter=painter,
+                shape=circle,
+                context=ShapeRenderContext(
+                    scale=self.scale,
+                    palette=_line_profile_circle_palette(color=color),
+                    point_size=self._point_size,
+                    point_type=self._point_type,
+                    selected=True,
+                    fill=True,
+                    highlight=(
+                        VertexHighlight(index=self._line_profile_hover[2], mode="move")
+                        if hovered_handle and self._line_profile_hover is not None
+                        else None
+                    ),
+                    rotation_highlight=None,
+                ),
+            )
+        for index, anchor in enumerate(profile.anchors):
+            if anchor.visibility is None:
+                continue
+            visibility = anchor.visibility
+            marker = _line_profile_circle_shape(
+                points=shape.points,
+                position=anchor.position,
+                radius=None,
+            )
+            active = (
                 index == self.active_line_profile_anchor_index
                 and self.active_line_profile_anchor_kind == "visibility"
-            ):
-                color = QtGui.QColor(40, 120, 255, 255)
-            elif anchor.confirmed:
-                color = QtGui.QColor(30, 190, 80, 230)
-            elif anchor.confidence < 0.5:
-                color = QtGui.QColor(220, 50, 50, 230)
-            else:
-                color = QtGui.QColor(150, 90, 220, 230)
-            painter.setPen(QtGui.QPen(color, 2))
-            painter.setBrush(QtGui.QColor(255, 255, 255, 100))
-            point = QtCore.QPointF(*center) * self.scale
-            painter.drawRect(QtCore.QRectF(point.x() - 5, point.y() - 5, 10, 10))
+            )
+            color = _line_profile_anchor_color(
+                confirmed=visibility.confirmed,
+                confidence=visibility.confidence,
+                fallback=(150, 90, 220),
+            )
+            if active:
+                color = self.palette().color(QtGui.QPalette.ColorRole.Highlight)
+                color.setAlpha(255)
+            hovered_handle = self._line_profile_hover == ("visibility", index, 0)
+            render_shape(
+                painter=painter,
+                shape=marker,
+                context=ShapeRenderContext(
+                    scale=self.scale,
+                    palette=_line_profile_circle_palette(color=color),
+                    point_size=self._point_size,
+                    point_type=self._point_type,
+                    selected=True,
+                    fill=True,
+                    highlight=(
+                        VertexHighlight(index=0, mode="move")
+                        if hovered_handle
+                        else None
+                    ),
+                    rotation_highlight=None,
+                ),
+            )
 
     def _draw_active_shape_layer(self, painter: QtGui.QPainter) -> None:
         if self._current is None:
@@ -2446,6 +2582,78 @@ def _should_reselect_on_right_press(
     if hovered_shape is None:
         return False
     return hovered_shape not in selected_shapes
+
+
+def _line_profile_radius_handle(
+    *,
+    points: Sequence[Sequence[float]],
+    position: float,
+    center: tuple[float, float],
+    radius: float,
+) -> tuple[float, float]:
+    """Place a Circle-style radius handle on the local linestrip normal."""
+    before = position_to_point(points, max(0.0, position - 1e-4))
+    after = position_to_point(points, min(1.0, position + 1e-4))
+    dx, dy = after[0] - before[0], after[1] - before[1]
+    tangent_length = math.hypot(dx, dy)
+    if tangent_length == 0.0:
+        return center[0] + radius, center[1]
+    return (
+        center[0] - radius * dy / tangent_length,
+        center[1] + radius * dx / tangent_length,
+    )
+
+
+def _line_profile_circle_shape(
+    *,
+    points: Sequence[Sequence[float]],
+    position: float,
+    radius: float | None,
+) -> Shape:
+    center = position_to_point(points, position)
+    circle_points = [center]
+    if radius is not None:
+        circle_points.append(
+            _line_profile_radius_handle(
+                points=points,
+                position=position,
+                center=center,
+                radius=radius,
+            )
+        )
+    return Shape(
+        shape_type="circle",
+        points=np.array(circle_points, dtype=np.float64),
+    )
+
+
+def _line_profile_point_distance(*, point: QPointF, target: Sequence[float]) -> float:
+    return math.hypot(point.x() - target[0], point.y() - target[1])
+
+
+def _line_profile_anchor_color(
+    *, confirmed: bool, confidence: float, fallback: tuple[int, int, int]
+) -> QtGui.QColor:
+    if confirmed:
+        return QtGui.QColor(30, 190, 80, 230)
+    if confidence < 0.5:
+        return QtGui.QColor(220, 50, 50, 230)
+    return QtGui.QColor(*fallback, 230)
+
+
+def _line_profile_circle_palette(*, color: QtGui.QColor) -> Palette:
+    fill = QtGui.QColor(color)
+    fill.setAlpha(80)
+    select_fill = QtGui.QColor(color)
+    select_fill.setAlpha(120)
+    return Palette(
+        line=color,
+        fill=fill,
+        select_line=QtGui.QColor(255, 255, 255, 255),
+        select_fill=select_fill,
+        vertex_fill=color,
+        hvertex_fill=QtGui.QColor(255, 255, 255, 255),
+    )
 
 
 def _pick_pending_moved_shape(

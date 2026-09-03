@@ -17,6 +17,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtCore import Qt
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QScrollArea
 from pytestqt.qtbot import QtBot
 
 import labelme._app
@@ -190,10 +191,21 @@ def click_canvas_fraction(
     assert pixmap is not None
     image_pos = QPointF(pixmap.width() * xy[0], pixmap.height() * xy[1])
     pos = image_to_widget_pos(canvas=canvas, image_pos=image_pos)
+    ensure_canvas_pos_visible(qtbot=qtbot, canvas=canvas, pos=pos)
     qtbot.mouseMove(canvas, pos=pos)
     qtbot.wait(50)
     qtbot.mouseClick(canvas, Qt.MouseButton.LeftButton, modifier, pos=pos)
     qtbot.wait(50)
+
+
+def ensure_canvas_pos_visible(qtbot: QtBot, canvas: Canvas, pos: QPoint) -> None:
+    """Keep coordinate-based GUI tests valid when the canvas has scrollbars."""
+    scroll_area = canvas.parentWidget()
+    while scroll_area is not None and not isinstance(scroll_area, QScrollArea):
+        scroll_area = scroll_area.parentWidget()
+    if isinstance(scroll_area, QScrollArea):
+        scroll_area.ensureVisible(pos.x(), pos.y(), 8, 8)
+        qtbot.wait(10)
 
 
 def drag_canvas(

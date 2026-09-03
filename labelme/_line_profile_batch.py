@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import dataclasses
+import hashlib
+import os
+import shutil
 from collections.abc import Callable
 from pathlib import Path
 
@@ -12,8 +15,7 @@ from ._line_measurement import MeasurementParameters
 from ._line_measurement import MeasurementSample
 from ._line_measurement import measure_line_profile
 from ._line_profile import LineProfile
-from ._line_profile import VisibilityAnchor
-from ._line_profile import WidthAnchor
+from ._line_profile import ProfileAnchor
 from ._utils.image import img_data_to_arr
 
 
@@ -27,6 +29,10 @@ class BatchOptions:
     )
     cancel_check: Callable[[], bool] | None = None
     retry_count: int = 0
+    # A caller can show the dry-run report and decide whether writes may start.
+    confirm_check: Callable[[BatchReport], bool] | None = None
+    backup_dir: str | None = None
+    progress_callback: Callable[[int, int], None] | None = None
     # The caller persists the last completed ordinal and passes it back after
     # cancellation; this keeps restart policy outside the file writer.
     resume_from: int = 0
@@ -44,11 +50,15 @@ class BatchItemResult:
     status: str
     processed_shapes: int = 0
     error: str | None = None
+    output_filename: str | None = None
+    backup_filename: str | None = None
 
 
 @dataclasses.dataclass(frozen=True)
 class BatchReport:
     items: tuple[BatchItemResult, ...]
+    is_preview: bool = False
+    confirmed: bool = True
 
     @property
     def failed(self) -> tuple[BatchItemResult, ...]:
@@ -71,34 +81,61 @@ def measure_annotation_files(
 ) -> BatchReport:
     """Measure eligible files with per-file atomic writes and a report."""
     options = options or BatchOptions()
+    if options.confirm_check is not None and not options.dry_run:
+        preview = preview_annotation_files(filenames, options=options)
+        if not options.confirm_check(preview):
+            return BatchReport(
+                preview.items,
+                is_preview=True,
+                confirmed=False,
+            )
     results: list[BatchItemResult] = []
     for index, filename in enumerate(filenames):
         if index < options.resume_from:
             continue
         if options.cancel_check is not None and options.cancel_check():
-            results.append(BatchItemResult(filename, "canceled"))
+            result = BatchItemResult(filename, "canceled")
+            results.append(result)
+            _report_batch_progress(options, index + 1, len(filenames))
             break
         for attempt in range(options.retry_count + 1):
             try:
-                results.append(
-                    _measure_annotation_file(
-                        filename=filename, output_dir=output_dir, options=options
-                    )
+                result = _measure_annotation_file(
+                    filename=filename, output_dir=output_dir, options=options
                 )
+                results.append(result)
+                _report_batch_progress(options, index + 1, len(filenames))
                 break
             except _BatchCanceled:
-                results.append(BatchItemResult(filename, "canceled"))
+                result = BatchItemResult(filename, "canceled")
+                results.append(result)
+                _report_batch_progress(options, index + 1, len(filenames))
                 return BatchReport(tuple(results))
             except Exception as e:
                 if attempt == options.retry_count:
-                    results.append(
-                        BatchItemResult(
-                            filename,
-                            "failed",
-                            error=f"{type(e).__name__}: {e}",
-                        )
+                    result = BatchItemResult(
+                        filename,
+                        "failed",
+                        error=f"{type(e).__name__}: {e}",
                     )
-    return BatchReport(tuple(results))
+                    results.append(result)
+                    _report_batch_progress(options, index + 1, len(filenames))
+    return BatchReport(tuple(results), is_preview=options.dry_run)
+
+
+def preview_annotation_files(
+    filenames: list[str], *, options: BatchOptions | None = None
+) -> BatchReport:
+    """Build a write-free report suitable for confirmation in a batch UI."""
+    source = options or BatchOptions()
+    return measure_annotation_files(
+        filenames,
+        options=dataclasses.replace(
+            source,
+            dry_run=True,
+            confirm_check=None,
+        ),
+    )
 
 
 def _measure_annotation_file(
@@ -109,6 +146,8 @@ def _measure_annotation_file(
     shapes = [dict(shape) for shape in annotation.shapes]
     processed = 0
     skipped_invalid = False
+    target: Path | None = None
+    backup_filename: str | None = None
     for shape in shapes:
         if options.cancel_check is not None and options.cancel_check():
             raise _BatchCanceled
@@ -118,19 +157,28 @@ def _measure_annotation_file(
             skipped_invalid = True
             continue
         profile = shape.get("line_profile")
-        if options.only_missing and profile is not None:
+        if options.only_missing and _profile_has_anchors(profile):
             continue
         if (
             options.only_unreviewed
             and profile is not None
             and profile.reviewed
-            and all(anchor.confidence >= 0.5 for anchor in profile.width_anchors)
+            and all(
+                value is None or value.confidence >= 0.5
+                for anchor in profile.anchors
+                for value in (anchor.width, anchor.visibility)
+            )
         ):
             continue
         measurement = measure_line_profile(
-            image, shape["points"], parameters=options.parameters
+            image,
+            shape["points"],
+            parameters=_parameters_for_profile(options.parameters, profile),
         )
-        shape["line_profile"] = _profile_from_measurement(measurement.samples)
+        shape["line_profile"] = _profile_from_measurement(
+            measurement.samples,
+            existing=profile,
+        )
         processed += 1
     if processed and not options.dry_run:
         target = (
@@ -140,6 +188,13 @@ def _measure_annotation_file(
         )
         if output_dir is not None:
             target.parent.mkdir(parents=True, exist_ok=True)
+        if options.backup_dir is not None and target.exists():
+            backup_root = Path(options.backup_dir)
+            backup_root.mkdir(parents=True, exist_ok=True)
+            digest = hashlib.sha256(str(target).encode()).hexdigest()[:12]
+            backup_path = backup_root / f"{digest}-{target.name}"
+            shutil.copy2(target, backup_path)
+            backup_filename = str(backup_path)
         write_label_file(
             filename=str(target),
             annotation=Annotation(
@@ -156,32 +211,109 @@ def _measure_annotation_file(
     status = "skipped-invalid" if skipped_invalid and not processed else "processed"
     if not processed and not skipped_invalid:
         status = "skipped"
-    return BatchItemResult(filename, status, processed)
+    return BatchItemResult(
+        filename,
+        status,
+        processed,
+        output_filename=(
+            None if not processed or options.dry_run or target is None else str(target)
+        ),
+        backup_filename=(None if options.dry_run else backup_filename),
+    )
+
+
+def rollback_batch(report: BatchReport) -> tuple[str, ...]:
+    """Restore files whose pre-write backups are present in a batch report."""
+    restored: list[str] = []
+    for item in report.items:
+        if item.output_filename is None or item.backup_filename is None:
+            continue
+        backup = Path(item.backup_filename)
+        target = Path(item.output_filename)
+        if not backup.is_file():
+            continue
+        temporary = Path(f"{target}.rollback.tmp")
+        try:
+            shutil.copy2(backup, temporary)
+            os.replace(temporary, target)
+        finally:
+            temporary.unlink(missing_ok=True)
+        restored.append(str(target))
+    return tuple(restored)
 
 
 def _profile_from_measurement(
-    samples: tuple[MeasurementSample, ...]
+    samples: tuple[MeasurementSample, ...],
+    *,
+    existing: LineProfile | None = None,
 ) -> LineProfile:
+    manual = {
+        anchor.position: anchor
+        for anchor in (() if existing is None else existing.anchors)
+    }
+    measured: list[ProfileAnchor] = []
+    for sample in samples:
+        current = next(
+            (
+                anchor
+                for position, anchor in manual.items()
+                if abs(position - sample.position) <= 1e-6
+            ),
+            None,
+        )
+        measured_anchor = sample.to_profile_anchor()
+        width = (
+            None
+            if current is not None
+            and current.width is not None
+            and current.width.confirmed
+            else measured_anchor.width
+        )
+        visibility = (
+            None
+            if current is not None
+            and current.visibility is not None
+            and current.visibility.confirmed
+            else measured_anchor.visibility
+        )
+        measured.append(ProfileAnchor(sample.position, width, visibility))
+    merged: list[ProfileAnchor] = []
+    for anchor in (*manual.values(), *measured):
+        existing_at_position = next(
+            (item for item in merged if abs(item.position - anchor.position) <= 1e-6),
+            None,
+        )
+        if existing_at_position is None:
+            merged.append(anchor)
+            continue
+        width = existing_at_position.width or anchor.width
+        visibility = existing_at_position.visibility or anchor.visibility
+        merged[merged.index(existing_at_position)] = ProfileAnchor(
+            existing_at_position.position, width, visibility
+        )
     return LineProfile(
-        width_anchors=tuple(
-            WidthAnchor(
-                position=sample.position,
-                width=sample.width,
-                source="auto",
-                confidence=sample.confidence,
-                confirmed=False,
-            )
-            for sample in samples
-        ),
-        visibility_anchors=tuple(
-            VisibilityAnchor(
-                position=sample.position,
-                visibility=sample.visibility,
-                source="auto",
-                confidence=sample.confidence,
-                confirmed=False,
-            )
-            for sample in samples
-        ),
+        anchors=tuple(sorted(merged, key=lambda anchor: anchor.position)),
+        min_width=None if existing is None else existing.min_width,
+        max_width=None if existing is None else existing.max_width,
         measurement_version=MEASUREMENT_VERSION,
+        measurement_overrides=()
+        if existing is None
+        else existing.measurement_overrides,
     )
+
+
+def _profile_has_anchors(profile: object) -> bool:
+    return isinstance(profile, LineProfile) and bool(profile.anchors)
+
+
+def _parameters_for_profile(
+    parameters: MeasurementParameters, profile: object
+) -> MeasurementParameters:
+    if not isinstance(profile, LineProfile) or not profile.measurement_overrides:
+        return parameters
+    return dataclasses.replace(parameters, **dict(profile.measurement_overrides))
+
+
+def _report_batch_progress(options: BatchOptions, completed: int, total: int) -> None:
+    if options.progress_callback is not None:
+        options.progress_callback(completed, total)

@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Shape Color controls to Settings for automatic, uniform, and per-Label fallback coloring. ([#2552](https://github.com/wkentaro/labelme/pull/2552))
 - Added typed, backward-compatible `line_profile` support for `linestrip` annotations, including normalized centerline positions, width/visibility anchors, profile-aware editing, visual boundaries, and opt-in background measurement with explicit acceptance.
+- Added profile-aware frame transfer with compatibility checks and a difference
+  confirmation preview, plus dry-run, confirmation, backup, and rollback APIs
+  for batch measurement. The feature remains Preview pending maintainer review
+  and a release PR link ([PR pending](https://github.com/varphone/labelme/pulls)).
 
 ### Changed
 
@@ -37,7 +41,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Undo appearing enabled immediately after opening an image whose Shapes were carried forward via Keep Previous Annotation / Ctrl+Shift, which could silently discard the carried-forward Shapes if clicked before any edit on the new image ([#2523](https://github.com/wkentaro/labelme/pull/2523))
 - Fixed Undo remaining disabled after committing the first Shape on a raw Image. Undo now removes that Shape from the canvas, Annotation List, and both manually saved and auto-saved Annotation Files ([#2523](https://github.com/wkentaro/labelme/pull/2523))
 - Kept the image point beneath the cursor stationary during Ctrl/Cmd-wheel zoom without canvas flicker. ([#2553](https://github.com/wkentaro/labelme/pull/2553))
-- Fixed `labelme --help` showing a Python executable and temporary launcher path instead of the stable `labelme` command on Windows with Python 3.14. ([#2559](https://github.com/wkentaro/labelme/pull/2559))
+ - Fixed `labelme --help` showing a Python executable and temporary launcher path instead of the stable `labelme` command on Windows with Python 3.14. ([#2559](https://github.com/wkentaro/labelme/pull/2559))
+- Fixed automatic line-profile width and visibility estimates being distorted by
+  an off-center line, local glare, or a very small intensity range. Measurement
+  now uses local background-trend removal, subpixel normal profiles, robust
+  stripe boundary crossings, stripe/background contrast,
+  displayed-intensity-aware visibility, and signal-to-noise scoring ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed the line-profile visibility editor showing the first visibility value
+  for every selected width handle; paired width and visibility anchors are now
+  synchronized by normalized position ([PR pending](https://github.com/varphone/labelme/pulls)).
 
 ## 7.1.0 - 2026-08-21
 

@@ -515,19 +515,21 @@ def test_load_shape_json_obj_buckets_unknown_keys_into_other_data() -> None:
 
 def _line_profile_json() -> dict[str, Any]:
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "path_mode": "visible_only",
         "parameterization": "normalized_arc_length",
-        "width_anchors": [
+        "anchors": [
             {
                 "position": 0.0,
-                "width": 3.0,
-                "source": "manual",
-                "confidence": 1.0,
-                "confirmed": True,
+                "width": {
+                    "value": 3.0,
+                    "source": "manual",
+                    "confidence": 1.0,
+                    "confirmed": True,
+                },
+                "visibility": None,
             }
         ],
-        "visibility_anchors": [],
         "min_width": 1.0,
         "max_width": 8.0,
         "measurement_version": "manual",

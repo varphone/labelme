@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Final
 
 import pytest
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QInputDialog
 from PySide6.QtWidgets import QMessageBox
 from pytestqt.qtbot import QtBot
 
@@ -116,6 +118,107 @@ def test_click_canvas_shape_selects_label_list_entry(
 
     assert len(selected_list_items) == 1
     assert selected_list_items[0].shape() is selected_canvas_shape
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_rename_label_list_item_updates_all_matching_shapes_and_saved_file(
+    qtbot: QtBot,
+    annotated_with_labels: MainWindow,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    pause: bool,
+) -> None:
+    win = annotated_with_labels
+    canvas = win._canvas_widgets.canvas
+    unique_label_list = win._docks.unique_label_list
+    item = unique_label_list.find_label_item("person")
+    assert item is not None
+    assert sum(shape.label == "person" for shape in canvas.shapes) == 3
+
+    monkeypatch.setattr(
+        QInputDialog,
+        "getText",
+        lambda *args, **kwargs: ("pedestrian", True),
+    )
+    unique_label_list.itemDoubleClicked.emit(item)
+    qtbot.wait(50)
+
+    assert sum(shape.label == "person" for shape in canvas.shapes) == 0
+    assert sum(shape.label == "pedestrian" for shape in canvas.shapes) == 3
+    assert unique_label_list.find_label_item("person") is None
+    assert unique_label_list.find_label_item("pedestrian") is item
+    annotation_labels = []
+    for annotation_item in win._docks.label_list:
+        shape = annotation_item.shape()
+        assert shape is not None
+        if shape.label == "pedestrian":
+            annotation_labels.append(annotation_item.text())
+    assert len(annotation_labels) == 3
+
+    label_path = tmp_path / "renamed.json"
+    assert win.save_labels(label_path=str(label_path))
+    saved_labels = [
+        shape["label"] for shape in json.loads(label_path.read_text())["shapes"]
+    ]
+    assert saved_labels.count("person") == 0
+    assert saved_labels.count("pedestrian") == 3
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_rename_label_list_item_updates_matching_shapes_in_all_files(
+    qtbot: QtBot,
+    main_win: MainWinFactory,
+    data_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    pause: bool,
+) -> None:
+    win = main_win(
+        file_or_dir=str(data_path / "annotated"),
+        config_overrides={"auto_save": True},
+    )
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+
+    unique_label_list = win._docks.unique_label_list
+    item = unique_label_list.find_label_item("person")
+    assert item is not None
+    assert win._docks.file_list.count() == 3
+
+    monkeypatch.setattr(
+        QInputDialog,
+        "getText",
+        lambda *args, **kwargs: ("pedestrian", True),
+    )
+    unique_label_list.itemDoubleClicked.emit(item)
+
+    assert (
+        sum(shape.label == "person" for shape in win._canvas_widgets.canvas.shapes) == 0
+    )
+    assert (
+        sum(shape.label == "pedestrian" for shape in win._canvas_widgets.canvas.shapes)
+        == 3
+    )
+
+    current_label_path = win.current_label_file_path()
+    assert win.save_labels(label_path=current_label_path)
+    current_labels = [
+        shape["label"]
+        for shape in json.loads(Path(current_label_path).read_text())["shapes"]
+    ]
+    assert current_labels.count("person") == 0
+    assert current_labels.count("pedestrian") == 3
+
+    other_labels = [
+        shape["label"]
+        for shape in json.loads(
+            (data_path / "annotated" / "2011_000006.json").read_text()
+        )["shapes"]
+    ]
+    assert other_labels.count("person") == 0
+    assert other_labels.count("pedestrian") == 4
 
     close_or_pause(qtbot=qtbot, widget=win, pause=pause)
 
