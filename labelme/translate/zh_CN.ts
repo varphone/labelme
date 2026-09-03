@@ -658,6 +658,14 @@ Shapes</source>
         <translation>合并为折线</translation>
     </message>
     <message>
+        <source>Merge Polygons</source>
+        <translation>合并多边形</translation>
+    </message>
+    <message>
+        <source>Merge the selected polygons and fill the gaps between them</source>
+        <translation>合并选中的多边形并填充它们之间的间隙</translation>
+    </message>
+    <message>
         <source>Combine the selected line and linestrip annotations into a single linestrip</source>
         <translation>将选中的直线和折线标注合并为一条折线</translation>
     </message>
