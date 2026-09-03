@@ -11,6 +11,8 @@ from loguru import logger
 from numpy.typing import NDArray
 
 from .._shape import BEZIER_SHAPE_TYPES
+from .._shape import CIRCLE_POINT_COUNT
+from .._shape import MIN_POLYGON_POINT_COUNT
 from .._shape import Shape
 from .._shape import bezier_sample_points
 from .._shape import spline_sample_points

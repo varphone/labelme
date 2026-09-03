@@ -12,6 +12,9 @@ from PySide6 import QtCore
 from PySide6 import QtGui
 
 from .. import _utils
+from .._shape import CIRCLE_POINT_COUNT
+from .._shape import ORIENTED_RECTANGLE_POINT_COUNT
+from .._shape import RECTANGLE_POINT_COUNT
 from .._shape import SPLINE_SHAPE_TYPES
 from .._shape import Shape
 from .._shape import get_rotation_handle
@@ -219,6 +222,7 @@ def _paint_shape_points(
         "linestrip",
         "bezier2",
         "bezier3",
+        *SPLINE_SHAPE_TYPES,
         "points",
         "mask",
     ]:

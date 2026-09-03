@@ -55,7 +55,46 @@ def _render(*, shape: Shape, show_label: bool, scale: float) -> QtGui.QImage:
     return image
 
 
-def _diff_rows(*, a: QtGui.QImage, b: QtGui.QImage, bottom: int) -> int:
+@pytest.mark.parametrize(
+    "shape_type", ["line", "linestrip", "bezier2", "bezier3", "catmull_rom", "bspline"]
+)
+def test_line_shapes_are_not_filled_when_selected(shape_type: ShapeType) -> None:
+    points = {
+        "line": [[20, 80], [100, 20]],
+        "linestrip": [[20, 80], [60, 20], [100, 80]],
+        "bezier2": [[20, 80], [60, 20], [100, 80]],
+        "bezier3": [[20, 80], [40, 20], [80, 20], [100, 80]],
+        "catmull_rom": [[20, 80], [60, 20], [100, 80]],
+        "bspline": [[20, 80], [60, 20], [100, 80]],
+    }[shape_type]
+    shape = Shape(
+        shape_type=shape_type,
+        points=np.array(points, dtype=np.float64),
+        closed=True,
+    )
+    image = QtGui.QImage(120, 100, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtGui.QColor(255, 255, 255))
+    painter = QtGui.QPainter(image)
+    render_shape(
+        painter=painter,
+        shape=shape,
+        context=ShapeRenderContext(
+            scale=1.0,
+            palette=Palette.from_rgb(rgb=(255, 0, 0)),
+            point_size=8,
+            point_type="round",
+            selected=True,
+            fill=True,
+            highlight=None,
+            rotation_highlight=None,
+        ),
+    )
+    painter.end()
+
+    assert image.pixelColor(60, 50) == QtGui.QColor(255, 255, 255)
+
+
+def _diff_rows(a: QtGui.QImage, b: QtGui.QImage, *, bottom: int) -> int:
     # Only the label text differs between renders; everything else (outline,
     # vertices) is identical, so the per-pixel diff isolates the text. Restrict
     # to rows above the shape top edge to assert the text is anchored there.

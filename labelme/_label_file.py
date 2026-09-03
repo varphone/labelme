@@ -31,6 +31,7 @@ from ._utils.shape import ShapeDict
 PIL.Image.MAX_IMAGE_PIXELS = None
 
 _SINGLE_CHANNEL_NDIM: Final = 2
+_POINT_COORDINATE_COUNT: Final = 2
 
 
 def _validate_flags(*, flags: object) -> dict[str, bool]:
@@ -120,7 +121,7 @@ def _normalize_shape_points(
     return [[xmin, ymin], [xmax, ymax]]
 
 
-def _load_shape_json_obj(shape_json_obj: dict) -> ShapeDict:
+def _load_shape_json_obj(*, shape_json_obj: dict) -> ShapeDict:
     SHAPE_KEYS: set[str] = {
         "label",
         "points",
@@ -146,7 +147,7 @@ def _load_shape_json_obj(shape_json_obj: dict) -> ShapeDict:
         raise ValueError(f"points must be non-empty: {shape_json_obj}")
     if not all(
         isinstance(point, list)
-        and len(point) == POINT_COORDINATE_COUNT
+        and len(point) == _POINT_COORDINATE_COUNT
         and all(
             isinstance(xy, int | float) and not isinstance(xy, bool) for xy in point
         )

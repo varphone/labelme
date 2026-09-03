@@ -587,6 +587,24 @@ def test_nearest_edge_index_matches_drawn_edge_for_linestrip() -> None:
     assert index == 1
 
 
+def test_nearest_edge_index_uses_bspline_control_polygon_order() -> None:
+    shape = Shape(
+        shape_type="bspline",
+        points=np.array(
+            [(0.0, 0.0), (20.0, 100.0), (80.0, 100.0), (100.0, 0.0)],
+            dtype=np.float64,
+        ),
+    )
+
+    # The B-spline itself does not pass through (80, 100), so insertion must
+    # use the nearest control-polygon interval rather than a curve sample span.
+    index = _shape.nearest_edge_index(
+        shape=shape, point=np.array([90.0, 70.0]), scale=1.0, epsilon=40.0
+    )
+
+    assert index == 3
+
+
 def test_nearest_vertex_index_returns_nearest_within_epsilon() -> None:
     shape = _make_square_polygon()
     # vertex 1 is at (10.0, 0.0); probe 0.4 units away, within epsilon=1.0

@@ -650,6 +650,56 @@ def test_profile_anchor_hit_testing_scales_and_reports_status(
     assert radius_handle[1:] == ("width", 0, "width")
 
 
+@pytest.mark.parametrize(
+    ("shape_type", "expected"),
+    [
+        ("bezier3", "Editing shape: Cubic Bezier"),
+        ("catmull_rom", "Editing shape: 猫氏样条"),
+    ],
+)
+def test_status_names_single_selected_shape(
+    canvas: Canvas, shape_type: ShapeType, expected: str
+) -> None:
+    canvas.load_shapes(
+        [
+            Shape(
+                shape_type=shape_type,
+                points=np.array(
+                    [[0.0, 0.0], [20.0, 20.0], [40.0, 0.0], [60.0, 20.0]],
+                    dtype=np.float64,
+                )[: (4 if shape_type == "bezier3" else 4)],
+            )
+        ]
+    )
+    canvas.selected_shapes = [canvas.shapes[0]]
+    statuses: list[str] = []
+    canvas.status_updated.connect(statuses.append)
+
+    canvas._update_status()
+
+    assert statuses[-1] == expected
+
+
+def test_status_is_updated_when_shape_is_selected_programmatically(
+    canvas: Canvas,
+) -> None:
+    shape = Shape(
+        shape_type="bezier3",
+        points=np.array(
+            [[0.0, 0.0], [20.0, 20.0], [40.0, 0.0], [60.0, 20.0]],
+            dtype=np.float64,
+        ),
+    )
+    canvas.load_shapes([shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    statuses: list[str] = []
+    canvas.status_updated.connect(statuses.append)
+
+    canvas.select_shapes([canvas.shapes[0]])
+
+    assert statuses[-1] == "Editing shape: Cubic Bezier"
+
+
 @pytest.mark.gui
 def test_profile_preview_handles_dense_anchors_edges_and_large_width(
     canvas: Canvas,

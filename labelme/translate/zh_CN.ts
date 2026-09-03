@@ -105,6 +105,62 @@
         <translation>正在编辑形状</translation>
     </message>
     <message>
+        <source>Editing shape: {0}</source>
+        <translation>正在编辑形状：{0}</translation>
+    </message>
+    <message>
+        <source>Polygon</source>
+        <translation>多边形</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>矩形</translation>
+    </message>
+    <message>
+        <source>Oriented Rectangle</source>
+        <translation>有向矩形</translation>
+    </message>
+    <message>
+        <source>Point</source>
+        <translation>点</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>直线</translation>
+    </message>
+    <message>
+        <source>Circle</source>
+        <translation>圆形</translation>
+    </message>
+    <message>
+        <source>LineStrip</source>
+        <translation>折线</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>点集</translation>
+    </message>
+    <message>
+        <source>Quadratic Bezier</source>
+        <translation>二阶曲线</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>三阶曲线</translation>
+    </message>
+    <message>
+        <source>猫氏样条</source>
+        <translation>猫氏样条</translation>
+    </message>
+    <message>
+        <source>B样条</source>
+        <translation>B 样条</translation>
+    </message>
+    <message>
+        <source>Mask</source>
+        <translation>掩膜</translation>
+    </message>
+    <message>
         <source>Click start point for line</source>
         <translation>单击确定直线起点</translation>
     </message>

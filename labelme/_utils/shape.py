@@ -15,6 +15,11 @@ from numpy.typing import NDArray
 
 from labelme._line_profile import LineProfile
 from labelme._shape import bezier_sample_points
+from labelme._shape import CIRCLE_POINT_COUNT
+from labelme._shape import LINE_POINT_COUNT
+from labelme._shape import MIN_POLYGON_POINT_COUNT
+from labelme._shape import ORIENTED_RECTANGLE_POINT_COUNT
+from labelme._shape import RECTANGLE_POINT_COUNT
 from labelme._shape import spline_sample_points
 
 

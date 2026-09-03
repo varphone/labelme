@@ -98,16 +98,37 @@ def spline_sample_points(
 
     sampled: list[npt.NDArray[np.float64]] = []
     if shape_type == "catmull_rom":
+        # Centripetal parameterization (alpha=0.5) prevents the overshoot and
+        # loops that uniform Catmull-Rom can produce when knots are clustered.
         padded = np.vstack((points[0], points, points[-1]))
         for i in range(len(points) - 1):
             p0, p1, p2, p3 = padded[i : i + 4]
-            for t in np.linspace(0.0, 1.0, samples_per_segment, endpoint=False):
-                t2, t3 = t * t, t * t * t
-                sampled.append(
-                    0.5
-                    * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2
-                       + (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
+            knots = np.zeros(4, dtype=np.float64)
+            for knot in range(1, 4):
+                distance = float(
+                    np.linalg.norm(padded[i + knot] - padded[i + knot - 1])
                 )
+                knots[knot] = knots[knot - 1] + max(distance**0.5, 1e-6)
+            for u in np.linspace(0.0, 1.0, samples_per_segment, endpoint=False):
+                t = knots[1] + u * (knots[2] - knots[1])
+
+                def interpolate(
+                    left: npt.NDArray[np.float64],
+                    right: npt.NDArray[np.float64],
+                    left_t: float,
+                    right_t: float,
+                ) -> npt.NDArray[np.float64]:
+                    denominator = right_t - left_t
+                    if denominator <= 1e-12:
+                        return right.copy()
+                    return ((right_t - t) * left + (t - left_t) * right) / denominator
+
+                a1 = interpolate(p0, p1, knots[0], knots[1])
+                a2 = interpolate(p1, p2, knots[1], knots[2])
+                a3 = interpolate(p2, p3, knots[2], knots[3])
+                b1 = interpolate(a1, a2, knots[0], knots[2])
+                b2 = interpolate(a2, a3, knots[1], knots[3])
+                sampled.append(interpolate(b1, b2, knots[1], knots[2]))
         sampled.append(points[-1])
         return np.asarray(sampled)
     else:
@@ -222,7 +243,7 @@ class Shape:
         self.point_labels = np.delete(self.point_labels, i)
         self.line_profile = new_profile
 
-    def move_vertex(self, i: int, pos: npt.ArrayLike) -> None:
+    def move_vertex(self, *, i: int, pos: npt.ArrayLike) -> None:
         old_points = self.points.copy()
         new_points = self.points.copy()
         new_points[i] = np.asarray(pos, dtype=np.float64).reshape(2)
@@ -326,6 +347,29 @@ def nearest_edge_index(
         )
         if nearest is None:
             return None
+        if shape.shape_type == "bspline":
+            # A B-spline does not generally pass through its control points.
+            # Use the control polygon to decide which knot interval an
+            # inserted point belongs to; the sampled curve alone has no
+            # one-to-one relationship with the control points (especially
+            # when there are only four of them).
+            control_starts = shape.points[:-1] * scale
+            control_ends = shape.points[1:] * scale
+            control_segments = control_ends - control_starts
+            control_lengths = (control_segments * control_segments).sum(axis=1)
+            control_t = np.clip(
+                ((scaled_point - control_starts) * control_segments).sum(axis=1)
+                / np.where(control_lengths == 0, 1.0, control_lengths),
+                0.0,
+                1.0,
+            )
+            control_projections = control_starts + control_t[:, None] * control_segments
+            control_index = int(
+                np.argmin(
+                    np.linalg.norm(scaled_point - control_projections, axis=1)
+                )
+            )
+            return control_index + 1
         # Sampling creates many segments per knot interval. Canvas insertion
         # expects the index of the following knot, not the sampled segment.
         return min(nearest // 24 + 1, len(shape.points) - 1)
