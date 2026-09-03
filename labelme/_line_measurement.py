@@ -4,6 +4,7 @@ import dataclasses
 import math
 from collections.abc import Callable
 from collections.abc import Sequence
+from typing import Final
 
 import numpy as np
 from numpy.typing import NDArray
@@ -14,6 +15,8 @@ from ._line_profile import cumulative_lengths
 from ._line_profile import position_to_point
 
 MEASUREMENT_VERSION = "line-profile-measurement-v3"
+_WIDTH_SMOOTHING_WINDOW: Final[int] = 5
+_WIDTH_SIMPLIFICATION_TOLERANCE: Final[float] = 1.5
 _MIN_VERTEX_TURN_RADIANS = math.radians(5.0)
 
 
@@ -108,10 +111,9 @@ def measure_line_profile(
                 intensity_scale=intensity_scale,
             )
         )
-    samples = tuple(samples_list)
-    return LineMeasurement(
-        MEASUREMENT_VERSION, _recommend_neighbor_widths(samples=samples)
-    )
+    samples = _smooth_sample_widths(samples=tuple(samples_list))
+    samples = _recommend_neighbor_widths(samples=samples)
+    return LineMeasurement(MEASUREMENT_VERSION, samples)
 
 
 def _sample_positions(
@@ -168,6 +170,58 @@ def _is_significant_turn(
         incoming[0] * outgoing[0] + incoming[1] * outgoing[1],
     )
     return turn >= _MIN_VERTEX_TURN_RADIANS
+
+
+def _smooth_sample_widths(
+    *, samples: tuple[MeasurementSample, ...]
+) -> tuple[MeasurementSample, ...]:
+    """Suppress isolated width spikes with a centered sliding median."""
+    if len(samples) < 3:
+        return samples
+    widths = np.asarray([sample.width for sample in samples], dtype=np.float64)
+    radius = _WIDTH_SMOOTHING_WINDOW // 2
+    smoothed: list[MeasurementSample] = []
+    for index, sample in enumerate(samples):
+        start = max(0, index - radius)
+        stop = min(len(samples), index + radius + 1)
+        smoothed.append(
+            dataclasses.replace(sample, width=float(np.median(widths[start:stop])))
+        )
+    return tuple(smoothed)
+
+
+def _simplify_measurement_samples(
+    *, samples: tuple[MeasurementSample, ...]
+) -> tuple[MeasurementSample, ...]:
+    """Keep only anchors needed to represent the measured width curve."""
+    if len(samples) <= 2:
+        return samples
+    kept = {0, len(samples) - 1}
+    pending = [(0, len(samples) - 1)]
+    while pending:
+        left_index, right_index = pending.pop()
+        if right_index - left_index <= 1:
+            continue
+        left = samples[left_index]
+        right = samples[right_index]
+        span = right.position - left.position
+        if span <= 0.0:
+            continue
+        farthest_index: int | None = None
+        farthest_error = _WIDTH_SIMPLIFICATION_TOLERANCE
+        for index in range(left_index + 1, right_index):
+            sample = samples[index]
+            ratio = (sample.position - left.position) / span
+            expected = left.width + ratio * (right.width - left.width)
+            error = abs(sample.width - expected)
+            if error > farthest_error:
+                farthest_index = index
+                farthest_error = error
+        if farthest_index is not None:
+            kept.add(farthest_index)
+            pending.append((left_index, farthest_index))
+            pending.append((farthest_index, right_index))
+    return tuple(sample for index, sample in enumerate(samples) if index in kept)
 
 
 def _measure_sample(

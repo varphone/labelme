@@ -49,6 +49,7 @@ from ._label_file import write_label_file
 from ._label_flags import compile_label_flags
 from ._line_measurement import LineMeasurement
 from ._line_measurement import MeasurementParameters
+from ._line_measurement import _simplify_measurement_samples
 from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._line_profile import AnchorSource
 from ._line_profile import LineProfile
@@ -3312,6 +3313,7 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         accept_only_high_confidence = high_confidence_only.isChecked()
         existing = shape.line_profile
+        samples = _simplify_measurement_samples(samples=result.samples)
         anchors = {
             anchor.position: anchor
             for anchor in (() if existing is None else existing.anchors)
@@ -3322,7 +3324,7 @@ class MainWindow(QtWidgets.QMainWindow):
             and anchor.visibility.source == "manual"
             and anchor.visibility.confirmed
         }
-        for sample in result.samples:
+        for sample in samples:
             if accept_only_high_confidence and sample.confidence < 0.5:
                 continue
             current = next(

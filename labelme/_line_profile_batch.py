@@ -13,6 +13,7 @@ from ._label_file import write_label_file
 from ._line_measurement import MEASUREMENT_VERSION
 from ._line_measurement import MeasurementParameters
 from ._line_measurement import MeasurementSample
+from ._line_measurement import _simplify_measurement_samples
 from ._line_measurement import measure_line_profile
 from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._line_profile import LineProfile
@@ -178,7 +179,7 @@ def _measure_annotation_file(
             parameters=_parameters_for_profile(options.parameters, profile),
         )
         shape["line_profile"] = _profile_from_measurement(
-            measurement.samples,
+            _simplify_measurement_samples(samples=measurement.samples),
             existing=profile,
         )
         processed += 1
@@ -252,6 +253,10 @@ def _profile_from_measurement(
     manual = {
         anchor.position: anchor
         for anchor in (() if existing is None else existing.anchors)
+        if any(
+            value is not None and value.confirmed
+            for value in (anchor.width, anchor.visibility)
+        )
     }
     measured: list[ProfileAnchor] = []
     for sample in samples:
