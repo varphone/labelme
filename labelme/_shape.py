@@ -12,6 +12,9 @@ import numpy as np
 import numpy.typing as npt
 from loguru import logger
 
+from ._line_profile import LineProfile
+from ._line_profile import remap_profile
+
 ShapeType: TypeAlias = Literal[
     "polygon",
     "rectangle",
@@ -51,6 +54,8 @@ class Shape:
         default_factory=lambda: np.empty((0,), dtype=np.int_)
     )
     other_data: dict[str, Any] = dataclasses.field(default_factory=dict)
+    line_profile: LineProfile | None = None
+    line_profile_error: str | None = None
     closed: bool = False
     visible: bool = True
 
@@ -73,8 +78,14 @@ class Shape:
                 len(self.points),
             )
             return
+        old_points = self.points.copy()
         point = np.asarray(point, dtype=np.float64).reshape(2)
-        self.points = np.insert(self.points, i, point, axis=0)
+        new_points = np.insert(self.points, i, point, axis=0)
+        new_profile = self._line_profile_after_points(
+            old_points=old_points, new_points=new_points
+        )
+        self.points = new_points
+        self.line_profile = new_profile
         self.point_labels = np.insert(self.point_labels, i, label)
 
     def can_remove_point(self) -> bool:
@@ -97,14 +108,41 @@ class Shape:
                 len(self.points),
             )
             return
-        self.points = np.delete(self.points, i, axis=0)
+        old_points = self.points.copy()
+        new_points = np.delete(self.points, i, axis=0)
+        new_profile = self._line_profile_after_points(
+            old_points=old_points, new_points=new_points
+        )
+        self.points = new_points
         self.point_labels = np.delete(self.point_labels, i)
+        self.line_profile = new_profile
 
-    def move_vertex(self, *, i: int, pos: npt.ArrayLike) -> None:
-        self.points[i] = np.asarray(pos, dtype=np.float64).reshape(2)
+    def move_vertex(self, i: int, pos: npt.ArrayLike) -> None:
+        old_points = self.points.copy()
+        new_points = self.points.copy()
+        new_points[i] = np.asarray(pos, dtype=np.float64).reshape(2)
+        new_profile = self._line_profile_after_points(
+            old_points=old_points, new_points=new_points
+        )
+        self.points = new_points
+        self.line_profile = new_profile
 
     def translate(self, *, offset: npt.ArrayLike) -> None:
         self.points = self.points + np.asarray(offset, dtype=np.float64).reshape(2)
+
+    def _line_profile_after_points(
+        self,
+        *,
+        old_points: npt.NDArray[np.float64],
+        new_points: npt.NDArray[np.float64],
+    ) -> LineProfile | None:
+        if self.line_profile is None or self.shape_type != "linestrip":
+            return self.line_profile
+        return remap_profile(
+            profile=self.line_profile,
+            old_points=old_points,
+            new_points=new_points,
+        )
 
     def copy(self) -> Shape:
         return copy.deepcopy(self)

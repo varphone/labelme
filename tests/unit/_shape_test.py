@@ -7,6 +7,7 @@ import pytest
 from loguru import logger
 
 from labelme import _shape
+from labelme._line_profile import LineProfile
 from labelme._shape import Shape
 from labelme._shape import ShapeType
 
@@ -21,6 +22,73 @@ def _make_oriented_rectangle(points: list[tuple[float, float]], /) -> Shape:
 
 def _make_axis_aligned_oriented_rectangle() -> Shape:
     return _make_oriented_rectangle([(0.0, 0.0), (10.0, 0.0), (10.0, 4.0), (0.0, 4.0)])
+
+
+def _make_profiled_linestrip() -> Shape:
+    return Shape(
+        shape_type="linestrip",
+        points=np.array([[0.0, 0.0], [10.0, 0.0]], dtype=np.float64),
+        line_profile=LineProfile.from_json_obj(
+            {
+                "schema_version": 1,
+                "path_mode": "continuous",
+                "parameterization": "normalized_arc_length",
+                "width_anchors": [
+                    {
+                        "position": 0.5,
+                        "width": 4.0,
+                        "source": "manual",
+                        "confidence": 1.0,
+                        "confirmed": True,
+                    }
+                ],
+                "visibility_anchors": [],
+                "min_width": None,
+                "max_width": None,
+                "measurement_version": None,
+                "reviewed": False,
+            }
+        ),
+    )
+
+
+def test_shape_vertex_edit_remaps_profile_and_copy_is_independent() -> None:
+    shape = _make_profiled_linestrip()
+    copied = shape.copy()
+
+    shape.move_vertex(i=1, pos=(20.0, 0.0))
+
+    assert shape.line_profile is not None
+    assert shape.line_profile.width_anchors[0].position == pytest.approx(0.25)
+    assert copied.line_profile is not None
+    assert copied.line_profile.width_anchors[0].position == pytest.approx(0.5)
+
+
+def test_shape_translation_does_not_change_profile() -> None:
+    shape = _make_profiled_linestrip()
+    before = shape.line_profile
+
+    shape.translate((10.0, 20.0))
+
+    assert shape.line_profile == before
+
+
+def test_shape_profile_edit_rolls_back_when_remap_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    shape = _make_profiled_linestrip()
+    before_points = shape.points.copy()
+    before_profile = shape.line_profile
+
+    def fail_remap(*args: object, **kwargs: object) -> object:
+        raise ValueError("cannot remap")
+
+    monkeypatch.setattr(_shape, "remap_profile", fail_remap)
+    with pytest.raises(ValueError, match="cannot remap"):
+        shape.move_vertex(i=1, pos=(20.0, 0.0))
+
+    np.testing.assert_array_equal(shape.points, before_points)
+    assert shape.line_profile == before_profile
 
 
 def test_rotate_oriented_rectangle_around_origin() -> None:
