@@ -405,6 +405,11 @@ def test_merge_polygons_initializes_point_labels() -> None:
     merged = window.add_label.call_args.kwargs["shape"]
     np.testing.assert_array_equal(merged.point_labels, np.ones(len(merged.points)))
     assert removed_shapes == [first, second]
+    assert len(merged.points) == len(first.points) + len(second.points)
+    for point in np.concatenate((first.points, second.points)):
+        assert any(
+            np.array_equal(point, merged_point) for merged_point in merged.points
+        )
     assert canvas.shapes == [merged]
     assert canvas.selected_shapes == []
 

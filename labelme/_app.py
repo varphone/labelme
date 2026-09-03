@@ -90,26 +90,130 @@ from ._widgets import SettingsDialog
 from ._widgets import StatusStats
 
 
-def _convex_hull_points(points: np.ndarray) -> np.ndarray:
-    """Return the outer hull of polygon vertices in counter-clockwise order."""
-    unique = sorted({(float(x), float(y)) for x, y in np.asarray(points)})
-    if len(unique) <= 1:
-        return np.asarray(unique, dtype=np.float64)
+def _polygon_signed_area(points: np.ndarray) -> float:
+    return float(
+        0.5
+        * np.sum(
+            points[:, 0] * np.roll(points[:, 1], -1)
+            - points[:, 1] * np.roll(points[:, 0], -1)
+        )
+    )
 
-    def cross(origin: tuple[float, float], a: tuple[float, float], b: tuple[float, float]) -> float:
-        return (a[0] - origin[0]) * (b[1] - origin[1]) - (a[1] - origin[1]) * (b[0] - origin[0])
 
-    lower: list[tuple[float, float]] = []
-    for point in unique:
-        while len(lower) >= 2 and cross(lower[-2], lower[-1], point) <= 0:
-            lower.pop()
-        lower.append(point)
-    upper: list[tuple[float, float]] = []
-    for point in reversed(unique):
-        while len(upper) >= 2 and cross(upper[-2], upper[-1], point) <= 0:
-            upper.pop()
-        upper.append(point)
-    return np.asarray(lower[:-1] + upper[:-1], dtype=np.float64)
+def _segments_intersect(
+    first_start: np.ndarray,
+    first_end: np.ndarray,
+    second_start: np.ndarray,
+    second_end: np.ndarray,
+) -> bool:
+    """Return whether two closed line segments intersect."""
+
+    def cross(origin: np.ndarray, a: np.ndarray, b: np.ndarray) -> float:
+        first = a - origin
+        second = b - origin
+        return float(first[0] * second[1] - first[1] * second[0])
+
+    def on_segment(start: np.ndarray, point: np.ndarray, end: np.ndarray) -> bool:
+        return bool(
+            np.all(point >= np.minimum(start, end) - 1e-9)
+            and np.all(point <= np.maximum(start, end) + 1e-9)
+        )
+
+    first_orientation = cross(first_start, first_end, second_start)
+    second_orientation = cross(first_start, first_end, second_end)
+    third_orientation = cross(second_start, second_end, first_start)
+    fourth_orientation = cross(second_start, second_end, first_end)
+    epsilon = 1e-9
+    if (
+        (
+            abs(first_orientation) <= epsilon
+            and on_segment(first_start, second_start, first_end)
+        )
+        or (
+            abs(second_orientation) <= epsilon
+            and on_segment(first_start, second_end, first_end)
+        )
+        or (
+            abs(third_orientation) <= epsilon
+            and on_segment(second_start, first_start, second_end)
+        )
+        or (
+            abs(fourth_orientation) <= epsilon
+            and on_segment(second_start, first_end, second_end)
+        )
+    ):
+        return True
+    return (first_orientation > 0) != (second_orientation > 0) and (
+        (third_orientation > 0) != (fourth_orientation > 0)
+    )
+
+
+def _is_simple_polygon(points: np.ndarray) -> bool:
+    segment_count = len(points)
+    for first_index in range(segment_count):
+        first_start = points[first_index]
+        first_end = points[(first_index + 1) % segment_count]
+        for second_index in range(first_index + 1, segment_count):
+            if second_index in (
+                (first_index + 1) % segment_count,
+                (first_index - 1) % segment_count,
+            ):
+                continue
+            if _segments_intersect(
+                first_start,
+                first_end,
+                points[second_index],
+                points[(second_index + 1) % segment_count],
+            ):
+                return False
+    return True
+
+
+def _connect_polygon_boundaries(
+    first: np.ndarray, second: np.ndarray
+) -> np.ndarray | None:
+    distances = np.linalg.norm(first[:, None, :] - second[None, :, :], axis=2)
+    first_indices, second_indices = np.unravel_index(
+        np.argsort(distances, axis=None), distances.shape
+    )
+    for first_index, second_index in zip(first_indices, second_indices, strict=True):
+        candidates: list[np.ndarray] = []
+        for first_direction in (1, -1):
+            first_order = [
+                (first_index + first_direction * offset) % len(first)
+                for offset in range(len(first))
+            ]
+            for second_direction in (1, -1):
+                second_order = [
+                    (second_index + second_direction * offset) % len(second)
+                    for offset in range(len(second))
+                ]
+                candidate = np.concatenate((first[first_order], second[second_order]))
+                if _is_simple_polygon(candidate):
+                    candidates.append(candidate)
+        if candidates:
+            return min(
+                candidates,
+                key=lambda candidate: abs(_polygon_signed_area(candidate)),
+            )
+    return None
+
+
+def _merge_polygon_points(polygons: list[np.ndarray]) -> np.ndarray | None:
+    """Connect polygon boundaries while retaining their original vertices."""
+    if not polygons:
+        return None
+    merged = np.asarray(polygons[0], dtype=np.float64)
+    for polygon in polygons[1:]:
+        connected = _connect_polygon_boundaries(
+            merged, np.asarray(polygon, dtype=np.float64)
+        )
+        if connected is None:
+            return None
+        merged = connected
+    return merged
+
+
 from ._widgets import ToolBar
 from ._widgets import UniqueLabelQListWidget
 from ._widgets import ZoomWidget
@@ -4869,19 +4973,14 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         all_points: list[np.ndarray] = []
         for shape in shapes:
-            points = np.rint(np.asarray(shape.points, dtype=np.float32)).astype(
-                np.int32
-            )
+            points = np.asarray(shape.points, dtype=np.float64)
             if len(points) < 3:
                 continue
             all_points.append(points)
         if not all_points:
             return
-        # The outer hull deliberately bridges disconnected polygons and fills
-        # the gap between them.  It also avoids introducing an OpenCV runtime
-        # dependency into LabelMe's GUI process.
-        merged_points = _convex_hull_points(np.concatenate(all_points, axis=0))
-        if len(merged_points) < 3:
+        merged_points = _merge_polygon_points(polygons=all_points)
+        if merged_points is None or len(merged_points) < 3:
             return
         first = shapes[0]
         merged = Shape(
