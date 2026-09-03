@@ -154,6 +154,15 @@ def test_sample_positions_deduplicate_repeated_vertices() -> None:
     assert positions == pytest.approx([0.0, 1.0])
 
 
+def test_sample_positions_do_not_treat_smooth_curve_tessellation_as_vertices() -> None:
+    points = [[float(x), 20.0] for x in np.linspace(0.0, 1000.0, 129)]
+
+    positions = _sample_positions(points=points, sample_spacing=20.0)
+
+    assert len(positions) == 51
+    assert positions == pytest.approx(np.linspace(0.0, 1.0, 51))
+
+
 def test_measure_line_profile_does_not_call_a_dim_line_perfectly_visible() -> None:
     image = np.full((48, 112), 30, dtype=np.uint8)
     image[20:25, 8:104] = 35

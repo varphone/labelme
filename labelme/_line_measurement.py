@@ -14,6 +14,7 @@ from ._line_profile import cumulative_lengths
 from ._line_profile import position_to_point
 
 MEASUREMENT_VERSION = "line-profile-measurement-v3"
+_MIN_VERTEX_TURN_RADIANS = math.radians(5.0)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -116,12 +117,14 @@ def measure_line_profile(
 def _sample_positions(
     *, points: Sequence[Sequence[float]], sample_spacing: float
 ) -> tuple[float, ...]:
-    """Return regular sample positions plus every non-degenerate vertex.
+    """Return regular sample positions plus meaningful polyline turns.
 
     A fixed-distance grid can skip short segments and sharp turns entirely.
-    Keeping the normalized arc position of each vertex makes the generated
-    profile preserve the geometry of the annotated linestrip, while the
-    de-duplication step avoids invalid duplicate anchors for repeated points.
+    Keeping the normalized arc position of each significant turn makes the
+    generated profile preserve the geometry of an annotated linestrip. Smooth
+    interpolated curve samples are intentionally not treated as vertices;
+    otherwise a Bezier or spline's tessellation would defeat ``sample_spacing``
+    and create hundreds of redundant measurement anchors.
     """
     lengths = cumulative_lengths(points)
     total_length = lengths[-1]
@@ -130,13 +133,41 @@ def _sample_positions(
     count = max(2, int(math.ceil(total_length / sample_spacing)) + 1)
     regular = [float(position) for position in np.linspace(0.0, 1.0, count)]
     vertices = [
-        length / total_length for length in lengths[1:-1] if 0.0 < length < total_length
+        length / total_length
+        for index, length in enumerate(lengths[1:-1], start=1)
+        if 0.0 < length < total_length and _is_significant_turn(points, index)
     ]
     positions: list[float] = []
     for position in sorted((*regular, *vertices)):
         if not positions or not math.isclose(position, positions[-1], abs_tol=1e-12):
             positions.append(position)
     return tuple(positions)
+
+
+def _is_significant_turn(
+    points: Sequence[Sequence[float]], index: int
+) -> bool:
+    """Return whether a polyline vertex has a visible change in direction."""
+    before = points[index - 1]
+    current = points[index]
+    after = points[index + 1]
+    incoming = (
+        float(current[0]) - float(before[0]),
+        float(current[1]) - float(before[1]),
+    )
+    outgoing = (
+        float(after[0]) - float(current[0]),
+        float(after[1]) - float(current[1]),
+    )
+    incoming_length = math.hypot(*incoming)
+    outgoing_length = math.hypot(*outgoing)
+    if incoming_length == 0.0 or outgoing_length == 0.0:
+        return False
+    turn = math.atan2(
+        abs(incoming[0] * outgoing[1] - incoming[1] * outgoing[0]),
+        incoming[0] * outgoing[0] + incoming[1] * outgoing[1],
+    )
+    return turn >= _MIN_VERTEX_TURN_RADIANS
 
 
 def _measure_sample(
