@@ -467,6 +467,12 @@ class SettingsDialog(QtWidgets.QDialog):
                 minimum=setting.minimum,
                 maximum=setting.maximum,
                 value=value,
+                suffix=(
+                    "%"
+                    if setting.key_path
+                    == ("line_profile_measurement", "width_filter_strength")
+                    else ""
+                ),
             )
             slider.setMinimumWidth(180)
             slider.value_changed.connect(

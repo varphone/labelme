@@ -2810,7 +2810,9 @@ class MainWindow(QtWidgets.QMainWindow):
         override = QtWidgets.QCheckBox(
             self.tr("Override global measurement settings"), dialog
         )
-        override.setChecked(bool(profile.measurement_overrides))
+        override.setChecked(
+            profile is not None and bool(profile.measurement_overrides)
+        )
         layout.addWidget(override)
         form = QtWidgets.QFormLayout()
         editors: dict[str, QtWidgets.QDoubleSpinBox] = {}
@@ -2833,6 +2835,7 @@ class MainWindow(QtWidgets.QMainWindow):
             minimum=1,
             maximum=100,
             value=max(1, min(100, round(values["width_filter_strength"]))),
+            suffix="%",
             parent=dialog,
         )
         width_filter_slider.setAccessibleName(self.tr("Width filter strength"))

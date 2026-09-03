@@ -5,6 +5,7 @@ from unittest.mock import Mock
 
 import numpy as np
 import pytest
+from PySide6 import QtWidgets
 from PySide6.QtCore import QPointF
 from PySide6.QtCore import QSize
 from PySide6.QtCore import Qt
@@ -147,6 +148,7 @@ def test_line_profile_parameters_are_available_before_measurement(
     main_win: MainWinFactory,
     qtbot: QtBot,
     data_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     win = main_win(
         file_or_dir=str(data_path / "raw" / "2011_000003.jpg"),
@@ -168,6 +170,14 @@ def test_line_profile_parameters_are_available_before_measurement(
         if button.text() == "Parameters"
     )
     assert button.isEnabled()
+
+    monkeypatch.setattr(
+        QtWidgets.QDialog,
+        "exec",
+        lambda _dialog: QtWidgets.QDialog.DialogCode.Rejected,
+    )
+    win.edit_line_profile_measurement_parameters()
+    assert shape.line_profile is None
 
 
 @pytest.mark.gui

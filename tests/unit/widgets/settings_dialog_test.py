@@ -104,6 +104,7 @@ def test_line_profile_width_filter_strength_uses_slider(
     slider = dialog._editors[("line_profile_measurement", "width_filter_strength")]
     assert isinstance(slider, IntegerSlider)
     assert slider.value == 20
+    assert slider.findChildren(QtWidgets.QLabel)[0].text() == "20%"
 
     slider.set_value(65)
 
