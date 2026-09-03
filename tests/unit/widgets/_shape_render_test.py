@@ -80,7 +80,7 @@ def test_line_shapes_are_not_filled_when_selected(shape_type: ShapeType) -> None
         shape=shape,
         context=ShapeRenderContext(
             scale=1.0,
-            palette=Palette.from_rgb(rgb=(255, 0, 0)),
+                palette=Palette.from_rgb((255, 0, 0)),
             point_size=8,
             point_type="round",
             selected=True,
@@ -204,7 +204,7 @@ def test_bezier_render_includes_control_polygon(shape_type: ShapeType) -> None:
     shape = _shape(shape_type=shape_type, points=points)
     context = ShapeRenderContext(
         scale=1.0,
-        palette=Palette.from_rgb(rgb=(255, 0, 0)),
+        palette=Palette.from_rgb((255, 0, 0)),
         point_size=8,
         point_type="round",
         selected=False,

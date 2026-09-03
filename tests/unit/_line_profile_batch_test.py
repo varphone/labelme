@@ -21,7 +21,7 @@ from labelme._line_profile_batch import rollback_batch
 def test_batch_measurement_supports_dry_run_and_atomic_output(
     data_path: Path, tmp_path: Path
 ) -> None:
-    source = read_label_file(str(data_path / "annotated/2011_000003.json"))
+    source = read_label_file(filename=str(data_path / "annotated/2011_000003.json"))
     input_file = tmp_path / "input.json"
     shape = ShapeDict(
         label="stripe",
@@ -51,7 +51,7 @@ def test_batch_measurement_supports_dry_run_and_atomic_output(
         [str(input_file)], options=BatchOptions(dry_run=True)
     )
     assert dry_run.items[0].status == "processed"
-    assert read_label_file(str(input_file)).shapes[0].get("line_profile") is None
+    assert read_label_file(filename=str(input_file)).shapes[0].get("line_profile") is None
 
     output_dir = tmp_path / "out"
     report = measure_annotation_files(
@@ -59,7 +59,7 @@ def test_batch_measurement_supports_dry_run_and_atomic_output(
     )
 
     assert report.items[0].processed_shapes == 1
-    output = read_label_file(str(output_dir / input_file.name))
+    output = read_label_file(filename=str(output_dir / input_file.name))
     assert output.shapes[0].get("line_profile") is not None
 
 
@@ -86,7 +86,7 @@ def test_batch_measurement_retries_transient_read_failure(
         calls += 1
         if calls == 1:
             raise OSError("transient")
-        return original(filename)
+        return original(filename=filename)
 
     monkeypatch.setattr(batch, "read_label_file", flaky_read_label_file)
     report = measure_annotation_files(
@@ -153,7 +153,7 @@ def test_batch_preview_can_be_rejected_without_writing(
 def test_batch_report_can_restore_an_overwritten_output(
     data_path: Path, tmp_path: Path
 ) -> None:
-    source = read_label_file(str(data_path / "annotated/2011_000003.json"))
+    source = read_label_file(filename=str(data_path / "annotated/2011_000003.json"))
     input_file = tmp_path / "input.json"
     write_label_file(
         filename=str(input_file),
@@ -202,7 +202,7 @@ def test_batch_report_can_restore_an_overwritten_output(
 def test_fill_skips_existing_profiles_and_rebuild_preserves_manual_anchors(
     data_path: Path, tmp_path: Path
 ) -> None:
-    source = read_label_file(str(data_path / "annotated/2011_000003.json"))
+    source = read_label_file(filename=str(data_path / "annotated/2011_000003.json"))
 
     def write_input(path: Path, profile: LineProfile | None) -> None:
         shape = ShapeDict(
@@ -244,15 +244,15 @@ def test_fill_skips_existing_profiles_and_rebuild_preserves_manual_anchors(
         options=BatchOptions(),
     )
     assert [item.status for item in fill.items] == ["processed", "skipped"]
-    assert read_label_file(str(missing)).shapes[0]["line_profile"] is not None
-    assert read_label_file(str(existing)).shapes[0]["line_profile"] == manual_profile
+    assert read_label_file(filename=str(missing)).shapes[0]["line_profile"] is not None
+    assert read_label_file(filename=str(existing)).shapes[0]["line_profile"] == manual_profile
 
     rebuild = measure_annotation_files(
         [str(existing)],
         options=BatchOptions(only_missing=False),
     )
     assert rebuild.items[0].status == "processed"
-    rebuilt_profile = read_label_file(str(existing)).shapes[0]["line_profile"]
+    rebuilt_profile = read_label_file(filename=str(existing)).shapes[0]["line_profile"]
     assert rebuilt_profile is not None
     assert any(
         anchor.width == manual_profile.anchors[0].width

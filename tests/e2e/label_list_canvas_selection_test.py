@@ -133,7 +133,7 @@ def test_rename_label_list_item_updates_all_matching_shapes_and_saved_file(
     win = annotated_with_labels
     canvas = win._canvas_widgets.canvas
     unique_label_list = win._docks.unique_label_list
-    item = unique_label_list.find_label_item("person")
+    item = unique_label_list.find_label_item(label="person")
     assert item is not None
     assert sum(shape.label == "person" for shape in canvas.shapes) == 3
 
@@ -147,8 +147,8 @@ def test_rename_label_list_item_updates_all_matching_shapes_and_saved_file(
 
     assert sum(shape.label == "person" for shape in canvas.shapes) == 0
     assert sum(shape.label == "pedestrian" for shape in canvas.shapes) == 3
-    assert unique_label_list.find_label_item("person") is None
-    assert unique_label_list.find_label_item("pedestrian") is item
+    assert unique_label_list.find_label_item(label="person") is None
+    assert unique_label_list.find_label_item(label="pedestrian") is item
     annotation_labels = []
     for annotation_item in win._docks.label_list:
         shape = annotation_item.shape()
@@ -183,7 +183,7 @@ def test_rename_label_list_item_updates_matching_shapes_in_all_files(
     show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
 
     unique_label_list = win._docks.unique_label_list
-    item = unique_label_list.find_label_item("person")
+    item = unique_label_list.find_label_item(label="person")
     assert item is not None
     assert win._docks.file_list.count() == 3
 

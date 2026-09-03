@@ -2065,10 +2065,10 @@ class MainWindow(QtWidgets.QMainWindow):
             image = QtGui.QImage.fromData(annotation.image_data)
             if image.isNull():
                 self.show_error_message(
-                    self.tr("Error reading label data"),
-                    self.tr("Could not read the image stored in <b>{}</b>.").format(
-                        label_path
-                    ),
+                    title=self.tr("Error reading label data"),
+                    message=self.tr(
+                        "Could not read the image stored in <b>{}</b>."
+                    ).format(label_path),
                 )
                 return False
             shapes = [
@@ -2103,8 +2103,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 )
             except (LabelFileError, OSError, ValueError) as error:
                 self.show_error_message(
-                    self.tr("Error saving label data"),
-                    self.tr("<b>{}</b>").format(error),
+                    title=self.tr("Error saving label data"),
+                    message=self.tr("<b>{}</b>").format(error),
                 )
                 return False
 
@@ -2113,7 +2113,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tr("Renamed label in {0} other annotation files").format(
                     len(staged)
                 ),
-                5000,
+                delay=5000,
             )
         return True
 
@@ -2159,16 +2159,16 @@ class MainWindow(QtWidgets.QMainWindow):
         existing_item = unique_label_list.find_label_item(label=new_label)
         if existing_item is not None and existing_item is not item:
             self.show_error_message(
-                self.tr("Invalid label"),
-                self.tr("A label named '{}' already exists.").format(new_label),
+                title=self.tr("Invalid label"),
+                message=self.tr("A label named '{}' already exists.").format(new_label),
             )
             return
         configured_labels = self._config["labels"] or []
         is_configured_label = old_label in configured_labels
         if not self.validate_label(label=new_label) and not is_configured_label:
             self.show_error_message(
-                self.tr("Invalid label"),
-                self.tr("Invalid label '{}' with validation type '{}'").format(
+                title=self.tr("Invalid label"),
+                message=self.tr("Invalid label '{}' with validation type '{}'").format(
                     new_label, self._config["validate_label"]
                 ),
             )
@@ -2210,7 +2210,7 @@ class MainWindow(QtWidgets.QMainWindow):
             shape.label = new_label
             annotation_item = self._docks.label_list.find_item_by_shape(shape=shape)
             annotation_item.set_label(
-                text=format_shape_label(shape),
+                text=format_shape_label(shape=shape),
                 color=new_color,
             )
         self._label_dialog.rename_label_history(old_label, new_label)
@@ -3020,7 +3020,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Batch measurement complete: {0} files, {1} linestrips, "
                 "{2} skipped, {3} failed, {4} canceled"
             ).format(processed, processed_shapes, skipped, failed, canceled),
-            10000,
+            delay=10000,
         )
         current_path = self._line_profile_batch_current_image_path
         if current_path is None:
@@ -3042,7 +3042,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def _on_batch_line_profile_failed(self, message: str) -> None:
         self.show_status_message(
             self.tr("Batch line-profile measurement failed: {0}").format(message),
-            10000,
+            delay=10000,
         )
 
     def _on_batch_line_profile_finished(self) -> None:
@@ -3065,7 +3065,7 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         shape = selected[0]
         canvas = self._canvas_widgets.canvas
-        image = _utils.img_qt_to_rgb_arr(img_qt=canvas.pixmap.toImage())
+        image = _utils.img_qt_to_rgb_arr(canvas.pixmap.toImage())
         points = line_profile_points(shape.points, shape.shape_type)
         token = _line_measurement_token(shape=shape, pixmap_hash=canvas._pixmap_hash)
         parameters = self._line_measurement_parameters(profile=shape.line_profile)
@@ -4407,7 +4407,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tr("Exported {count} files to {dir}").format(
                 count=len(items), dir=target_dir
             ),
-            5000,
+            delay=5000,
         )
 
     @property
@@ -4537,7 +4537,7 @@ class MainWindow(QtWidgets.QMainWindow):
             with QtCore.QSignalBlocker(action):
                 action.setChecked(value)
             if key_path == ("canvas", "fill_drawing"):
-                self._canvas_widgets.canvas.set_fill_drawing(value)
+                self._canvas_widgets.canvas.set_fill_drawing(value=value)
             elif key_path == ("snap_to_point",):
                 self._canvas_widgets.canvas.set_snap_to_point(value)
         elif key_path == ("shape", "show_labels"):
@@ -4907,7 +4907,7 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas = self._canvas_widgets.canvas
         if not canvas.shapes:
             self.show_status_message(
-                self.tr("Current file has no annotations to copy"), 3000
+                self.tr("Current file has no annotations to copy"), delay=3000
             )
             return
 
@@ -4948,8 +4948,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     )
                 except (LabelFileError, OSError, ValueError) as e:
                     self.show_error_message(
-                        self.tr("Error saving label data"),
-                        self.tr("<b>%s</b>") % e,
+                        title=self.tr("Error saving label data"),
+                        message=self.tr("<b>%s</b>") % e,
                     )
                     return
                 item.setCheckState(Qt.CheckState.Checked)

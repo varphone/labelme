@@ -95,7 +95,7 @@ def _bezier_sample_points(
     return [tuple(point) for point in curve]
 
 
-def img_b64_to_arr(img_b64: str | bytes) -> NDArray[np.uint8]:
+def img_b64_to_arr(img_b64: str | bytes, /) -> NDArray[np.uint8]:
     return img_data_to_arr(base64.b64decode(img_b64))
 
 

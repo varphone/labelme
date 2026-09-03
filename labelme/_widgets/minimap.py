@@ -109,11 +109,11 @@ class MinimapWidget(QtWidgets.QFrame):
         )
 
     def _viewport_image_rect(self) -> QtCore.QRectF:
-        top_left = self.canvas.mapFrom(
-            self.viewport, QtCore.QPoint(0, 0)
+        top_left = QtCore.QPointF(
+            self.canvas.mapFrom(self.viewport, QtCore.QPoint(0, 0))
         )
-        bottom_right = self.canvas.mapFrom(
-            self.viewport, self.viewport.rect().bottomRight()
+        bottom_right = QtCore.QPointF(
+            self.canvas.mapFrom(self.viewport, self.viewport.rect().bottomRight())
         )
         return self.canvas.viewport_image_rect(
             top_left=top_left, bottom_right=bottom_right

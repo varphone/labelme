@@ -72,7 +72,7 @@ def test_shape_translation_does_not_change_profile() -> None:
     shape = _make_profiled_linestrip()
     before = shape.line_profile
 
-    shape.translate((10.0, 20.0))
+    shape.translate(offset=(10.0, 20.0))
 
     assert shape.line_profile == before
 

@@ -144,7 +144,7 @@ def _measure_annotation_file(
     *, filename: str, output_dir: str | None, options: BatchOptions
 ) -> BatchItemResult:
     annotation = read_label_file(filename=filename)
-    image = img_data_to_arr(img_data=annotation.image_data)
+    image = img_data_to_arr(annotation.image_data)
     shapes = [dict(shape) for shape in annotation.shapes]
     processed = 0
     skipped_invalid = False

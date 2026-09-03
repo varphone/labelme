@@ -282,7 +282,7 @@ def test_shape_to_mask_bezier_marks_curve(
     shape_type: str, points: list[list[float]]
 ) -> None:
     mask = shape_module.shape_to_mask(
-        img_shape=(100, 100), points=points, shape_type=shape_type, line_width=5
+        (100, 100), points, shape_type=shape_type, line_width=5
     )
     assert mask.dtype == bool
     assert mask[80, 10]
