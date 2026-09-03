@@ -42,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a Snap to Point toggle to the Edit menu (shortcut `S`) that snaps the drawing cursor to the nearest existing annotation point within the pick threshold, so new shapes can share vertices exactly with existing ones; the setting is persisted in the config file and exposed in the Settings dialog ([#2481](https://github.com/wkentaro/labelme/pull/2481))
+- Added a Radius input to the toolbar that activates when a circle annotation is selected, so the radius can be typed exactly (in image pixels) instead of dragging the circumference point; the circle keeps its center and the edit is undoable ([#2480](https://github.com/wkentaro/labelme/pull/2480))
 - Expanded the Settings dialog with a scrollable page of workflow-oriented groups, an icon-labeled section index for quick navigation, and explanatory descriptions, so that auto-save, saving image data, keep-previous annotation/zoom/brightness-contrast, fill-drawing, label sorting/completion/text-field behavior, and the default AI model can all be changed in-app with immediate apply, instead of requiring hand-editing the config file ([#2403](https://github.com/wkentaro/labelme/pull/2403))
 
 ### Changed

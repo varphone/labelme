@@ -4,6 +4,7 @@ from ._shape_render import Palette
 from ._status import StatusStats
 from .brightness_contrast_dialog import BrightnessContrastDialog
 from .canvas import Canvas
+from .circle_radius_widget import CircleRadiusWidget
 from .download import download_ai_model
 from .label_dialog import LabelDialog
 from .label_list_widget import LabelListWidget

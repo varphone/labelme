@@ -52,6 +52,7 @@ from ._widgets import AiAssistedAnnotationWidget
 from ._widgets import AiTextToAnnotationWidget
 from ._widgets import BrightnessContrastDialog
 from ._widgets import Canvas
+from ._widgets import CircleRadiusWidget
 from ._widgets import LabelDialog
 from ._widgets import LabelListWidget
 from ._widgets import LabelListWidgetItem
@@ -126,6 +127,7 @@ class _Actions(NamedTuple):
     delete_file: QtGui.QAction
     toggle_keep_prev_mode: QtGui.QAction
     toggle_keep_prev_brightness_contrast: QtGui.QAction
+    toggle_snap_to_point: QtGui.QAction
     delete: QtGui.QAction
     edit: QtGui.QAction
     copy: QtGui.QAction
@@ -161,6 +163,7 @@ class _Actions(NamedTuple):
     toggle_all: QtGui.QAction
     open_dir: QtGui.QAction
     zoom_widget_action: QtWidgets.QWidgetAction
+    circle_radius_action: QtWidgets.QWidgetAction
     draw: list[tuple[str, QtGui.QAction]]
     zoom: tuple[ZoomWidget | QtGui.QAction, ...]
     on_load_active: tuple[QtGui.QAction, ...]
@@ -249,6 +252,7 @@ class MainWindow(QtWidgets.QMainWindow):
             (
                 "keep_prev_brightness_contrast",
             ): self._actions.toggle_keep_prev_brightness_contrast,
+            ("snap_to_point",): self._actions.toggle_snap_to_point,
             ("canvas", "fill_drawing"): self._actions.fill_drawing,
         }
         self._connect_persistent_actions()
@@ -425,6 +429,15 @@ class MainWindow(QtWidgets.QMainWindow):
             text=self.tr("Keep Previous Brightness/Contrast"),
             checkable=True,
             checked=self._config["keep_prev_brightness_contrast"],
+        )
+        toggle_snap_to_point = action(
+            text=self.tr("Snap to Point"),
+            shortcut=shortcuts["toggle_snap_to_point"],
+            tip=self.tr(
+                "Snap the cursor to the nearest annotation point while drawing"
+            ),
+            checkable=True,
+            checked=self._config["snap_to_point"],
         )
         delete = action(
             text=self.tr("Delete Shapes"),
@@ -713,6 +726,12 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self._canvas_widgets.zoom_widget.setEnabled(False)
 
+        circle_radius_widget = CircleRadiusWidget(self)
+        circle_radius_widget.radius_committed.connect(self._on_circle_radius_committed)
+        circle_radius_action = QtWidgets.QWidgetAction(self)
+        circle_radius_action.setDefaultWidget(circle_radius_widget)
+        self._canvas_widgets.canvas.shape_moved.connect(self._sync_circle_radius_widget)
+
         self._zoom_mode = _ZoomMode.FIT_WINDOW
         fit_window.setChecked(True)
 
@@ -780,6 +799,7 @@ class MainWindow(QtWidgets.QMainWindow):
             remove_point,
             separator(),
             keep_prev_action,
+            toggle_snap_to_point,
         )
         return _Actions(
             about=about,
@@ -793,6 +813,7 @@ class MainWindow(QtWidgets.QMainWindow):
             delete_file=delete_file,
             toggle_keep_prev_mode=keep_prev_action,
             toggle_keep_prev_brightness_contrast=toggle_keep_prev_brightness_contrast,
+            toggle_snap_to_point=toggle_snap_to_point,
             delete=delete,
             edit=edit,
             copy=copy,
@@ -828,6 +849,7 @@ class MainWindow(QtWidgets.QMainWindow):
             toggle_all=toggle_all,
             open_dir=open_dir,
             zoom_widget_action=zoom_widget_action,
+            circle_radius_action=circle_radius_action,
             draw=draw,
             zoom=zoom,
             on_load_active=on_load_active,
@@ -976,7 +998,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     separator(),
                     self._actions.fit_window,
                     self._actions.zoom_widget_action,
-                    separator(),
+                    None,
+                    self._actions.circle_radius_action,
+                    None,
                     select_ai_model,
                     separator(),
                     ai_prompt_action,
@@ -1480,6 +1504,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._label_file_path = None
         self._last_failed_auto_save_path = None
         self._canvas_widgets.canvas.reset_state()
+        self._sync_circle_radius_widget()
 
     # Callbacks
 
@@ -1488,6 +1513,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._docks.label_list.clear()
         self._load_shapes(self._canvas_widgets.canvas.shapes, replace=True)
         self.mark_dirty()
+        self._sync_circle_radius_widget()
 
     def tutorial(self) -> None:
         url = "https://github.com/labelmeai/labelme/tree/main/examples/tutorial"  # NOQA
@@ -1710,6 +1736,49 @@ class MainWindow(QtWidgets.QMainWindow):
         self._actions.duplicate.setEnabled(n_selected)
         self._actions.copy.setEnabled(n_selected)
         self._actions.edit.setEnabled(n_selected)
+        self._sync_circle_radius_widget()
+
+    def _sync_circle_radius_widget(self) -> None:
+        widget = cast(
+            CircleRadiusWidget,
+            self._actions.circle_radius_action.defaultWidget(),
+        )
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if len(selected) == 1 and selected[0].shape_type == "circle":
+            shape = selected[0]
+            if len(shape.points) == 2:
+                radius = float(np.linalg.norm(shape.points[1] - shape.points[0]))
+                widget.set_radius(radius)
+                return
+        widget.set_radius(None)
+
+    def _on_circle_radius_committed(self, radius: float) -> None:
+        if radius <= 0:
+            # A zero-radius circle is not representable; keep the shape and
+            # snap the control back to the current radius.
+            self._sync_circle_radius_widget()
+            return
+        selected = self._canvas_widgets.canvas.selected_shapes
+        if len(selected) != 1:
+            return
+        shape = selected[0]
+        if shape.shape_type != "circle" or len(shape.points) != 2:
+            return
+        center = shape.points[0]
+        offset = shape.points[1] - center
+        current_radius = float(np.linalg.norm(offset))
+        if current_radius <= 0:
+            # A degenerate circle has no direction; default to the +x axis.
+            offset = np.array([1.0, 0.0])
+            current_radius = 1.0
+        if math.isclose(current_radius, radius, rel_tol=1e-9, abs_tol=1e-9):
+            return
+        canvas = self._canvas_widgets.canvas
+        shape.points[1] = center + offset * (radius / current_radius)
+        canvas.backup_shapes()
+        canvas.update()
+        self.mark_dirty()
+        self._sync_circle_radius_widget()
 
     def add_label(self, *, shape: Shape) -> None:
         assert shape.label is not None
@@ -2727,7 +2796,9 @@ class MainWindow(QtWidgets.QMainWindow):
             with QtCore.QSignalBlocker(action):
                 action.setChecked(value)
             if key_path == ("canvas", "fill_drawing"):
-                self._canvas_widgets.canvas.set_fill_drawing(value=value)
+                self._canvas_widgets.canvas.set_fill_drawing(value)
+            elif key_path == ("snap_to_point",):
+                self._canvas_widgets.canvas.set_snap_to_point(value)
         elif key_path == ("shape", "show_labels"):
             canvas = self._canvas_widgets.canvas
             canvas.set_show_labels(value=self._config["shape"]["show_labels"])
