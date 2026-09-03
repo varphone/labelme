@@ -27,13 +27,15 @@ from .. import _ai_models
 from .. import _automation
 from .. import _shape
 from .. import _utils
+from .._line_profile import LINE_PROFILE_SHAPE_TYPES
+from .._line_profile import line_profile_points
 from .._line_profile import point_to_position
 from .._line_profile import position_to_point
 from .._line_profile import profile_boundary_polygon
 from .._line_profile import split_profile
 from .._shape import BEZIER_SHAPE_TYPES
 from .._shape import POLYLINE_SHAPE_TYPES
-from .._shape import RECTANGLE_POINT_COUNT
+from .._shape import SPLINE_SHAPE_TYPES
 from .._shape import Shape
 from .._shape import ShapeType
 from .._shape import bezier_degree
@@ -121,6 +123,8 @@ _CreateMode = Literal[
     "linestrip",
     "bezier2",
     "bezier3",
+    "catmull_rom",
+    "bspline",
     "ai_points_to_shape",
     "ai_box_to_shape",
 ]
@@ -141,6 +145,8 @@ _CREATE_MODE_TO_SHAPE_TYPE: Final[dict[_CreateMode, ShapeType]] = {
     "linestrip": "linestrip",
     "bezier2": "bezier2",
     "bezier3": "bezier3",
+    "catmull_rom": "catmull_rom",
+    "bspline": "bspline",
     "ai_points_to_shape": "points",
     "ai_box_to_shape": "rectangle",
 }
@@ -249,6 +255,8 @@ class Canvas(QtWidgets.QWidget):
                 "linestrip": False,
                 "bezier2": False,
                 "bezier3": False,
+                "catmull_rom": False,
+                "bspline": False,
                 "ai_points_to_shape": False,
                 "ai_box_to_shape": True,
             },
@@ -687,7 +695,7 @@ class Canvas(QtWidgets.QWidget):
                 return self.tr("Click start point for line")
             else:
                 return self.tr("Click end point for line")
-        if self.create_mode == "linestrip":
+        if self.create_mode in ("linestrip",) + SPLINE_SHAPE_TYPES:
             if is_new:
                 return self.tr("Click start point for linestrip")
             else:
@@ -869,7 +877,7 @@ class Canvas(QtWidgets.QWidget):
         current = self._current
         assert current is not None
         mode = self.create_mode
-        if mode in POLYLINE_SHAPE_TYPES:
+        if mode in POLYLINE_SHAPE_TYPES + SPLINE_SHAPE_TYPES:
             self._line = dataclasses.replace(
                 self._line, points=(current.points[-1], pos), point_labels=(1, 1)
             )
@@ -1284,7 +1292,7 @@ class Canvas(QtWidgets.QWidget):
             assert len(current.points) == 1
             self._current = dataclasses.replace(current, points=self._line.points)
             self._finalize()
-        elif mode == "linestrip":
+        elif mode in ("linestrip",) + SPLINE_SHAPE_TYPES:
             current = current.add_point(self._line.points[1])
             self._current = current
             self._line = dataclasses.replace(
@@ -1567,6 +1575,8 @@ class Canvas(QtWidgets.QWidget):
             return False
         if self.create_mode == "ai_points_to_shape":
             return True
+        if self.create_mode in SPLINE_SHAPE_TYPES:
+            return len(self._current.points) >= 3
         if self.create_mode == "linestrip":
             return len(self._current.points) >= MIN_LINESTRIP_POINT_COUNT
         if self.create_mode == "oriented_rectangle":
@@ -1663,18 +1673,22 @@ class Canvas(QtWidgets.QWidget):
         shapes = self.selected_shapes or [
             shape
             for shape in self.shapes
-            if shape.visible and shape.shape_type == "linestrip"
+            if shape.visible and shape.shape_type in LINE_PROFILE_SHAPE_TYPES
         ]
         for shape in shapes:
-            if shape.shape_type != "linestrip" or shape.line_profile is None:
+            if (
+                shape.shape_type not in LINE_PROFILE_SHAPE_TYPES
+                or shape.line_profile is None
+            ):
                 continue
+            centerline = line_profile_points(shape.points, shape.shape_type)
             for index, anchor in enumerate(shape.line_profile.anchors):
                 if anchor.width is None:
                     continue
                 width = anchor.width
                 radius = max(0.0, width.value / 2.0)
                 circle = _line_profile_circle_shape(
-                    points=shape.points,
+                    points=centerline,
                     position=anchor.position,
                     radius=radius,
                 )
@@ -1712,7 +1726,7 @@ class Canvas(QtWidgets.QWidget):
                 if anchor.visibility is None:
                     continue
                 marker = _line_profile_circle_shape(
-                    points=shape.points,
+                    points=centerline,
                     position=anchor.position,
                     radius=None,
                 )
@@ -1964,11 +1978,12 @@ class Canvas(QtWidgets.QWidget):
             return
         shape = self.selected_shapes[0]
         profile = shape.line_profile
-        if shape.shape_type != "linestrip" or profile is None:
+        if shape.shape_type not in LINE_PROFILE_SHAPE_TYPES or profile is None:
             return
+        centerline = line_profile_points(shape.points, shape.shape_type)
         if any(anchor.width is not None for anchor in profile.anchors):
             boundary = profile_boundary_polygon(
-                profile, shape.points, samples=max(16, min(128, len(shape.points) * 16))
+                profile, centerline, samples=max(16, min(128, len(centerline) * 16))
             )
             boundary_color = QtGui.QColor(
                 self._resolve_palette(shape.label).select_line
@@ -1990,7 +2005,7 @@ class Canvas(QtWidgets.QWidget):
             width = anchor.width
             radius = max(0.0, width.value / 2.0)
             circle = _line_profile_circle_shape(
-                points=shape.points,
+                points=centerline,
                 position=anchor.position,
                 radius=radius,
             )
@@ -2034,7 +2049,7 @@ class Canvas(QtWidgets.QWidget):
                 continue
             visibility = anchor.visibility
             marker = _line_profile_circle_shape(
-                points=shape.points,
+                points=centerline,
                 position=anchor.position,
                 radius=None,
             )
@@ -2274,7 +2289,7 @@ class Canvas(QtWidgets.QWidget):
                 shapes=proposal.matching_existing_shapes
             )
         else:
-            if self.create_mode not in BEZIER_SHAPE_TYPES:
+            if self.create_mode not in BEZIER_SHAPE_TYPES + SPLINE_SHAPE_TYPES:
                 self._current = self._current.close()
             if _is_degenerate_draft(self._current):
                 self.degenerate_shape_rejected.emit()
@@ -2460,7 +2475,7 @@ class Canvas(QtWidgets.QWidget):
             self._cancel_current_shape()
             return
         self._current = _shape_to_draft(self.shapes.pop()).open()
-        if self.create_mode in POLYLINE_SHAPE_TYPES:
+        if self.create_mode in POLYLINE_SHAPE_TYPES + SPLINE_SHAPE_TYPES:
             self._line = dataclasses.replace(
                 self._line,
                 points=(self._current.points[-1], self._current.points[0]),
@@ -2589,7 +2604,9 @@ def _is_degenerate_draft(draft: _DraftShape, /) -> bool:
     if shape_type == "polygon":
         return len({(p.x(), p.y()) for p in points}) < MIN_POLYGON_POINT_COUNT
     if shape_type == "linestrip":
-        return len({(p.x(), p.y()) for p in points}) < MIN_LINESTRIP_POINT_COUNT
+        return len({(p.x(), p.y()) for p in points}) < 2
+    if shape_type in SPLINE_SHAPE_TYPES:
+        return len(points) < 3 or len({(p.x(), p.y()) for p in points}) < 3
     if shape_type == "rectangle":
         return (
             len(points) != RECTANGLE_POINT_COUNT

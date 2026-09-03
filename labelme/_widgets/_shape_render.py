@@ -12,13 +12,12 @@ from PySide6 import QtCore
 from PySide6 import QtGui
 
 from .. import _utils
-from .._shape import CIRCLE_POINT_COUNT
-from .._shape import ORIENTED_RECTANGLE_POINT_COUNT
-from .._shape import RECTANGLE_POINT_COUNT
+from .._shape import SPLINE_SHAPE_TYPES
 from .._shape import Shape
 from .._shape import get_rotation_handle
 from .._shape import nearest_edge_index
 from .._shape import oriented_rectangle_arrow_points
+from .._shape import spline_sample_points
 
 PEN_WIDTH: Final[int] = 2
 
@@ -394,6 +393,20 @@ def _build_shape_points_paths(
             _build_shape_point_path(
                 path=paths.vertices, shape=shape, context=context, vertex_index=i
             )
+    elif shape.shape_type in SPLINE_SHAPE_TYPES:
+        curve = spline_sample_points(points, shape.shape_type)
+        if len(curve) > 0:
+            paths.line.moveTo(QtCore.QPointF(*(curve[0] * scale)))
+            for point in curve[1:]:
+                paths.line.lineTo(QtCore.QPointF(*(point * scale)))
+        for i in range(len(points)):
+            _build_shape_point_path(
+                path=paths.vertices, shape=shape, context=context, vertex_index=i
+            )
+        if len(points) > 1:
+            paths.control_polygon.moveTo(QtCore.QPointF(*(points[0] * scale)))
+            for point in points[1:]:
+                paths.control_polygon.lineTo(QtCore.QPointF(*(point * scale)))
     elif shape.shape_type in ("bezier2", "bezier3"):
         if len(points) > 0:
             paths.line.moveTo(QtCore.QPointF(*(points[0] * scale)))
@@ -445,7 +458,9 @@ def is_hit_by_point(
     point_size: int,
     epsilon: float,
 ) -> bool:
-    if shape.shape_type in ("line", "linestrip", "bezier2", "bezier3"):
+    if shape.shape_type in (
+        "line", "linestrip", "bezier2", "bezier3", *SPLINE_SHAPE_TYPES
+    ):
         return (
             nearest_edge_index(shape=shape, point=point, scale=scale, epsilon=epsilon)
             is not None
@@ -506,6 +521,12 @@ def _build_image_path(*, shape: Shape) -> QtGui.QPainterPath:
                 QtCore.QPointF(*points[2]),
                 QtCore.QPointF(*points[3]),
             )
+    elif shape.shape_type in SPLINE_SHAPE_TYPES:
+        curve = spline_sample_points(points, shape.shape_type)
+        if len(curve) > 0:
+            out.moveTo(QtCore.QPointF(*curve[0]))
+            for point in curve[1:]:
+                out.lineTo(QtCore.QPointF(*point))
     else:
         if len(points) > 0:
             out.moveTo(QtCore.QPointF(*points[0]))
