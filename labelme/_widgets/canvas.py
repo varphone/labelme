@@ -2177,7 +2177,7 @@ class Canvas(QtWidgets.QWidget):
             _draw_line_profile_vertex(
                 painter=painter,
                 point=QtCore.QPointF(*point) * self.scale,
-                size=size * self.scale,
+                size=size,
                 point_type=point_type,
             )
 
@@ -2189,7 +2189,7 @@ class Canvas(QtWidgets.QWidget):
         color: QtGui.QColor,
         hovered_handle: bool,
     ) -> None:
-        size = self._point_size * (1.5 if hovered_handle else 1.0) * self.scale
+        size = self._point_size * (1.5 if hovered_handle else 1.0)
         point = QtCore.QPointF(*center) * self.scale
         painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 255)))
         painter.setBrush(

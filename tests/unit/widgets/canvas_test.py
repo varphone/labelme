@@ -735,6 +735,39 @@ def test_profile_preview_handles_dense_anchors_edges_and_large_width(
 
 
 @pytest.mark.gui
+def test_line_profile_width_handle_size_is_screen_constant(
+    *, canvas: Canvas, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    sizes: list[float] = []
+
+    def record_vertex(*, size: float, **_: object) -> None:
+        sizes.append(size)
+
+    monkeypatch.setattr(
+        "labelme._widgets.canvas._draw_line_profile_vertex", record_vertex
+    )
+    image = QtGui.QImage(_WIDTH, _HEIGHT, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtCore.Qt.GlobalColor.transparent)
+    painter = QtGui.QPainter(image)
+    try:
+        for scale in (1.0, 4.0):
+            canvas.scale = scale
+            canvas._draw_line_profile_width_handle(
+                painter=painter,
+                center=(20.0, 20.0),
+                handle=(20.0, 30.0),
+                radius=10.0,
+                color=QtGui.QColor(30, 190, 80),
+                hovered_handle=False,
+                hovered_index=None,
+            )
+    finally:
+        painter.end()
+
+    assert sizes == [canvas._point_size] * 4
+
+
+@pytest.mark.gui
 def test_profile_anchor_hit_testing_does_not_change_plain_shape_behavior(
     canvas: Canvas,
 ) -> None:
