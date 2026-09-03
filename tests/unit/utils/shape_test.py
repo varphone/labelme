@@ -268,6 +268,28 @@ def test_shape_to_mask_linestrip_fills_notch_at_turning_point() -> None:
     assert join_below_apex.all(), f"notch left unfilled below apex: {join_below_apex}"
 
 
+@pytest.mark.parametrize(
+    ("shape_type", "points"),
+    [
+        ("bezier2", [[10.0, 80.0], [50.0, 10.0], [90.0, 80.0]]),
+        (
+            "bezier3",
+            [[10.0, 80.0], [10.0, 10.0], [90.0, 10.0], [90.0, 80.0]],
+        ),
+    ],
+)
+def test_shape_to_mask_bezier_marks_curve(
+    shape_type: str, points: list[list[float]]
+) -> None:
+    mask = shape_module.shape_to_mask(
+        img_shape=(100, 100), points=points, shape_type=shape_type, line_width=5
+    )
+    assert mask.dtype == bool
+    assert mask[80, 10]
+    assert mask[80, 90]
+    assert mask[28, 50] if shape_type == "bezier3" else mask[45, 50]
+
+
 def test_shape_to_mask_linestrip_collinear_point_does_not_change_mask() -> None:
     img_shape = (100, 100)
     line_width = 25

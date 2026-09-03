@@ -31,10 +31,12 @@ from .._line_profile import point_to_position
 from .._line_profile import position_to_point
 from .._line_profile import profile_boundary_polygon
 from .._line_profile import split_profile
+from .._shape import BEZIER_SHAPE_TYPES
 from .._shape import POLYLINE_SHAPE_TYPES
 from .._shape import RECTANGLE_POINT_COUNT
 from .._shape import Shape
 from .._shape import ShapeType
+from .._shape import bezier_degree
 from .._shape import nearest_vertex_index
 from . import _canvas_interaction
 from ._canvas_interaction import CursorRole
@@ -117,6 +119,8 @@ _CreateMode = Literal[
     "line",
     "point",
     "linestrip",
+    "bezier2",
+    "bezier3",
     "ai_points_to_shape",
     "ai_box_to_shape",
 ]
@@ -135,6 +139,8 @@ _CREATE_MODE_TO_SHAPE_TYPE: Final[dict[_CreateMode, ShapeType]] = {
     "line": "line",
     "point": "point",
     "linestrip": "linestrip",
+    "bezier2": "bezier2",
+    "bezier3": "bezier3",
     "ai_points_to_shape": "points",
     "ai_box_to_shape": "rectangle",
 }
@@ -241,6 +247,8 @@ class Canvas(QtWidgets.QWidget):
                 "line": False,
                 "point": False,
                 "linestrip": False,
+                "bezier2": False,
+                "bezier3": False,
                 "ai_points_to_shape": False,
                 "ai_box_to_shape": True,
             },
@@ -686,6 +694,21 @@ class Canvas(QtWidgets.QWidget):
                 return self.tr(
                     "Click next point or finish by Ctrl/Cmd+Click for linestrip"
                 )
+        if self.create_mode in BEZIER_SHAPE_TYPES:
+            degree = bezier_degree(self.create_mode)
+            if is_new:
+                return self.tr(
+                    "Click start point for quadratic Bezier curve"
+                    if degree == 2
+                    else "Click start point for cubic Bezier curve"
+                )
+            assert self._current is not None
+            messages = {
+                2: self.tr("Click control point for Bezier curve"),
+                3: self.tr("Click end point for quadratic Bezier curve"),
+                4: self.tr("Click second control point for cubic Bezier curve"),
+            }
+            return messages[len(self._current.points) + 1]
         if self.create_mode == "circle":
             if is_new:
                 return self.tr("Click center point for circle")
@@ -878,6 +901,12 @@ class Canvas(QtWidgets.QWidget):
         elif mode == "circle":
             self._line = dataclasses.replace(
                 self._line, points=(current.points[0], pos), point_labels=(1, 1)
+            )
+        elif mode in BEZIER_SHAPE_TYPES:
+            self._line = dataclasses.replace(
+                self._line,
+                points=current.points + (pos,),
+                point_labels=current.point_labels + (1,),
             )
         elif mode == "line":
             self._line = dataclasses.replace(
@@ -1262,6 +1291,27 @@ class Canvas(QtWidgets.QWidget):
                 self._line, points=(current.points[-1],) + self._line.points[1:]
             )
             if modifiers == Qt.KeyboardModifier.ControlModifier:
+                self._finalize()
+        elif mode in BEZIER_SHAPE_TYPES:
+            clicked_point = self._line.points[-1]
+            current = current.add_point(clicked_point)
+            if len(current.points) == bezier_degree(mode) + 1:
+                # The drawing gesture is start, end, then control point(s),
+                # while Bezier data is stored in the conventional start,
+                # control point(s), end order.
+                point_order = (0, 2, 1) if mode == "bezier2" else (0, 2, 3, 1)
+                current = dataclasses.replace(
+                    current,
+                    points=tuple(current.points[i] for i in point_order),
+                    point_labels=tuple(current.point_labels[i] for i in point_order),
+                )
+            self._current = current
+            self._line = dataclasses.replace(
+                self._line,
+                points=current.points + (clicked_point,),
+                point_labels=current.point_labels + (1,),
+            )
+            if len(current.points) == bezier_degree(mode) + 1:
                 self._finalize()
         elif mode == "ai_points_to_shape":
             current = current.add_point(
@@ -2081,6 +2131,36 @@ class Canvas(QtWidgets.QWidget):
     def _render_draft(
         self, *, painter: QtGui.QPainter, draft: _DraftShape, highlighted: bool
     ) -> None:
+        if draft.shape_type in BEZIER_SHAPE_TYPES:
+            point_count = len(draft.points)
+            if point_count == 3:
+                # During creation the points are collected as start, end,
+                # control. Render the curve using the canonical order.
+                draft = dataclasses.replace(
+                    draft,
+                    points=(draft.points[0], draft.points[2], draft.points[1]),
+                    point_labels=(
+                        draft.point_labels[0],
+                        draft.point_labels[2],
+                        draft.point_labels[1],
+                    ),
+                )
+            elif point_count == 4:
+                draft = dataclasses.replace(
+                    draft,
+                    points=(
+                        draft.points[0],
+                        draft.points[2],
+                        draft.points[3],
+                        draft.points[1],
+                    ),
+                    point_labels=(
+                        draft.point_labels[0],
+                        draft.point_labels[2],
+                        draft.point_labels[3],
+                        draft.point_labels[1],
+                    ),
+                )
         shape = _draft_to_shape(draft)
         context = self._draft_render_context(
             selected=False,
@@ -2184,7 +2264,8 @@ class Canvas(QtWidgets.QWidget):
                 shapes=proposal.matching_existing_shapes
             )
         else:
-            self._current = self._current.close()
+            if self.create_mode not in BEZIER_SHAPE_TYPES:
+                self._current = self._current.close()
             if _is_degenerate_draft(self._current):
                 self.degenerate_shape_rejected.emit()
                 self._cancel_current_shape()
@@ -2378,6 +2459,8 @@ class Canvas(QtWidgets.QWidget):
             "rectangle",
             "line",
             "circle",
+            "bezier2",
+            "bezier3",
             "ai_box_to_shape",
         ):
             self._current = dataclasses.replace(
@@ -2506,11 +2589,9 @@ def _is_degenerate_draft(draft: _DraftShape, /) -> bool:
     if shape_type in ("circle", "line"):
         return len(points) != CIRCLE_POINT_COUNT or points[0] == points[1]
     if shape_type == "oriented_rectangle":
-        return (
-            len(points) != ORIENTED_RECTANGLE_POINT_COUNT
-            or points[0] == points[1]
-            or points[1] == points[2]
-        )
+        return len(points) != 4 or points[0] == points[1] or points[1] == points[2]
+    if shape_type in BEZIER_SHAPE_TYPES:
+        return len(points) != bezier_degree(shape_type) + 1 or points[0] == points[-1]
     return False
 
 

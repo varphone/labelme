@@ -31,6 +31,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   confirmation preview, plus dry-run, confirmation, backup, and rollback APIs
   for batch measurement. The feature remains Preview pending maintainer review
   and a release PR link ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Added file-list batch Line Profile measurement actions: "Fill Missing Line
+  Profiles" measures only annotations without profile anchors, while "Rebuild
+  Line Profiles" forces remeasurement and preserves confirmed manual anchors;
+  both operations provide progress, cancellation, and current-view refresh
+  ([PR pending](https://github.com/varphone/labelme/pulls)).
+
+### Changed
+
+- Moved the Line Profile editors and related actions from the main toolbar into
+  a dedicated vertical dock panel. The panel is placed to the left of the
+  annotation and file docks by default and groups measurement, preview,
+  anchor, parameter, cleanup, and frame-copy actions in one place with compact
+  icon-and-label buttons ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Added translations for the Line Profile panel, editor controls, action
+  tooltips, measurement dialogs, and canvas editing hints across all bundled
+  locales ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Automatic line-profile measurement now places samples at every non-degenerate
+  linestrip vertex, including sharp turns, while de-duplicating repeated
+  vertices ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Line Profile anchors now use the existing Circle rendering and vertex-handle
+  interaction: the center handle moves the anchor and the radius handle edits
+  width, with the same fill and hover highlighting; visibility-only anchors use
+  the same round marker style
+  ([PR pending](https://github.com/varphone/labelme/pulls)).
 
 ### Changed
 
@@ -50,6 +74,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the line-profile visibility editor showing the first visibility value
   for every selected width handle; paired width and visibility anchors are now
   synchronized by normalized position ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed automatic line-profile widths becoming excessively large when glare
+  contaminated only one side of the measured line; strong one-sided transitions
+  are now treated as the actual boundary ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed line-profile widths being pulled toward a diffuse reflection edge when
+  the two measured sides were strongly asymmetric; the reliable half-width is
+  now used, while isolated width jumps are corrected from neighbouring anchors
+  ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed hidden Line Profile anchors intercepting clicks when Preview was
+  disabled; the underlying linestrip vertices can now be selected and edited
+  normally ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed Line Profile envelopes cutting across sharp linestrip corners; boundary
+  generation now uses adjacent offset-edge intersections at vertices, with a
+  bounded fallback for extremely acute turns
+  ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed automatic widths becoming too small when a reflective surface created
+  short dark notches inside one laser stripe; nearby profile lobes are now
+  merged into a bounded local envelope before measuring its width
+  ([PR pending](https://github.com/varphone/labelme/pulls)).
+- Fixed isolated narrow width anchors being accepted as high-confidence results
+  when both neighbouring anchors were substantially wider; locally consistent
+  neighbours now correct these narrow spikes without flattening genuine width
+  transitions ([PR pending](https://github.com/varphone/labelme/pulls)).
 
 ## 7.1.0 - 2026-08-21
 

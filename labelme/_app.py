@@ -183,6 +183,8 @@ class _Actions(NamedTuple):
     create_line_mode: QtGui.QAction
     create_point_mode: QtGui.QAction
     create_line_strip_mode: QtGui.QAction
+    create_bezier2_mode: QtGui.QAction
+    create_bezier3_mode: QtGui.QAction
     create_ai_points_to_shape_mode: QtGui.QAction
     create_ai_box_to_shape_mode: QtGui.QAction
     open_next_img: QtGui.QAction
@@ -766,6 +768,22 @@ class MainWindow(QtWidgets.QMainWindow):
             tip=self.tr("Start drawing linestrip. Ctrl+LeftClick ends creation."),
             enabled=False,
         )
+        create_bezier2_mode = action(
+            text=self.tr("Quadratic Bezier"),
+            slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier2"),
+            shortcut=shortcuts["create_bezier2"],
+            icon="phosphor/bezier-quadratic.svg",
+            tip=self.tr("Start drawing a quadratic Bezier curve (3 points)"),
+            enabled=False,
+        )
+        create_bezier3_mode = action(
+            text=self.tr("Cubic Bezier"),
+            slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier3"),
+            shortcut=shortcuts["create_bezier3"],
+            icon="phosphor/bezier-cubic.svg",
+            tip=self.tr("Start drawing a cubic Bezier curve (4 points)"),
+            enabled=False,
+        )
         create_ai_points_to_shape_mode = action(
             text=self.tr("AI-Points"),
             slot=lambda: self._switch_canvas_mode(
@@ -955,6 +973,8 @@ class MainWindow(QtWidgets.QMainWindow):
             ("point", create_point_mode),
             ("line", create_line_mode),
             ("linestrip", create_line_strip_mode),
+            ("bezier2", create_bezier2_mode),
+            ("bezier3", create_bezier3_mode),
             ("ai_points_to_shape", create_ai_points_to_shape_mode),
             ("ai_box_to_shape", create_ai_box_to_shape_mode),
         ]
@@ -975,6 +995,8 @@ class MainWindow(QtWidgets.QMainWindow):
             create_line_mode,
             create_point_mode,
             create_line_strip_mode,
+            create_bezier2_mode,
+            create_bezier3_mode,
             create_ai_points_to_shape_mode,
             create_ai_box_to_shape_mode,
             brightness_contrast,
@@ -1074,6 +1096,8 @@ class MainWindow(QtWidgets.QMainWindow):
             create_line_mode=create_line_mode,
             create_point_mode=create_point_mode,
             create_line_strip_mode=create_line_strip_mode,
+            create_bezier2_mode=create_bezier2_mode,
+            create_bezier3_mode=create_bezier3_mode,
             create_ai_points_to_shape_mode=create_ai_points_to_shape_mode,
             create_ai_box_to_shape_mode=create_ai_box_to_shape_mode,
             open_next_img=open_next_img,

@@ -24,10 +24,49 @@ ShapeType: TypeAlias = Literal[
     "circle",
     "linestrip",
     "points",
+    "bezier2",
+    "bezier3",
     "mask",
 ]
 
 POLYLINE_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("polygon", "linestrip")
+BEZIER_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("bezier2", "bezier3")
+
+
+def bezier_degree(shape_type: ShapeType) -> int:
+    if shape_type == "bezier2":
+        return 2
+    if shape_type == "bezier3":
+        return 3
+    raise ValueError(f"Not a Bezier shape: {shape_type!r}")
+
+
+def bezier_point(
+    points: npt.NDArray[np.float64], t: float
+) -> npt.NDArray[np.float64]:
+    """Evaluate a quadratic or cubic Bezier curve at normalized position ``t``."""
+    if len(points) not in (3, 4):
+        raise ValueError(f"Bezier curves require 3 or 4 points, got {len(points)}")
+    t = float(np.clip(t, 0.0, 1.0))
+    u = 1.0 - t
+    if len(points) == 3:
+        return u * u * points[0] + 2.0 * u * t * points[1] + t * t * points[2]
+    return (
+        u**3 * points[0]
+        + 3.0 * u**2 * t * points[1]
+        + 3.0 * u * t**2 * points[2]
+        + t**3 * points[3]
+    )
+
+
+def bezier_sample_points(
+    points: npt.NDArray[np.float64], samples: int = 64
+) -> npt.NDArray[np.float64]:
+    if len(points) not in (3, 4):
+        raise ValueError(f"Bezier curves require 3 or 4 points, got {len(points)}")
+    if samples < 2:
+        raise ValueError("samples must be at least 2")
+    return np.array([bezier_point(points, t) for t in np.linspace(0.0, 1.0, samples)])
 
 # Point counts each shape type's geometry is defined by. A shape being drawn
 # holds fewer points than these until the user finishes it.
@@ -179,6 +218,25 @@ def nearest_edge_index(
 ) -> int | None:
     if len(shape.points) == 0:
         return None
+    if shape.shape_type in BEZIER_SHAPE_TYPES:
+        expected = bezier_degree(shape.shape_type) + 1
+        if len(shape.points) != expected:
+            return None
+        curve = bezier_sample_points(shape.points)
+        scaled_point = point * scale
+        scaled_curve = curve * scale
+        segments = scaled_curve[1:] - scaled_curve[:-1]
+        length_squared = (segments * segments).sum(axis=1)
+        starts = scaled_curve[:-1]
+        t = np.clip(
+            ((scaled_point - starts) * segments).sum(axis=1)
+            / np.where(length_squared == 0, 1.0, length_squared),
+            0.0,
+            1.0,
+        )
+        projections = starts + t[:, None] * segments
+        distances = np.linalg.norm(scaled_point - projections, axis=1)
+        return _nearest_index_within_epsilon(distances=distances, epsilon=epsilon)
     scaled_point = point * scale
     scaled_points = shape.points * scale
     starts = np.roll(scaled_points, 1, axis=0)

@@ -10,6 +10,8 @@ from labelme import _shape
 from labelme._line_profile import LineProfile
 from labelme._shape import Shape
 from labelme._shape import ShapeType
+from labelme._shape import bezier_point
+from labelme._shape import bezier_sample_points
 
 
 def _make_oriented_rectangle(points: list[tuple[float, float]], /) -> Shape:
@@ -267,11 +269,42 @@ def _make_open_linestrip() -> Shape:
         ("line", False),
         ("circle", False),
         ("points", False),
+        ("bezier2", False),
+        ("bezier3", False),
         ("mask", False),
     ],
 )
 def test_can_add_point(*, shape_type: ShapeType, expected: bool) -> None:
     assert Shape(shape_type=shape_type).can_add_point() is expected
+
+
+@pytest.mark.parametrize(
+    ("points", "t", "expected"),
+    [
+        (
+            np.array([[0.0, 0.0], [5.0, 10.0], [10.0, 0.0]]),
+            0.5,
+            (5.0, 5.0),
+        ),
+        (
+            np.array([[0.0, 0.0], [0.0, 10.0], [10.0, 10.0], [10.0, 0.0]]),
+            0.5,
+            (5.0, 7.5),
+        ),
+    ],
+)
+def test_bezier_point_evaluates_quadratic_and_cubic_curves(
+    points: np.ndarray, t: float, expected: tuple[float, float]
+) -> None:
+    assert bezier_point(points, t) == pytest.approx(expected)
+
+
+def test_bezier_sample_points_includes_endpoints() -> None:
+    points = np.array([[1.0, 2.0], [4.0, 8.0], [9.0, 3.0]])
+    sampled = bezier_sample_points(points, samples=5)
+    assert sampled.shape == (5, 2)
+    assert sampled[0] == pytest.approx(points[0])
+    assert sampled[-1] == pytest.approx(points[-1])
 
 
 def test_constructor_rejects_unknown_shape_type() -> None:
