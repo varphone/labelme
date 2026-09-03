@@ -458,6 +458,8 @@ class MainWindow(QtWidgets.QMainWindow):
     _zoom_values: dict[str, tuple[_ZoomMode, float]]
     _brightness_contrast_values: dict[str, tuple[int | None, int | None]]
     _default_state: QtCore.QByteArray
+    _line_profile_drag_shape: Shape | None
+    _line_profile_drag_centerline: list[tuple[float, float]] | None
 
     def __init__(
         self,
@@ -494,6 +496,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self._active_line_profile_anchor_index = 0
         self._active_line_profile_anchor_kind: Literal["width", "visibility"] = "width"
         self._line_profile_anchor_drag_changed = False
+        self._line_profile_drag_shape = None
+        self._line_profile_drag_centerline = None
         self._docks = self._setup_dock_widgets()
 
         self.setAcceptDrops(True)
@@ -3014,7 +3018,14 @@ class MainWindow(QtWidgets.QMainWindow):
         property_value = anchor.width if kind == "width" else anchor.visibility
         if property_value is None:
             return
-        centerline = line_profile_points(shape.points, shape.shape_type)
+        if self._line_profile_drag_shape is not shape:
+            self._line_profile_drag_shape = shape
+            self._line_profile_drag_centerline = [
+                (float(center[0]), float(center[1]))
+                for center in line_profile_points(shape.points, shape.shape_type)
+            ]
+        centerline = self._line_profile_drag_centerline
+        assert centerline is not None
         if mode == "position":
             position = point_to_position(centerline, [point.x(), point.y()])
             value = property_value.value
@@ -3050,14 +3061,16 @@ class MainWindow(QtWidgets.QMainWindow):
             Literal["width", "visibility"], kind
         )
         self._line_profile_anchor_drag_changed = True
-        self._sync_line_profile_widgets()
+        self._canvas_widgets.canvas.update()
 
     def _on_line_profile_anchor_drag_finished(self) -> None:
-        if not self._line_profile_anchor_drag_changed:
-            return
-        self._canvas_widgets.canvas.backup_shapes()
-        self._line_profile_anchor_drag_changed = False
-        self.mark_dirty()
+        if self._line_profile_anchor_drag_changed:
+            self._canvas_widgets.canvas.backup_shapes()
+            self._line_profile_anchor_drag_changed = False
+            self.mark_dirty()
+            self._sync_line_profile_widgets()
+        self._line_profile_drag_shape = None
+        self._line_profile_drag_centerline = None
 
     def _cancel_line_measurement(self) -> None:
         """Stop an in-flight measurement before replacing or closing a view."""
