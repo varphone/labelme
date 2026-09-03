@@ -88,6 +88,28 @@ from ._widgets import MinimapWidget
 from ._widgets import Palette
 from ._widgets import SettingsDialog
 from ._widgets import StatusStats
+
+
+def _convex_hull_points(points: np.ndarray) -> np.ndarray:
+    """Return the outer hull of polygon vertices in counter-clockwise order."""
+    unique = sorted({(float(x), float(y)) for x, y in np.asarray(points)})
+    if len(unique) <= 1:
+        return np.asarray(unique, dtype=np.float64)
+
+    def cross(origin: tuple[float, float], a: tuple[float, float], b: tuple[float, float]) -> float:
+        return (a[0] - origin[0]) * (b[1] - origin[1]) - (a[1] - origin[1]) * (b[0] - origin[0])
+
+    lower: list[tuple[float, float]] = []
+    for point in unique:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], point) <= 0:
+            lower.pop()
+        lower.append(point)
+    upper: list[tuple[float, float]] = []
+    for point in reversed(unique):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], point) <= 0:
+            upper.pop()
+        upper.append(point)
+    return np.asarray(lower[:-1] + upper[:-1], dtype=np.float64)
 from ._widgets import ToolBar
 from ._widgets import UniqueLabelQListWidget
 from ._widgets import ZoomWidget
@@ -164,6 +186,7 @@ class _Actions(NamedTuple):
     toggle_snap_to_point: QtGui.QAction
     copy_annotations_to_next: QtGui.QAction
     merge_linestrips: QtGui.QAction
+    merge_polygons: QtGui.QAction
     measure_line_profile: QtGui.QAction
     delete_selected_files: QtGui.QAction
     export_selected_files: QtGui.QAction
@@ -557,6 +580,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Combine the selected line and linestrip annotations "
                 "into a single linestrip"
             ),
+            enabled=False,
+        )
+        merge_polygons = action(
+            text=self.tr("Merge Polygons"),
+            slot=self.merge_polygons,
+            tip=self.tr("Merge the selected polygons and fill the gaps between them"),
             enabled=False,
         )
         measure_line_profile = action(
@@ -1091,6 +1120,7 @@ class MainWindow(QtWidgets.QMainWindow):
             copy_profiles_from_previous_frame,
             copy_annotations_to_next,
             merge_linestrips,
+            merge_polygons,
             measure_line_profile,
             keep_prev_action,
             toggle_snap_to_point,
@@ -1111,6 +1141,7 @@ class MainWindow(QtWidgets.QMainWindow):
             toggle_snap_to_point=toggle_snap_to_point,
             copy_annotations_to_next=copy_annotations_to_next,
             merge_linestrips=merge_linestrips,
+            merge_polygons=merge_polygons,
             measure_line_profile=measure_line_profile,
             delete_selected_files=delete_selected_files,
             export_selected_files=export_selected_files,
@@ -1211,7 +1242,12 @@ class MainWindow(QtWidgets.QMainWindow):
         help_menu = self.menuBar().addMenu(self.tr("&Help"))
         label_menu = QtWidgets.QMenu()
         label_menu.addActions(
-            (self._actions.edit, self._actions.delete, self._actions.merge_linestrips)
+            (
+                self._actions.edit,
+                self._actions.delete,
+                self._actions.merge_linestrips,
+                self._actions.merge_polygons,
+            )
         )
         self._docks.label_list.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu
@@ -1973,6 +2009,11 @@ class MainWindow(QtWidgets.QMainWindow):
             s.shape_type in LINE_PROFILE_SHAPE_TYPES for s in selected_shapes
         )
         self._actions.merge_linestrips.setEnabled(can_merge)
+        self._actions.merge_polygons.setEnabled(
+            len(selected_shapes) >= 2
+            and all(s.shape_type == "polygon" for s in selected_shapes)
+            and len({s.label for s in selected_shapes}) == 1
+        )
         self._label_list_menu_origin = self._docks.label_list.mapToGlobal(point)
         try:
             # PySide6 type QMenu.exec() argument too narrowly
@@ -2328,6 +2369,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self._actions.duplicate.setEnabled(n_selected)
         self._actions.copy.setEnabled(n_selected)
         self._actions.edit.setEnabled(n_selected)
+        self._actions.merge_polygons.setEnabled(
+            len(selected_shapes) >= 2
+            and all(shape.shape_type == "polygon" for shape in selected_shapes)
+            and len({shape.label for shape in selected_shapes}) == 1
+        )
         self._actions.measure_line_profile.setEnabled(
             len(selected_shapes) == 1
             and selected_shapes[0].shape_type in LINE_PROFILE_SHAPE_TYPES
@@ -4804,6 +4850,50 @@ class MainWindow(QtWidgets.QMainWindow):
                 canvas.selected_shapes.remove(shape)
             canvas.shapes.remove(shape)
         canvas.shapes.append(merged)
+        canvas.backup_shapes()
+        self.remove_labels(shapes)
+        self.add_label(shape=merged)
+        canvas.deselect_shape()
+        canvas.select_shapes(shapes=[merged])
+        canvas.update()
+        self.mark_dirty()
+
+    def merge_polygons(self) -> None:
+        """Merge selected polygons into one filled, connected polygon."""
+        canvas = self._canvas_widgets.canvas
+        shapes = list(canvas.selected_shapes)
+        if len(shapes) < 2 or any(shape.shape_type != "polygon" for shape in shapes):
+            return
+        labels = {shape.label for shape in shapes}
+        if len(labels) != 1 or not shapes:
+            return
+        all_points: list[np.ndarray] = []
+        for shape in shapes:
+            points = np.rint(np.asarray(shape.points, dtype=np.float32)).astype(
+                np.int32
+            )
+            if len(points) < 3:
+                continue
+            all_points.append(points)
+        if not all_points:
+            return
+        # The outer hull deliberately bridges disconnected polygons and fills
+        # the gap between them.  It also avoids introducing an OpenCV runtime
+        # dependency into LabelMe's GUI process.
+        merged_points = _convex_hull_points(np.concatenate(all_points, axis=0))
+        if len(merged_points) < 3:
+            return
+        first = shapes[0]
+        merged = Shape(
+            label=first.label,
+            group_id=first.group_id,
+            shape_type="polygon",
+            flags=first.flags,
+            description=first.description,
+            points=merged_points,
+            point_labels=np.asarray([None] * len(merged_points), dtype=object),
+            other_data=copy.deepcopy(first.other_data),
+        )
         canvas.backup_shapes()
         self.remove_labels(shapes)
         self.add_label(shape=merged)
