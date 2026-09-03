@@ -511,6 +511,29 @@ def test_cancel_line_measurement_stops_worker_thread_and_progress() -> None:
     window._line_measurement_progress.close.assert_called_once_with()
 
 
+def test_line_measurement_result_closes_progress_before_acceptance(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    window = _app.MainWindow.__new__(_app.MainWindow)
+    progress = Mock()
+    window._line_measurement_progress = progress
+    window._line_measurement_token = object()
+    accepted = Mock()
+
+    def accept_result(result: object, token: object) -> None:
+        accepted(result, token)
+        assert progress.close.call_count == 1
+
+    monkeypatch.setattr(window, "_accept_line_measurement", accept_result)
+
+    result = object()
+    token = window._line_measurement_token
+    window._on_line_measurement_result(result)
+
+    progress.close.assert_called_once_with()
+    accepted.assert_called_once_with(result, token)
+
+
 def test_line_measurement_parameters_apply_shape_overrides() -> None:
     profile = LineProfile(
         measurement_overrides=(

@@ -3480,6 +3480,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self._sync_line_profile_width_widget()
 
     def _on_line_measurement_result(self, result: object) -> None:
+        # The acceptance dialog is modal, so hide the progress dialog before
+        # entering its nested event loop. Otherwise the still-visible progress
+        # dialog can remain above the acceptance prompt on some window managers.
+        if self._line_measurement_progress is not None:
+            self._line_measurement_progress.close()
         self._accept_line_measurement(result, self._line_measurement_token)
 
     def _on_line_measurement_failed(self, message: str) -> None:
