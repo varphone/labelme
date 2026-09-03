@@ -414,6 +414,30 @@ def test_merge_polygons_initializes_point_labels() -> None:
     assert canvas.selected_shapes == []
 
 
+def test_merge_polygons_connects_the_full_facing_edge() -> None:
+    first = np.array(
+        [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0], [0.0, 10.0]]
+    )
+    second = np.array(
+        [[0.0, 20.0], [10.0, 20.0], [10.0, 30.0], [0.0, 30.0]]
+    )
+
+    merged = _app._merge_polygon_points([first, second])
+
+    assert merged is not None
+    assert len(merged) == 8
+    assert any(
+        np.array_equal(merged[index], [10.0, 10.0])
+        and np.array_equal(merged[(index + 1) % len(merged)], [10.0, 20.0])
+        for index in range(len(merged))
+    )
+    assert any(
+        np.array_equal(merged[index], [0.0, 20.0])
+        and np.array_equal(merged[(index + 1) % len(merged)], [0.0, 10.0])
+        for index in range(len(merged))
+    )
+
+
 def test_shapes_from_dicts_carries_over_the_shape_fields() -> None:
     mask = np.ones((2, 3), dtype=bool)
     shape_dict = ShapeDict(

@@ -106,43 +106,28 @@ def _segments_intersect(
     second_start: np.ndarray,
     second_end: np.ndarray,
 ) -> bool:
-    """Return whether two closed line segments intersect."""
+    """Return whether two segments cross away from their endpoints."""
 
     def cross(origin: np.ndarray, a: np.ndarray, b: np.ndarray) -> float:
         first = a - origin
         second = b - origin
         return float(first[0] * second[1] - first[1] * second[0])
 
-    def on_segment(start: np.ndarray, point: np.ndarray, end: np.ndarray) -> bool:
-        return bool(
-            np.all(point >= np.minimum(start, end) - 1e-9)
-            and np.all(point <= np.maximum(start, end) + 1e-9)
-        )
-
     first_orientation = cross(first_start, first_end, second_start)
     second_orientation = cross(first_start, first_end, second_end)
     third_orientation = cross(second_start, second_end, first_start)
     fourth_orientation = cross(second_start, second_end, first_end)
     epsilon = 1e-9
-    if (
-        (
-            abs(first_orientation) <= epsilon
-            and on_segment(first_start, second_start, first_end)
-        )
-        or (
-            abs(second_orientation) <= epsilon
-            and on_segment(first_start, second_end, first_end)
-        )
-        or (
-            abs(third_orientation) <= epsilon
-            and on_segment(second_start, first_start, second_end)
-        )
-        or (
-            abs(fourth_orientation) <= epsilon
-            and on_segment(second_start, first_end, second_end)
+    if any(
+        abs(orientation) <= epsilon
+        for orientation in (
+            first_orientation,
+            second_orientation,
+            third_orientation,
+            fourth_orientation,
         )
     ):
-        return True
+        return False
     return (first_orientation > 0) != (second_orientation > 0) and (
         (third_orientation > 0) != (fourth_orientation > 0)
     )
@@ -173,30 +158,80 @@ def _connect_polygon_boundaries(
     first: np.ndarray, second: np.ndarray
 ) -> np.ndarray | None:
     distances = np.linalg.norm(first[:, None, :] - second[None, :, :], axis=2)
-    first_indices, second_indices = np.unravel_index(
-        np.argsort(distances, axis=None), distances.shape
+    first_index, second_index = np.unravel_index(
+        np.argmin(distances), distances.shape
     )
-    for first_index, second_index in zip(first_indices, second_indices, strict=True):
-        candidates: list[np.ndarray] = []
-        for first_direction in (1, -1):
-            first_order = [
-                (first_index + first_direction * offset) % len(first)
-                for offset in range(len(first))
-            ]
-            for second_direction in (1, -1):
-                second_order = [
-                    (second_index + second_direction * offset) % len(second)
-                    for offset in range(len(second))
-                ]
-                candidate = np.concatenate((first[first_order], second[second_order]))
-                if _is_simple_polygon(candidate):
-                    candidates.append(candidate)
-        if candidates:
-            return min(
-                candidates,
-                key=lambda candidate: abs(_polygon_signed_area(candidate)),
+    candidates: list[tuple[int, np.ndarray]] = []
+    for first_direction in (1, -1):
+        for second_direction in (1, -1):
+            initial_distance = float(distances[first_index, second_index])
+            first_edge_length = np.linalg.norm(
+                first[(first_index + first_direction) % len(first)]
+                - first[first_index]
             )
-    return None
+            second_edge_length = np.linalg.norm(
+                second[(second_index + second_direction) % len(second)]
+                - second[second_index]
+            )
+            maximum_interface_distance = initial_distance + 1.25 * max(
+                first_edge_length, second_edge_length
+            )
+            interface_steps = 0
+            for step in range(1, min(len(first), len(second))):
+                first_previous = first[
+                    (first_index + first_direction * (step - 1)) % len(first)
+                ]
+                first_current = first[
+                    (first_index + first_direction * step) % len(first)
+                ]
+                second_previous = second[
+                    (second_index + second_direction * (step - 1)) % len(second)
+                ]
+                second_current = second[
+                    (second_index + second_direction * step) % len(second)
+                ]
+                first_vector = first_current - first_previous
+                second_vector = second_current - second_previous
+                if (
+                    float(first_vector @ second_vector) <= 0
+                    or float(np.linalg.norm(first_current - second_current))
+                    > maximum_interface_distance
+                ):
+                    break
+                interface_steps = step
+
+            first_end = (first_index + first_direction * interface_steps) % len(first)
+            first_start = (
+                (first_end - first_direction) % len(first)
+                if interface_steps == 0
+                else first_end
+            )
+            outer_point_count = (
+                len(first) - interface_steps + 1
+                if interface_steps > 0
+                else len(first)
+            )
+            first_order = [
+                (first_start + first_direction * offset) % len(first)
+                for offset in range(outer_point_count)
+            ]
+            second_order = [
+                (second_index - second_direction * offset) % len(second)
+                for offset in range(
+                    len(second) - interface_steps + 1
+                    if interface_steps > 0
+                    else len(second)
+                )
+            ]
+            candidate = np.concatenate((first[first_order], second[second_order]))
+            if _is_simple_polygon(candidate):
+                candidates.append((interface_steps, candidate))
+    if not candidates:
+        return None
+    return max(
+        candidates,
+        key=lambda item: (item[0], -abs(_polygon_signed_area(item[1]))),
+    )[1]
 
 
 def _merge_polygon_points(polygons: list[np.ndarray]) -> np.ndarray | None:
