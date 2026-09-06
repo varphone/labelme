@@ -12,40 +12,8 @@
         <translation>AI在&apos;AI-Points&apos;和&apos;AI-Box&apos;模式下建議標註</translation>
     </message>
     <message>
-        <source>Polygon detail</source>
-        <translation>多邊形細節</translation>
-    </message>
-    <message>
-        <source>Adjust polygon detail</source>
-        <translation>調整多邊形細節</translation>
-    </message>
-    <message>
-        <source>Smoother</source>
-        <translation>更平滑</translation>
-    </message>
-    <message>
-        <source>More detail</source>
-        <translation>更多細節</translation>
-    </message>
-    <message>
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>選擇&apos;AI-Points&apos;或&apos;AI-Box&apos;模式以啟用AI輔助標註</translation>
-    </message>
-    <message>
-        <source>AI-assisted annotation model</source>
-        <translation>AI 輔助標註模型</translation>
-    </message>
-    <message>
-        <source>AI-assisted annotation output format</source>
-        <translation>AI 輔助標註輸出格式</translation>
-    </message>
-    <message>
-        <source>Model</source>
-        <translation>模型</translation>
-    </message>
-    <message>
-        <source>Output format</source>
-        <translation>輸出格式</translation>
     </message>
 </context>
 <context>
@@ -78,18 +46,6 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>選擇&apos;Polygon&apos;、&apos;Rectangle&apos;或&apos;AI-Points&apos;模式以啟用</translation>
     </message>
-    <message>
-        <source>Model</source>
-        <translation>模型</translation>
-    </message>
-    <message>
-        <source>Prompt</source>
-        <translation>提示詞</translation>
-    </message>
-    <message>
-        <source>Text-to-annotation model</source>
-        <translation>文字轉標註模型</translation>
-    </message>
 </context>
 <context>
     <name>BrightnessContrastDialog</name>
@@ -110,7 +66,7 @@
     <name>Canvas</name>
     <message>
         <source>Click &amp; drag to move point</source>
-        <translation>點按 &amp; 拖曳以移動點</translation>
+        <translation>點擊並拖拽以移動控制點</translation>
     </message>
     <message>
         <source>Click &amp; drag to move shape</source>
@@ -149,6 +105,10 @@
         <translation>點擊下一個點或 Ctrl/Cmd+點擊完成折線</translation>
     </message>
     <message>
+        <source>Click start point for quadratic Bezier curve</source>
+        <translation>Click start point for quadratic Bezier curve</translation>
+    </message>
+    <message>
         <source>Click center point for circle</source>
         <translation>點擊圓形中心點</translation>
     </message>
@@ -166,15 +126,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>拖曳以調整設定檔寬度</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>拖曳以移動寬度錨點</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>拖曳以移動可見度錨點</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -185,8 +145,12 @@
         <translation>ALT + 點擊在形狀上創建點</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>選擇另一個角。按住Shift可繪製正方形。</translation>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>右鍵點擊並拖拽以複製形狀</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>點擊矩形對角（Shift繪製正方形）</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -199,6 +163,18 @@
     <message>
         <source>Click opposite corner to segment object</source>
         <translation>點擊對角以分割物件</translation>
+    </message>
+    <message>
+        <source>Click control point for Bezier curve</source>
+        <translation>Click control point for Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click end point for quadratic Bezier curve</source>
+        <translation>Click end point for quadratic Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click second control point for cubic Bezier curve</source>
+        <translation>Click second control point for cubic Bezier curve</translation>
     </message>
     <message>
         <source>Click first corner for oriented rectangle</source>
@@ -218,26 +194,14 @@
     </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>開始標註</translation>
+        <source>Radius</source>
+        <translation>半徑</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>開啟影像或影像目錄以開始。</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>開啟影像</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>開啟目錄</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>或將影像檔案拖放到此處</translation>
+        <source>Radius of the selected circle</source>
+        <translation>所選圓的半徑</translation>
     </message>
 </context>
 <context>
@@ -260,102 +224,189 @@
     </message>
 </context>
 <context>
+    <name>LineProfilePanel</name>
+    <message>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>選擇一條折線以編輯其寬度與可見度設定檔。</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>設定檔操作</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>錨點</translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation>位置</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>寬度</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>可見度</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手動</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>已確認</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>可見度</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>來源</translation>
+    </message>
+    <message>
+        <source>Confidence</source>
+        <translation>信心度</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileWidthWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手動</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>已確認</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>寬度</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>來源</translation>
+    </message>
+    <message>
+        <source>Confidence</source>
+        <translation>信心度</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Flags</source>
-        <translation>旗標</translation>
+        <translation>標記</translation>
     </message>
     <message>
         <source>Shape List</source>
-        <translation>形狀清單</translation>
+        <translation>圖形列表</translation>
     </message>
     <message>
         <source>Label List</source>
-        <translation>標籤清單</translation>
+        <translation>標籤列表</translation>
     </message>
     <message>
         <source>Search Filename</source>
-        <translation>搜尋檔案名稱</translation>
+        <translation>按文件名檢索</translation>
     </message>
     <message>
         <source>File List</source>
-        <translation>檔案清單</translation>
+        <translation>文件列表</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>結束(&amp;Q)</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <source>Quit application</source>
-        <translation>結束應用程式</translation>
+        <translation>退出應用</translation>
     </message>
     <message>
         <source>&amp;Open
 </source>
-        <translation>開啟(&amp;O)
-</translation>
+        <translation>打開(&amp;O)</translation>
     </message>
     <message>
         <source>Open image or label file</source>
-        <translation>開啟影像或標籤檔案</translation>
+        <translation>打開圖像或標籤文件</translation>
     </message>
     <message>
         <source>Open Dir</source>
-        <translation>開啟資料夾</translation>
+        <translation>打開目錄</translation>
     </message>
     <message>
         <source>&amp;Next Image</source>
-        <translation>下一張影像(&amp;N)</translation>
+        <translation>下一幅(&amp;N)</translation>
     </message>
     <message>
         <source>Open next (hold Ctl+Shift to copy labels)</source>
-        <translation>開啟下一張影像（按住 Ctl+Shift 複製標籤）</translation>
+        <translation>打開下一幅（按 Ctrl+Shift 複製標籤）</translation>
     </message>
     <message>
         <source>&amp;Prev Image</source>
-        <translation>上一張影像(&amp;P)</translation>
+        <translation>上一幅(&amp;P)</translation>
     </message>
     <message>
         <source>Open prev (hold Ctl+Shift to copy labels)</source>
-        <translation>開啟上一張影像（按住 Ctl+Shift 複製標籤）</translation>
+        <translation>打開上一幅（按 Ctrl+Shift 複製標籤）</translation>
     </message>
     <message>
         <source>&amp;Save
 </source>
-        <translation>儲存(&amp;S)
-</translation>
+        <translation>保存(&amp;S)</translation>
     </message>
     <message>
         <source>Save labels to file</source>
-        <translation>將標籤儲存至檔案</translation>
+        <translation>保存標籤到文件</translation>
     </message>
     <message>
         <source>&amp;Save As</source>
-        <translation>另存新檔(&amp;S)</translation>
+        <translation>另存為(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Delete File</source>
-        <translation>刪除檔案(&amp;D)</translation>
+        <translation>刪除(&amp;D)</translation>
     </message>
     <message>
         <source>Delete current label file</source>
-        <translation>刪除目前的標籤檔案</translation>
+        <translation>刪除當前標籤文件</translation>
     </message>
     <message>
         <source>&amp;Change Output Dir</source>
-        <translation>變更輸出資料夾(&amp;C)</translation>
+        <translation>更改輸出路徑(&amp;C)</translation>
     </message>
     <message>
         <source>Change where annotations are loaded/saved</source>
-        <translation>變更標註的載入與儲存位置</translation>
+        <translation>更改載入、保存標註的路徑</translation>
     </message>
     <message>
         <source>Save &amp;Automatically</source>
-        <translation>自動儲存(&amp;A)</translation>
+        <translation>自動保存(&amp;A)</translation>
     </message>
     <message>
         <source>Save automatically</source>
-        <translation>自動儲存</translation>
+        <translation>自動保存</translation>
+    </message>
+    <message>
+        <source>Save With Image Data</source>
+        <translation>同時保存圖像數據</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>將圖像數據保存到標籤文件中</translation>
     </message>
     <message>
         <source>&amp;Close</source>
@@ -363,11 +414,11 @@
     </message>
     <message>
         <source>Close current file</source>
-        <translation>關閉目前的檔案</translation>
+        <translation>關閉當前文件</translation>
     </message>
     <message>
         <source>Keep Previous Annotation</source>
-        <translation>保留上一張標註</translation>
+        <translation>保留上一個標註</translation>
     </message>
     <message>
         <source>Start drawing polygons</source>
@@ -383,91 +434,99 @@
     </message>
     <message>
         <source>Start drawing lines</source>
-        <translation>開始繪製線段</translation>
+        <translation>開始繪製直線</translation>
     </message>
     <message>
         <source>Start drawing points</source>
-        <translation>開始繪製點</translation>
+        <translation>開始繪製控制點</translation>
+    </message>
+    <message>
+        <source>Start drawing linestrip. Ctrl+LeftClick ends creation.</source>
+        <translation>開始繪製折線。Ctrl+單擊左鍵結束繪製。</translation>
     </message>
     <message>
         <source>Edit Shapes</source>
-        <translation>編輯形狀</translation>
+        <translation>編輯圖形</translation>
     </message>
     <message>
         <source>Move and edit the selected shapes</source>
-        <translation>移動與編輯選取的形狀</translation>
+        <translation>移動、編輯選中的圖形</translation>
     </message>
     <message>
         <source>Delete Shapes</source>
-        <translation>刪除形狀</translation>
+        <translation>刪除圖形</translation>
     </message>
     <message>
         <source>Delete the selected shapes</source>
-        <translation>刪除選取的形狀</translation>
+        <translation>刪除選中的圖形</translation>
     </message>
     <message>
         <source>Duplicate Shapes</source>
-        <translation>複製形狀</translation>
+        <translation>複製圖形</translation>
     </message>
     <message>
         <source>Create a duplicate of the selected shapes</source>
-        <translation>建立選取形狀的複本</translation>
+        <translation>為選中的圖形創建副本</translation>
     </message>
     <message>
         <source>Undo last point</source>
-        <translation>復原上一個點</translation>
+        <translation>撤銷最後的控制點</translation>
     </message>
     <message>
         <source>Undo last drawn point</source>
-        <translation>復原上一個繪製的點</translation>
+        <translation>撤銷最後一次繪製的控制點</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>移除選中的控制點</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>從多邊形中移除選中的控制點</translation>
     </message>
     <message>
         <source>Undo
 </source>
-        <translation>復原
-</translation>
+        <translation>撤銷</translation>
     </message>
     <message>
         <source>Undo last add and edit of shape</source>
-        <translation>復原上一次新增或編輯形狀的操作</translation>
+        <translation>撤銷最近一次添加和編輯</translation>
     </message>
     <message>
         <source>&amp;Hide
 Shapes</source>
-        <translation>隱藏(&amp;H)
-形狀</translation>
+        <translation>隱藏圖形(&amp;H)</translation>
     </message>
     <message>
         <source>Hide all shapes</source>
-        <translation>隱藏所有形狀</translation>
+        <translation>隱藏所有圖形</translation>
     </message>
     <message>
         <source>&amp;Show
 Shapes</source>
-        <translation>顯示(&amp;S)
-形狀</translation>
+        <translation>顯示圖形(&amp;S)</translation>
     </message>
     <message>
         <source>Show all shapes</source>
-        <translation>顯示所有形狀</translation>
+        <translation>顯示所有圖形</translation>
     </message>
     <message>
         <source>&amp;Toggle
 Shapes</source>
-        <translation>切換(&amp;T)
-形狀顯示</translation>
+        <translation>開關圖形(&amp;S)</translation>
     </message>
     <message>
         <source>Toggle all shapes</source>
-        <translation>切換所有形狀的顯示狀態</translation>
+        <translation>開關所有圖形</translation>
     </message>
     <message>
         <source>&amp;Tutorial</source>
-        <translation>教學(&amp;T)</translation>
+        <translation>教程[&amp;T]</translation>
     </message>
     <message>
         <source>Show tutorial page</source>
-        <translation>顯示教學頁面</translation>
+        <translation>顯示教程網頁</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -483,63 +542,139 @@ Shapes</source>
     </message>
     <message>
         <source>&amp;Brightness Contrast</source>
-        <translation>亮度與對比(&amp;B)</translation>
+        <translation>亮度 對比度(&amp;B)</translation>
     </message>
     <message>
         <source>Adjust brightness and contrast</source>
-        <translation>調整亮度與對比</translation>
+        <translation>調節亮度和對比度</translation>
     </message>
     <message>
         <source>&amp;Edit Label</source>
         <translation>編輯標籤(&amp;E)</translation>
     </message>
     <message>
-        <source>Save the labels under a new file name</source>
-        <translation>以新的檔案名稱儲存標籤</translation>
+        <source>Measure</source>
+        <translation>測量</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>將影像嵌入標籤檔案</translation>
+        <source>Preview</source>
+        <translation>預覽</translation>
     </message>
     <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>在標籤檔案中儲存一份影像副本</translation>
+        <source>Insert</source>
+        <translation>插入</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>參數</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>複製上一幀</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>清除</translation>
+    </message>
+    <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>刪除&amp;圖像和標註檔案</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>刪除目前圖像及其標註檔案</translation>
+    </message>
+    <message>
+        <source>Snap to Point</source>
+        <translation>吸附到標註點</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>繪製時,將游標吸附到最近的標註點。</translation>
+    </message>
+    <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>複製標註到下一個未標註檔案</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>將目前標註儲存到下一個沒有標註檔案的檔案中</translation>
+    </message>
+    <message>
+        <source>Merge into Linestrip</source>
+        <translation>合併為折線</translation>
+    </message>
+    <message>
+        <source>Merge Polygons</source>
+        <translation>合併多邊形</translation>
+    </message>
+    <message>
+        <source>Merge the selected polygons and fill the gaps between them</source>
+        <translation>合併選取的多邊形並填補其間的間隙</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>將選中的直線和折線標註合併為一條折線</translation>
+    </message>
+    <message>
+        <source>Measure Line Profile</source>
+        <translation>測量線條設定檔</translation>
+    </message>
+    <message>
+        <source>Measure width and visibility along the selected linestrip</source>
+        <translation>測量選取折線上的寬度與可見度</translation>
+    </message>
+    <message>
+        <source>Delete Selected Files</source>
+        <translation>刪除選中檔案</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>永久刪除選中的檔案及其標註檔案</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>匯出選中檔案</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>將選中的檔案及其標註檔案複製到指定目錄</translation>
+    </message>
+    <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>補齊缺失的線剖面</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>測量沒有剖面錨點的選取標註</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>重建線剖面</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>強制重新測量所有選取的線剖面標註</translation>
     </message>
     <message>
         <source>Modify the label of the selected shape</source>
-        <translation>修改選取形狀的標籤</translation>
+        <translation>修改選中圖形的標籤</translation>
     </message>
     <message>
-        <source>Copy to Clipboard</source>
-        <translation>複製到剪貼板</translation>
+        <source>Split Linestrip at Vertex</source>
+        <translation>在頂點處分割折線</translation>
     </message>
     <message>
-        <source>Place the selected shapes on the clipboard</source>
-        <translation>將選中圖形放入剪貼板</translation>
+        <source>Split the selected linestrip into two at the hovered vertex</source>
+        <translation>將選中的折線在游標懸停的頂點處分割為兩條</translation>
     </message>
     <message>
-        <source>Paste from Clipboard</source>
-        <translation>從剪貼板粘貼</translation>
+        <source>Insert Profile Anchor</source>
+        <translation>插入設定檔錨點</translation>
     </message>
     <message>
-        <source>Insert the clipboard shapes into this image</source>
-        <translation>將剪貼板中的圖形插入此圖片</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>合併形狀</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>將選取的遮罩形狀合併為一個</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>刪除選取的頂點</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>從多邊形或折線中刪除選取的頂點</translation>
+        <source>Insert an interpolated profile anchor</source>
+        <translation>插入插值設定檔錨點</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -550,40 +685,68 @@ Shapes</source>
         <translation>適應窗口(&amp;W)</translation>
     </message>
     <message>
-        <source>Keep the whole image visible when the window is resized</source>
-        <translation>調整視窗大小時保持整張影像可見</translation>
+        <source>Delete Profile Anchor</source>
+        <translation>刪除設定檔錨點</translation>
     </message>
     <message>
-        <source>Fit to Wi&amp;dth</source>
-        <translation>適應寬度(&amp;D)</translation>
+        <source>Delete the active profile anchor</source>
+        <translation>刪除目前的設定檔錨點</translation>
     </message>
     <message>
-        <source>Match the image width to the window when it is resized</source>
-        <translation>調整視窗大小時使影像寬度與視窗一致</translation>
+        <source>Clear Line Profile</source>
+        <translation>清除線條設定檔</translation>
     </message>
     <message>
-        <source>Make the image appear larger</source>
-        <translation>以較大的尺寸顯示影像</translation>
+        <source>Remove profile metadata and keep the centerline</source>
+        <translation>移除設定檔中繼資料並保留中心線</translation>
     </message>
     <message>
-        <source>Make the image appear smaller</source>
-        <translation>以較小的尺寸顯示影像</translation>
+        <source>Line Profile Measurement Parameters</source>
+        <translation>線條設定檔測量參數</translation>
     </message>
     <message>
-        <source>&amp;Actual Size</source>
-        <translation>實際大小(&amp;A)</translation>
+        <source>Override measurement defaults for this linestrip</source>
+        <translation>覆寫此折線的預設測量參數</translation>
     </message>
     <message>
-        <source>Show the image at 100%</source>
-        <translation>以 100% 顯示影像</translation>
+        <source>Copy Profiles from Previous Frame</source>
+        <translation>從上一幀複製設定檔</translation>
+    </message>
+    <message>
+        <source>Copy only compatible line profiles from the previous frame</source>
+        <translation>僅從上一幀複製相容的線條設定檔</translation>
+    </message>
+    <message>
+        <source>Quadratic Bezier</source>
+        <translation>二階曲線</translation>
+    </message>
+    <message>
+        <source>Start drawing a quadratic Bezier curve (3 points)</source>
+        <translation>Start drawing a quadratic Bezier curve (3 points)</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>三階曲線</translation>
+    </message>
+    <message>
+        <source>Start drawing a cubic Bezier curve (4 points)</source>
+        <translation>Start drawing a cubic Bezier curve (4 points)</translation>
     </message>
     <message>
         <source>Fill Drawing Polygon</source>
-        <translation>填滿正在繪製的多邊形</translation>
+        <translation>填充所繪多邊形</translation>
     </message>
     <message>
         <source>Fill polygon while drawing</source>
-        <translation>繪製時填滿多邊形</translation>
+        <translation>繪製時填充多邊形</translation>
+    </message>
+    <message>
+        <source>Show Line Profile Preview</source>
+        <translation>顯示線條設定檔預覽</translation>
+    </message>
+    <message>
+        <source>Show variable-width profile boundaries and handles</source>
+        <translation>顯示可變寬度設定檔的邊界與控制點</translation>
     </message>
     <message>
         <source>Ctrl+Wheel zooms the canvas</source>
@@ -591,7 +754,7 @@ Shapes</source>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>檔案(&amp;F)</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -599,23 +762,23 @@ Shapes</source>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>檢視(&amp;V)</translation>
+        <translation>視圖(&amp;V)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>說明(&amp;H)</translation>
+        <translation>幫助(&amp;H)</translation>
     </message>
     <message>
         <source>%s started.</source>
-        <translation>%s 已啟動。</translation>
+        <translation>%s 已啟動</translation>
     </message>
     <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>選擇一個標籤以開始用它繪製。按 &apos;Esc&apos; 清除選擇。</translation>
+        <source>Line Profile</source>
+        <translation>線條設定檔</translation>
     </message>
     <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>正規表示式無效。保留上一次搜尋條件。</translation>
+        <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -630,16 +793,148 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 請將 AI Text-to-Annotation 模型切換為 &apos;SAM3 (smart)&apos;，或將輸出格式設定為 &apos;Rectangle&apos;。</translation>
     </message>
     <message>
+        <source>Rename Label</source>
+        <translation>Rename Label</translation>
+    </message>
+    <message>
+        <source>Error reading label data</source>
+        <translation>Error reading label data</translation>
+    </message>
+    <message>
+        <source>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</source>
+        <translation>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;{}&lt;/b&gt;</source>
+        <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Renamed label in {0} other annotation files</translation>
+    </message>
+    <message>
+        <source>New label:</source>
+        <translation>New label:</translation>
+    </message>
+    <message>
         <source>Invalid label</source>
         <translation>無效的標籤</translation>
     </message>
     <message>
+        <source>A label named &apos;{}&apos; already exists.</source>
+        <translation>A label named &apos;{}&apos; already exists.</translation>
+    </message>
+    <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
-        <translation>標籤「{}」不符合「{}」驗證類型</translation>
+        <translation>無效的標籤&apos;{}&apos;，驗證類型&apos;{}&apos;</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>已選中 {count} 個檔案</translation>
+    </message>
+    <message>
+        <source>Sample spacing</source>
+        <translation>Sample spacing</translation>
+    </message>
+    <message>
+        <source>Search radius</source>
+        <translation>Search radius</translation>
+    </message>
+    <message>
+        <source>Minimum width</source>
+        <translation>Minimum width</translation>
+    </message>
+    <message>
+        <source>Maximum width</source>
+        <translation>Maximum width</translation>
+    </message>
+    <message>
+        <source>Contrast factor</source>
+        <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Use fixed width</source>
+        <translation>使用固定寬度</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
+    </message>
+    <message>
+        <source>Override global measurement settings</source>
+        <translation>Override global measurement settings</translation>
+    </message>
+    <message>
+        <source>Invalid Measurement Parameters</source>
+        <translation>Invalid Measurement Parameters</translation>
+    </message>
+    <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>選取的檔案中沒有可測量的標註檔案</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>補齊缺失的線剖面</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>重建線剖面</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>批次測量線剖面</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>在選取的 {1} 個標註檔案中{0}？</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>正在測量線剖面…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>批次測量完成：{0} 個檔案，{1} 條線條，略過 {2} 個，失敗 {3} 個，取消 {4} 個</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>批次線剖面測量失敗：{0}</translation>
+    </message>
+    <message>
+        <source>Measuring line profile…</source>
+        <translation>Measuring line profile…</translation>
+    </message>
+    <message>
+        <source>Line Profile Measurement</source>
+        <translation>線條設定檔測量</translation>
+    </message>
+    <message>
+        <source>Measurement result is out of date</source>
+        <translation>Measurement result is out of date</translation>
+    </message>
+    <message>
+        <source>Accept Line Profile Measurement</source>
+        <translation>接受線條設定檔測量</translation>
+    </message>
+    <message>
+        <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
+        <translation>Measurement produced {0} samples. Accept automatic width and visibility anchors?</translation>
+    </message>
+    <message>
+        <source>Only accept samples with confidence &gt;= 0.5</source>
+        <translation>Only accept samples with confidence &gt;= 0.5</translation>
+    </message>
+    <message>
+        <source>Line profile measurement failed: {0}</source>
+        <translation>Line profile measurement failed: {0}</translation>
     </message>
     <message>
         <source>Error saving label data</source>
-        <translation>儲存標籤資料時發生錯誤</translation>
+        <translation>保存標籤發生錯誤</translation>
     </message>
     <message>
         <source>&lt;b&gt;%s&lt;/b&gt;</source>
@@ -650,28 +945,12 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>AI 推理失敗: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>大型影像</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>大型影像需要更多記憶體</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>影像尺寸為 {width}x{height} 像素，解碼至少需要約 {required} MB，超過目前 {limit} MB 的安全限制。開啟影像可能會暫時降低 Labelme 或其他應用程式的回應速度。</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>仍要開啟</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
-        <translation>開啟檔案時發生錯誤</translation>
+        <translation>打開文件發生錯誤</translation>
     </message>
     <message>
         <source>No such file: &lt;b&gt;%s&lt;/b&gt;</source>
-        <translation>檔案不存在：&lt;b&gt;%s&lt;/b&gt;</translation>
+        <translation>文件不存在: &lt;b&gt;%s&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Loading %s...</source>
@@ -682,28 +961,64 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>已載入 %s</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>影像與標註檔案 (%s)</translation>
+        <source>Previous frame profiles are incompatible: {0}</source>
+        <translation>Previous frame profiles are incompatible: {0}</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - 開啟影像或標註</translation>
+        <source>Shape {0} ({1}): centerline difference {2:.2f} px</source>
+        <translation>Shape {0} ({1}): centerline difference {2:.2f} px</translation>
+    </message>
+    <message>
+        <source>unlabeled</source>
+        <translation>unlabeled</translation>
+    </message>
+    <message>
+        <source>Shape {0}: width difference {1}, visibility difference {2}</source>
+        <translation>Shape {0}: width difference {1}, visibility difference {2}</translation>
+    </message>
+    <message>
+        <source>n/a</source>
+        <translation>n/a</translation>
+    </message>
+    <message>
+        <source>Frame Profile Transfer Preview</source>
+        <translation>Frame Profile Transfer Preview</translation>
+    </message>
+    <message>
+        <source>Copy profiles from the previous frame?
+
+{0}</source>
+        <translation>Copy profiles from the previous frame?
+
+{0}</translation>
+    </message>
+    <message>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>圖像和標籤文件(%s)</translation>
+    </message>
+    <message>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - 選擇圖像或標籤文件</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
-        <translation>%s - 在資料夾中儲存或載入標註</translation>
+        <translation>%s - 保存和載入批註的路徑</translation>
     </message>
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
-        <translation>%s。標註將在 %s 中儲存或載入</translation>
+        <translation>%s . 批註會被載入和保存在 %s</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - 選擇文件</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
-        <translation>標籤檔案 (*%s)</translation>
+        <translation>標籤文件(*%s)</translation>
     </message>
     <message>
         <source>Choose File</source>
-        <translation>選擇檔案</translation>
+        <translation>選擇文件</translation>
     </message>
     <message>
         <source>Attention</source>
@@ -718,24 +1033,52 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>取消</translation>
     </message>
     <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>永久刪除此圖像及其標註檔案?此操作無法復原。</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>批次線剖面</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>永久刪除 {count} 個檔案及其標註檔案?此操作無法復原。</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>選擇匯出目錄</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>已將 {count} 個檔案匯出到 {dir}</translation>
+    </message>
+    <message>
         <source>Unavailable in AI-Points mode because this model does not support point prompts.</source>
         <translation>此模型不支援點提示，因此無法在 AI-Points 模式中使用。</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>要保留「{}」的標註變更嗎？</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>關閉前保存批註到&quot;{}&quot;嗎?</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>尚未儲存的變更</translation>
+        <source>Save annotations?</source>
+        <translation>保存批註嗎?</translation>
     </message>
     <message>
         <source>Delete {} shapes? You can restore them with Undo.</source>
         <translation>刪除 {} 個圖形？可以使用「撤銷」復原。</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - 瀏覽影像資料夾</translation>
+        <source>Current file has no annotations to copy</source>
+        <translation>目前檔案沒有可複製的標註</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>目前檔案之後沒有找到未標註檔案</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - 打開目錄</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -834,6 +1177,10 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Permanently delete this label file? This action cannot be undone.</source>
         <translation>永久刪除此標籤文件？此操作無法復原。</translation>
+    </message>
+    <message>
+        <source>Permanently delete {} shapes? This action cannot be undone.</source>
+        <translation>永久刪除{}個圖形？此操作無法復原。</translation>
     </message>
     <message>
         <source>Allowed formats: {formats}</source>
@@ -943,44 +1290,28 @@ Please select a different model or use AI-Box mode.</source>
         <translation>AI 輔助</translation>
     </message>
     <message>
+        <source>Line profile measurement</source>
+        <translation>Line profile measurement</translation>
+    </message>
+    <message>
         <source>Save automatically</source>
-        <translation>自動儲存</translation>
+        <translation>自動保存</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>將圖像數據保存到標籤文件中</translation>
     </message>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>將圖像嵌入標籤 JSON 文件中。</translation>
     </message>
     <message>
-        <source>Shape Color Mode</source>
-        <translation>形狀顏色模式</translation>
+        <source>Snap cursor to annotation points</source>
+        <translation>將游標吸附到標註點</translation>
     </message>
     <message>
-        <source>Automatic</source>
-        <translation>自動</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>統一</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>依標籤</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>自動調色盤位移</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>「統一」模式顏色</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>「依標籤」模式備用顏色</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>仍可在設定檔中編輯各個標籤的顏色。</translation>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>繪製時,游標會吸附到最近的現有標註點。</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>
@@ -996,27 +1327,15 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>Fill polygon while drawing</source>
-        <translation>繪製時填滿多邊形</translation>
+        <translation>繪製時填充多邊形</translation>
     </message>
     <message>
         <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
         <translation>允許形狀的點延伸到影像之外，例如用於部分可見的物件。</translation>
     </message>
     <message>
-        <source>Polygon detail</source>
-        <translation>多邊形細節</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>值越高，保留的遮罩邊界細節和較小區域越多。</translation>
-    </message>
-    <message>
         <source>Predefined labels</source>
         <translation>預定義標籤</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>將影像嵌入標籤檔案</translation>
     </message>
     <message>
         <source>Label validation</source>
@@ -1045,6 +1364,46 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Contains</source>
         <translation>包含</translation>
+    </message>
+    <message>
+        <source>Sample spacing</source>
+        <translation>Sample spacing</translation>
+    </message>
+    <message>
+        <source>Pixels along the centerline.</source>
+        <translation>Pixels along the centerline.</translation>
+    </message>
+    <message>
+        <source>Search radius</source>
+        <translation>Search radius</translation>
+    </message>
+    <message>
+        <source>Pixels sampled on each normal.</source>
+        <translation>Pixels sampled on each normal.</translation>
+    </message>
+    <message>
+        <source>Minimum width</source>
+        <translation>Minimum width</translation>
+    </message>
+    <message>
+        <source>Maximum width</source>
+        <translation>Maximum width</translation>
+    </message>
+    <message>
+        <source>Contrast factor</source>
+        <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Sliding window length as a percentage of measured samples.</source>
+        <translation>滑動視窗長度佔測量樣本的百分比。</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
     </message>
     <message>
         <source>Default model</source>
@@ -1148,28 +1507,10 @@ Please select a different model or use AI-Box mode.</source>
     </message>
 </context>
 <context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_SettingsPage</name>
     <message>
         <source>Settings sections</source>
         <translation>設定區段</translation>
-    </message>
-</context>
-<context>
-<name>CircleRadiusWidget</name>
-    <message>
-        <source>Radius</source>
-        <translation>半徑</translation>
-    </message>
-    <message>
-        <source>Radius of the selected circle</source>
-        <translation>所選圓的半徑</translation>
     </message>
 </context>
 </TS>
