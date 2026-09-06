@@ -20,7 +20,7 @@ class ZoomWidget(QtWidgets.QDoubleSpinBox):
         self.setValue(100)
         self.setSuffix(self.PERCENT_SUFFIX)
         self.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows)
         self.setToolTip(ZOOM_LEVEL_LABEL)
         self.setStatusTip(ZOOM_LEVEL_LABEL)
 

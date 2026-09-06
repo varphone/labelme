@@ -39,7 +39,7 @@ class CircleRadiusWidget(QtWidgets.QWidget):
         self._spin_box.setSuffix(_RADIUS_SUFFIX)
         self._spin_box.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self._spin_box.setButtonSymbols(
-            QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons
+            QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows
         )
         self._spin_box.setToolTip(self.tr("Radius of the selected circle"))
         self._spin_box.setStatusTip(self.tr("Radius of the selected circle"))

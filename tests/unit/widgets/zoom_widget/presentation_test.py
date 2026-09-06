@@ -72,8 +72,11 @@ def test_zoom_widget_alignment_is_center(*, widget: ZoomWidget) -> None:
 # --- button symbols ---
 
 
-def test_zoom_widget_no_spin_buttons(*, widget: ZoomWidget) -> None:
-    assert widget.buttonSymbols() == QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons
+def test_zoom_widget_has_spin_buttons(*, widget: ZoomWidget) -> None:
+    assert (
+        widget.buttonSymbols()
+        == QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows
+    )
 
 
 # --- tooltip and status tip ---
