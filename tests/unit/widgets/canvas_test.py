@@ -1012,6 +1012,14 @@ def test_ai_proposal_uses_out_of_bounds_setting(
             lambda canvas: canvas.set_ai_existing_shape_suppression(enabled=True),
             id="existing-shape-suppression",
         ),
+        pytest.param(
+            lambda canvas: canvas.set_ai_downsample_scale(scale=0.3),
+            id="downsample-scale",
+        ),
+        pytest.param(
+            lambda canvas: canvas.set_ai_denoise_strength(strength=0.4),
+            id="denoise-strength",
+        ),
     ],
 )
 def test_changing_ai_assist_setting_clears_highlights(
