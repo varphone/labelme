@@ -15,6 +15,7 @@ from .._shape import CIRCLE_POINT_COUNT
 from .._shape import MIN_POLYGON_POINT_COUNT
 from .._shape import Shape
 from .._shape import bezier_sample_points
+from .._shape import spline_sample_points
 
 # Highest value of the mask polygonization detail slider.
 _DETAIL_MAX: Final = 100
@@ -64,6 +65,8 @@ def shape_to_xyxy_bbox(*, shape: Shape) -> NDArray[np.float32] | None:
         "oriented_rectangle": 4,
         "bezier2": 3,
         "bezier3": 4,
+        "catmull_rom": 3,
+        "bspline": 3,
     }
     if shape.shape_type not in minimum_points_by_shape_type:
         raise ValueError(f"Unsupported shape_type: {shape.shape_type!r}")
@@ -72,6 +75,8 @@ def shape_to_xyxy_bbox(*, shape: Shape) -> NDArray[np.float32] | None:
     points = (
         bezier_sample_points(shape.points)
         if shape.shape_type in BEZIER_SHAPE_TYPES
+        else spline_sample_points(shape.points, shape.shape_type)
+        if shape.shape_type in ("catmull_rom", "bspline")
         else shape.points
     )
     xmin, ymin = points.min(axis=0)

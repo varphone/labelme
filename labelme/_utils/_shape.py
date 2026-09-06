@@ -20,6 +20,7 @@ from labelme._shape import MIN_POLYGON_POINT_COUNT
 from labelme._shape import ORIENTED_RECTANGLE_POINT_COUNT
 from labelme._shape import RECTANGLE_POINT_COUNT
 from labelme._shape import bezier_sample_points
+from labelme._shape import spline_sample_points
 
 
 class ShapeDict(TypedDict):
@@ -77,6 +78,12 @@ def shape_to_mask(
             f"Shape of shape_type={shape_type} has an invalid point count"
         )
         curve = bezier_sample_points(np.asarray(points, dtype=np.float64))
+        draw.line(
+            xy=[tuple(point) for point in curve], fill=1, width=line_width
+        )  # ty: ignore[invalid-argument-type]
+    elif shape_type in ("catmull_rom", "bspline"):
+        assert len(xy) >= 3, "Spline shapes must have at least 3 points"
+        curve = spline_sample_points(np.asarray(points, dtype=np.float64), shape_type)
         draw.line(
             xy=[tuple(point) for point in curve], fill=1, width=line_width
         )  # ty: ignore[invalid-argument-type]

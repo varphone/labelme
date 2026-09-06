@@ -5,8 +5,10 @@ import numpy.typing as npt
 
 from ._model import Shape
 from ._model import BEZIER_SHAPE_TYPES
+from ._model import SPLINE_SHAPE_TYPES
 from ._model import bezier_degree
 from ._model import bezier_sample_points
+from ._model import spline_sample_points
 from ._oriented_rectangle import _get_rotation_handles
 from ._oriented_rectangle import _is_full_oriented_rectangle
 
@@ -59,6 +61,25 @@ def nearest_edge_index(
         return _find_closest_index_within(
             distances=distances, epsilon=image_epsilon
         )
+    if shape.shape_type in SPLINE_SHAPE_TYPES:
+        curve = spline_sample_points(shape.points, shape.shape_type)
+        segments = curve[1:] - curve[:-1]
+        squared_lengths = np.einsum("ij,ij->i", segments, segments)
+        starts = curve[:-1]
+        projection_t = np.clip(
+            np.einsum("ij,ij->i", point - starts, segments)
+            / np.where(squared_lengths == 0, 1.0, squared_lengths),
+            0.0,
+            1.0,
+        )
+        projections = starts + projection_t[:, None] * segments
+        nearest = _find_closest_index_within(
+            distances=np.linalg.norm(point - projections, axis=1),
+            epsilon=image_epsilon,
+        )
+        if nearest is None:
+            return None
+        return min(nearest // 24 + 1, len(shape.points) - 1)
     # Edge i runs from points[i - 1] to points[i] (so edge 0 is the segment
     # that closes a polygon from its last point back to its first).
     edge_starts = np.roll(shape.points, shift=1, axis=0)

@@ -203,6 +203,8 @@ class _Actions(NamedTuple):
     create_line_strip_mode: QtGui.QAction
     create_bezier2_mode: QtGui.QAction
     create_bezier3_mode: QtGui.QAction
+    create_catmull_rom_mode: QtGui.QAction
+    create_bspline_mode: QtGui.QAction
     create_ai_points_to_shape_mode: QtGui.QAction
     create_ai_box_to_shape_mode: QtGui.QAction
     open_next_img: QtGui.QAction
@@ -794,21 +796,37 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Click to place linestrip points; Ctrl+click places the last one."
             ),
         )
-        create_bezier2_mode = action(
+        create_bezier2_mode = image_action(
             text=self.tr("Quadratic Bezier"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier2"),
             shortcut=shortcuts["create_bezier2"],
             icon="phosphor/bezier-quadratic.svg",
             tip=self.tr("Start drawing a quadratic Bezier curve (3 points)"),
-            enabled=False,
         )
-        create_bezier3_mode = action(
+        create_bezier3_mode = image_action(
             text=self.tr("Cubic Bezier"),
             slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier3"),
             shortcut=shortcuts["create_bezier3"],
             icon="phosphor/bezier-cubic.svg",
             tip=self.tr("Start drawing a cubic Bezier curve (4 points)"),
-            enabled=False,
+        )
+        create_catmull_rom_mode = image_action(
+            text=self.tr("猫氏样条"),
+            slot=lambda: self._switch_canvas_mode(
+                edit=False, create_mode="catmull_rom"
+            ),
+            shortcut=shortcuts.get("create_catmull_rom"),
+            icon="phosphor/catmull-rom.svg",
+            tip=self.tr(
+                "Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation."
+            ),
+        )
+        create_bspline_mode = image_action(
+            text=self.tr("B样条"),
+            slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bspline"),
+            shortcut=shortcuts.get("create_bspline"),
+            icon="phosphor/b-spline.svg",
+            tip=self.tr("Start drawing a B-spline. Ctrl+LeftClick ends creation."),
         )
         create_ai_points_to_shape_mode = image_action(
             text=self.tr("AI-Points"),
@@ -1012,6 +1030,8 @@ class MainWindow(QtWidgets.QMainWindow):
             ("linestrip", create_line_strip_mode),
             ("bezier2", create_bezier2_mode),
             ("bezier3", create_bezier3_mode),
+            ("catmull_rom", create_catmull_rom_mode),
+            ("bspline", create_bspline_mode),
             ("ai_points_to_shape", create_ai_points_to_shape_mode),
             ("ai_box_to_shape", create_ai_box_to_shape_mode),
         ]
@@ -1105,6 +1125,8 @@ class MainWindow(QtWidgets.QMainWindow):
             create_line_strip_mode=create_line_strip_mode,
             create_bezier2_mode=create_bezier2_mode,
             create_bezier3_mode=create_bezier3_mode,
+            create_catmull_rom_mode=create_catmull_rom_mode,
+            create_bspline_mode=create_bspline_mode,
             create_ai_points_to_shape_mode=create_ai_points_to_shape_mode,
             create_ai_box_to_shape_mode=create_ai_box_to_shape_mode,
             open_next_img=open_next_img,

@@ -10,6 +10,7 @@ from typing import TypeAlias
 
 import numpy as np
 import numpy.typing as npt
+import scipy.interpolate
 from loguru import logger
 
 from .._line_profile import LineProfile
@@ -26,6 +27,8 @@ ShapeType: TypeAlias = Literal[
     "points",
     "bezier2",
     "bezier3",
+    "catmull_rom",
+    "bspline",
     "mask",
 ]
 
@@ -33,6 +36,7 @@ ShapeType: TypeAlias = Literal[
 # extend or shrink one vertex at a time.
 POLYLINE_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("polygon", "linestrip")
 BEZIER_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("bezier2", "bezier3")
+SPLINE_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("catmull_rom", "bspline")
 
 
 def bezier_degree(shape_type: ShapeType) -> int:
@@ -69,6 +73,70 @@ def bezier_sample_points(
     if samples < 2:
         raise ValueError("samples must be at least 2")
     return np.array([bezier_point(points, t) for t in np.linspace(0.0, 1.0, samples)])
+
+
+def spline_sample_points(
+    points: npt.NDArray[np.float64],
+    shape_type: ShapeType,
+    samples_per_segment: int = 24,
+) -> npt.NDArray[np.float64]:
+    """Sample an open multi-knot Catmull-Rom or cubic B-spline curve."""
+    points = np.asarray(points, dtype=np.float64).reshape(-1, 2)
+    if len(points) < 3:
+        return points.copy()
+    if shape_type not in SPLINE_SHAPE_TYPES:
+        raise ValueError(f"Not a spline shape: {shape_type!r}")
+    if samples_per_segment < 2:
+        raise ValueError("samples_per_segment must be at least 2")
+
+    sampled: list[npt.NDArray[np.float64]] = []
+    if shape_type == "catmull_rom":
+        padded = np.vstack((points[0], points, points[-1]))
+        for i in range(len(points) - 1):
+            p0, p1, p2, p3 = padded[i : i + 4]
+            for t in np.linspace(0.0, 1.0, samples_per_segment, endpoint=False):
+                t2, t3 = t * t, t * t * t
+                sampled.append(
+                    0.5
+                    * (
+                        (2 * p1)
+                        + (-p0 + p2) * t
+                        + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2
+                        + (-p0 + 3 * p1 - 3 * p2 + p3) * t3
+                    )
+                )
+        sampled.append(points[-1])
+        return np.asarray(sampled)
+
+    degree = min(3, len(points) - 1)
+    interior_count = len(points) - degree - 1
+    knots = np.concatenate(
+        (
+            np.zeros(degree + 1),
+            np.arange(1, interior_count + 1, dtype=np.float64),
+            np.full(degree + 1, interior_count + 1, dtype=np.float64),
+        )
+    )
+    curve = scipy.interpolate.BSpline(knots, points, degree)
+    parameters = np.linspace(
+        knots[degree],
+        knots[-degree - 1],
+        (len(points) - degree) * samples_per_segment + 1,
+    )
+    return np.asarray(curve(parameters), dtype=np.float64)
+
+
+def line_profile_centerline(
+    points: npt.ArrayLike, shape_type: ShapeType
+) -> npt.NDArray[np.float64]:
+    """Return the sampled polyline used for line-profile geometry."""
+    array = np.asarray(points, dtype=np.float64).reshape(-1, 2)
+    if shape_type in BEZIER_SHAPE_TYPES:
+        return bezier_sample_points(array, samples=128)
+    if shape_type in SPLINE_SHAPE_TYPES:
+        return spline_sample_points(array, shape_type, samples_per_segment=32)
+    return array
+
 
 # Point counts each shape type's finished geometry is defined by. A shape
 # still being drawn holds fewer points than these until it is finalized.
@@ -109,7 +177,7 @@ class Shape:
             self.point_labels = np.ones(len(self.points), dtype=np.int_)
 
     def can_add_point(self) -> bool:
-        return self.shape_type in POLYLINE_SHAPE_TYPES
+        return self.shape_type in POLYLINE_SHAPE_TYPES + SPLINE_SHAPE_TYPES
 
     def can_remove_point(self) -> bool:
         if not self.can_add_point():
@@ -117,6 +185,8 @@ class Shape:
         floor = {
             "polygon": MIN_POLYGON_POINT_COUNT,
             "linestrip": MIN_LINESTRIP_POINT_COUNT,
+            "catmull_rom": 3,
+            "bspline": 3,
         }[self.shape_type]
         return len(self.points) > floor
 
@@ -146,6 +216,8 @@ class Shape:
                 len(self.points),
             )
             return
+        if self.shape_type in SPLINE_SHAPE_TYPES and len(self.points) <= 3:
+            return
         old_points = self.points.copy()
         new_points = np.delete(self.points, i, axis=0)
         self.points = new_points
@@ -172,12 +244,19 @@ class Shape:
         old_points: npt.NDArray[np.float64],
         new_points: npt.NDArray[np.float64],
     ) -> LineProfile | None:
-        if self.line_profile is None or self.shape_type != "linestrip":
+        if self.line_profile is None or self.shape_type not in (
+            "line",
+            "linestrip",
+            "bezier2",
+            "bezier3",
+            "catmull_rom",
+            "bspline",
+        ):
             return self.line_profile
         return remap_profile(
             profile=self.line_profile,
-            old_points=old_points,
-            new_points=new_points,
+            old_points=line_profile_centerline(old_points, self.shape_type),
+            new_points=line_profile_centerline(new_points, self.shape_type),
         )
 
     def copy(self) -> Shape:

@@ -11,11 +11,14 @@ from ._model import MIN_POLYGON_POINT_COUNT
 from ._model import ORIENTED_RECTANGLE_POINT_COUNT
 from ._model import POLYLINE_SHAPE_TYPES
 from ._model import RECTANGLE_POINT_COUNT
+from ._model import SPLINE_SHAPE_TYPES
 from ._model import Shape
 from ._model import ShapeType
 from ._model import bezier_degree
 from ._model import bezier_point
 from ._model import bezier_sample_points
+from ._model import line_profile_centerline
+from ._model import spline_sample_points
 from ._oriented_rectangle import get_rotation_handle
 from ._oriented_rectangle import oriented_rectangle_arrow_points
 from ._oriented_rectangle import oriented_rectangle_center
@@ -35,6 +38,9 @@ __all__ = [
     "bezier_degree",
     "bezier_point",
     "bezier_sample_points",
+    "line_profile_centerline",
+    "spline_sample_points",
+    "SPLINE_SHAPE_TYPES",
     "can_merge_shapes",
     "get_rotation_handle",
     "merge_masks",
