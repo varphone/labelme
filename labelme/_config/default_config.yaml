@@ -37,6 +37,8 @@ shape:
   hvertex_fill_color: [255, 255, 255, 255]
   point_size: 8
   show_labels: false
+minimap:
+  show_shape_outlines: true
 mask_polygonization:
   detail: 80
 ai:
