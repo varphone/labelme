@@ -31,10 +31,12 @@ from .._line_profile import point_to_position
 from .._line_profile import position_to_point
 from .._line_profile import profile_boundary_polygon
 from .._line_profile import split_profile
+from .._shape import BEZIER_SHAPE_TYPES
 from .._shape import POLYLINE_SHAPE_TYPES
 from .._shape import RECTANGLE_POINT_COUNT
 from .._shape import Shape
 from .._shape import ShapeType
+from .._shape import bezier_degree
 from .._shape import nearest_vertex_index
 from . import _canvas_interaction
 from ._canvas_interaction import CursorRole
@@ -117,6 +119,8 @@ _CreateMode = Literal[
     "line",
     "point",
     "linestrip",
+    "bezier2",
+    "bezier3",
     "ai_points_to_shape",
     "ai_box_to_shape",
 ]
@@ -135,6 +139,8 @@ _CREATE_MODE_TO_SHAPE_TYPE: Final[dict[_CreateMode, ShapeType]] = {
     "line": "line",
     "point": "point",
     "linestrip": "linestrip",
+    "bezier2": "bezier2",
+    "bezier3": "bezier3",
     "ai_points_to_shape": "points",
     "ai_box_to_shape": "rectangle",
 }
@@ -241,6 +247,8 @@ class Canvas(QtWidgets.QWidget):
                 "line": False,
                 "point": False,
                 "linestrip": False,
+                "bezier2": False,
+                "bezier3": False,
                 "ai_points_to_shape": False,
                 "ai_box_to_shape": True,
             },
@@ -262,7 +270,7 @@ class Canvas(QtWidgets.QWidget):
         self._rotation_center = np.zeros(2)
         self._rotation_initial_angle = 0.0
         self._rotation_original_points = np.empty((0, 2))
-        self._scale: float = 1.0
+        self.scale: float = 1.0
         self._ai_assist_session = _automation.AiAssistSession()
         self._ai_inference_failed = False
         self._ai_suppress_existing_shape_matches = False
@@ -416,18 +424,6 @@ class Canvas(QtWidgets.QWidget):
         )
 
     @property
-    def scale(self) -> float:
-        return self._scale
-
-    @scale.setter
-    def scale(self, value: float, /) -> None:
-        self._scale = value
-        # Callers read the scroll range right after assigning, so resize
-        # synchronously instead of waiting for a layout pass.
-        self.adjustSize()
-        self.update()
-
-    @property
     def is_drawing(self) -> bool:
         return self._current is not None
 
@@ -437,16 +433,11 @@ class Canvas(QtWidgets.QWidget):
 
     @create_mode.setter
     def create_mode(self, value: str, /) -> None:
-        if not self._set_create_mode(value=value):
-            return
-        self._update_status(extra_messages=None)
-
-    def _set_create_mode(self, *, value: str) -> bool:
         if value not in typing.get_args(_CreateMode):
             raise ValueError(f"Unsupported create_mode: {value}")
         new_mode = cast(_CreateMode, value)
         if new_mode == self._create_mode:
-            return False
+            return
         old_mode = self._create_mode
         # Update the mode before reconciling so any signals fired from a cancel
         # observe the new mode rather than the one being left behind.
@@ -455,7 +446,6 @@ class Canvas(QtWidgets.QWidget):
         self._reconcile_partial_shape_on_mode_switch(
             old_mode=old_mode, new_mode=new_mode
         )
-        return True
 
     def _reconcile_partial_shape_on_mode_switch(
         self, *, old_mode: _CreateMode, new_mode: _CreateMode
@@ -563,12 +553,14 @@ class Canvas(QtWidgets.QWidget):
         return len(self.shape_backups) >= MIN_SHAPE_BACKUPS_FOR_UNDO
 
     def restore_last_shape(self) -> None:
+        # Undo coordinates with app.py::undo_shape_edit, app.py::load_shapes,
+        # and Canvas::load_shapes; this method only adjusts the backup stack.
         if not self.can_restore_shape:
             return
         self.shape_backups.pop()  # discard current state
 
-        # Peeking would leave this entry on the stack, and the reload that
-        # follows would record it a second time, making the next undo a no-op.
+        # load_shapes (called downstream by the application) will re-push
+        # this entry as the new current state.
         self.shapes = self.shape_backups.pop()
         self.selected_shapes.clear()
         self.update()
@@ -592,11 +584,7 @@ class Canvas(QtWidgets.QWidget):
         self._release_cursor()
         self._update_status(extra_messages=None)
 
-    def set_editing(
-        self, *, value: bool = True, create_mode: str | None = None
-    ) -> None:
-        if create_mode is not None:
-            self._set_create_mode(value=create_mode)
+    def set_editing(self, *, value: bool = True) -> None:
         new_mode = _CanvasMode.EDIT if value else _CanvasMode.CREATE
         if new_mode is not self.mode:
             self._clear_ai_existing_shape_highlights()
@@ -615,7 +603,6 @@ class Canvas(QtWidgets.QWidget):
             need_update |= self.deselect_shape()
             if need_update:
                 self.update()
-        self._update_status(extra_messages=None)
 
     def _set_highlight(
         self,
@@ -707,6 +694,21 @@ class Canvas(QtWidgets.QWidget):
                 return self.tr(
                     "Click next point or finish by Ctrl/Cmd+Click for linestrip"
                 )
+        if self.create_mode in BEZIER_SHAPE_TYPES:
+            degree = bezier_degree(self.create_mode)
+            if is_new:
+                return self.tr(
+                    "Click start point for quadratic Bezier curve"
+                    if degree == 2
+                    else "Click start point for cubic Bezier curve"
+                )
+            assert self._current is not None
+            messages = {
+                2: self.tr("Click control point for Bezier curve"),
+                3: self.tr("Click end point for quadratic Bezier curve"),
+                4: self.tr("Click second control point for cubic Bezier curve"),
+            }
+            return messages[len(self._current.points) + 1]
         if self.create_mode == "circle":
             if is_new:
                 return self.tr("Click center point for circle")
@@ -899,6 +901,12 @@ class Canvas(QtWidgets.QWidget):
         elif mode == "circle":
             self._line = dataclasses.replace(
                 self._line, points=(current.points[0], pos), point_labels=(1, 1)
+            )
+        elif mode in BEZIER_SHAPE_TYPES:
+            self._line = dataclasses.replace(
+                self._line,
+                points=current.points + (pos,),
+                point_labels=current.point_labels + (1,),
             )
         elif mode == "line":
             self._line = dataclasses.replace(
@@ -1265,11 +1273,31 @@ class Canvas(QtWidgets.QWidget):
             else:
                 assert len(current.points) == 1
                 self._lock_oriented_rectangle_first_edge(current=current)
-        else:
-            assert mode in ("rectangle", "circle", "line", "ai_box_to_shape")
+        elif mode in ("rectangle", "circle", "line", "ai_box_to_shape"):
             assert len(current.points) == 1
             self._current = dataclasses.replace(current, points=self._line.points)
             self._finalize()
+        elif mode in BEZIER_SHAPE_TYPES:
+            clicked_point = self._line.points[-1]
+            current = current.add_point(clicked_point)
+            if len(current.points) == bezier_degree(mode) + 1:
+                # The drawing gesture is start, end, then control point(s),
+                # while Bezier data is stored in the conventional start,
+                # control point(s), end order.
+                point_order = (0, 2, 1) if mode == "bezier2" else (0, 2, 3, 1)
+                current = dataclasses.replace(
+                    current,
+                    points=tuple(current.points[i] for i in point_order),
+                    point_labels=tuple(current.point_labels[i] for i in point_order),
+                )
+            self._current = current
+            self._line = dataclasses.replace(
+                self._line,
+                points=current.points + (clicked_point,),
+                point_labels=current.point_labels + (1,),
+            )
+            if len(current.points) == bezier_degree(mode) + 1:
+                self._finalize()
 
     def _commit_preview_vertex(
         self, *, current: _DraftShape, event: QtGui.QMouseEvent
@@ -2102,6 +2130,36 @@ class Canvas(QtWidgets.QWidget):
     def _render_draft(
         self, *, painter: QtGui.QPainter, draft: _DraftShape, highlighted: bool
     ) -> None:
+        if draft.shape_type in BEZIER_SHAPE_TYPES:
+            point_count = len(draft.points)
+            if point_count == 3:
+                # During creation the points are collected as start, end,
+                # control. Render the curve using the canonical order.
+                draft = dataclasses.replace(
+                    draft,
+                    points=(draft.points[0], draft.points[2], draft.points[1]),
+                    point_labels=(
+                        draft.point_labels[0],
+                        draft.point_labels[2],
+                        draft.point_labels[1],
+                    ),
+                )
+            elif point_count == 4:
+                draft = dataclasses.replace(
+                    draft,
+                    points=(
+                        draft.points[0],
+                        draft.points[2],
+                        draft.points[3],
+                        draft.points[1],
+                    ),
+                    point_labels=(
+                        draft.point_labels[0],
+                        draft.point_labels[2],
+                        draft.point_labels[3],
+                        draft.point_labels[1],
+                    ),
+                )
         shape = _draft_to_shape(draft)
         context = self._draft_render_context(
             selected=False,
@@ -2205,7 +2263,8 @@ class Canvas(QtWidgets.QWidget):
                 shapes=proposal.matching_existing_shapes
             )
         else:
-            self._current = self._current.close()
+            if self.create_mode not in BEZIER_SHAPE_TYPES:
+                self._current = self._current.close()
             if _is_degenerate_draft(self._current):
                 self.degenerate_shape_rejected.emit()
                 self._cancel_current_shape()
@@ -2394,15 +2453,13 @@ class Canvas(QtWidgets.QWidget):
             self._line = dataclasses.replace(
                 self._line,
                 points=(self._current.points[-1], self._current.points[0]),
-                point_labels=(
-                    self._current.point_labels[-1],
-                    self._current.point_labels[0],
-                ),
             )
         elif self.create_mode in (
             "rectangle",
             "line",
             "circle",
+            "bezier2",
+            "bezier3",
             "ai_box_to_shape",
         ):
             self._current = dataclasses.replace(
@@ -2531,11 +2588,9 @@ def _is_degenerate_draft(draft: _DraftShape, /) -> bool:
     if shape_type in ("circle", "line"):
         return len(points) != CIRCLE_POINT_COUNT or points[0] == points[1]
     if shape_type == "oriented_rectangle":
-        return (
-            len(points) != ORIENTED_RECTANGLE_POINT_COUNT
-            or points[0] == points[1]
-            or points[1] == points[2]
-        )
+        return len(points) != 4 or points[0] == points[1] or points[1] == points[2]
+    if shape_type in BEZIER_SHAPE_TYPES:
+        return len(points) != bezier_degree(shape_type) + 1 or points[0] == points[-1]
     return False
 
 
