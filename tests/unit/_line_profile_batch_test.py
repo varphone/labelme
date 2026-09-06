@@ -9,6 +9,7 @@ from labelme._label_file import Annotation
 from labelme._label_file import ShapeDict
 from labelme._label_file import read_label_file
 from labelme._label_file import write_label_file
+from labelme._line_measurement import MeasurementParameters
 from labelme._line_profile import LineProfile
 from labelme._line_profile import ProfileAnchor
 from labelme._line_profile import ProfileValue
@@ -16,6 +17,15 @@ from labelme._line_profile_batch import BatchOptions
 from labelme._line_profile_batch import measure_annotation_files
 from labelme._line_profile_batch import preview_annotation_files
 from labelme._line_profile_batch import rollback_batch
+
+
+def test_profile_override_can_disable_global_fixed_width() -> None:
+    parameters = MeasurementParameters(fixed_width=12.0)
+    profile = LineProfile(measurement_overrides=(("fixed_width", 0.0),))
+
+    merged = batch._parameters_for_profile(parameters, profile)
+
+    assert merged.fixed_width is None
 
 
 def test_batch_measurement_supports_dry_run_and_atomic_output(

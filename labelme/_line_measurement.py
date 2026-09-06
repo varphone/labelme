@@ -14,10 +14,10 @@ from ._line_profile import ProfileValue
 from ._line_profile import cumulative_lengths
 from ._line_profile import position_to_point
 
-MEASUREMENT_VERSION = "line-profile-measurement-v3"
-_WIDTH_SMOOTHING_WINDOW: Final[int] = 5
+MEASUREMENT_VERSION = "line-profile-measurement-v4"
 _WIDTH_SIMPLIFICATION_TOLERANCE: Final[float] = 1.5
 _MIN_VERTEX_TURN_RADIANS = math.radians(5.0)
+_DEFAULT_WIDTH_FILTER_STRENGTH: Final[float] = 20.0
 
 
 @dataclasses.dataclass(frozen=True)
@@ -27,6 +27,8 @@ class MeasurementParameters:
     min_width: float = 1.0
     max_width: float = 256.0
     contrast_factor: float = 0.35
+    width_filter_strength: float = _DEFAULT_WIDTH_FILTER_STRENGTH
+    fixed_width: float | None = None
 
     def __post_init__(self) -> None:
         if not math.isfinite(self.sample_spacing) or self.sample_spacing <= 0:
@@ -37,6 +39,12 @@ class MeasurementParameters:
             raise ValueError("width bounds must be positive and ordered")
         if not 0 <= self.contrast_factor <= 1:
             raise ValueError("contrast_factor must be within [0, 1]")
+        if not 1 <= self.width_filter_strength <= 100:
+            raise ValueError("width_filter_strength must be within [1, 100]")
+        if self.fixed_width is not None and (
+            not math.isfinite(self.fixed_width) or self.fixed_width <= 0
+        ):
+            raise ValueError("fixed_width must be positive when enabled")
 
 
 @dataclasses.dataclass(frozen=True)
@@ -111,8 +119,21 @@ def measure_line_profile(
                 intensity_scale=intensity_scale,
             )
         )
-    samples = _smooth_sample_widths(samples=tuple(samples_list))
+    samples = _smooth_sample_widths(
+        samples=tuple(samples_list),
+        strength=parameters.width_filter_strength,
+    )
     samples = _recommend_neighbor_widths(samples=samples)
+    if parameters.width_filter_strength >= 100.0 and samples:
+        average_width = float(np.mean([sample.width for sample in samples]))
+        samples = tuple(
+            dataclasses.replace(sample, width=average_width) for sample in samples
+        )
+    if parameters.fixed_width is not None:
+        samples = tuple(
+            dataclasses.replace(sample, width=parameters.fixed_width)
+            for sample in samples
+        )
     return LineMeasurement(MEASUREMENT_VERSION, samples)
 
 
@@ -173,13 +194,22 @@ def _is_significant_turn(
 
 
 def _smooth_sample_widths(
-    *, samples: tuple[MeasurementSample, ...]
+    *,
+    samples: tuple[MeasurementSample, ...],
+    strength: float = _DEFAULT_WIDTH_FILTER_STRENGTH,
 ) -> tuple[MeasurementSample, ...]:
-    """Suppress isolated width spikes with a centered sliding median."""
+    """Suppress width spikes with a strength-controlled sliding median."""
     if len(samples) < 3:
         return samples
     widths = np.asarray([sample.width for sample in samples], dtype=np.float64)
-    radius = _WIDTH_SMOOTHING_WINDOW // 2
+    if strength >= 100.0:
+        width = float(np.mean(widths))
+        return tuple(dataclasses.replace(sample, width=width) for sample in samples)
+    window = max(3, int(round(len(samples) * strength / 100.0)))
+    window = min(window, len(samples))
+    if window % 2 == 0:
+        window = min(window + 1, len(samples))
+    radius = window // 2
     smoothed: list[MeasurementSample] = []
     for index, sample in enumerate(samples):
         start = max(0, index - radius)

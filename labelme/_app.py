@@ -97,6 +97,7 @@ from ._widgets import ZoomWidget
 from ._widgets import download_ai_model
 from ._widgets import format_shape_label
 from ._widgets._label_list_widget import LABEL_COLOR_ROLE
+from ._widgets._integer_slider import IntegerSlider
 
 
 def _polygon_signed_area(points: np.ndarray) -> float:
@@ -2507,11 +2508,23 @@ class MainWindow(QtWidgets.QMainWindow):
             visibility_widget.set_anchor(None)
             position_widget.setEnabled(False)
             return
-        profile = selected[0].line_profile
-        if profile is None:
+        shape = selected[0]
+        if shape.shape_type not in LINE_PROFILE_SHAPE_TYPES:
             self._sync_line_profile_anchor_actions(available=False)
             self._actions.clear_line_profile.setEnabled(False)
             self._actions.line_profile_measurement_parameters.setEnabled(False)
+            self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
+            width_widget.set_profile(None)
+            visibility_widget.set_anchor(None)
+            position_widget.setEnabled(False)
+            return
+        # Measurement settings can be configured before the first measurement,
+        # so do not require the shape to already have a LineProfile object.
+        self._actions.line_profile_measurement_parameters.setEnabled(True)
+        profile = shape.line_profile
+        if profile is None:
+            self._sync_line_profile_anchor_actions(available=False)
+            self._actions.clear_line_profile.setEnabled(False)
             self._canvas_widgets.canvas.set_active_line_profile_anchor_index(None)
             width_widget.set_profile(None)
             visibility_widget.set_anchor(None)
@@ -2666,7 +2679,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def edit_line_profile_measurement_parameters(self) -> None:
         selected = self._canvas_widgets.canvas.selected_shapes
-        if len(selected) != 1 or selected[0].line_profile is None:
+        if (
+            len(selected) != 1
+            or selected[0].shape_type not in LINE_PROFILE_SHAPE_TYPES
+        ):
             return
         shape = selected[0]
         profile = shape.line_profile
@@ -2679,8 +2695,13 @@ class MainWindow(QtWidgets.QMainWindow):
             "min_width": float(global_values.get("min_width", 1.0)),
             "max_width": float(global_values.get("max_width", 256.0)),
             "contrast_factor": float(global_values.get("contrast_factor", 0.35)),
+            "width_filter_strength": float(
+                global_values.get("width_filter_strength", 20.0)
+            ),
+            "fixed_width": float(global_values.get("fixed_width", 0.0)),
         }
-        values.update(dict(profile.measurement_overrides))
+        if profile is not None:
+            values.update(dict(profile.measurement_overrides))
         specifications = (
             ("sample_spacing", self.tr("Sample spacing"), 0.1, 4096.0, 1),
             ("search_radius", self.tr("Search radius"), 0.5, 4096.0, 1),
@@ -2694,7 +2715,9 @@ class MainWindow(QtWidgets.QMainWindow):
         override = QtWidgets.QCheckBox(
             self.tr("Override global measurement settings"), dialog
         )
-        override.setChecked(bool(profile.measurement_overrides))
+        override.setChecked(
+            profile is not None and bool(profile.measurement_overrides)
+        )
         layout.addWidget(override)
         form = QtWidgets.QFormLayout()
         editors: dict[str, QtWidgets.QDoubleSpinBox] = {}
@@ -2703,16 +2726,54 @@ class MainWindow(QtWidgets.QMainWindow):
             editor.setRange(minimum, maximum)
             editor.setDecimals(decimals)
             editor.setValue(values[key])
-            editor.setSuffix(" px" if key != "contrast_factor" else "")
+            editor.setSuffix(
+                "%"
+                if key == "width_filter_strength"
+                else " px"
+                if key != "contrast_factor"
+                else ""
+            )
             editors[key] = editor
             form.addRow(label, editor)
+
+        width_filter_slider = IntegerSlider(
+            minimum=1,
+            maximum=100,
+            value=max(1, min(100, round(values["width_filter_strength"]))),
+            suffix="%",
+            parent=dialog,
+        )
+        width_filter_slider.setAccessibleName(self.tr("Width filter strength"))
+        form.addRow(self.tr("Width filter strength"), width_filter_slider)
+
+        fixed_width_enabled = QtWidgets.QCheckBox(
+            self.tr("Use fixed width"), dialog
+        )
+        fixed_width = QtWidgets.QDoubleSpinBox(dialog)
+        fixed_width.setRange(0.1, 4096.0)
+        fixed_width.setDecimals(1)
+        fixed_width.setSuffix(" px")
+        fixed_width.setValue(max(0.1, values["fixed_width"]))
+        fixed_width_row = QtWidgets.QWidget(dialog)
+        fixed_width_layout = QtWidgets.QHBoxLayout(fixed_width_row)
+        fixed_width_layout.setContentsMargins(0, 0, 0, 0)
+        fixed_width_layout.addWidget(fixed_width_enabled)
+        fixed_width_layout.addWidget(fixed_width)
+        form.addRow(self.tr("Fixed width"), fixed_width_row)
+        fixed_width_enabled.setChecked(values["fixed_width"] > 0.0)
         layout.addLayout(form)
 
         def sync_enabled(enabled: bool) -> None:
             for editor in editors.values():
                 editor.setEnabled(enabled)
+            width_filter_slider.setEnabled(enabled)
+            fixed_width_enabled.setEnabled(enabled)
+            fixed_width.setEnabled(enabled and fixed_width_enabled.isChecked())
 
         override.toggled.connect(sync_enabled)
+        fixed_width_enabled.toggled.connect(
+            lambda checked: fixed_width.setEnabled(override.isChecked() and checked)
+        )
         sync_enabled(override.isChecked())
         buttons = QtWidgets.QDialogButtonBox(
             QtWidgets.QDialogButtonBox.StandardButton.Ok
@@ -2728,8 +2789,25 @@ class MainWindow(QtWidgets.QMainWindow):
             updated_overrides: tuple[tuple[str, float], ...] = ()
         else:
             raw_values = {key: editor.value() for key, editor in editors.items()}
+            raw_values["width_filter_strength"] = float(width_filter_slider.value)
+            raw_values["fixed_width"] = (
+                fixed_width.value() if fixed_width_enabled.isChecked() else 0.0
+            )
             try:
-                MeasurementParameters(**raw_values)
+                validated_fixed_width = (
+                    None
+                    if raw_values["fixed_width"] <= 0.0
+                    else raw_values["fixed_width"]
+                )
+                MeasurementParameters(
+                    sample_spacing=raw_values["sample_spacing"],
+                    search_radius=raw_values["search_radius"],
+                    min_width=raw_values["min_width"],
+                    max_width=raw_values["max_width"],
+                    contrast_factor=raw_values["contrast_factor"],
+                    width_filter_strength=raw_values["width_filter_strength"],
+                    fixed_width=validated_fixed_width,
+                )
             except ValueError as error:
                 QMessageBox.warning(
                     self,
@@ -2738,9 +2816,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 )
                 return
             updated_overrides = tuple(sorted(raw_values.items()))
-        updated_profile = dataclasses.replace(
-            profile, measurement_overrides=updated_overrides
-        )
+        if profile is None:
+            if not updated_overrides:
+                return
+            updated_profile = LineProfile(measurement_overrides=updated_overrides)
+        else:
+            updated_profile = dataclasses.replace(
+                profile, measurement_overrides=updated_overrides
+            )
         if updated_profile == profile:
             return
         shape.line_profile = updated_profile
@@ -3190,6 +3273,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 min_width=float(merged_values.get("min_width", 1.0)),
                 max_width=float(merged_values.get("max_width", 256.0)),
                 contrast_factor=float(merged_values.get("contrast_factor", 0.35)),
+                width_filter_strength=float(
+                    merged_values.get("width_filter_strength", 20.0)
+                ),
+                fixed_width=(
+                    None
+                    if float(merged_values.get("fixed_width", 0.0)) <= 0.0
+                    else float(merged_values["fixed_width"])
+                ),
             )
         except (TypeError, ValueError):
             return MeasurementParameters()
@@ -3293,6 +3384,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self._sync_line_profile_width_widget()
 
     def _on_line_measurement_result(self, result: object) -> None:
+        # The acceptance dialog is modal, so hide the progress dialog before
+        # entering its nested event loop. Otherwise the still-visible progress
+        # dialog can remain above the acceptance prompt on some window managers.
+        if self._line_measurement_progress is not None:
+            self._line_measurement_progress.close()
         self._accept_line_measurement(result, self._line_measurement_token)
 
     def _on_line_measurement_failed(self, message: str) -> None:

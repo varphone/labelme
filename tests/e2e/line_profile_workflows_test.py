@@ -5,6 +5,7 @@ from unittest.mock import Mock
 
 import numpy as np
 import pytest
+from PySide6 import QtWidgets
 from PySide6.QtCore import QPointF
 from PySide6.QtCore import QSize
 from PySide6.QtCore import Qt
@@ -140,6 +141,43 @@ def test_line_profile_panel_is_docked_before_annotation_panels(
     assert panel.visibility_widget not in tools_toolbar.findChildren(
         type(panel.visibility_widget)
     )
+
+
+@pytest.mark.gui
+def test_line_profile_parameters_are_available_before_measurement(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    win = main_win(
+        file_or_dir=str(data_path / "raw" / "2011_000003.jpg"),
+        size=QSize(900, 700),
+    )
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+    shape = Shape(
+        label="line",
+        shape_type="linestrip",
+        points=np.array([[10.0, 20.0], [180.0, 20.0]], dtype=np.float64),
+    )
+    win._load_shapes([shape], replace=True)
+    win._canvas_widgets.canvas.select_shapes(shapes=[shape])
+
+    assert win._actions.line_profile_measurement_parameters.isEnabled()
+    button = next(
+        button
+        for button in win._docks.line_profile_panel.findChildren(QToolButton)
+        if button.text() == "Parameters"
+    )
+    assert button.isEnabled()
+
+    monkeypatch.setattr(
+        QtWidgets.QDialog,
+        "exec",
+        lambda _dialog: QtWidgets.QDialog.DialogCode.Rejected,
+    )
+    win.edit_line_profile_measurement_parameters()
+    assert shape.line_profile is None
 
 
 @pytest.mark.gui
