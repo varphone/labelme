@@ -14,8 +14,10 @@ from ._line_measurement import MEASUREMENT_VERSION
 from ._line_measurement import MeasurementParameters
 from ._line_measurement import MeasurementSample
 from ._line_measurement import measure_line_profile
+from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._line_profile import LineProfile
 from ._line_profile import ProfileAnchor
+from ._line_profile import line_profile_points
 from ._utils.image import img_data_to_arr
 
 
@@ -151,7 +153,7 @@ def _measure_annotation_file(
     for shape in shapes:
         if options.cancel_check is not None and options.cancel_check():
             raise _BatchCanceled
-        if shape.get("shape_type") != "linestrip":
+        if shape.get("shape_type") not in LINE_PROFILE_SHAPE_TYPES:
             continue
         if shape.get("line_profile_error") is not None:
             skipped_invalid = True
@@ -172,7 +174,7 @@ def _measure_annotation_file(
             continue
         measurement = measure_line_profile(
             image,
-            shape["points"],
+            line_profile_points(shape["points"], shape["shape_type"]),
             parameters=_parameters_for_profile(options.parameters, profile),
         )
         shape["line_profile"] = _profile_from_measurement(

@@ -382,6 +382,20 @@ def test_can_remove_point_linestrip_requires_more_than_two() -> None:
     assert shape.can_remove_point() is False
 
 
+@pytest.mark.parametrize("shape_type", ["catmull_rom", "bspline"])
+def test_can_remove_point_spline_requires_more_than_three(
+    shape_type: ShapeType,
+) -> None:
+    shape = Shape(
+        shape_type=shape_type,
+        points=[(0, 0), (1, 1), (2, 0), (3, 1)],
+    )
+    assert shape.can_remove_point() is True
+    shape.remove_point(i=1)
+    assert len(shape.points) == 3
+    assert shape.can_remove_point() is False
+
+
 def test_can_remove_point_false_for_non_polyline() -> None:
     shape = Shape(
         shape_type="rectangle",
