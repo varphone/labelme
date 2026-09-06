@@ -1065,6 +1065,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>레이블 검증이 &apos;exact&apos;로 설정된 동안에는 사전 정의된 레이블을 비울 수 없습니다. 먼저 &apos;exact&apos; 검증을 비활성화하세요.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>입력 다운샘플링 배율</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>AI로 전송되는 이미지에만 적용되는 배율입니다. 1.0은 원본 해상도를 유지합니다.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>입력 노이즈 제거 강도</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>AI로 전송되는 크기 조정 이미지의 노이즈를 제거합니다. 0.0은 노이즈 제거를 비활성화합니다.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>언어</translation>
     </message>

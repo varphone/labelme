@@ -1490,6 +1490,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>當標籤驗證設定為「exact」時，預定義標籤不能為空。請先停用「exact」驗證。</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>輸入下採樣比例</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>僅用於傳送給 AI 的影像；1.0 會保留原始解析度。</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>輸入降噪強度</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>對傳送給 AI 的縮放影像進行降噪；0.0 表示關閉降噪。</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>語言</translation>
     </message>

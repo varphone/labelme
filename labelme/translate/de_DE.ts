@@ -1071,6 +1071,22 @@ Bitte wählen Sie ein anderes Modell oder verwenden Sie den AI-Box-Modus.</trans
         <translation>Vordefinierte Labels dürfen nicht leer sein, solange die Label-Validierung auf „exact“ gesetzt ist. Deaktivieren Sie zuerst die „exact“-Validierung.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Skalierungsfaktor für Eingabe-Downsampling</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Wird nur für das an die KI gesendete Bild verwendet; 1,0 behält die Originalauflösung bei.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Stärke der Eingabe-Entrauschung</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Entrauscht das an die KI gesendete skalierte Bild; 0,0 deaktiviert die Entrauschung.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>

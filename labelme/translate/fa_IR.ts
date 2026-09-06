@@ -1065,6 +1065,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>برچسب‌های از پیش تعریف‌شده نمی‌توانند خالی باشند در حالی که اعتبارسنجی برچسب روی «exact» تنظیم شده است. ابتدا اعتبارسنجی «exact» را غیرفعال کنید.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>مقیاس کاهش اندازه ورودی</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>مقیاسی که فقط برای تصویر ارسالی به هوش مصنوعی استفاده می‌شود؛ ۱٫۰ وضوح اصلی را حفظ می‌کند.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>شدت نویزگیری ورودی</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>نویز تصویر مقیاس‌گذاری‌شده ارسالی به هوش مصنوعی را کاهش می‌دهد؛ ۰٫۰ نویزگیری را غیرفعال می‌کند.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>زبان</translation>
     </message>

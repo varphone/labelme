@@ -893,6 +893,22 @@ Shapes</source>
         <translation>Memungkinkan titik bentuk melampaui gambar, mis. untuk objek yang terlihat sebagian.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Skala downsampling input</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Skala yang hanya digunakan untuk gambar yang dikirim ke AI; 1,0 mempertahankan resolusi asli.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Intensitas pengurangan noise input</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Mengurangi noise pada gambar yang diskalakan sebelum dikirim ke AI; 0,0 menonaktifkan pengurangan noise.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Bahasa</translation>
     </message>

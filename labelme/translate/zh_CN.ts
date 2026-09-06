@@ -1630,6 +1630,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>当标签验证设置为“exact”时，预定义标签不能为空。请先禁用“exact”验证。</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>输入下采样系数</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>仅用于发送给 AI 的图像；1.0 保持原始分辨率。</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>输入降噪强度</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>对发送给 AI 的缩放图像进行降噪；0.0 表示关闭降噪。</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>语言</translation>
     </message>

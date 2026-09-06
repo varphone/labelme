@@ -1065,6 +1065,22 @@ Seleccione un modelo diferente o use el modo AI-Box.</translation>
         <translation>Las etiquetas predefinidas no pueden estar vacías mientras la validación de etiquetas esté configurada como «exact». Desactiva primero la validación «exact».</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Escala de submuestreo de entrada</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Escala usada solo para la imagen enviada a la IA; 1,0 mantiene la resolución original.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Intensidad de reducción de ruido de entrada</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Reduce el ruido de la imagen escalada enviada a la IA; 0,0 desactiva la reducción de ruido.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Idioma</translation>
     </message>

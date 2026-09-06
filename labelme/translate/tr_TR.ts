@@ -1068,6 +1068,22 @@ Lütfen farklı bir model seçin veya AI-Box modunu kullanın.</translation>
         <translation>Etiket doğrulama &apos;exact&apos; olarak ayarlıyken önceden tanımlı etiketler boş olamaz. Önce &apos;exact&apos; doğrulamasını devre dışı bırakın.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Girdi alt örnekleme ölçeği</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Yalnızca yapay zekâya gönderilen görüntü için kullanılan ölçek; 1,0 özgün çözünürlüğü korur.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Girdi gürültü azaltma gücü</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Yapay zekâya gönderilen ölçeklenmiş görüntüdeki gürültüyü azaltır; 0,0 gürültü azaltmayı devre dışı bırakır.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Dil</translation>
     </message>

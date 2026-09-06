@@ -1136,6 +1136,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Попередньо визначені мітки не можуть бути порожніми, коли перевірка мітки встановлена на «exact». Спочатку вимкніть перевірку «exact».</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Масштаб зменшення вхідного зображення</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Масштаб, який використовується лише для зображення, що надсилається ШІ; 1,0 зберігає вихідну роздільну здатність.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Інтенсивність шумозаглушення вхідного зображення</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Зменшує шум у масштабованому зображенні, що надсилається ШІ; 0,0 вимикає шумозаглушення.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Мова</translation>
     </message>

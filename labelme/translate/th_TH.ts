@@ -1065,6 +1065,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>เลเบลที่กำหนดไว้ล่วงหน้าต้องไม่ว่างเปล่าขณะที่การตรวจสอบเลเบลถูกตั้งค่าเป็น &apos;exact&apos; โปรดปิดการตรวจสอบ &apos;exact&apos; ก่อน</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>สเกลการลดขนาดภาพอินพุต</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>สเกลที่ใช้เฉพาะกับภาพที่ส่งให้ AI; 1.0 จะคงความละเอียดเดิมไว้</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>ระดับการลดสัญญาณรบกวนของอินพุต</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>ลดสัญญาณรบกวนในภาพที่ปรับขนาดก่อนส่งให้ AI; 0.0 จะปิดการลดสัญญาณรบกวน</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>ภาษา</translation>
     </message>

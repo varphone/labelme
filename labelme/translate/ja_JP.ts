@@ -1079,6 +1079,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>ラベルの検証が「exact」に設定されている間は、定義済みラベルを空にできません。先に「exact」検証を無効にしてください。</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>入力ダウンサンプリング倍率</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>AI に送信する画像にのみ使用する倍率です。1.0 では元の解像度を維持します。</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>入力ノイズ除去強度</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>AI に送信する縮小画像のノイズを除去します。0.0 でノイズ除去を無効にします。</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>言語</translation>
     </message>
