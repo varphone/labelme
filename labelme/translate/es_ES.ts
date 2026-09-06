@@ -182,6 +182,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Radio</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Radio del círculo seleccionado</translation>
+    </message>
+</context>
+<context>
     <name>LabelDialog</name>
     <message>
         <source>Shape Label</source>

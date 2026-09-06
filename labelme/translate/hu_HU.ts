@@ -182,6 +182,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Sugár</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>A kiválasztott kör sugara</translation>
+    </message>
+</context>
+<context>
     <name>LabelDialog</name>
     <message>
         <source>Shape Label</source>
