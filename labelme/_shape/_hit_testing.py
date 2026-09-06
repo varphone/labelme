@@ -79,6 +79,20 @@ def nearest_edge_index(
         )
         if nearest is None:
             return None
+        if shape.shape_type == "bspline":
+            control_starts = shape.points[:-1]
+            control_segments = shape.points[1:] - control_starts
+            control_lengths = np.einsum(
+                "ij,ij->i", control_segments, control_segments
+            )
+            control_t = np.clip(
+                np.einsum("ij,ij->i", point - control_starts, control_segments)
+                / np.where(control_lengths == 0, 1.0, control_lengths),
+                0.0,
+                1.0,
+            )
+            control_projections = control_starts + control_t[:, None] * control_segments
+            return int(np.argmin(np.linalg.norm(point - control_projections, axis=1))) + 1
         return min(nearest // 24 + 1, len(shape.points) - 1)
     # Edge i runs from points[i - 1] to points[i] (so edge 0 is the segment
     # that closes a polygon from its last point back to its first).

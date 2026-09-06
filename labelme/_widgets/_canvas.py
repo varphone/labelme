@@ -324,7 +324,7 @@ class Canvas(QtWidgets.QWidget):
         self._rotation_center = np.zeros(2)
         self._rotation_initial_angle = 0.0
         self._rotation_original_points = np.empty((0, 2))
-        self.scale: float = 1.0
+        self._scale: float = 1.0
         self._ai_assist_session = _automation.AiAssistSession()
         self._ai_inference_failed = False
         self._ai_suppress_existing_shape_matches = False
@@ -354,14 +354,14 @@ class Canvas(QtWidgets.QWidget):
     def set_snap_to_point(self, value: bool) -> None:
         self.snap_to_point = value
 
-    def set_show_labels(self, value: bool) -> None:
+    def set_show_labels(self, *, value: bool) -> None:
         self._show_labels = value
 
     def set_show_line_profile_preview(self, value: bool) -> None:
         self._show_line_profile_preview = value
         self.update()
 
-    def set_allow_out_of_bounds_points(self, value: bool) -> None:
+    def set_allow_out_of_bounds_points(self, *, value: bool) -> None:
         self._allow_out_of_bounds_points = value
         self.update()
 
@@ -412,7 +412,7 @@ class Canvas(QtWidgets.QWidget):
         self.active_line_profile_anchor_index = index
         self.update()
 
-    def _resolve_palette(self, label: str | None) -> Palette:
+    def _resolve_palette(self, label: str | None, /) -> Palette:
         if label is None or self._color_resolver is None:
             return _DEFAULT_PALETTE
         # Auto colors depend on the live label ordering, so the palette cannot
@@ -474,6 +474,16 @@ class Canvas(QtWidgets.QWidget):
             highlight=highlight,
             rotation_highlight=rotation_highlight,
         )
+
+    @property
+    def scale(self) -> float:
+        return self._scale
+
+    @scale.setter
+    def scale(self, value: float, /) -> None:
+        self._scale = value
+        self.adjustSize()
+        self.update()
 
     @property
     def is_drawing(self) -> bool:
@@ -634,11 +644,15 @@ class Canvas(QtWidgets.QWidget):
         self._release_cursor()
         self._update_status(extra_messages=None)
 
-    def set_editing(self, *, value: bool = True) -> None:
+    def set_editing(
+        self, *, value: bool = True, create_mode: _CreateMode | None = None
+    ) -> None:
         new_mode = _CanvasMode.EDIT if value else _CanvasMode.CREATE
         if new_mode is not self.mode:
             self._clear_ai_existing_shape_highlights()
         self.mode = new_mode
+        if create_mode is not None:
+            self.create_mode = create_mode
         if self.mode == _CanvasMode.EDIT:
             # CREATE -> EDIT
             self.update()  # clear crosshair
@@ -701,7 +715,7 @@ class Canvas(QtWidgets.QWidget):
         i = self._last_hovered_vertex
         return i is not None and 0 < i < len(shape.points) - 1
 
-    def _update_status(self, extra_messages: list[str] | None = None) -> None:
+    def _update_status(self, *, extra_messages: list[str] | None) -> None:
         messages: list[str] = []
         if self.mode == _CanvasMode.CREATE:
             messages.append(self.tr("Creating %r") % self.create_mode)
@@ -712,7 +726,26 @@ class Canvas(QtWidgets.QWidget):
                 messages.append(self.tr("Enter or Space to finalize"))
         else:
             assert self.mode == _CanvasMode.EDIT
-            messages.append(self.tr("Editing shapes"))
+            if len(self.selected_shapes) == 1:
+                shape = self.selected_shapes[0]
+                shape_name = {
+                    "polygon": self.tr("Polygon"),
+                    "rectangle": self.tr("Rectangle"),
+                    "oriented_rectangle": self.tr("Oriented Rectangle"),
+                    "point": self.tr("Point"),
+                    "line": self.tr("Line"),
+                    "circle": self.tr("Circle"),
+                    "linestrip": self.tr("LineStrip"),
+                    "points": self.tr("Points"),
+                    "bezier2": self.tr("Quadratic Bezier"),
+                    "bezier3": self.tr("Cubic Bezier"),
+                    "catmull_rom": self.tr("猫氏样条"),
+                    "bspline": self.tr("B样条"),
+                    "mask": self.tr("Mask"),
+                }[shape.shape_type]
+                messages.append(self.tr("Editing shape: {0}").format(shape_name))
+            else:
+                messages.append(self.tr("Editing shapes"))
         if extra_messages:
             messages.extend(extra_messages)
         self.status_updated.emit(" • ".join(messages))
@@ -907,7 +940,7 @@ class Canvas(QtWidgets.QWidget):
             return nearest
         return pos
 
-    def _refresh_hover_state(self, pos: QPointF) -> None:
+    def _refresh_hover_state(self, *, pos: QPointF) -> None:
         status_messages: list[str] = []
         self._highlight_hover_shape(pos=pos, status_messages=status_messages)
         self.vertex_selected.emit(self._hovered_vertex is not None)
@@ -1039,7 +1072,9 @@ class Canvas(QtWidgets.QWidget):
         self.update()
         self._is_moving_shape = True
 
-    def _highlight_hover_shape(self, pos: QPointF, status_messages: list[str]) -> None:
+    def _highlight_hover_shape(
+        self, *, pos: QPointF, status_messages: list[str]
+    ) -> None:
         profile_hit = self._find_line_profile_anchor_at_point(pos)
         if profile_hit is not None:
             shape, kind, _, mode = profile_hit
@@ -1226,7 +1261,7 @@ class Canvas(QtWidgets.QWidget):
         self.backup_shapes()
         return shape, left, right
 
-    def mousePressEvent(self, a0: QtGui.QMouseEvent) -> None:
+    def mousePressEvent(self, a0: QtGui.QMouseEvent, /) -> None:
         pos: QPointF = self.transform_widget_point_to_image(a0.position())
         self._dispatch_pointer_press(pos=pos, event=a0)
         self._update_status(extra_messages=None)
@@ -1587,6 +1622,7 @@ class Canvas(QtWidgets.QWidget):
     def select_shapes(self, *, shapes: list[Shape]) -> None:
         self.selection_changed.emit(shapes)
         self.update()
+        self._update_status(extra_messages=None)
 
     def _select_shape_point(
         self, point: QPointF, /, *, multiple_selection_mode: bool
@@ -1683,8 +1719,7 @@ class Canvas(QtWidgets.QWidget):
                 hit_index = nearest_vertex_index(
                     shape=circle,
                     point=np.array([point.x(), point.y()]),
-                    scale=self.scale,
-                    epsilon=self._epsilon,
+                    image_epsilon=self._epsilon / self.scale,
                 )
                 if hit_index == 0:
                     candidates.append(
@@ -1721,8 +1756,7 @@ class Canvas(QtWidgets.QWidget):
                 hit_index = nearest_vertex_index(
                     shape=marker,
                     point=np.array([point.x(), point.y()]),
-                    scale=self.scale,
-                    epsilon=self._epsilon,
+                    image_epsilon=self._epsilon / self.scale,
                 )
                 if hit_index == 0:
                     candidates.append(
@@ -1747,7 +1781,7 @@ class Canvas(QtWidgets.QWidget):
         )
         return shape, kind, index, mode
 
-    def _record_drag_anchor(self, shapes: list[Shape], click: QPointF) -> None:
+    def _record_drag_anchor(self, *, shapes: list[Shape], click: QPointF) -> None:
         if not shapes:
             self._drag_anchor = None
             return
@@ -2081,7 +2115,7 @@ class Canvas(QtWidgets.QWidget):
                 ),
             )
 
-    def _draw_active_shape_layer(self, painter: QtGui.QPainter) -> None:
+    def _draw_active_shape_layer(self, painter: QtGui.QPainter, /) -> None:
         if self._current is None:
             return
         assert len(self._line.points) == len(self._line.point_labels)
@@ -2255,7 +2289,9 @@ class Canvas(QtWidgets.QWidget):
             QRectF(0, 0, self.pixmap.width(), self.pixmap.height())
         )
 
-    def _compute_image_origin_offset(self, area: QtCore.QSize | None = None) -> QPointF:
+    def _compute_image_origin_offset(
+        self, *, area: QtCore.QSize | None
+    ) -> QPointF:
         if area is None:
             area = super().size()
         scaled_w = self.pixmap.width() * self.scale
@@ -2477,6 +2513,9 @@ class Canvas(QtWidgets.QWidget):
             self._line = dataclasses.replace(
                 self._line,
                 points=(self._current.points[-1], self._current.points[0]),
+                point_labels=(
+                    self._current.point_labels[-1], self._current.point_labels[0]
+                ),
             )
         elif self.create_mode in (
             "rectangle",

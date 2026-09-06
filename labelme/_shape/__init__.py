@@ -18,6 +18,7 @@ from ._model import bezier_degree
 from ._model import bezier_point
 from ._model import bezier_sample_points
 from ._model import line_profile_centerline
+from .._line_profile import remap_profile
 from ._model import spline_sample_points
 from ._oriented_rectangle import get_rotation_handle
 from ._oriented_rectangle import oriented_rectangle_arrow_points
@@ -39,6 +40,7 @@ __all__ = [
     "bezier_point",
     "bezier_sample_points",
     "line_profile_centerline",
+    "remap_profile",
     "spline_sample_points",
     "SPLINE_SHAPE_TYPES",
     "can_merge_shapes",

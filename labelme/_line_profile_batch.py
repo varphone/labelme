@@ -18,7 +18,7 @@ from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._line_profile import LineProfile
 from ._line_profile import ProfileAnchor
 from ._line_profile import line_profile_points
-from ._utils.image import img_data_to_arr
+from ._utils._image import img_data_to_arr
 
 
 @dataclasses.dataclass(frozen=True)

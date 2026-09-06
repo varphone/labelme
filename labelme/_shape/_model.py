@@ -14,7 +14,6 @@ import scipy.interpolate
 from loguru import logger
 
 from .._line_profile import LineProfile
-from .._line_profile import remap_profile
 
 ShapeType: TypeAlias = Literal[
     "polygon",
@@ -202,10 +201,11 @@ class Shape:
         new_points = np.insert(
             self.points, i, np.asarray(point, dtype=np.float64).reshape(2), axis=0
         )
-        self.points = new_points
-        self.line_profile = self._line_profile_after_points(
+        new_profile = self._line_profile_after_points(
             old_points=old_points, new_points=new_points
         )
+        self.points = new_points
+        self.line_profile = new_profile
         self.point_labels = np.insert(self.point_labels, i, label)
 
     def remove_point(self, *, i: int) -> None:
@@ -220,20 +220,22 @@ class Shape:
             return
         old_points = self.points.copy()
         new_points = np.delete(self.points, i, axis=0)
-        self.points = new_points
-        self.point_labels = np.delete(self.point_labels, i)
-        self.line_profile = self._line_profile_after_points(
+        new_profile = self._line_profile_after_points(
             old_points=old_points, new_points=new_points
         )
+        self.points = new_points
+        self.point_labels = np.delete(self.point_labels, i)
+        self.line_profile = new_profile
 
     def move_vertex(self, *, i: int, pos: npt.ArrayLike) -> None:
         old_points = self.points.copy()
         new_points = self.points.copy()
         new_points[i] = np.asarray(pos, dtype=np.float64).reshape(2)
-        self.points = new_points
-        self.line_profile = self._line_profile_after_points(
+        new_profile = self._line_profile_after_points(
             old_points=old_points, new_points=new_points
         )
+        self.points = new_points
+        self.line_profile = new_profile
 
     def translate(self, *, offset: npt.ArrayLike) -> None:
         self.points = self.points + np.asarray(offset, dtype=np.float64).reshape(2)
@@ -253,7 +255,12 @@ class Shape:
             "bspline",
         ):
             return self.line_profile
-        return remap_profile(
+        # Resolve through the package export at call time. Besides preserving
+        # the historical ``labelme._shape.remap_profile`` extension point,
+        # this keeps profile-edit failures atomic for callers that replace it.
+        from . import remap_profile as profile_remap
+
+        return profile_remap(
             profile=self.line_profile,
             old_points=line_profile_centerline(old_points, self.shape_type),
             new_points=line_profile_centerline(new_points, self.shape_type),

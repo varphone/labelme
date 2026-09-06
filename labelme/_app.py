@@ -1470,6 +1470,7 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.new_shape.connect(minimap.update)
         canvas.shape_moved.connect(minimap.update)
         canvas.selection_changed.connect(lambda _: minimap.update())
+        canvas.drawing_polygon.connect(minimap.set_mouse_passthrough)
         canvas.scroll_request.connect(self._on_scroll_request)
         canvas.pan_request.connect(self._on_pan_request)
 
@@ -1636,7 +1637,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # that container as a single full-height column on its left.
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, line_profile)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, flag)
-        self.splitDockWidget(line_profile, flag, Qt.Orientation.Horizontal)
+        self.splitDockWidget(line_profile, flag, Qt.Orientation.Vertical)
         for dock_widget in (file, shape, label):
             self.splitDockWidget(flag, dock_widget, Qt.Orientation.Vertical)
 
@@ -3422,13 +3423,24 @@ class MainWindow(QtWidgets.QMainWindow):
     def _on_scroll_request(self, delta: int, orientation: Qt.Orientation, /) -> None:
         units = -delta * 0.1  # natural scroll
         bar = self._canvas_widgets.scroll_bars[orientation]
-        value = bar.value() + bar.singleStep() * units
-        self.set_scroll_value(orientation=orientation, value=value)
+        old_value = bar.value()
+        requested_value = old_value + bar.singleStep() * units
+        step = old_value - requested_value
+        self._move_canvas_view(
+            step=(
+                QtCore.QPointF(step, 0.0)
+                if orientation == Qt.Orientation.Horizontal
+                else QtCore.QPointF(0.0, step)
+            ),
+            constrain_to_center=False,
+        )
 
     def _on_pan_request(self, step: QtCore.QPoint, /) -> None:
         # Pan moves the viewport opposite to the cursor delta so the image
         # tracks the grabbed point one-for-one in widget pixels.
-        self._move_canvas_view(step=QtCore.QPointF(step), constrain_to_center=True)
+        self._move_canvas_view(
+            step=QtCore.QPointF(step), constrain_to_center=False
+        )
 
     def _move_canvas_view(
         self, *, step: QtCore.QPointF, constrain_to_center: bool

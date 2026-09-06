@@ -121,7 +121,7 @@ def _normalize_shape_points(
     return [[xmin, ymin], [xmax, ymax]]
 
 
-def _load_shape_json_obj(shape_json_obj: dict) -> ShapeDict:
+def _load_shape_json_obj(*, shape_json_obj: dict) -> ShapeDict:
     SHAPE_KEYS: set[str] = {
         "label",
         "points",

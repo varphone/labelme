@@ -12,6 +12,7 @@ from PySide6 import QtCore
 from PySide6 import QtGui
 
 from .. import _utils
+from .._shape import BEZIER_SHAPE_TYPES
 from .._shape import CIRCLE_POINT_COUNT
 from .._shape import LINE_POINT_COUNT
 from .._shape import ORIENTED_RECTANGLE_POINT_COUNT
@@ -20,6 +21,7 @@ from .._shape import SPLINE_SHAPE_TYPES
 from .._shape import Shape
 from .._shape import get_rotation_handle
 from .._shape import nearest_edge_index
+from .._shape import bezier_degree
 from .._shape import oriented_rectangle_arrow_points
 from .._shape import spline_sample_points
 
@@ -220,6 +222,7 @@ def _paint_shape_points(
         "linestrip",
         "bezier2",
         "bezier3",
+        *SPLINE_SHAPE_TYPES,
         "points",
         "mask",
     ]:
@@ -337,7 +340,7 @@ def _build_shape_points_paths(
         assert len(points) in [1, 2]
     elif shape.shape_type == "oriented_rectangle":
         assert len(points) in [1, 2, 4]
-    elif shape.shape_type in ("bezier2", "bezier3"):
+    elif shape.shape_type in BEZIER_SHAPE_TYPES:
         if len(points) > 0:
             paths.control_polygon.moveTo(QtCore.QPointF(*(points[0] * scale)))
         if len(points) > 1:
@@ -431,6 +434,8 @@ def _build_outline_path(*, shape: Shape) -> QtGui.QPainterPath:
         ORIENTED_RECTANGLE_POINT_COUNT,
     ):
         # Neither the first edge being dragged nor a finished loop yet.
+        pass
+    elif shape.shape_type in BEZIER_SHAPE_TYPES and len(points) != bezier_degree(shape.shape_type) + 1:
         pass
     elif shape.shape_type == "bezier2" and len(points) == 3:
         path.moveTo(QtCore.QPointF(*points[0]))
