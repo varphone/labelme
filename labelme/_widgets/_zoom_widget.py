@@ -10,6 +10,7 @@ class ZoomWidget(QtWidgets.QDoubleSpinBox):
         self.setRange(1, 1000)
         self.setSuffix(" %")
         self.setValue(100)
+        self.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows)
 
     @property
     def scale(self) -> float:

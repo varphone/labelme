@@ -61,7 +61,9 @@ class LineProfileWidthWidget(QtWidgets.QWidget):
         spin_box.setDecimals(_DECIMALS)
         spin_box.setRange(minimum, maximum)
         spin_box.setSuffix(suffix)
-        spin_box.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
+        spin_box.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows
+        )
         return spin_box
 
     def set_profile(

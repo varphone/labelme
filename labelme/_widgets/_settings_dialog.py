@@ -423,7 +423,9 @@ class SettingsDialog(QtWidgets.QDialog):
             spin.setRange(setting.minimum, setting.maximum)
             spin.setDecimals(setting.decimals)
             spin.setSingleStep(0.1 if setting.decimals else 1.0)
-            spin.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
+            spin.setButtonSymbols(
+                QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows
+            )
             self._set_editor_value(editor=spin, value=value)
             spin.valueChanged.connect(
                 lambda changed: self._apply(setting.key_path, changed)

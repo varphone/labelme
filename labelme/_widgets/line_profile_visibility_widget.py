@@ -40,7 +40,9 @@ class LineProfileVisibilityWidget(QtWidgets.QWidget):
         spin_box = QtWidgets.QDoubleSpinBox(self)
         spin_box.setDecimals(_DECIMALS)
         spin_box.setRange(minimum, maximum)
-        spin_box.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
+        spin_box.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows
+        )
         return spin_box
 
     def set_anchor(
