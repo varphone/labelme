@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import math
 import uuid
+from typing import NotRequired
 from typing import TypedDict
 
 import numpy as np
@@ -12,11 +13,7 @@ import PIL.Image
 import PIL.ImageDraw
 from numpy.typing import NDArray
 
-from .._shape import CIRCLE_POINT_COUNT
-from .._shape import LINE_POINT_COUNT
-from .._shape import MIN_POLYGON_POINT_COUNT
-from .._shape import ORIENTED_RECTANGLE_POINT_COUNT
-from .._shape import RECTANGLE_POINT_COUNT
+from labelme._line_profile import LineProfile
 
 
 class ShapeDict(TypedDict):
@@ -28,6 +25,8 @@ class ShapeDict(TypedDict):
     group_id: int | None
     mask: NDArray[np.bool_] | None
     other_data: dict
+    line_profile: NotRequired[LineProfile | None]
+    line_profile_error: NotRequired[str | None]
 
 
 def shape_to_mask(

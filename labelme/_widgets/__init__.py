@@ -17,6 +17,11 @@ from .circle_radius_widget import CircleRadiusWidget
 from ._tool_bar import ToolBar
 from ._unique_label_qlist_widget import UniqueLabelQListWidget
 from ._zoom_widget import ZoomWidget
+from .line_measurement_worker import LineMeasurementWorker
+from .line_profile_batch_worker import LineProfileBatchWorker
+from .line_profile_panel import LineProfilePanel
+from .line_profile_visibility_widget import LineProfileVisibilityWidget
+from .line_profile_width_widget import LineProfileWidthWidget
 
 __all__ = [
     "AiAssistedAnnotationWidget",
@@ -25,6 +30,11 @@ __all__ = [
     "Canvas",
     "CircleRadiusWidget",
     "EmptyStateWidget",
+    "LineMeasurementWorker",
+    "LineProfileBatchWorker",
+    "LineProfilePanel",
+    "LineProfileVisibilityWidget",
+    "LineProfileWidthWidget",
     "LabelDialog",
     "LabelDialogEntry",
     "LabelDialogField",

@@ -18,8 +18,9 @@ Group = Literal[
     "Label sources",
     "Label behavior",
     "AI assist",
+    "Line profile measurement",
 ]
-Kind = Literal["bool", "color", "enum", "int", "str_list", "language"]
+Kind = Literal["bool", "color", "enum", "float", "int", "str_list", "language"]
 
 # Group names double as headings. QT_TRANSLATE_NOOP marks them for
 # pyside6-lupdate under the SettingsDialog context (where they are resolved via
@@ -33,6 +34,7 @@ _TRANSLATABLE_GROUPS: Final = (
     QT_TRANSLATE_NOOP("SettingsDialog", "Label sources"),
     QT_TRANSLATE_NOOP("SettingsDialog", "Label behavior"),
     QT_TRANSLATE_NOOP("SettingsDialog", "AI assist"),
+    QT_TRANSLATE_NOOP("SettingsDialog", "Line profile measurement"),
 )
 assert set(_TRANSLATABLE_GROUPS) == set(typing.get_args(Group))
 
@@ -51,8 +53,10 @@ class Setting:
     choice_labels: tuple[str, ...] | None = None
     # Optional muted caption rendered beneath the control.
     note: str | None = None
-    minimum: int | None = None
-    maximum: int | None = None
+    # Bounds for numeric controls. Required for ``kind="float"``.
+    minimum: float | None = None
+    maximum: float | None = None
+    decimals: int = 2
     # Marks a feature shipped for early use: renders a "BETA" badge beside the
     # label so users expect rough edges and report issues. Drop when it stabilizes.
     beta: bool = False
@@ -270,6 +274,59 @@ SETTINGS: Final[tuple[Setting, ...]] = (
             cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Starts with")),
             cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Contains")),
         ),
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "sample_spacing"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Sample spacing")),
+        kind="float",
+        minimum=0.1,
+        maximum=4096.0,
+        decimals=1,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP("SettingsDialog", "Pixels along the centerline."),
+        ),
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "search_radius"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Search radius")),
+        kind="float",
+        minimum=0.5,
+        maximum=4096.0,
+        decimals=1,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP("SettingsDialog", "Pixels sampled on each normal."),
+        ),
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "min_width"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Minimum width")),
+        kind="float",
+        minimum=0.1,
+        maximum=4096.0,
+        decimals=1,
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "max_width"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Maximum width")),
+        kind="float",
+        minimum=0.1,
+        maximum=4096.0,
+        decimals=1,
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "contrast_factor"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Contrast factor")),
+        kind="float",
+        minimum=0.0,
+        maximum=1.0,
+        decimals=2,
     ),
     Setting(
         # Choices are the models' display names, matching the format
