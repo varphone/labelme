@@ -96,6 +96,152 @@ from ._widgets import format_shape_label
 from ._widgets._label_list_widget import LABEL_COLOR_ROLE
 
 
+def _polygon_signed_area(points: np.ndarray) -> float:
+    return float(
+        0.5
+        * np.sum(
+            points[:, 0] * np.roll(points[:, 1], -1)
+            - points[:, 1] * np.roll(points[:, 0], -1)
+        )
+    )
+
+
+def _segments_intersect(
+    first_start: np.ndarray,
+    first_end: np.ndarray,
+    second_start: np.ndarray,
+    second_end: np.ndarray,
+) -> bool:
+    """Return whether two segments cross away from their endpoints."""
+
+    def cross(origin: np.ndarray, a: np.ndarray, b: np.ndarray) -> float:
+        first = a - origin
+        second = b - origin
+        return float(first[0] * second[1] - first[1] * second[0])
+
+    orientations = (
+        cross(first_start, first_end, second_start),
+        cross(first_start, first_end, second_end),
+        cross(second_start, second_end, first_start),
+        cross(second_start, second_end, first_end),
+    )
+    if any(abs(orientation) <= 1e-9 for orientation in orientations):
+        return False
+    return (orientations[0] > 0) != (orientations[1] > 0) and (
+        (orientations[2] > 0) != (orientations[3] > 0)
+    )
+
+
+def _is_simple_polygon(points: np.ndarray) -> bool:
+    segment_count = len(points)
+    for first_index in range(segment_count):
+        first_start = points[first_index]
+        first_end = points[(first_index + 1) % segment_count]
+        for second_index in range(first_index + 1, segment_count):
+            if second_index in (
+                (first_index + 1) % segment_count,
+                (first_index - 1) % segment_count,
+            ):
+                continue
+            if _segments_intersect(
+                first_start,
+                first_end,
+                points[second_index],
+                points[(second_index + 1) % segment_count],
+            ):
+                return False
+    return True
+
+
+def _connect_polygon_boundaries(
+    first: np.ndarray, second: np.ndarray
+) -> np.ndarray | None:
+    distances = np.linalg.norm(first[:, None, :] - second[None, :, :], axis=2)
+    first_index, second_index = np.unravel_index(np.argmin(distances), distances.shape)
+    candidates: list[tuple[int, np.ndarray]] = []
+    first_centroid = np.mean(first, axis=0)
+    second_centroid = np.mean(second, axis=0)
+
+    def facing_edge_count(
+        polygon: np.ndarray,
+        start_index: np.intp,
+        direction: int,
+        other_centroid: np.ndarray,
+    ) -> int:
+        count = 0
+        for step in range(min(len(polygon), 128)):
+            current_index = (start_index + direction * step) % len(polygon)
+            edge_index = (
+                current_index if direction == 1 else (current_index - 1) % len(polygon)
+            )
+            edge_start = polygon[edge_index]
+            edge_end = polygon[(edge_index + 1) % len(polygon)]
+            edge_vector = edge_end - edge_start
+            edge_length = float(np.linalg.norm(edge_vector))
+            if edge_length <= 1e-9:
+                break
+            edge_midpoint = (edge_start + edge_end) / 2
+            outward_normal = np.array([-edge_vector[1], edge_vector[0]])
+            if float(outward_normal @ (polygon.mean(axis=0) - edge_midpoint)) > 0:
+                outward_normal = -outward_normal
+            to_other = other_centroid - edge_midpoint
+            to_other_length = float(np.linalg.norm(to_other))
+            if (
+                to_other_length <= 1e-9
+                or float(outward_normal @ to_other)
+                <= 0.2 * edge_length * to_other_length
+            ):
+                break
+            count += 1
+        return count
+
+    for first_direction in (1, -1):
+        for second_direction in (1, -1):
+            first_steps = facing_edge_count(
+                first, first_index, first_direction, second_centroid
+            )
+            second_steps = facing_edge_count(
+                second, second_index, second_direction, first_centroid
+            )
+            if (first_steps == 0) != (second_steps == 0):
+                first_steps = second_steps = 0
+            first_end = (first_index + first_direction * first_steps) % len(first)
+            first_start = (
+                (first_end - first_direction) % len(first)
+                if first_steps == 0
+                else first_end
+            )
+            first_count = len(first) - first_steps + 1 if first_steps > 0 else len(first)
+            first_order = [
+                (first_start + first_direction * offset) % len(first)
+                for offset in range(first_count)
+            ]
+            second_count = (
+                len(second) - second_steps + 1 if second_steps > 0 else len(second)
+            )
+            second_order = [
+                (second_index - second_direction * offset) % len(second)
+                for offset in range(second_count)
+            ]
+            candidate = np.concatenate((first[first_order], second[second_order]))
+            if _is_simple_polygon(candidate):
+                candidates.append((first_steps + second_steps, candidate))
+    if not candidates:
+        return None
+    return max(candidates, key=lambda item: (item[0], -abs(_polygon_signed_area(item[1]))))[1]
+
+
+def _merge_polygon_points(polygons: list[np.ndarray]) -> np.ndarray | None:
+    if not polygons:
+        return None
+    merged = np.asarray(polygons[0], dtype=np.float64)
+    for polygon in polygons[1:]:
+        merged = _connect_polygon_boundaries(merged, np.asarray(polygon, dtype=np.float64))
+        if merged is None:
+            return None
+    return merged
+
+
 class _ZoomMode(enum.Enum):
     FIT_WINDOW = enum.auto()
     FIT_WIDTH = enum.auto()
@@ -177,6 +323,7 @@ class _Actions(NamedTuple):
     toggle_snap_to_point: QtGui.QAction
     copy_annotations_to_next: QtGui.QAction
     merge_linestrips: QtGui.QAction
+    merge_polygons: QtGui.QAction
     measure_line_profile: QtGui.QAction
     delete_selected_files: QtGui.QAction
     export_selected_files: QtGui.QAction
@@ -577,6 +724,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Combine the selected line and linestrip annotations "
                 "into a single linestrip"
             ),
+            enabled=False,
+        )
+        merge_polygons = action(
+            text=self.tr("Merge Polygons"),
+            slot=self.merge_polygons,
+            tip=self.tr("Merge the selected polygons and fill the gaps between them"),
             enabled=False,
         )
         measure_line_profile = action(
@@ -1079,6 +1232,7 @@ class MainWindow(QtWidgets.QMainWindow):
             copy_profiles_from_previous_frame,
             copy_annotations_to_next,
             merge_linestrips,
+            merge_polygons,
             measure_line_profile,
             keep_prev_action,
             toggle_snap_to_point,
@@ -1099,6 +1253,7 @@ class MainWindow(QtWidgets.QMainWindow):
             toggle_snap_to_point=toggle_snap_to_point,
             copy_annotations_to_next=copy_annotations_to_next,
             merge_linestrips=merge_linestrips,
+            merge_polygons=merge_polygons,
             measure_line_profile=measure_line_profile,
             delete_selected_files=delete_selected_files,
             export_selected_files=export_selected_files,
@@ -1199,7 +1354,12 @@ class MainWindow(QtWidgets.QMainWindow):
         label_menu = QtWidgets.QMenu()
         _utils.add_actions(
             label_menu,
-            (self._actions.edit, self._actions.delete, self._actions.merge_linestrips),
+            (
+                self._actions.edit,
+                self._actions.delete,
+                self._actions.merge_linestrips,
+                self._actions.merge_polygons,
+            ),
         )
         self._docks.label_list.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu
@@ -1902,6 +2062,11 @@ class MainWindow(QtWidgets.QMainWindow):
             s.shape_type in ("line", "linestrip") for s in selected_shapes
         )
         self._actions.merge_linestrips.setEnabled(can_merge)
+        self._actions.merge_polygons.setEnabled(
+            len(selected_shapes) >= 2
+            and all(s.shape_type == "polygon" for s in selected_shapes)
+            and len({s.label for s in selected_shapes}) == 1
+        )
         self._label_list_menu_origin = self._docks.label_list.mapToGlobal(point)
         try:
             # PySide6 type QMenu.exec() argument too narrowly
@@ -2262,6 +2427,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self._actions.delete.setEnabled(n_selected)
         self._actions.duplicate.setEnabled(n_selected)
         self._actions.merge.setEnabled(can_merge_shapes(selected_shapes))
+        self._actions.merge_polygons.setEnabled(
+            len(selected_shapes) >= 2
+            and all(shape.shape_type == "polygon" for shape in selected_shapes)
+            and len({shape.label for shape in selected_shapes}) == 1
+        )
         self._actions.copy.setEnabled(n_selected)
         self._actions.edit.setEnabled(n_selected)
         self._actions.measure_line_profile.setEnabled(
@@ -4800,6 +4970,47 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_label(merged)
         canvas.deselect_shape()
         canvas.select_shapes([merged])
+        canvas.update()
+        self.mark_dirty()
+
+    def merge_polygons(self) -> None:
+        """Merge selected polygons into one filled, connected polygon."""
+        canvas = self._canvas_widgets.canvas
+        shapes = list(canvas.selected_shapes)
+        if len(shapes) < 2 or any(shape.shape_type != "polygon" for shape in shapes):
+            return
+        if len({shape.label for shape in shapes}) != 1:
+            return
+        polygons = [
+            np.asarray(shape.points, dtype=np.float64)
+            for shape in shapes
+            if len(shape.points) >= 3
+        ]
+        if not polygons:
+            return
+        merged_points = _merge_polygon_points(polygons)
+        if merged_points is None or len(merged_points) < 3:
+            return
+        first = shapes[0]
+        merged = Shape(
+            label=first.label,
+            group_id=first.group_id,
+            shape_type="polygon",
+            flags=first.flags,
+            description=first.description,
+            points=merged_points,
+            other_data=copy.deepcopy(first.other_data),
+        )
+        for shape in shapes:
+            if shape in canvas.selected_shapes:
+                canvas.selected_shapes.remove(shape)
+            canvas.shapes.remove(shape)
+        canvas.shapes.append(merged)
+        canvas.backup_shapes()
+        self.remove_labels(shapes=shapes)
+        self.add_label(shape=merged)
+        canvas.deselect_shape()
+        canvas.select_shapes(shapes=[merged])
         canvas.update()
         self.mark_dirty()
 
