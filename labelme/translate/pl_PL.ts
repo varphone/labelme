@@ -1125,6 +1125,22 @@ Wybierz inny model lub użyj trybu AI-Box.</translation>
         <translation>Predefiniowane etykiety nie mogą być puste, gdy walidacja etykiet jest ustawiona na „exact”. Najpierw wyłącz walidację „exact”.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Skala zmniejszania obrazu wejściowego</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Skala używana wyłącznie dla obrazu wysyłanego do AI; 1,0 zachowuje oryginalną rozdzielczość.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Siła odszumiania obrazu wejściowego</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Odszumianie przeskalowanego obrazu wysyłanego do AI; 0,0 wyłącza odszumianie.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Język</translation>
     </message>

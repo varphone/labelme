@@ -1128,6 +1128,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Предустановленные метки не могут быть пустыми, пока проверка меток установлена в «exact». Сначала отключите проверку «exact».</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Масштаб уменьшения входного изображения</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Масштаб, используемый только для изображения, отправляемого ИИ; значение 1,0 сохраняет исходное разрешение.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Интенсивность подавления шума во входном изображении</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Подавляет шум в масштабированном изображении, отправляемом ИИ; значение 0,0 отключает подавление шума.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Язык</translation>
     </message>

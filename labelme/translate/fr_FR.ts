@@ -1131,6 +1131,22 @@ Veuillez sélectionner un autre modèle ou utiliser le mode AI-Box.</translation
         <translation>Les étiquettes prédéfinies ne peuvent pas être vides lorsque la validation des étiquettes est définie sur « exact ». Désactivez d’abord la validation « exact ».</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Échelle de sous-échantillonnage de l’entrée</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Échelle utilisée uniquement pour l’image envoyée à l’IA ; 1,0 conserve la résolution d’origine.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Intensité de réduction du bruit de l’entrée</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Réduit le bruit de l’image mise à l’échelle envoyée à l’IA ; 0,0 désactive la réduction du bruit.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Langue</translation>
     </message>

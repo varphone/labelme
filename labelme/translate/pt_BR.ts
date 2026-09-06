@@ -1125,6 +1125,22 @@ Selecione um modelo diferente ou use o modo AI-Box.</translation>
         <translation>Os rótulos predefinidos não podem ficar vazios enquanto a validação de rótulo estiver definida como «exact». Desative primeiro a validação «exact».</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Escala de redução da entrada</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Escala usada apenas para a imagem enviada à IA; 1,0 mantém a resolução original.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Intensidade de redução de ruído da entrada</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Reduz o ruído da imagem redimensionada enviada à IA; 0,0 desativa a redução de ruído.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Idioma</translation>
     </message>

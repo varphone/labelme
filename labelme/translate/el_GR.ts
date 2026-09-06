@@ -1199,6 +1199,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Οι προκαθορισμένες ετικέτες δεν μπορούν να είναι κενές όταν η επικύρωση ετικέτας έχει οριστεί σε «exact». Απενεργοποιήστε πρώτα την επικύρωση «exact».</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Κλίμακα υποδειγματοληψίας εισόδου</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Κλίμακα που χρησιμοποιείται μόνο για την εικόνα που αποστέλλεται στην ΤΝ· το 1,0 διατηρεί την αρχική ανάλυση.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Ισχύς αποθορυβοποίησης εισόδου</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Αποθορυβοποιεί την κλιμακωμένη εικόνα που αποστέλλεται στην ΤΝ· το 0,0 απενεργοποιεί την αποθορυβοποίηση.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Γλώσσα</translation>
     </message>

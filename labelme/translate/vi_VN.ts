@@ -1125,6 +1125,22 @@ Vui lòng chọn mô hình khác hoặc sử dụng chế độ AI-Box.</transla
         <translation>Nhãn định sẵn không được để trống khi kiểm tra nhãn được đặt thành &apos;exact&apos;. Vui lòng tắt kiểm tra &apos;exact&apos; trước.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Tỷ lệ giảm mẫu đầu vào</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Tỷ lệ chỉ áp dụng cho ảnh gửi đến AI; 1,0 giữ nguyên độ phân giải gốc.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Cường độ khử nhiễu đầu vào</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Khử nhiễu ảnh đã thu nhỏ trước khi gửi đến AI; 0,0 tắt khử nhiễu.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Ngôn ngữ</translation>
     </message>

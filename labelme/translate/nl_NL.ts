@@ -1125,6 +1125,22 @@ Selecteer een ander model of gebruik de AI-Box-modus.</translation>
         <translation>Voorgedefinieerde labels mogen niet leeg zijn wanneer labelvalidatie is ingesteld op &apos;exact&apos;. Schakel eerst de &apos;exact&apos;-validatie uit.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Schaal voor downsampling van invoer</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Schaal die alleen wordt gebruikt voor de afbeelding die naar AI wordt verzonden; 1,0 behoudt de oorspronkelijke resolutie.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Sterkte van ruisonderdrukking van invoer</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Onderdrukt ruis in de geschaalde afbeelding die naar AI wordt verzonden; 0,0 schakelt ruisonderdrukking uit.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Taal</translation>
     </message>

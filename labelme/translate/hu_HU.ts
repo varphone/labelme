@@ -1131,6 +1131,22 @@ Kérjük, válasszon másik modellt vagy használja az AI-Box módot.</translati
         <translation>Az előre definiált címkék nem lehetnek üresek, amíg a címkeellenőrzés „exact” értékre van állítva. Először kapcsolja ki az „exact” ellenőrzést.</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>Bemeneti almintavételezési skála</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Csak a mesterséges intelligenciának küldött képre alkalmazott skála; az 1,0 megtartja az eredeti felbontást.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Bemeneti zajszűrés erőssége</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>A mesterséges intelligenciának küldött átméretezett képet zajszűri; a 0,0 kikapcsolja a zajszűrést.</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>Nyelv</translation>
     </message>
