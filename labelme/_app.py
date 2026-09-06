@@ -48,6 +48,8 @@ from ._label_file import write_label_file
 from ._label_flags import compile_label_flags
 from ._line_measurement import LineMeasurement
 from ._line_measurement import MeasurementParameters
+from ._line_measurement import _simplify_measurement_samples
+from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._line_profile import AnchorSource
 from ._line_profile import LineProfile
 from ._line_profile import ProfileAnchor
@@ -55,6 +57,7 @@ from ._line_profile import ProfileValue
 from ._line_profile import cumulative_lengths
 from ._line_profile import insert_visibility_anchor
 from ._line_profile import insert_width_anchor
+from ._line_profile import line_profile_points
 from ._line_profile import merge_profiles
 from ._line_profile import point_to_position
 from ._line_profile import position_to_point
@@ -2059,7 +2062,7 @@ class MainWindow(QtWidgets.QMainWindow):
         selected = self._docks.label_list.selected_items()
         selected_shapes = [s for item in selected if (s := item.shape()) is not None]
         can_merge = len(selected_shapes) >= 2 and all(
-            s.shape_type in ("line", "linestrip") for s in selected_shapes
+            s.shape_type in LINE_PROFILE_SHAPE_TYPES for s in selected_shapes
         )
         self._actions.merge_linestrips.setEnabled(can_merge)
         self._actions.merge_polygons.setEnabled(
@@ -2436,7 +2439,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._actions.edit.setEnabled(n_selected)
         self._actions.measure_line_profile.setEnabled(
             len(selected_shapes) == 1
-            and selected_shapes[0].shape_type == "linestrip"
+            and selected_shapes[0].shape_type in LINE_PROFILE_SHAPE_TYPES
             and self._image_path is not None
         )
         self._sync_circle_radius_widget()
@@ -2917,12 +2920,13 @@ class MainWindow(QtWidgets.QMainWindow):
         if property_value is None:
             return
         if mode == "position":
-            position = point_to_position(shape.points, [point.x(), point.y()])
+            centerline = line_profile_points(shape.points, shape.shape_type)
+            position = point_to_position(centerline, [point.x(), point.y()])
             value = property_value.value
         else:
             if kind != "width":
                 return
-            center_point = position_to_point(shape.points, anchor.position)
+            center_point = position_to_point(centerline, anchor.position)
             value = 2.0 * math.hypot(
                 point.x() - center_point[0], point.y() - center_point[1]
             )
@@ -3118,14 +3122,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def measure_selected_line_profile(self) -> None:
         selected = self._canvas_widgets.canvas.selected_shapes
-        if len(selected) != 1 or selected[0].shape_type != "linestrip":
+        if len(selected) != 1 or selected[0].shape_type not in LINE_PROFILE_SHAPE_TYPES:
             return
         if self._line_measurement_thread is not None:
             return
         shape = selected[0]
         canvas = self._canvas_widgets.canvas
         image = _utils.img_qt_to_rgb_arr(img_qt=canvas.pixmap.toImage())
-        points = shape.points.copy()
+        points = line_profile_points(shape.points, shape.shape_type)
         token = _line_measurement_token(shape=shape, pixmap_hash=canvas._pixmap_hash)
         parameters = self._line_measurement_parameters(profile=shape.line_profile)
         progress = QProgressDialog(
@@ -4117,7 +4121,10 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         changed = False
         for target, source in zip(current, mapped):
-            if source.line_profile is None or target.shape_type != "linestrip":
+            if (
+                source.line_profile is None
+                or target.shape_type not in LINE_PROFILE_SHAPE_TYPES
+            ):
                 continue
             if target.line_profile == source.line_profile:
                 continue
