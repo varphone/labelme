@@ -1150,3 +1150,13 @@ Bitte wählen Sie ein anderes Modell oder verwenden Sie den AI-Box-Modus.</trans
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Radius</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Radius des ausgewählten Kreises</translation>
+    </message>
+</context>

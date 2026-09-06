@@ -1144,3 +1144,13 @@ Selecteer een ander model of gebruik de AI-Box-modus.</translation>
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Straal</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Straal van de geselecteerde cirkel</translation>
+    </message>
+</context>

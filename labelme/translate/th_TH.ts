@@ -1144,3 +1144,13 @@ Please select a different model or use AI-Box mode.</source>
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>รัศมี</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>รัศมีของวงกลมที่เลือก</translation>
+    </message>
+</context>

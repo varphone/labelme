@@ -1144,3 +1144,13 @@ Seleccione un modelo diferente o use el modo AI-Box.</translation>
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Radio</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Radio del círculo seleccionado</translation>
+    </message>
+</context>

@@ -13,6 +13,7 @@ from ._label_list_widget import format_shape_label
 from ._settings_dialog import SettingsDialog
 from ._shape_render import Palette
 from ._status import StatusStats
+from .circle_radius_widget import CircleRadiusWidget
 from ._tool_bar import ToolBar
 from ._unique_label_qlist_widget import UniqueLabelQListWidget
 from ._zoom_widget import ZoomWidget
@@ -22,6 +23,7 @@ __all__ = [
     "AiTextToAnnotationWidget",
     "BrightnessContrastDialog",
     "Canvas",
+    "CircleRadiusWidget",
     "EmptyStateWidget",
     "LabelDialog",
     "LabelDialogEntry",

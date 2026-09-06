@@ -1150,3 +1150,13 @@ Lütfen farklı bir model seçin veya AI-Box modunu kullanın.</translation>
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Yarıçap</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Seçili dairenin yarıçapı</translation>
+    </message>
+</context>

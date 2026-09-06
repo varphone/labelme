@@ -1150,3 +1150,13 @@ Kérjük, válasszon másik modellt vagy használja az AI-Box módot.</translati
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Sugár</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>A kiválasztott kör sugara</translation>
+    </message>
+</context>

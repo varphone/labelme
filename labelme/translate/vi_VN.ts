@@ -1144,3 +1144,13 @@ Vui lòng chọn mô hình khác hoặc sử dụng chế độ AI-Box.</transla
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Bán kính</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Bán kính của hình tròn đã chọn</translation>
+    </message>
+</context>

@@ -1158,3 +1158,13 @@ Please select a different model or use AI-Box mode.</source>
     </message>
 </context>
 </TS>
+<name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>半径</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>選択した円の半径</translation>
+    </message>
+</context>
