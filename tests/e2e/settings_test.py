@@ -789,3 +789,27 @@ def test_polygon_detail_popover_and_settings_stay_in_sync(
     assert win._canvas_widgets.canvas._ai_assist_session.polygon_detail == 70
 
     close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_ai_input_preprocessing_settings_apply_and_persist(
+    *, main_win: MainWinFactory, qtbot: QtBot, editable_config_file: Path, pause: bool
+) -> None:
+    win = main_win(config_file=editable_config_file)
+    dialog = _open_settings_dialog(win=win)
+    downsample = dialog._editors[("ai", "downsample_scale")]
+    denoise = dialog._editors[("ai", "denoise_strength")]
+    assert isinstance(downsample, QtWidgets.QDoubleSpinBox)
+    assert isinstance(denoise, QtWidgets.QDoubleSpinBox)
+
+    downsample.setValue(0.3)
+    denoise.setValue(0.4)
+
+    session = win._canvas_widgets.canvas._ai_assist_session
+    assert session.downsample_scale == 0.3
+    assert session.denoise_strength == 0.4
+    persisted = safe_load(editable_config_file.read_text())
+    assert persisted["ai"]["downsample_scale"] == 0.3
+    assert persisted["ai"]["denoise_strength"] == 0.4
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)

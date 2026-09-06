@@ -1599,6 +1599,12 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.set_ai_existing_shape_suppression(
             enabled=self._config["ai"]["suppress_existing_shape_matches"]
         )
+        canvas.set_ai_downsample_scale(
+            scale=self._config["ai"]["downsample_scale"]
+        )
+        canvas.set_ai_denoise_strength(
+            strength=self._config["ai"]["denoise_strength"]
+        )
         canvas.set_draft_palette(
             palette=Palette(
                 line=QtGui.QColor(*self._config["shape"]["line_color"]),
@@ -4870,6 +4876,14 @@ class MainWindow(QtWidgets.QMainWindow):
         elif key_path == ("ai", "suppress_existing_shape_matches"):
             self._canvas_widgets.canvas.set_ai_existing_shape_suppression(
                 enabled=self._config["ai"]["suppress_existing_shape_matches"]
+            )
+        elif key_path == ("ai", "downsample_scale"):
+            self._canvas_widgets.canvas.set_ai_downsample_scale(
+                scale=self._config["ai"]["downsample_scale"]
+            )
+        elif key_path == ("ai", "denoise_strength"):
+            self._canvas_widgets.canvas.set_ai_denoise_strength(
+                strength=self._config["ai"]["denoise_strength"]
             )
 
     def _refresh_shape_colors(self) -> None:

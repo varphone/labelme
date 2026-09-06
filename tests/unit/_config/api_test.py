@@ -108,6 +108,18 @@ def test_load_config_rejects_invalid_polygon_detail(
         _config.load_config(config_file=config_file, config_overrides={})
 
 
+@pytest.mark.parametrize("key", ["downsample_scale", "denoise_strength"])
+@pytest.mark.parametrize("value", [-0.01, 1.01, float("inf"), "0.3"])
+def test_load_config_rejects_invalid_ai_input_preprocessing(
+    *, tmp_path: Path, key: str, value: object
+) -> None:
+    config_file = tmp_path / "config.yaml"
+    config_file.write_text(f"ai:\n  {key}: {value!r}\n")
+
+    with pytest.raises(ValueError, match=rf"ai\.{key}"):
+        _config.load_config(config_file=config_file, config_overrides={})
+
+
 _POLYGON_TO_SHAPE_RENAMES: Final = {
     "edit_polygon": "edit_shape",
     "delete_polygon": "delete_shape",

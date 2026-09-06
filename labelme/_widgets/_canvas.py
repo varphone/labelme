@@ -582,6 +582,18 @@ class Canvas(QtWidgets.QWidget):
         self._ai_assist_session.polygon_detail = detail
         self._clear_ai_existing_shape_highlights()
 
+    def set_ai_downsample_scale(self, *, scale: float) -> None:
+        if self._ai_assist_session.downsample_scale == scale:
+            return
+        self._ai_assist_session.downsample_scale = scale
+        self._clear_ai_existing_shape_highlights()
+
+    def set_ai_denoise_strength(self, *, strength: float) -> None:
+        if self._ai_assist_session.denoise_strength == strength:
+            return
+        self._ai_assist_session.denoise_strength = strength
+        self._clear_ai_existing_shape_highlights()
+
     def set_ai_existing_shape_suppression(self, *, enabled: bool) -> None:
         if self._ai_suppress_existing_shape_matches == enabled:
             return

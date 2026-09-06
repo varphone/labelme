@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import math
 import re
 from pathlib import Path
 from typing import Final
@@ -55,6 +56,7 @@ def _update_dict(
 
 def _validate_config_item(*, key_path: tuple[str, ...], value: object) -> None:
     MASK_POLYGONIZATION_DETAIL_MAX: Final = 100
+    AI_INPUT_PREPROCESSING_MAX: Final = 1.0
 
     key = key_path[-1]
     if key_path == ("mask_polygonization", "detail") and (
@@ -64,6 +66,19 @@ def _validate_config_item(*, key_path: tuple[str, ...], value: object) -> None:
     ):
         raise ValueError(
             "mask_polygonization.detail must be an integer between 0 and 100, "
+            f"but got {value!r}"
+        )
+    if key_path in {
+        ("ai", "downsample_scale"),
+        ("ai", "denoise_strength"),
+    } and (
+        isinstance(value, bool)
+        or not isinstance(value, int | float)
+        or not math.isfinite(value)
+        or not 0.0 <= value <= AI_INPUT_PREPROCESSING_MAX
+    ):
+        raise ValueError(
+            f"{'.'.join(key_path)} must be a finite number between 0.0 and 1.0, "
             f"but got {value!r}"
         )
     if key == "validate_label" and value not in [None, "exact"]:

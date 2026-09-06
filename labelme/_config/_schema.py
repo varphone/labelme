@@ -412,6 +412,39 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         maximum=100,
     ),
     Setting(
+        key_path=("ai", "downsample_scale"),
+        group="AI assist",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Input downsample scale")),
+        kind="float",
+        minimum=0.0,
+        maximum=1.0,
+        decimals=2,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "Scale used only for the image sent to AI; 1.0 keeps the original "
+                "resolution.",
+            ),
+        ),
+    ),
+    Setting(
+        key_path=("ai", "denoise_strength"),
+        group="AI assist",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Input denoise strength")),
+        kind="float",
+        minimum=0.0,
+        maximum=1.0,
+        decimals=2,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "Denoises the scaled image sent to AI; 0.0 disables denoising.",
+            ),
+        ),
+    ),
+    Setting(
         key_path=("ai", "suppress_existing_shape_matches"),
         group="AI assist",
         label=cast(
