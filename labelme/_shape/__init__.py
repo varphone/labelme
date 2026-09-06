@@ -4,6 +4,7 @@ from ._hit_testing import nearest_vertex_index
 from ._merge import can_merge_shapes
 from ._merge import merge_masks
 from ._model import CIRCLE_POINT_COUNT
+from ._model import BEZIER_SHAPE_TYPES
 from ._model import LINE_POINT_COUNT
 from ._model import MIN_LINESTRIP_POINT_COUNT
 from ._model import MIN_POLYGON_POINT_COUNT
@@ -12,6 +13,9 @@ from ._model import POLYLINE_SHAPE_TYPES
 from ._model import RECTANGLE_POINT_COUNT
 from ._model import Shape
 from ._model import ShapeType
+from ._model import bezier_degree
+from ._model import bezier_point
+from ._model import bezier_sample_points
 from ._oriented_rectangle import get_rotation_handle
 from ._oriented_rectangle import oriented_rectangle_arrow_points
 from ._oriented_rectangle import oriented_rectangle_center
@@ -19,6 +23,7 @@ from ._oriented_rectangle import rotate
 
 __all__ = [
     "CIRCLE_POINT_COUNT",
+    "BEZIER_SHAPE_TYPES",
     "LINE_POINT_COUNT",
     "MIN_LINESTRIP_POINT_COUNT",
     "MIN_POLYGON_POINT_COUNT",
@@ -27,6 +32,9 @@ __all__ = [
     "RECTANGLE_POINT_COUNT",
     "Shape",
     "ShapeType",
+    "bezier_degree",
+    "bezier_point",
+    "bezier_sample_points",
     "can_merge_shapes",
     "get_rotation_handle",
     "merge_masks",

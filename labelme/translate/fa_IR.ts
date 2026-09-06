@@ -1155,7 +1155,7 @@ Please select a different model or use AI-Box mode.</source>
         <translation>بخش‌های تنظیمات</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1166,3 +1166,4 @@ Please select a different model or use AI-Box mode.</source>
         <translation>شعاع دایره انتخاب‌شده</translation>
     </message>
 </context>
+</TS>

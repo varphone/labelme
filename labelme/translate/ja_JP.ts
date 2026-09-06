@@ -1169,7 +1169,7 @@ Please select a different model or use AI-Box mode.</source>
         <translation>設定セクション</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1180,3 +1180,4 @@ Please select a different model or use AI-Box mode.</source>
         <translation>選択した円の半径</translation>
     </message>
 </context>
+</TS>

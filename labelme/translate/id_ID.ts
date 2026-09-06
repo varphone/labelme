@@ -1155,7 +1155,7 @@ Shapes</source>
         <translation>Bagian pengaturan</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1166,3 +1166,4 @@ Shapes</source>
         <translation>Jari-jari lingkaran yang dipilih</translation>
     </message>
 </context>
+</TS>

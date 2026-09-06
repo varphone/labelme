@@ -1155,7 +1155,7 @@ Selecteer een ander model of gebruik de AI-Box-modus.</translation>
         <translation>Instellingssecties</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1166,3 +1166,4 @@ Selecteer een ander model of gebruik de AI-Box-modus.</translation>
         <translation>Straal van de geselecteerde cirkel</translation>
     </message>
 </context>
+</TS>

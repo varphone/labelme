@@ -1161,7 +1161,7 @@ Lütfen farklı bir model seçin veya AI-Box modunu kullanın.</translation>
         <translation>Ayar bölümleri</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1172,3 +1172,4 @@ Lütfen farklı bir model seçin veya AI-Box modunu kullanın.</translation>
         <translation>Seçili dairenin yarıçapı</translation>
     </message>
 </context>
+</TS>

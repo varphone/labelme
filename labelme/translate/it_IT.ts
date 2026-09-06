@@ -1161,7 +1161,7 @@ Selezionare un modello diverso o utilizzare la modalità AI-Box.</translation>
         <translation>Sezioni delle impostazioni</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1172,3 +1172,4 @@ Selezionare un modello diverso o utilizzare la modalità AI-Box.</translation>
         <translation>Raggio del cerchio selezionato</translation>
     </message>
 </context>
+</TS>

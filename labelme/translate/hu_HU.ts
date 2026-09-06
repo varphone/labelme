@@ -1161,7 +1161,7 @@ Kérjük, válasszon másik modellt vagy használja az AI-Box módot.</translati
         <translation>Beállítások szakaszai</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1172,3 +1172,4 @@ Kérjük, válasszon másik modellt vagy használja az AI-Box módot.</translati
         <translation>A kiválasztott kör sugara</translation>
     </message>
 </context>
+</TS>

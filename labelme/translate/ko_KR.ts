@@ -1155,7 +1155,7 @@ Please select a different model or use AI-Box mode.</source>
         <translation>설정 섹션</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1166,3 +1166,4 @@ Please select a different model or use AI-Box mode.</source>
         <translation>선택한 원의 반지름</translation>
     </message>
 </context>
+</TS>

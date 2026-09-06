@@ -1158,7 +1158,7 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Разделы настроек</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1169,3 +1169,4 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Радиус выбранной окружности</translation>
     </message>
 </context>
+</TS>

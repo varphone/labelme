@@ -1155,7 +1155,7 @@ Selecione um modelo diferente ou use o modo AI-Box.</translation>
         <translation>Seções de configurações</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1166,3 +1166,4 @@ Selecione um modelo diferente ou use o modo AI-Box.</translation>
         <translation>Raio do círculo selecionado</translation>
     </message>
 </context>
+</TS>

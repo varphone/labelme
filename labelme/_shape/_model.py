@@ -24,12 +24,51 @@ ShapeType: TypeAlias = Literal[
     "circle",
     "linestrip",
     "points",
+    "bezier2",
+    "bezier3",
     "mask",
 ]
 
 # Shape types whose points form an open-or-closed polyline that a user can
 # extend or shrink one vertex at a time.
 POLYLINE_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("polygon", "linestrip")
+BEZIER_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = ("bezier2", "bezier3")
+
+
+def bezier_degree(shape_type: ShapeType) -> int:
+    if shape_type == "bezier2":
+        return 2
+    if shape_type == "bezier3":
+        return 3
+    raise ValueError(f"Not a Bezier shape: {shape_type!r}")
+
+
+def bezier_point(
+    points: npt.NDArray[np.float64], t: float
+) -> npt.NDArray[np.float64]:
+    """Evaluate a quadratic or cubic Bezier curve at normalized position ``t``."""
+    if len(points) not in (3, 4):
+        raise ValueError(f"Bezier curves require 3 or 4 points, got {len(points)}")
+    t = float(np.clip(t, 0.0, 1.0))
+    u = 1.0 - t
+    if len(points) == 3:
+        return u * u * points[0] + 2.0 * u * t * points[1] + t * t * points[2]
+    return (
+        u**3 * points[0]
+        + 3.0 * u**2 * t * points[1]
+        + 3.0 * u * t**2 * points[2]
+        + t**3 * points[3]
+    )
+
+
+def bezier_sample_points(
+    points: npt.NDArray[np.float64], samples: int = 64
+) -> npt.NDArray[np.float64]:
+    if len(points) not in (3, 4):
+        raise ValueError(f"Bezier curves require 3 or 4 points, got {len(points)}")
+    if samples < 2:
+        raise ValueError("samples must be at least 2")
+    return np.array([bezier_point(points, t) for t in np.linspace(0.0, 1.0, samples)])
 
 # Point counts each shape type's finished geometry is defined by. A shape
 # still being drawn holds fewer points than these until it is finalized.

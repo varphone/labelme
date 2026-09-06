@@ -1155,7 +1155,7 @@ Vui lòng chọn mô hình khác hoặc sử dụng chế độ AI-Box.</transla
         <translation>Các phần cài đặt</translation>
     </message>
 </context>
-</TS>
+<context>
 <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
@@ -1166,3 +1166,4 @@ Vui lòng chọn mô hình khác hoặc sử dụng chế độ AI-Box.</transla
         <translation>Bán kính của hình tròn đã chọn</translation>
     </message>
 </context>
+</TS>
