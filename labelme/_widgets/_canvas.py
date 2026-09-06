@@ -32,6 +32,10 @@ from .._line_profile import position_to_point
 from .._line_profile import profile_boundary_polygon
 from .._line_profile import split_profile
 from .._shape import BEZIER_SHAPE_TYPES
+from .._shape import CIRCLE_POINT_COUNT
+from .._shape import MIN_LINESTRIP_POINT_COUNT
+from .._shape import MIN_POLYGON_POINT_COUNT
+from .._shape import ORIENTED_RECTANGLE_POINT_COUNT
 from .._shape import POLYLINE_SHAPE_TYPES
 from .._shape import RECTANGLE_POINT_COUNT
 from .._shape import Shape
@@ -2226,7 +2230,17 @@ class Canvas(QtWidgets.QWidget):
     ) -> QPointF:
         return (point + self._compute_image_origin_offset(area=area)) * self.scale
 
-    def _compute_image_origin_offset(self, *, area: QtCore.QSize | None) -> QPointF:
+    def viewport_image_rect(
+        self, *, top_left: QPointF, bottom_right: QPointF
+    ) -> QRectF:
+        """Convert viewport corners from canvas coordinates to image space."""
+        first = self.transform_widget_point_to_image(top_left)
+        last = self.transform_widget_point_to_image(bottom_right)
+        return QRectF(first, last).normalized().intersected(
+            QRectF(0, 0, self.pixmap.width(), self.pixmap.height())
+        )
+
+    def _compute_image_origin_offset(self, area: QtCore.QSize | None = None) -> QPointF:
         if area is None:
             area = super().size()
         scaled_w = self.pixmap.width() * self.scale
