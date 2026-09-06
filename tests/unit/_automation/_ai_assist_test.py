@@ -103,11 +103,54 @@ def test_default_model_name_and_output_format() -> None:
     assert session.model_name == "sam2:latest"
     assert session.output_format == "polygon"
     assert session.polygon_detail == 80
+    assert session.downsample_scale == 1.0
+    assert session.denoise_strength == 0.0
 
     session.model_name = "efficientsam:latest"
     session.output_format = "mask"
     assert session.model_name == "efficientsam:latest"
     assert session.output_format == "mask"
+
+
+def test_preprocessed_model_coordinates_are_restored_to_original_image(
+    *,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, object] = {}
+
+    class _FakeOsamSession:
+        def __init__(self, *, model_name: str) -> None:
+            self.model_name = model_name
+
+        def run(self, **kwargs: object) -> osam.types.GenerateResponse:
+            captured.update(kwargs)
+            return osam.types.GenerateResponse(
+                model="stub",
+                annotations=[
+                    _annotation(score=0.9, bbox=(1, 2, 4, 5), mask=None)
+                ],
+            )
+
+    monkeypatch.setattr(_ai_assist, "OsamSession", _FakeOsamSession)
+    session = AiAssistSession(
+        output_format="rectangle",
+        downsample_scale=0.5,
+    )
+    image = np.zeros((10, 20, 3), dtype=np.uint8)
+
+    proposal = session.propose_shapes(
+        image=image,
+        image_id="img",
+        prompt_kind="points",
+        points=np.array([[6, 4]], dtype=np.float64),
+        point_labels=np.array([1]),
+        existing_shapes=[],
+    )
+
+    assert captured["image"].shape == (5, 10, 3)
+    np.testing.assert_array_equal(captured["points"], [[3, 2]])
+    assert captured["image_id"] == "img:downsample=0.5:denoise=0.0"
+    np.testing.assert_array_equal(proposal.new_shapes[0].points, [[2, 4], [8, 10]])
 
 
 def test_polygon_detail_controls_ai_polygon_points(

@@ -4,11 +4,14 @@ import dataclasses
 
 import numpy as np
 import osam
+import skimage.transform
 from loguru import logger
 from numpy.typing import NDArray
 
 from .._ai_models import supports_point_prompts
 from .._shape import Shape
+from ._ai_image import AiImageInput
+from ._ai_image import prepare_ai_image
 from ._geometry import _round_bbox_to_int
 from ._osam_session import OsamSession
 from ._shape_builders import Detection
@@ -17,6 +20,8 @@ from ._suppression import match_detections_to_existing_shapes
 from ._suppression import suppress_detections_greedy
 from ._types import AiOutputFormat
 from ._types import AiPromptKind
+
+_MASK_THRESHOLD: float = 0.5
 
 
 @dataclasses.dataclass(frozen=True)
@@ -29,6 +34,8 @@ class AiAssistSession:
     model_name: str
     output_format: AiOutputFormat
     polygon_detail: int
+    downsample_scale: float
+    denoise_strength: float
     _session: OsamSession | None
 
     def __init__(
@@ -37,10 +44,14 @@ class AiAssistSession:
         model_name: str = "sam2:latest",
         output_format: AiOutputFormat = "polygon",
         polygon_detail: int = 80,
+        downsample_scale: float = 1.0,
+        denoise_strength: float = 0.0,
     ) -> None:
         self.model_name = model_name
         self.output_format = output_format
         self.polygon_detail = polygon_detail
+        self.downsample_scale = downsample_scale
+        self.denoise_strength = denoise_strength
         self._session = None
 
     def _get_session(self) -> OsamSession:
@@ -63,16 +74,35 @@ class AiAssistSession:
             model_name=self.model_name
         ):
             raise ValueError(f"{self.model_name} does not support point prompts")
-        response: osam.types.GenerateResponse = self._get_session().run(
+        image_input: AiImageInput = prepare_ai_image(
             image=image,
-            image_id=image_id,
-            points=points,
+            downsample_scale=self.downsample_scale,
+            denoise_strength=self.denoise_strength,
+        )
+        processed_points = points * np.array(
+            [image_input.scale_x, image_input.scale_y], dtype=points.dtype
+        )
+        processed_image_id = image_id
+        if self.downsample_scale != 1.0 or self.denoise_strength != 0.0:
+            processed_image_id = (
+                f"{image_id}:downsample={self.downsample_scale!r}:"
+                f"denoise={self.denoise_strength!r}"
+            )
+        response: osam.types.GenerateResponse = self._get_session().run(
+            image=image_input.image,
+            image_id=processed_image_id,
+            points=processed_points,
             point_labels=point_labels,
         )
         # iou_threshold is hardcoded because the AI Assist flow has no
         # user-facing IoU control (unlike the AI Text Prompt flow); 0.5 matches
         # the AI Text Prompt widget default.
         detections = _detections_from_annotations(response.annotations)
+        detections = _restore_detections_to_original_image(
+            detections=detections,
+            image_shape=image.shape,
+            image_input=image_input,
+        )
         if prompt_kind == "points" and detections:
             detections = [
                 max(
@@ -104,6 +134,55 @@ class AiAssistSession:
             ),
             matching_existing_shapes=matches.matching_shapes,
         )
+
+
+def _restore_detections_to_original_image(
+    *,
+    detections: list[Detection],
+    image_shape: tuple[int, ...],
+    image_input: AiImageInput,
+) -> list[Detection]:
+    if image_input.scale_x == 1.0 and image_input.scale_y == 1.0:
+        return detections
+
+    image_height, image_width = image_shape[:2]
+    restored: list[Detection] = []
+    for detection in detections:
+        bbox = detection.bbox
+        if bbox is not None:
+            bbox = tuple(
+                coordinate / scale
+                for coordinate, scale in zip(
+                    bbox,
+                    (
+                        image_input.scale_x,
+                        image_input.scale_y,
+                        image_input.scale_x,
+                        image_input.scale_y,
+                    ),
+                    strict=True,
+                )
+            )
+        mask = detection.mask
+        if mask is not None:
+            if bbox is None:
+                mask_shape = (image_height, image_width)
+            else:
+                xmin, ymin, xmax, ymax = _round_bbox_to_int(bbox=bbox)
+                mask_shape = (
+                    max(1, ymax - ymin + 1),
+                    max(1, xmax - xmin + 1),
+                )
+            mask = skimage.transform.resize(
+                mask,
+                output_shape=mask_shape,
+                order=0,
+                mode="edge",
+                preserve_range=True,
+                anti_aliasing=False,
+            ) >= _MASK_THRESHOLD
+        restored.append(dataclasses.replace(detection, bbox=bbox, mask=mask))
+    return restored
 
 
 def _count_satisfied_prompt_points(
