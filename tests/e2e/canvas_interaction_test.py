@@ -325,7 +325,7 @@ def test_add_point_via_context_menu_action(
 
     # The line-profile dock reduces the default canvas scale on small test
     # windows; use a stable scale so midpoint hit-testing remains meaningful.
-    annotated_win._set_zoom(100.0)
+    annotated_win._set_zoom(value=100.0, pos=None)
     qtbot.wait(50)
     midpoint = _find_edge_midpoint_clear_of_vertices(canvas=canvas, shape=shape)
     qtbot.mouseMove(canvas, pos=image_to_widget_pos(canvas=canvas, image_pos=midpoint))
@@ -655,8 +655,8 @@ def test_select_nonpolygon_shape(
     shape = _wait_for_shape(qtbot=qtbot, canvas=canvas, label=label)
     assert shape.shape_type == create_mode
 
-    raw_win._switch_canvas_mode(edit=True)
-    raw_win._set_zoom(100.0)
+    raw_win._switch_canvas_mode(edit=True, create_mode=None)
+    raw_win._set_zoom(value=100.0, pos=None)
     qtbot.wait(50)
 
     click_pos = _shape_bounds(shape=shape).center() + QPointF(*select_offset)

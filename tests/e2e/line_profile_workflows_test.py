@@ -186,12 +186,12 @@ def test_profile_preview_zoom_and_undo_preserve_centerline(
             )
         ),
     )
-    win._load_shapes([shape])
-    win._canvas_widgets.canvas.select_shapes([shape])
+    win._load_shapes([shape], replace=True)
+    win._canvas_widgets.canvas.select_shapes(shapes=[shape])
 
     original_points = shape.points.copy()
     for zoom in (25.0, 100.0, 400.0):
-        win._set_zoom(zoom)
+        win._set_zoom(value=zoom, pos=None)
         assert (
             win._canvas_widgets.canvas._find_line_profile_anchor_at_point(
                 QPointF(10.0, 20.0)
@@ -234,7 +234,9 @@ def test_continuous_frame_profile_copy_requires_mapping_and_does_not_write_previ
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    source = read_label_file(str(data_path / "annotated" / "2011_000003.json"))
+    source = read_label_file(
+        filename=str(data_path / "annotated" / "2011_000003.json")
+    )
     image_bytes = source.image_data
     frames_dir = tmp_path / "frames"
     frames_dir.mkdir()

@@ -381,6 +381,63 @@ def test_shapes_from_dicts_gives_each_shape_its_own_flags() -> None:
     ]
 
 
+def test_merge_polygons_initializes_point_labels() -> None:
+    first = Shape(
+        label="object",
+        shape_type="polygon",
+        points=[[0.0, 0.0], [2.0, 0.0], [1.0, 2.0]],
+    )
+    second = Shape(
+        label="object",
+        shape_type="polygon",
+        points=[[3.0, 0.0], [5.0, 0.0], [4.0, 2.0]],
+    )
+    canvas = Mock()
+    canvas.selected_shapes = [first, second]
+    canvas.shapes = [first, second]
+    window = Mock()
+    window._canvas_widgets.canvas = canvas
+    removed_shapes: list[Shape] = []
+    window.remove_labels = lambda *, shapes: removed_shapes.extend(shapes)
+
+    _app.MainWindow.merge_polygons(window)
+
+    merged = window.add_label.call_args.kwargs["shape"]
+    np.testing.assert_array_equal(merged.point_labels, np.ones(len(merged.points)))
+    assert removed_shapes == [first, second]
+    assert len(merged.points) == len(first.points) + len(second.points)
+    for point in np.concatenate((first.points, second.points)):
+        assert any(
+            np.array_equal(point, merged_point) for merged_point in merged.points
+        )
+    assert canvas.shapes == [merged]
+    assert canvas.selected_shapes == []
+
+
+def test_merge_polygons_connects_the_full_facing_edge() -> None:
+    first = np.array(
+        [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0], [0.0, 10.0]]
+    )
+    second = np.array(
+        [[0.0, 20.0], [10.0, 20.0], [10.0, 30.0], [0.0, 30.0]]
+    )
+
+    merged = _app._merge_polygon_points([first, second])
+
+    assert merged is not None
+    assert len(merged) == 8
+    assert any(
+        np.array_equal(merged[index], [10.0, 10.0])
+        and np.array_equal(merged[(index + 1) % len(merged)], [10.0, 20.0])
+        for index in range(len(merged))
+    )
+    assert any(
+        np.array_equal(merged[index], [0.0, 20.0])
+        and np.array_equal(merged[(index + 1) % len(merged)], [0.0, 10.0])
+        for index in range(len(merged))
+    )
+
+
 def test_shapes_from_dicts_carries_over_the_shape_fields() -> None:
     mask = np.ones((2, 3), dtype=bool)
     shape_dict = ShapeDict(
