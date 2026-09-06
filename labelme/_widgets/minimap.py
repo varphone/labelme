@@ -37,12 +37,24 @@ class MinimapWidget(QtWidgets.QFrame):
         self._show_shape_outlines = value
         self.update()
 
+    def set_mouse_passthrough(self, value: bool) -> None:
+        """Let drawing gestures reach the canvas beneath the overview."""
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TransparentForMouseEvents, value)
+
     def eventFilter(self, watched: QtCore.QObject, event: QtCore.QEvent) -> bool:
         if watched is self.viewport and event.type() == QtCore.QEvent.Type.Resize:
             self._position_in_viewport()
         return super().eventFilter(watched, event)
 
     def _position_in_viewport(self) -> None:
+        if (
+            self.viewport.width() < self.width() + 2 * self._MARGIN
+            or self.viewport.height() < self.height() + 2 * self._MARGIN
+        ):
+            # Do not cover the canvas when the viewport is narrower than the
+            # overview itself (for example while the dock layout is compact).
+            self.move(-self.width() - 1, -self.height() - 1)
+            return
         self.move(
             max(self.viewport.width() - self.width() - self._MARGIN, 0),
             self._MARGIN,
@@ -77,6 +89,8 @@ class MinimapWidget(QtWidgets.QFrame):
     def _image_to_minimap(self, point: QtCore.QPointF) -> QtCore.QPointF:
         image_rect = self._image_rect()
         map_rect = self._map_rect()
+        if image_rect.isEmpty() or map_rect.isEmpty():
+            return QtCore.QPointF()
         return map_rect.topLeft() + QtCore.QPointF(
             point.x() / image_rect.width() * map_rect.width(),
             point.y() / image_rect.height() * map_rect.height(),
@@ -85,6 +99,8 @@ class MinimapWidget(QtWidgets.QFrame):
     def _minimap_to_image(self, point: QtCore.QPointF) -> QtCore.QPointF:
         image_rect = self._image_rect()
         map_rect = self._map_rect()
+        if image_rect.isEmpty() or map_rect.isEmpty():
+            return QtCore.QPointF()
         x = (point.x() - map_rect.left()) / map_rect.width()
         y = (point.y() - map_rect.top()) / map_rect.height()
         return QtCore.QPointF(
@@ -144,6 +160,9 @@ class MinimapWidget(QtWidgets.QFrame):
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
+            if self._map_rect().isEmpty():
+                event.accept()
+                return
             self._dragging = True
             self.center_requested.emit(self._minimap_to_image(event.position()))
             event.accept()
@@ -152,6 +171,9 @@ class MinimapWidget(QtWidgets.QFrame):
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent) -> None:
         if self._dragging:
+            if self._map_rect().isEmpty():
+                event.accept()
+                return
             self.center_requested.emit(self._minimap_to_image(event.position()))
             event.accept()
             return
