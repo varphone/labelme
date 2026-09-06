@@ -2423,13 +2423,23 @@ class MainWindow(QtWidgets.QMainWindow):
             else self._label_list_menu_origin
         )
 
-        text, flags, group_id, description = self._label_dialog.popup(
+        locked = tuple(
+            field
+            for field, editable in (
+                ("label", edit_text),
+                ("flags", edit_flags),
+                ("group_id", edit_group_id),
+                ("description", edit_description),
+            )
+            if not editable
+        )
+        entry = self._label_dialog.popup(
             text=first_shape.label if edit_text else "",
             position=menu_origin,
             flags=first_shape.flags if edit_flags else None,
             group_id=first_shape.group_id if edit_group_id else None,
             description=first_shape.description if edit_description else None,
-            flags_disabled=not edit_flags,
+            locked=locked,
         )
 
         if not edit_text:
@@ -2440,11 +2450,13 @@ class MainWindow(QtWidgets.QMainWindow):
         if not edit_description:
             self._label_dialog.edit_description.setDisabled(False)
 
-        if text is None:
-            assert flags is None
-            assert group_id is None
-            assert description is None
+        if entry is None:
             return
+
+        text = entry.label
+        flags = entry.flags
+        group_id = entry.group_id
+        description = entry.description
 
         if not self.validate_label(label=text):
             self.show_error_message(
@@ -3729,9 +3741,18 @@ class MainWindow(QtWidgets.QMainWindow):
         description = ""
         if self._config["display_label_popup"] or not text:
             previous_text = self._label_dialog.edit.text()
-            text, flags, group_id, description = self._label_dialog.popup(text=text)
-            if not text:
+            entry = self._label_dialog.popup(text=text)
+            if entry is None:
+                text = None
+                flags = None
+                group_id = None
+                description = None
                 self._label_dialog.edit.setText(previous_text)
+            else:
+                text = entry.label
+                flags = entry.flags
+                group_id = entry.group_id
+                description = entry.description
 
         if text and not self.validate_label(label=text):
             self.show_error_message(
