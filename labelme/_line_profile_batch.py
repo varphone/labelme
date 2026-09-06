@@ -318,7 +318,15 @@ def _parameters_for_profile(
 ) -> MeasurementParameters:
     if not isinstance(profile, LineProfile) or not profile.measurement_overrides:
         return parameters
-    return dataclasses.replace(parameters, **dict(profile.measurement_overrides))
+    overrides = dict(profile.measurement_overrides)
+    if "fixed_width" not in overrides:
+        return dataclasses.replace(parameters, **overrides)
+    fixed_width = overrides.pop("fixed_width")
+    return dataclasses.replace(
+        parameters,
+        fixed_width=None if fixed_width <= 0.0 else fixed_width,
+        **overrides,
+    )
 
 
 def _report_batch_progress(options: BatchOptions, completed: int, total: int) -> None:

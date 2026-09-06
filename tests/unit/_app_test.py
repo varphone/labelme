@@ -511,11 +511,36 @@ def test_cancel_line_measurement_stops_worker_thread_and_progress() -> None:
     window._line_measurement_progress.close.assert_called_once_with()
 
 
+def test_line_measurement_result_closes_progress_before_acceptance(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    window = _app.MainWindow.__new__(_app.MainWindow)
+    progress = Mock()
+    window._line_measurement_progress = progress
+    window._line_measurement_token = object()
+    accepted = Mock()
+
+    def accept_result(result: object, token: object) -> None:
+        accepted(result, token)
+        assert progress.close.call_count == 1
+
+    monkeypatch.setattr(window, "_accept_line_measurement", accept_result)
+
+    result = object()
+    token = window._line_measurement_token
+    window._on_line_measurement_result(result)
+
+    progress.close.assert_called_once_with()
+    accepted.assert_called_once_with(result, token)
+
+
 def test_line_measurement_parameters_apply_shape_overrides() -> None:
     profile = LineProfile(
         measurement_overrides=(
             ("sample_spacing", 3.0),
             ("contrast_factor", 0.8),
+            ("width_filter_strength", 50.0),
+            ("fixed_width", 18.0),
         )
     )
 
@@ -527,6 +552,8 @@ def test_line_measurement_parameters_apply_shape_overrides() -> None:
                 "min_width": 1.0,
                 "max_width": 256.0,
                 "contrast_factor": 0.35,
+                "width_filter_strength": 20.0,
+                "fixed_width": 0.0,
             }
         }
 
@@ -537,6 +564,8 @@ def test_line_measurement_parameters_apply_shape_overrides() -> None:
     assert parameters.sample_spacing == 3.0
     assert parameters.search_radius == 32.0
     assert parameters.contrast_factor == 0.8
+    assert parameters.width_filter_strength == 50.0
+    assert parameters.fixed_width == 18.0
 
 
 def test_shape_to_dict_maps_all_fields() -> None:
