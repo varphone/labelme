@@ -605,6 +605,14 @@ Shapes</source>
         <translation>合併為折線</translation>
     </message>
     <message>
+        <source>Merge Polygons</source>
+        <translation>合併多邊形</translation>
+    </message>
+    <message>
+        <source>Merge the selected polygons and fill the gaps between them</source>
+        <translation>合併選取的多邊形並填補其間的間隙</translation>
+    </message>
+    <message>
         <source>Combine the selected line and linestrip annotations into a single linestrip</source>
         <translation>將選中的直線和折線標註合併為一條折線</translation>
     </message>
@@ -843,6 +851,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Contrast factor</source>
         <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Use fixed width</source>
+        <translation>使用固定寬度</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
     </message>
     <message>
         <source>Override global measurement settings</source>
@@ -1372,6 +1392,18 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Contrast factor</source>
         <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Sliding window length as a percentage of measured samples.</source>
+        <translation>滑動視窗長度佔測量樣本的百分比。</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
     </message>
     <message>
         <source>Default model</source>
