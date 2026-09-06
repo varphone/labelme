@@ -129,6 +129,18 @@
         <translation>Klicken zum Hinzufügen eines Punktes</translation>
     </message>
     <message>
+        <source>Click &amp; drag to adjust profile width</source>
+        <translation>Click &amp; drag to adjust profile width</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move width anchor</source>
+        <translation>Click &amp; drag to move width anchor</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move visibility anchor</source>
+        <translation>Click &amp; drag to move visibility anchor</translation>
+    </message>
+    <message>
         <source>Click &amp; drag to move point</source>
         <translation>Klicken und ziehen zum Verschieben des Punktes</translation>
     </message>

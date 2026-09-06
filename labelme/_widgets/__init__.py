@@ -12,6 +12,11 @@ from .label_dialog import LabelDialogField
 from .label_list_widget import LabelListWidget
 from .label_list_widget import LabelListWidgetItem
 from .label_list_widget import format_shape_label
+from .line_measurement_worker import LineMeasurementWorker
+from .line_profile_batch_worker import LineProfileBatchWorker
+from .line_profile_panel import LineProfilePanel
+from .line_profile_visibility_widget import LineProfileVisibilityWidget
+from .line_profile_width_widget import LineProfileWidthWidget
 from .settings_dialog import SettingsDialog
 from .tool_bar import ToolBar
 from .unique_label_qlist_widget import UniqueLabelQListWidget

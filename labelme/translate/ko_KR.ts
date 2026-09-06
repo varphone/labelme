@@ -137,6 +137,18 @@
         <translation>점 추가를 위해 클릭</translation>
     </message>
     <message>
+        <source>Click &amp; drag to adjust profile width</source>
+        <translation>Click &amp; drag to adjust profile width</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move width anchor</source>
+        <translation>Click &amp; drag to move width anchor</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move visibility anchor</source>
+        <translation>Click &amp; drag to move visibility anchor</translation>
+    </message>
+    <message>
         <source>ALT + SHIFT + Click to delete point</source>
         <translation>ALT + SHIFT + 클릭으로 점 삭제</translation>
     </message>
