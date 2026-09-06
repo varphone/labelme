@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -224,6 +225,57 @@ def test_profile_preview_zoom_and_undo_preserve_centerline(
     assert restored.line_profile is not None
     np.testing.assert_array_equal(restored.points, original_points)
     assert win._docks.label_list[0].shape().line_profile is not None
+
+
+@pytest.mark.gui
+def test_profile_anchor_drag_repaints_without_syncing_panel_each_move(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    win = main_win(
+        file_or_dir=str(data_path / "raw" / "2011_000003.jpg"),
+        size=QSize(900, 700),
+    )
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+    shape = Shape(
+        label="stripe",
+        shape_type="linestrip",
+        points=np.array([[10.0, 20.0], [180.0, 20.0]], dtype=np.float64),
+        line_profile=LineProfile(
+            anchors=(
+                ProfileAnchor(
+                    0.5, width=ProfileValue(12.0, "manual", 1.0, True)
+                ),
+            )
+        ),
+    )
+    win._load_shapes([shape], replace=True)
+    canvas = win._canvas_widgets.canvas
+    canvas.select_shapes(shapes=[shape])
+
+    sync_panel = Mock()
+    update_canvas = Mock()
+    build_centerline = Mock(wraps=_app.line_profile_points)
+    monkeypatch.setattr(_app, "line_profile_points", build_centerline)
+    monkeypatch.setattr(win, "_sync_line_profile_widgets", sync_panel)
+    monkeypatch.setattr(canvas, "update", update_canvas)
+
+    win._on_line_profile_anchor_dragged(
+        "width", 0, QPointF(85.0, 30.0), "width"
+    )
+    win._on_line_profile_anchor_dragged(
+        "width", 0, QPointF(85.0, 35.0), "width"
+    )
+
+    assert sync_panel.call_count == 0
+    assert update_canvas.call_count == 2
+    assert build_centerline.call_count == 1
+
+    win._on_line_profile_anchor_drag_finished()
+
+    assert sync_panel.call_count == 1
 
 
 @pytest.mark.gui
