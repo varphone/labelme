@@ -1207,6 +1207,53 @@ def test_changing_ai_assist_setting_clears_highlights(
     assert canvas._ai_existing_shape_highlights == []
 
 
+@pytest.mark.parametrize("shape_type", ["linestrip", "catmull_rom", "bspline"])
+def test_split_line_at_vertex_preserves_line_shape_type(
+    *, canvas: Canvas, shape_type: ShapeType
+) -> None:
+    points = np.array(
+        [(0.0, 0.0), (10.0, 20.0), (30.0, 5.0), (50.0, 25.0), (70.0, 0.0)],
+        dtype=np.float64,
+    )
+    shape = Shape(shape_type=shape_type, points=points)
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [shape]
+    canvas._last_hovered_vertex = 2
+
+    assert canvas.can_split_linestrip
+    result = canvas.split_linestrip()
+
+    assert result is not None
+    original, left, right = result
+    assert original is shape
+    assert left.shape_type == right.shape_type == shape_type
+    np.testing.assert_array_equal(left.points, points[:3])
+    np.testing.assert_array_equal(right.points, points[2:])
+
+
+@pytest.mark.parametrize("shape_type", ["catmull_rom", "bspline"])
+def test_split_short_spline_at_vertex(
+    *, canvas: Canvas, shape_type: ShapeType
+) -> None:
+    shape = Shape(
+        shape_type=shape_type,
+        points=np.array(
+            [(0.0, 0.0), (30.0, 20.0), (60.0, 0.0)], dtype=np.float64
+        ),
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [shape]
+    canvas._last_hovered_vertex = 1
+
+    assert canvas.can_split_linestrip
+    result = canvas.split_linestrip()
+
+    assert result is not None
+    _, left, right = result
+    assert left.shape_type == right.shape_type == shape_type
+    assert len(left.points) == len(right.points) == 2
+
+
 @pytest.mark.gui
 def test_changing_polygon_detail_requests_preview_repaint(
     *,

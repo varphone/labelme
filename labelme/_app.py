@@ -855,10 +855,10 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         split_linestrip = action(
-            text=self.tr("Split Linestrip at Vertex"),
+            text=self.tr("Split Line at Vertex"),
             slot=self.split_linestrip,
             shortcut=shortcuts["split_linestrip"],
-            tip=self.tr("Split the selected linestrip into two at the hovered vertex"),
+            tip=self.tr("Split the selected line into two at the hovered vertex"),
             enabled=False,
         )
         insert_line_profile_anchor = action(
