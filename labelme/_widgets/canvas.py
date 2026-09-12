@@ -167,6 +167,11 @@ _CREATE_MODE_TO_SHAPE_TYPE: Final[dict[_CreateMode, ShapeType]] = {
     "ai_box_to_shape": "rectangle",
 }
 
+_SPLITTABLE_LINE_SHAPE_TYPES: Final[tuple[ShapeType, ...]] = (
+    "linestrip",
+    *SPLINE_SHAPE_TYPES,
+)
+
 
 class _CanvasMode(enum.Enum):
     CREATE = enum.auto()
@@ -698,10 +703,15 @@ class Canvas(QtWidgets.QWidget):
         if len(self.selected_shapes) != 1:
             return False
         shape = self.selected_shapes[0]
-        if shape.shape_type != "linestrip" or len(shape.points) < 3:
+        if (
+            shape.shape_type not in _SPLITTABLE_LINE_SHAPE_TYPES
+            or len(shape.points) < 3
+        ):
             return False
         i = self._last_hovered_vertex
-        return i is not None and 0 < i < len(shape.points) - 1
+        if i is None:
+            return False
+        return 0 < i < len(shape.points) - 1
 
     def _update_status(self, *, extra_messages: list[str] | None) -> None:
         messages: list[str] = []
@@ -1215,22 +1225,23 @@ class Canvas(QtWidgets.QWidget):
     def split_linestrip(
         self,
     ) -> tuple[Shape, Shape, Shape] | None:
-        """Split the selected linestrip at the hovered vertex.
+        """Split the selected line at the hovered vertex.
 
         Returns ``(original, left, right)`` when the split is applied, or
-        ``None`` if the operation is not valid (wrong shape type, endpoint
-        selected, or degenerate result).
+        ``None`` if the operation is not valid (unsupported shape type,
+        endpoint selected, or degenerate result).
         """
         if len(self.selected_shapes) != 1:
             return None
         shape = self.selected_shapes[0]
-        if shape.shape_type != "linestrip":
+        if shape.shape_type not in _SPLITTABLE_LINE_SHAPE_TYPES:
             return None
         i = self._last_hovered_vertex
-        # Splitting at an endpoint would produce a one-point linestrip.
+        # Splitting at an endpoint would produce a one-point line.
         if i is None or i == 0 or i >= len(shape.points) - 1:
             return None
-        split_position = point_to_position(shape.points, shape.points[i])
+        centerline = line_profile_points(shape.points, shape.shape_type)
+        split_position = point_to_position(centerline, shape.points[i])
         if split_position <= 0.0 or split_position >= 1.0:
             return None
         if shape.line_profile is None:
@@ -1245,7 +1256,7 @@ class Canvas(QtWidgets.QWidget):
         left = Shape(
             label=shape.label,
             group_id=shape.group_id,
-            shape_type="linestrip",
+            shape_type=shape.shape_type,
             flags=shape.flags,
             description=shape.description,
             points=shape.points[: i + 1].copy(),
@@ -1257,7 +1268,7 @@ class Canvas(QtWidgets.QWidget):
         right = Shape(
             label=shape.label,
             group_id=shape.group_id,
-            shape_type="linestrip",
+            shape_type=shape.shape_type,
             flags=shape.flags,
             description=shape.description,
             points=shape.points[i:].copy(),

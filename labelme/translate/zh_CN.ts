@@ -733,12 +733,12 @@ Shapes</source>
         <translation>修改所选形状的标签</translation>
     </message>
     <message>
-        <source>Split Linestrip at Vertex</source>
-        <translation>在顶点处分割折线</translation>
+        <source>Split Line at Vertex</source>
+        <translation>在顶点处分割线条</translation>
     </message>
     <message>
-        <source>Split the selected linestrip into two at the hovered vertex</source>
-        <translation>将选中的折线在光标悬停的顶点处分割为两条</translation>
+        <source>Split the selected line into two at the hovered vertex</source>
+        <translation>将选中的线条在光标悬停的顶点处分割为两条</translation>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
