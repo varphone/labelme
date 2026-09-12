@@ -1639,6 +1639,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         canvas.set_point_size(point_size=self._config["shape"]["point_size"])
         canvas.set_show_labels(value=self._config["shape"]["show_labels"])
+        canvas.set_snap_to_point(self._config["snap_to_point"])
         canvas.set_ai_existing_shape_suppression(
             enabled=self._config["ai"]["suppress_existing_shape_matches"]
         )
