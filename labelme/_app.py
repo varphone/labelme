@@ -349,6 +349,7 @@ class _Actions(NamedTuple):
     measure_line_profile: QtGui.QAction
     delete_selected_files: QtGui.QAction
     export_selected_files: QtGui.QAction
+    export_annotated_files: QtGui.QAction
     batch_fill_line_profiles: QtGui.QAction
     batch_rebuild_line_profiles: QtGui.QAction
     delete: QtGui.QAction
@@ -768,6 +769,13 @@ class MainWindow(QtWidgets.QMainWindow):
             text=self.tr("Export Selected Files"),
             slot=self.export_selected_files,
             tip=self.tr("Copy the selected files and their label files to a directory"),
+        )
+        export_annotated_files = action(
+            text=self.tr("Export Annotated Files"),
+            slot=self.export_annotated_files,
+            tip=self.tr(
+                "Copy the selected annotated files and their label files to a directory"
+            ),
         )
         batch_fill_line_profiles = action(
             text=self.tr("Fill Missing Line Profiles"),
@@ -1309,6 +1317,7 @@ class MainWindow(QtWidgets.QMainWindow):
             measure_line_profile=measure_line_profile,
             delete_selected_files=delete_selected_files,
             export_selected_files=export_selected_files,
+            export_annotated_files=export_annotated_files,
             batch_fill_line_profiles=batch_fill_line_profiles,
             batch_rebuild_line_profiles=batch_rebuild_line_profiles,
             delete=delete,
@@ -4612,12 +4621,23 @@ class MainWindow(QtWidgets.QMainWindow):
         has_selection = len(selected) > 0
         self._actions.delete_selected_files.setEnabled(has_selection)
         self._actions.export_selected_files.setEnabled(has_selection)
+        has_annotated_selection = any(
+            QtCore.QFile.exists(
+                _resolve_label_path(
+                    image_or_label_path=item.text(),
+                    output_dir=self._output_dir,
+                )
+            )
+            for item in selected
+        )
+        self._actions.export_annotated_files.setEnabled(has_annotated_selection)
         batch_available = has_selection and self._line_profile_batch_thread is None
         self._actions.batch_fill_line_profiles.setEnabled(batch_available)
         self._actions.batch_rebuild_line_profiles.setEnabled(batch_available)
         menu = QtWidgets.QMenu(self)
         menu.addAction(self._actions.delete_selected_files)
         menu.addAction(self._actions.export_selected_files)
+        menu.addAction(self._actions.export_annotated_files)
         menu.addSeparator()
         batch_menu = menu.addMenu(self.tr("Batch Line Profile"))
         batch_menu.addAction(self._actions.batch_fill_line_profiles)
@@ -4679,6 +4699,29 @@ class MainWindow(QtWidgets.QMainWindow):
         items = self._docks.file_list.selectedItems()
         if not items:
             return
+        self._export_file_list_items(items=list(items), annotated_only=False)
+
+    def export_annotated_files(self) -> None:
+        items = [
+            item
+            for item in self._docks.file_list.selectedItems()
+            if QtCore.QFile.exists(
+                _resolve_label_path(
+                    image_or_label_path=item.text(),
+                    output_dir=self._output_dir,
+                )
+            )
+        ]
+        if not items:
+            return
+        self._export_file_list_items(items=items, annotated_only=True)
+
+    def _export_file_list_items(
+        self,
+        *,
+        items: list[QtWidgets.QListWidgetItem],
+        annotated_only: bool,
+    ) -> None:
         target_dir = QtWidgets.QFileDialog.getExistingDirectory(
             self,
             self.tr("Choose Export Directory"),
@@ -4687,7 +4730,6 @@ class MainWindow(QtWidgets.QMainWindow):
         if not target_dir:
             return
         target = Path(target_dir)
-        exported = 0
         for item in items:
             image_path = Path(item.text())
             label_path = Path(
@@ -4700,11 +4742,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 if src.exists():
                     dest = target / src.name
                     QtCore.QFile.copy(str(src), str(dest))
-                    exported += 1
+        message = (
+            self.tr("Exported {count} annotated files to {dir}")
+            if annotated_only
+            else self.tr("Exported {count} files to {dir}")
+        )
         self.show_status_message(
-            self.tr("Exported {count} files to {dir}").format(
-                count=len(items), dir=target_dir
-            ),
+            message.format(count=len(items), dir=target_dir),
             delay=5000,
         )
 
