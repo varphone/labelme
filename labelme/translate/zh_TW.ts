@@ -641,6 +641,18 @@ Shapes</source>
         <translation>將選中的檔案及其標註檔案複製到指定目錄</translation>
     </message>
     <message>
+        <source>Export Annotated Files</source>
+        <translation>匯出已標註檔案</translation>
+    </message>
+    <message>
+        <source>Copy the selected annotated files and their label files to a directory</source>
+        <translation>將選取的已標註檔案及其標註檔案複製到指定目錄</translation>
+    </message>
+    <message>
+        <source>Exported {count} annotated files to {dir}</source>
+        <translation>已將 {count} 個已標註檔案匯出至 {dir}</translation>
+    </message>
+    <message>
         <source>Fill Missing Line Profiles</source>
         <translation>補齊缺失的線剖面</translation>
     </message>
