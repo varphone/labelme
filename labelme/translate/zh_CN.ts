@@ -713,6 +713,18 @@ Shapes</source>
         <translation>将选中的文件及其标注文件复制到指定目录</translation>
     </message>
     <message>
+        <source>Export Annotated Files</source>
+        <translation>导出已标注文件</translation>
+    </message>
+    <message>
+        <source>Copy the selected annotated files and their label files to a directory</source>
+        <translation>将选中的已标注文件及其标注文件复制到指定目录</translation>
+    </message>
+    <message>
+        <source>Exported {count} annotated files to {dir}</source>
+        <translation>已将 {count} 个已标注文件导出到 {dir}</translation>
+    </message>
+    <message>
         <source>Fill Missing Line Profiles</source>
         <translation>补齐缺失的线剖面</translation>
     </message>
