@@ -131,3 +131,63 @@ def test_export_selected_files_copies_to_target(
     assert any("2011_000003" in f for f in exported)
 
     close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+def test_export_annotated_files_filters_selected_files(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    pause: bool,
+) -> None:
+    work_dir = tmp_path / "work"
+    work_dir.mkdir()
+    for image_path in (data_path / "raw").iterdir():
+        if image_path.is_file():
+            shutil.copy(image_path, work_dir / image_path.name)
+    shutil.copy(
+        data_path / "annotated" / "2011_000003.json",
+        work_dir / "2011_000003.json",
+    )
+
+    win = main_win(file_or_dir=str(work_dir), output_dir=str(work_dir))
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+    file_list = win._docks.file_list
+    file_list.selectAll()
+    qtbot.wait(50)
+
+    menu = win._build_file_list_context_menu()
+    annotated_action = next(
+        action for action in menu.actions() if action.text() == "Export Annotated Files"
+    )
+    assert annotated_action.isEnabled()
+    menu.deleteLater()
+
+    export_dir = tmp_path / "export"
+    export_dir.mkdir()
+    monkeypatch.setattr(
+        QtWidgets.QFileDialog,
+        "getExistingDirectory",
+        lambda *a, **k: str(export_dir),
+    )
+
+    win.export_annotated_files()
+    qtbot.wait(100)
+
+    assert sorted(f.name for f in export_dir.iterdir() if f.is_file()) == [
+        "2011_000003.jpg",
+        "2011_000003.json",
+    ]
+
+    file_list.clearSelection()
+    file_list.setCurrentRow(1)
+    qtbot.wait(50)
+    menu = win._build_file_list_context_menu()
+    annotated_action = next(
+        action for action in menu.actions() if action.text() == "Export Annotated Files"
+    )
+    assert not annotated_action.isEnabled()
+    menu.deleteLater()
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
