@@ -46,6 +46,11 @@ def test_zoom_control_exposes_accessible_name(*, _win: MainWindow) -> None:
     assert interface.text(QtGui.QAccessible.Text.Name) == _win.tr("Zoom")
 
 
+@pytest.mark.gui
+def test_minimap_center_uses_canvas_scroll_area(*, _win: MainWindow) -> None:
+    _win._center_canvas_on_image_point(QPointF(1, 1))
+
+
 def _wait_for_fitted_image(*, qtbot: QtBot, win: MainWindow) -> None:
     def check() -> None:
         canvas = win._canvas_widgets.canvas

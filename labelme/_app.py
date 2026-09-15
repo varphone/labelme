@@ -3788,8 +3788,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _center_canvas_on_image_point(self, point: QtCore.QPointF) -> None:
         canvas = self._canvas_widgets.canvas
-        scroll_area = self.centralWidget()
-        assert isinstance(scroll_area, QtWidgets.QScrollArea)
+        scroll_area = self._canvas_widgets.scroll_area
         viewport = scroll_area.viewport()
         viewport_center = QtCore.QPointF(viewport.rect().center())
         current = canvas.mapFrom(viewport, viewport_center.toPoint())
