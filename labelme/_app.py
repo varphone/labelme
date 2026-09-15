@@ -1240,7 +1240,7 @@ class MainWindow(QtWidgets.QMainWindow):
             merge,
             remove_point,
             split_linestrip,
-            None,
+            separator(),
             insert_line_profile_anchor,
             delete_line_profile_anchor,
             clear_line_profile,
@@ -1369,8 +1369,7 @@ class MainWindow(QtWidgets.QMainWindow):
         view_menu = self.menuBar().addMenu(self.tr("&View"))
         help_menu = self.menuBar().addMenu(self.tr("&Help"))
         label_menu = QtWidgets.QMenu()
-        _utils.add_actions(
-            label_menu,
+        label_menu.addActions(
             (
                 self._actions.edit,
                 self._actions.delete,
@@ -1399,7 +1398,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.close,
                 self._actions.delete_file,
                 self._actions.delete_image_file,
-                None,
+                separator(),
                 open_config,
                 separator(),
                 quit_,
@@ -1421,10 +1420,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.hide_all,
                 self._actions.show_all,
                 self._actions.toggle_all,
-                None,
+                separator(),
                 self._actions.show_minimap,
                 self._actions.show_line_profile_preview,
-                None,
+                separator(),
                 self._actions.zoom_in,
                 self._actions.zoom_out,
                 self._actions.zoom_org,
@@ -1443,8 +1442,8 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self._canvas_widgets.canvas.context_menus.with_selection.addActions(
             (
-                action("&Copy here", self.copy_shape),
-                action("&Move here", self.move_shape),
+                action(text="&Copy here", slot=self.copy_shape),
+                action(text="&Move here", slot=self.move_shape),
                 self._actions.split_linestrip,
             ),
         )
@@ -1485,9 +1484,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     separator(),
                     self._actions.fit_window,
                     self._actions.zoom_widget_action,
-                    None,
+                    separator(),
                     self._actions.circle_radius_action,
-                    None,
+                    separator(),
                     select_ai_model,
                     separator(),
                     ai_prompt_action,
@@ -1877,8 +1876,9 @@ class MainWindow(QtWidgets.QMainWindow):
         return not len(self._docks.label_list)
 
     def populate_mode_actions(self) -> None:
-        self._canvas_widgets.canvas.context_menu.clear()
-        self._canvas_widgets.canvas.context_menu.addActions(self._actions.context_menu)
+        menu = self._canvas_widgets.canvas.context_menus.without_selection
+        menu.clear()
+        menu.addActions(self._actions.context_menu)
         self._menus.edit.clear()
         actions = (
             *[draw_action for _, draw_action in self._actions.draw],
@@ -4303,6 +4303,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self._canvas_widgets.canvas.adjustSize()
         self._canvas_widgets.canvas.update()
         self._canvas_widgets.minimap.update()
+
+    def _apply_zoom_to_canvas(self) -> None:
+        if self._image.isNull():
+            logger.warning("image is null, cannot apply zoom")
+            return
+        self._canvas_widgets.canvas.scale = self._canvas_widgets.zoom_widget.scale
 
     def _adjust_scale(self) -> None:
         if self._zoom_mode == _ZoomMode.FIT_WINDOW:
