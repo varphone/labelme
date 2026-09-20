@@ -70,6 +70,7 @@ from ._line_profile_batch import BatchReport
 from ._line_profile_sequence import compare_frames
 from ._line_profile_sequence import transfer_frame_profiles
 from ._line_profile_sequence import validate_frame_mapping
+from ._shape import CIRCLE_POINT_COUNT
 from ._shape import Shape
 from ._shape import ShapeType
 from ._shape_clipboard import ShapeClipboard
@@ -2208,12 +2209,166 @@ class MainWindow(QtWidgets.QMainWindow):
             return
 
         self._docks.unique_label_list.setCurrentItem(item)
+        menu = self._build_unique_label_list_context_menu(item=item)
+        menu.exec(self._docks.unique_label_list.mapToGlobal(point))  # ty: ignore[invalid-argument-type]
+
+    def _build_unique_label_list_context_menu(
+        self, *, item: QtWidgets.QListWidgetItem
+    ) -> QtWidgets.QMenu:
         menu = QtWidgets.QMenu(self)
         rename = menu.addAction(self.tr("Rename Label"))
         rename.triggered.connect(lambda: self._rename_label(item))
-        menu.exec(  # ty: ignore[invalid-argument-type]
-            self._docks.unique_label_list.mapToGlobal(point)
+        menu.addSeparator()
+        set_circle_radius = menu.addAction(self.tr("Set Uniform Circle Radius"))
+        set_circle_radius.triggered.connect(
+            lambda: self._set_uniform_circle_radius(item)
         )
+        return menu
+
+    def _set_uniform_circle_radius(self, item: QtWidgets.QListWidgetItem) -> None:
+        unique_label_list = self._docks.unique_label_list
+        if unique_label_list.row(item) < 0:
+            logger.warning("The label item no longer belongs to the label list.")
+            return
+
+        label = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(label, str):
+            return
+
+        current_radius = 1.0
+        for shape in self._canvas_widgets.canvas.shapes:
+            if shape.label != label or shape.shape_type != "circle":
+                continue
+            if len(shape.points) != CIRCLE_POINT_COUNT:
+                continue
+            candidate = _circle_radius(points=shape.points)
+            if math.isfinite(candidate) and candidate > 0:
+                current_radius = candidate
+                break
+        radius, accepted = QtWidgets.QInputDialog.getDouble(
+            self,
+            self.tr("Set Uniform Circle Radius"),
+            self.tr("Radius:"),
+            current_radius,
+            0.001,
+            1_000_000_000.0,
+            3,
+        )
+        if not accepted or not math.isfinite(radius) or radius <= 0:
+            return
+
+        other_result = self._set_circle_radius_in_other_files(
+            label=label, radius=radius
+        )
+        if other_result is None:
+            return
+        other_circle_count, other_file_count = other_result
+
+        current_shapes = [
+            shape
+            for shape in self._canvas_widgets.canvas.shapes
+            if shape.label == label and shape.shape_type == "circle"
+        ]
+        if current_shapes:
+            canvas = self._canvas_widgets.canvas
+            canvas.backup_shapes()
+            for shape in current_shapes:
+                _set_circle_radius(shape=shape, radius=radius)
+            canvas.update()
+            self._sync_circle_radius_widget()
+            self.mark_dirty()
+
+        circle_count = len(current_shapes) + other_circle_count
+        if circle_count == 0:
+            self.show_status_message(
+                self.tr("No circles found for label '{0}'.").format(label),
+                delay=5000,
+            )
+        else:
+            self.show_status_message(
+                self.tr(
+                    "Set the radius of {0} circles in {1} other annotation files."
+                ).format(circle_count, other_file_count),
+                delay=5000,
+            )
+
+    def _set_circle_radius_in_other_files(
+        self, *, label: str, radius: float
+    ) -> tuple[int, int] | None:
+        current_label_path = (
+            None
+            if self._label_file_path is None
+            else Path(self._label_file_path).resolve()
+        )
+        staged: list[tuple[str, Annotation, int, int]] = []
+        other_circle_count = 0
+
+        for row in range(self._docks.file_list.count()):
+            file_item = self._docks.file_list.item(row)
+            assert file_item is not None
+            label_path = _resolve_label_path(
+                image_or_label_path=file_item.text(),
+                output_dir=self._output_dir,
+            )
+            if not QtCore.QFile.exists(label_path):
+                continue
+            if current_label_path is not None and Path(label_path).resolve() == (
+                current_label_path
+            ):
+                continue
+
+            annotation = self._read_annotation_file(label_path=label_path)
+            if annotation is None:
+                return None
+            matching_shapes = [
+                shape
+                for shape in annotation.shapes
+                if shape["label"] == label and shape["shape_type"] == "circle"
+            ]
+            if not matching_shapes:
+                continue
+
+            image = QtGui.QImage.fromData(annotation.image_data)
+            if image.isNull():
+                self.show_error_message(
+                    title=self.tr("Error reading label data"),
+                    message=self.tr(
+                        "Could not read the image stored in <b>{}</b>."
+                    ).format(label_path),
+                )
+                return None
+
+            for shape in matching_shapes:
+                shape["points"] = _circle_points_with_radius(
+                    points=shape["points"], radius=radius
+                )
+            other_circle_count += len(matching_shapes)
+            staged.append(
+                (
+                    label_path,
+                    annotation,
+                    image.height(),
+                    image.width(),
+                )
+            )
+
+        for label_path, annotation, image_height, image_width in staged:
+            try:
+                write_label_file(
+                    filename=label_path,
+                    annotation=annotation,
+                    image_height=image_height,
+                    image_width=image_width,
+                    save_image_data=self._config["with_image_data"],
+                )
+            except (LabelFileError, OSError, ValueError) as error:
+                self.show_error_message(
+                    title=self.tr("Error saving label data"),
+                    message=self.tr("<b>{}</b>").format(error),
+                )
+                return None
+
+        return other_circle_count, len(staged)
 
     def _rename_label_in_other_files(self, old_label: str, new_label: str) -> bool:
         current_label_path = (
@@ -5608,6 +5763,36 @@ def _shape_to_dict(shape: Shape, /) -> ShapeDict:
     if shape.line_profile_error is not None:
         shape_dict["line_profile_error"] = shape.line_profile_error
     return shape_dict
+
+
+def _circle_radius(*, points: np.ndarray) -> float:
+    if len(points) != CIRCLE_POINT_COUNT:
+        raise ValueError("circle shapes must have exactly two points")
+    return float(np.linalg.norm(points[1] - points[0]))
+
+
+def _circle_points_with_radius(
+    *, points: np.ndarray | list[list[float]], radius: float
+) -> list[list[float]]:
+    point_array = np.asarray(points, dtype=np.float64)
+    if point_array.shape != (CIRCLE_POINT_COUNT, 2):
+        raise ValueError("circle shapes must have exactly two points")
+
+    center = point_array[0].copy()
+    direction = point_array[1] - center
+    length = float(np.linalg.norm(direction))
+    if length <= np.finfo(np.float64).eps:
+        direction = np.array([1.0, 0.0], dtype=np.float64)
+    else:
+        direction /= length
+    return np.stack((center, center + direction * radius)).tolist()
+
+
+def _set_circle_radius(*, shape: Shape, radius: float) -> None:
+    shape.points = np.asarray(
+        _circle_points_with_radius(points=shape.points, radius=radius),
+        dtype=np.float64,
+    )
 
 
 def _make_image_too_large_message(*, image_data: bytes) -> str | None:
