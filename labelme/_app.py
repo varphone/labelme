@@ -4472,7 +4472,7 @@ class MainWindow(QtWidgets.QMainWindow):
             False,  # noqa: FBT003 -- placeholder for the Qt triggered flag
             is_initial_load=True,
         )
-        self._actions.image.setEnabled(True)
+        self.update_action_states(value=True)
         self._sync_previous_frame_profile_action()
         # A load never pulls the keyboard out of the File List, whatever drove
         # it; otherwise an arrow-key walk of the list ends after one keypress.
