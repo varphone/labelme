@@ -841,6 +841,38 @@ Shapes</source>
         <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>正在重新命名標註檔案中的標籤…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>正在設定標註檔案中的圓半徑…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>批次更新標註</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>批次更新標註失敗</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>批次更新標註已取消。</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>找不到標籤「{0}」的圓形。</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>已在另外 {1} 個標註檔案中設定 {0} 個圓形的半徑。</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>已在另外 {0} 個標註檔案中重新命名標籤</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>遮罩輸出無法使用</translation>
     </message>
@@ -867,10 +899,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
         <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
     </message>
     <message>
         <source>New label:</source>

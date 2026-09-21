@@ -596,6 +596,38 @@ Shapes</source>
         <translation>%s เริ่มทำงานแล้ว</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>กำลังเปลี่ยนชื่อป้ายกำกับในไฟล์คำอธิบายประกอบ…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>กำลังตั้งค่ารัศมีวงกลมในไฟล์คำอธิบายประกอบ…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>การอัปเดตคำอธิบายประกอบแบบกลุ่ม</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>การอัปเดตคำอธิบายประกอบแบบกลุ่มล้มเหลว</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>ยกเลิกการอัปเดตคำอธิบายประกอบแบบกลุ่มแล้ว</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>ไม่พบวงกลมสำหรับป้ายกำกับ '{0}'</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>ตั้งค่ารัศมีของวงกลม {0} วงในไฟล์คำอธิบายประกอบอื่น {1} ไฟล์แล้ว</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>เปลี่ยนชื่อป้ายกำกับในไฟล์คำอธิบายประกอบอื่น {0} ไฟล์แล้ว</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>ไม่สามารถสร้างเอาต์พุตมาสก์ได้</translation>
     </message>

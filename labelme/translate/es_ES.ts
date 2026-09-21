@@ -596,6 +596,38 @@ Shapes</source>
         <translation>%s iniciado.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Renombrando la etiqueta en los archivos de anotaciones…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Estableciendo el radio del círculo en los archivos de anotaciones…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Actualización por lotes de anotaciones</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Error en la actualización por lotes de anotaciones</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Actualización por lotes de anotaciones cancelada.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>No se encontraron círculos para la etiqueta «{0}».</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Se estableció el radio de {0} círculos en {1} archivos de anotaciones adicionales.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Etiqueta renombrada en {0} archivos de anotaciones adicionales</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Salida de máscara no disponible</translation>
     </message>

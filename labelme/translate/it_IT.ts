@@ -602,6 +602,38 @@ forme</translation>
         <translation>%s avviato.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Ridenominazione dell'etichetta nei file di annotazione…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Impostazione del raggio del cerchio nei file di annotazione…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Aggiornamento in batch delle annotazioni</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Aggiornamento in batch delle annotazioni non riuscito</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Aggiornamento in batch delle annotazioni annullato.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Nessun cerchio trovato per l'etichetta "{0}".</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Raggio impostato per {0} cerchi in {1} altri file di annotazione.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Etichetta rinominata in {0} altri file di annotazione</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Output maschera non disponibile</translation>
     </message>

@@ -581,6 +581,38 @@ Shapes</source>
         <translation>%s запущен.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Переименование метки в файлах аннотаций…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Настройка радиуса круга в файлах аннотаций…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Пакетное обновление аннотаций</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Не удалось выполнить пакетное обновление аннотаций</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Пакетное обновление аннотаций отменено.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Круги для метки «{0}» не найдены.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Радиус {0} кругов в {1} других файлах аннотаций настроен.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Метка переименована в {0} других файлах аннотаций</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Вывод маски недоступен</translation>
     </message>

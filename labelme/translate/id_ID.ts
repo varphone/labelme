@@ -649,6 +649,38 @@
         <translation>Cadangan konfigurasi disimpan ke %s</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Mengganti nama label dalam file anotasi…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Mengatur radius lingkaran dalam file anotasi…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Pembaruan anotasi batch</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Pembaruan anotasi batch gagal</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Pembaruan anotasi batch dibatalkan.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Tidak ditemukan lingkaran untuk label '{0}'.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Radius {0} lingkaran di {1} file anotasi lainnya telah diatur.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Label diganti namanya di {0} file anotasi lainnya</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Keluaran mask tidak tersedia</translation>
     </message>

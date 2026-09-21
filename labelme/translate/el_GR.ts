@@ -602,6 +602,38 @@ Shapes</source>
         <translation>Βρέθηκαν σφάλματα κατά τη φόρτωση της διαμόρφωσης. Ελέγξτε τα παρακάτω σφάλματα και φορτώστε ξανά τη διαμόρφωσή σας ή αγνοήστε τις λανθασμένες γραμμές.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Μετονομασία ετικέτας σε αρχεία σχολιασμών…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Ορισμός ακτίνας κύκλων σε αρχεία σχολιασμών…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Μαζική ενημέρωση σχολιασμών</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Η μαζική ενημέρωση σχολιασμών απέτυχε</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Η μαζική ενημέρωση σχολιασμών ακυρώθηκε.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Δεν βρέθηκαν κύκλοι για την ετικέτα «{0}».</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Ορίστηκε η ακτίνα για {0} κύκλους σε {1} άλλα αρχεία σχολιασμών.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Η ετικέτα μετονομάστηκε σε {0} άλλα αρχεία σχολιασμών</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Η έξοδος μάσκας δεν είναι διαθέσιμη</translation>
     </message>
@@ -628,10 +660,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
         <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
     </message>
     <message>
         <source>New label:</source>

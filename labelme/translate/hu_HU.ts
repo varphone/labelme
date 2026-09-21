@@ -610,6 +610,38 @@ Shapes</source>
         <translation>%s elindítva.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Címke átnevezése annotációs fájlokban…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Körsugár beállítása annotációs fájlokban…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Kötegelt annotációfrissítés</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>A kötegelt annotációfrissítés sikertelen</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>A kötegelt annotációfrissítés megszakítva.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Nem találhatók körök a(z) „{0}” címkéhez.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>{0} kör sugara beállítva {1} további annotációs fájlban.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Címke átnevezve {0} további annotációs fájlban</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>A maszk kimenet nem érhető el</translation>
     </message>

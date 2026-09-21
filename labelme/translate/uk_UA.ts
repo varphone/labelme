@@ -603,6 +603,38 @@ Shapes</source>
         <translation>Під час завантаження конфігурації виявлено помилки. Перегляньте наведені нижче помилки та перезавантажте свою конфігурацію або проігноруйте помилкові рядки.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Перейменування мітки у файлах анотацій…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Налаштування радіуса кола у файлах анотацій…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Пакетне оновлення анотацій</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Не вдалося виконати пакетне оновлення анотацій</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Пакетне оновлення анотацій скасовано.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Кіл для мітки «{0}» не знайдено.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Радіус {0} кіл у {1} інших файлах анотацій налаштовано.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Мітку перейменовано у {0} інших файлах анотацій</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Вивід маски недоступний</translation>
     </message>
@@ -629,10 +661,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
         <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
     </message>
     <message>
         <source>New label:</source>

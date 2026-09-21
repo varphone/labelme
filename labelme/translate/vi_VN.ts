@@ -596,6 +596,38 @@ Shapes</source>
         <translation>%s đã khởi động.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Đang đổi tên nhãn trong các tệp chú thích…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Đang đặt bán kính hình tròn trong các tệp chú thích…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Cập nhật chú thích hàng loạt</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Cập nhật chú thích hàng loạt không thành công</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Đã hủy cập nhật chú thích hàng loạt.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Không tìm thấy hình tròn nào cho nhãn '{0}'.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Đã đặt bán kính cho {0} hình tròn trong {1} tệp chú thích khác.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Đã đổi tên nhãn trong {0} tệp chú thích khác</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Không có đầu ra mặt nạ</translation>
     </message>

@@ -596,6 +596,38 @@ Shapes</source>
         <translation>%s gestart.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Label in annotatiebestanden hernoemen…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Cirkelradius in annotatiebestanden instellen…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Batchupdate van annotaties</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Batchupdate van annotaties mislukt</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Batchupdate van annotaties geannuleerd.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Geen cirkels gevonden voor label '{0}'.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>De straal van {0} cirkels in {1} andere annotatiebestanden is ingesteld.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Label hernoemd in {0} andere annotatiebestanden</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Maskeruitvoer niet beschikbaar</translation>
     </message>

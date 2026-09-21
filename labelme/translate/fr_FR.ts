@@ -602,6 +602,38 @@ les formes</translation>
         <translation>%s démarré.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Renommage du libellé dans les fichiers d’annotations…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Définition du rayon du cercle dans les fichiers d’annotations…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Mise à jour groupée des annotations</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Échec de la mise à jour groupée des annotations</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Mise à jour groupée des annotations annulée.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Aucun cercle trouvé pour le libellé « {0} ».</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Rayon défini pour {0} cercles dans {1} autres fichiers d’annotations.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Libellé renommé dans {0} autres fichiers d’annotations</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Sortie de masque indisponible</translation>
     </message>

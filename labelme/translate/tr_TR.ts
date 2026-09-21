@@ -599,6 +599,38 @@ Shapes</source>
         <translation>%s başlatıldı.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Açıklama dosyalarındaki etiket yeniden adlandırılıyor…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Açıklama dosyalarındaki daire yarıçapı ayarlanıyor…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Toplu açıklama güncellemesi</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Toplu açıklama güncellemesi başarısız oldu</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Toplu açıklama güncellemesi iptal edildi.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>'{0}' etiketi için daire bulunamadı.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>{1} diğer açıklama dosyasındaki {0} dairenin yarıçapı ayarlandı.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Etiket {0} diğer açıklama dosyasında yeniden adlandırıldı</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Maske çıktısı kullanılamıyor</translation>
     </message>

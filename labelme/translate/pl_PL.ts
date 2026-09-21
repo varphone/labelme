@@ -596,6 +596,38 @@ Shapes</source>
         <translation>%s uruchomiono.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Zmienianie nazwy etykiety w plikach adnotacji…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Ustawianie promienia okręgu w plikach adnotacji…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Grupowa aktualizacja adnotacji</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Grupowa aktualizacja adnotacji nie powiodła się</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Grupowa aktualizacja adnotacji anulowana.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Nie znaleziono okręgów dla etykiety „{0}”.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Ustawiono promień {0} okręgów w {1} innych plikach adnotacji.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Zmieniono nazwę etykiety w {0} innych plikach adnotacji</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Wyjście maski niedostępne</translation>
     </message>

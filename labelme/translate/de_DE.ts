@@ -610,6 +610,38 @@ Formen</translation>
         <translation>%s gestartet.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Label in Annotationsdateien wird umbenannt …</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Kreisradius in Annotationsdateien wird festgelegt …</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Stapelaktualisierung von Annotationen</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Stapelaktualisierung von Annotationen fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Stapelaktualisierung von Annotationen abgebrochen.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>Keine Kreise für das Label „{0}“ gefunden.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Der Radius von {0} Kreisen in {1} weiteren Annotationsdateien wurde festgelegt.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Label in {0} weiteren Annotationsdateien umbenannt</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>Maskenausgabe nicht verfügbar</translation>
     </message>

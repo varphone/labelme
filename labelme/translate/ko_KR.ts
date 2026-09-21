@@ -596,6 +596,38 @@ Shapes</source>
         <translation>%s가 시작되었습니다.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>주석 파일의 레이블 이름을 바꾸는 중…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>주석 파일의 원 반지름을 설정하는 중…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>주석 일괄 업데이트</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>주석 일괄 업데이트 실패</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>주석 일괄 업데이트가 취소되었습니다.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>레이블 '{0}'에 대한 원을 찾을 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>다른 주석 파일 {1}개에서 원 {0}개의 반지름을 설정했습니다.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>다른 주석 파일 {0}개에서 레이블 이름을 변경했습니다</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>마스크 출력을 사용할 수 없음</translation>
     </message>

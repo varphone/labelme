@@ -610,6 +610,38 @@ Shapes</source>
         <translation>%s を起動しました</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>アノテーションファイルのラベル名を変更中…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>アノテーションファイルの円の半径を設定中…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>アノテーションの一括更新</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>アノテーションの一括更新に失敗しました</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>アノテーションの一括更新をキャンセルしました。</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>ラベル「{0}」の円が見つかりません。</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>{1} 個の他のアノテーションファイルにある {0} 個の円の半径を設定しました。</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>{0} 個の他のアノテーションファイルでラベル名を変更しました</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>マスク出力は利用できません</translation>
     </message>

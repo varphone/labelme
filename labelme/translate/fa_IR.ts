@@ -596,6 +596,38 @@ Shapes</source>
         <translation>%s راه‌اندازی شد.</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>در حال تغییر نام برچسب در فایل‌های حاشیه‌نویسی…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>در حال تنظیم شعاع دایره در فایل‌های حاشیه‌نویسی…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>به‌روزرسانی دسته‌ای حاشیه‌نویسی</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>به‌روزرسانی دسته‌ای حاشیه‌نویسی ناموفق بود</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>به‌روزرسانی دسته‌ای حاشیه‌نویسی لغو شد.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>هیچ دایره‌ای برای برچسب «{0}» پیدا نشد.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>شعاع {0} دایره در {1} فایل حاشیه‌نویسی دیگر تنظیم شد.</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>نام برچسب در {0} فایل حاشیه‌نویسی دیگر تغییر کرد</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>خروجی ماسک در دسترس نیست</translation>
     </message>

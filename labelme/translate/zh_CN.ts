@@ -921,6 +921,26 @@ Shapes</source>
         <translation>请选择一个标签开始标注。双击或右键单击可重命名；按 Esc 取消选择。</translation>
     </message>
     <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>正在重命名标注文件中的标签…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>正在设置标注文件中的圆半径…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>批量更新标注</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>批量更新标注失败</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>批量更新标注已取消。</translation>
+    </message>
+    <message>
         <source>Mask Output Unavailable</source>
         <translation>掩膜输出不可用</translation>
     </message>
