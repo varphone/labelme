@@ -17,6 +17,12 @@ def test_actions_follow_image_and_shapes(
     *, main_win: MainWinFactory, data_path: Path
 ) -> None:
     win = main_win(config_overrides={"auto_save": False})
+    curve_actions = (
+        win._actions.create_bezier2_mode,
+        win._actions.create_bezier3_mode,
+        win._actions.create_catmull_rom_mode,
+        win._actions.create_bspline_mode,
+    )
     visibility_actions = (
         win._actions.hide_all,
         win._actions.show_all,
@@ -26,6 +32,7 @@ def test_actions_follow_image_and_shapes(
     assert not win._actions.close.isEnabled()
     assert not win._canvas_widgets.zoom_widget.isEnabled()
     assert not win._actions.brightness_contrast.isEnabled()
+    assert all(not action.isEnabled() for action in curve_actions)
     assert all(not action.isEnabled() for action in visibility_actions)
 
     assert win._load_file(
@@ -35,10 +42,12 @@ def test_actions_follow_image_and_shapes(
     assert win._actions.close.isEnabled()
     assert win._canvas_widgets.zoom_widget.isEnabled()
     assert win._actions.brightness_contrast.isEnabled()
+    assert all(action.isEnabled() for action in curve_actions)
     assert all(action.isEnabled() for action in visibility_actions)
 
     assert win._load_file(image_or_label_path=str(data_path / "raw/2011_000003.jpg"))
     assert win._actions.save_as.isEnabled()
+    assert all(action.isEnabled() for action in curve_actions)
     assert all(not action.isEnabled() for action in visibility_actions)
 
     win.close_file()
@@ -46,6 +55,7 @@ def test_actions_follow_image_and_shapes(
     assert not win._actions.close.isEnabled()
     assert not win._canvas_widgets.zoom_widget.isEnabled()
     assert not win._actions.brightness_contrast.isEnabled()
+    assert all(not action.isEnabled() for action in curve_actions)
     assert all(not action.isEnabled() for action in visibility_actions)
 
 
