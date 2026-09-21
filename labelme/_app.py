@@ -915,10 +915,10 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         split_linestrip = action(
-            text=self.tr("Split Linestrip at Vertex"),
+            text=self.tr("Split Line at Vertex"),
             slot=self.split_linestrip,
             shortcut=shortcuts["split_linestrip"],
-            tip=self.tr("Split the selected linestrip into two at the hovered vertex"),
+            tip=self.tr("Split the selected line into two at the hovered vertex"),
             enabled=False,
         )
         insert_line_profile_anchor = action(
@@ -1688,6 +1688,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         canvas.set_point_size(point_size=self._config["shape"]["point_size"])
         canvas.set_show_labels(value=self._config["shape"]["show_labels"])
+        canvas.set_snap_to_point(value=self._config["snap_to_point"])
         canvas.set_ai_existing_shape_suppression(
             enabled=self._config["ai"]["suppress_existing_shape_matches"]
         )
@@ -5282,7 +5283,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_label(shape=left)
         self.add_label(shape=right)
         canvas.deselect_shape()
-        canvas.select_shapes([left, right])
+        canvas.select_shapes(shapes=[left, right])
         canvas.update()
         self.mark_dirty()
 

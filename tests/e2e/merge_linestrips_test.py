@@ -8,7 +8,7 @@ from pytestqt.qtbot import QtBot
 
 from labelme._app import MainWindow
 from labelme._shape import Shape
-from labelme._widgets.canvas import Canvas
+from labelme._widgets._canvas import Canvas
 from labelme._widgets.label_list_widget import LabelListWidget
 
 from .conftest import MainWinFactory

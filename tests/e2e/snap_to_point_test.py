@@ -77,6 +77,22 @@ def _draw_line(
     qtbot.waitUntil(shape_committed)
 
 
+def test_snap_to_point_is_initialized_from_config(
+    main_win: MainWinFactory,
+    qtbot: QtBot,
+    data_path: Path,
+) -> None:
+    win = main_win(
+        file_or_dir=str(data_path / "raw/2011_000003.jpg"),
+        config_overrides={"snap_to_point": True},
+    )
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+
+    canvas = win._canvas_widgets.canvas
+    assert canvas.snap_to_point
+    assert win._actions.toggle_snap_to_point.isChecked()
+
+
 def test_snap_to_point_snaps_cursor_to_annotation_points(
     main_win: MainWinFactory,
     qtbot: QtBot,
