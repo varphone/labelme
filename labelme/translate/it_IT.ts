@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>Selezionare la modalità &apos;AI-Points&apos; o &apos;AI-Box&apos; per abilitare l&apos;Annotazione Assistita da IA</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>Modello di annotazione assistita da AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>Formato di uscita delle annotazioni assistite da AI</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Modello</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>Formato di uscita</translation>
     </message>
@@ -78,15 +78,15 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>Selezionare la modalità &apos;Polygon&apos;, &apos;Rectangle&apos; o &apos;AI-Points&apos; per abilitare</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Modello</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>Modello da testo ad annotazione</translation>
     </message>
@@ -185,8 +185,12 @@
         <translation>ALT + Clicca per creare un punto sulla forma</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>Scegli l’altro angolo. Tieni premuto Shift per un quadrato.</translation>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>Tasto destro e trascina per copiare la forma</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>Clicca sull&apos;angolo opposto del rettangolo (Shift per quadrato)</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -216,28 +220,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>Clicca e trascina per ruotare la forma</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>Scegli l’altro angolo. Tieni premuto Shift per un quadrato.</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>Inizia ad annotare</translation>
+        <source>Radius</source>
+        <translation>Raggio</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>Apri un&apos;immagine o una cartella di immagini per iniziare.</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>Apri immagine</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>Apri cartella</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>Oppure trascina qui i file immagine</translation>
+        <source>Radius of the selected circle</source>
+        <translation>Raggio del cerchio selezionato</translation>
     </message>
 </context>
 <context>
@@ -268,6 +264,10 @@
     <message>
         <source>Shape List</source>
         <translation>Lista forme</translation>
+    </message>
+    <message>
+        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Seleziona un&apos;etichetta per iniziare ad annotare. Premi &apos;Esc&apos; per deselezionare.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -358,6 +358,14 @@
         <translation>Salva automaticamente</translation>
     </message>
     <message>
+        <source>Save With Image Data</source>
+        <translation>Salva con dati immagine</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Salva i dati dell&apos;immagine nel file di etichette</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
         <translation>&amp;Chiudi</translation>
     </message>
@@ -420,6 +428,14 @@
     <message>
         <source>Undo last drawn point</source>
         <translation>Annulla l&apos;ultimo punto disegnato</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>Rimuovi punto selezionato</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>Rimuovi il punto selezionato dal poligono</translation>
     </message>
     <message>
         <source>Undo
@@ -498,14 +514,6 @@ forme</translation>
         <translation>Salva le etichette con un nuovo nome di file</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>Incorpora immagine nel file di etichette</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>Salva una copia dell&apos;immagine all&apos;interno del file di etichette</translation>
-    </message>
-    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Modifica l&apos;etichetta della forma selezionata</translation>
     </message>
@@ -524,22 +532,6 @@ forme</translation>
     <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>Inserisci in questa immagine le forme degli appunti</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>Unisci forme</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>Unisci le forme maschera selezionate in una</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>Elimina vertice selezionato</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>Elimina il vertice selezionato dal poligono o dalla polilinea</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -586,38 +578,6 @@ forme</translation>
         <translation>Riempire il poligono durante il disegno</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>Seleziona forma sopra</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>Seleziona la forma più vicina sopra la selezione</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>Seleziona forma sotto</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>Seleziona la forma più vicina sotto la selezione</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>Seleziona forma a sinistra</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>Seleziona la forma più vicina a sinistra della selezione</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>Seleziona forma a destra</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>Seleziona la forma più vicina a destra della selezione</translation>
-    </message>
-    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Ctrl+Rotella ingrandisce la tela</translation>
     </message>
@@ -640,44 +600,6 @@ forme</translation>
     <message>
         <source>%s started.</source>
         <translation>%s avviato.</translation>
-    </message>
-    <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>Scegliere un&apos;etichetta per iniziare a disegnare con essa. Premere &apos;Esc&apos; per annullare la selezione.</translation>
-    </message>
-    <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>Espressione regolare non valida. Viene mantenuta la ricerca precedente.</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>Impossibile caricare le tue impostazioni.</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>Per ora puoi usare le impostazioni predefinite. Prima del ripristino verrà salvata una copia di backup del file di configurazione.</translation>
-    </message>
-    <message>
-        <source>Command-line settings</source>
-        <translation>Impostazioni della riga di comando</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>Esegui backup e ripristina</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>Continua con i valori predefiniti</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>Impossibile ripristinare il file di configurazione.
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>Backup della configurazione salvato in %s</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -712,22 +634,6 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
         <translation>Inferenza IA non riuscita: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>Immagine grande</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>L’immagine grande richiede più memoria</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>L’immagine è di {width}x{height} pixel e richiede almeno circa {required} MB per la decodifica, oltre l’attuale limite di sicurezza di {limit} MB. L’apertura potrebbe rallentare temporaneamente Labelme o altre applicazioni.</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>Apri comunque</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>Errore nell&apos;apertura del file</translation>
     </message>
@@ -744,12 +650,12 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
         <translation>%s caricato</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>Immagini e file di annotazioni (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>File Immagine &amp; Etichette (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - Apri immagine o annotazioni</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - Scegli un file Immagine o Etichetta</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -758,6 +664,10 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s . Le annotazioni saranno salvate/caricate in %s</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - Scegli un file</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -784,16 +694,20 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
         <translation>Non disponibile nella modalità AI-Points perché questo modello non supporta i prompt di punti.</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>Mantenere le modifiche alle annotazioni di «{}»?</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>Salvare le annotazioni in &quot;{}&quot; prima di chiudere?</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>Modifiche non salvate</translation>
+        <source>Save annotations?</source>
+        <translation>Salvare le annotazioni?</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - Sfoglia cartella immagini</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>Eliminare {} forme? È possibile ripristinarle con il comando Annulla.</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - Apri directory</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -810,6 +724,14 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
     <message>
         <source>Keep Previous Brightness/Contrast</source>
         <translation>Mantieni luminosità/contrasto precedenti</translation>
+    </message>
+    <message>
+        <source>Configuration Errors</source>
+        <translation>Errori di Configurazione</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>Sono stati trovati errori durante il caricamento della configurazione. Si prega di esaminare gli errori sottostanti e ricaricare la configurazione o ignorare le righe errate.</translation>
     </message>
     <message>
         <source>Reset Layout</source>
@@ -864,18 +786,6 @@ Cambia il modello AI Text-to-Annotation in &apos;SAM3 (smart)&apos; oppure impos
 Please select a different model or use AI-Box mode.</source>
         <translation>%s non supporta i prompt a punti.
 Selezionare un modello diverso o utilizzare la modalità AI-Box.</translation>
-    </message>
-    <message>
-        <source>Image not found</source>
-        <translation>Immagine non trovata</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>Questa annotazione fa riferimento a «{name}», ma l’immagine non è stata trovata.
-
-Posizione prevista: {path}</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -944,6 +854,516 @@ Posizione prevista: {path}</translation>
     <message>
         <source>Configuration Error</source>
         <translation>Errore di configurazione</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>Incorpora immagine nel file di etichette</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>Salva una copia dell&apos;immagine all&apos;interno del file di etichette</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>Unisci forme</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>Unisci le forme maschera selezionate in una</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>Elimina vertice selezionato</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>Elimina il vertice selezionato dal poligono o dalla polilinea</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>Seleziona forma sopra</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>Seleziona la forma più vicina sopra la selezione</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>Seleziona forma sotto</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>Seleziona la forma più vicina sotto la selezione</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>Seleziona forma a sinistra</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>Seleziona la forma più vicina a sinistra della selezione</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>Seleziona forma a destra</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>Seleziona la forma più vicina a destra della selezione</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>Scegliere un&apos;etichetta per iniziare a disegnare con essa. Premere &apos;Esc&apos; per annullare la selezione.</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>Espressione regolare non valida. Viene mantenuta la ricerca precedente.</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>Impossibile caricare le tue impostazioni.</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>Per ora puoi usare le impostazioni predefinite. Prima del ripristino verrà salvata una copia di backup del file di configurazione.</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>Impostazioni della riga di comando</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>Esegui backup e ripristina</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>Continua con i valori predefiniti</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>Impossibile ripristinare il file di configurazione.
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>Backup della configurazione salvato in %s</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>Immagine grande</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>L’immagine grande richiede più memoria</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>L’immagine è di {width}x{height} pixel e richiede almeno circa {required} MB per la decodifica, oltre l’attuale limite di sicurezza di {limit} MB. L’apertura potrebbe rallentare temporaneamente Labelme o altre applicazioni.</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>Apri comunque</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>Immagini e file di annotazioni (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - Apri immagine o annotazioni</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>Mantenere le modifiche alle annotazioni di «{}»?</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>Modifiche non salvate</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - Sfoglia cartella immagini</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>Immagine non trovata</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>Questa annotazione fa riferimento a «{name}», ma l’immagine non è stata trovata.
+
+Posizione prevista: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>Tema colore</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Sistema</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Chiaro</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Scuro</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>Mostra il popup dell&apos;etichetta per le nuove forme</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>Mostra le etichette delle forme sulla tela</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>Consenti punti al di fuori dei bordi dell&apos;immagine</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>Aspetto e lingua</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>File e salvataggio</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>Disegno e tela</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>Continuare tra le immagini</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>Fonti delle etichette</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>Comportamento delle etichette</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>Assistenza IA</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>Salva automaticamente</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Salva i dati dell&apos;immagine nel file di etichette</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>Incorpora l’immagine nel file JSON delle etichette.</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>Modalità colore forma</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatico</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>Uniforme</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>Per etichetta</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>Spostamento automatico della tavolozza</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>Colore modalità Uniforme</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>Colore di riserva modalità Per etichetta</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>I colori delle singole etichette restano modificabili nel file di configurazione.</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>Mantieni annotazione precedente</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>Mantieni zoom precedente</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>Mantieni luminosità/contrasto precedenti</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>Riempire il poligono durante il disegno</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>Permette ai punti delle forme di estendersi oltre l&apos;immagine, ad es. per oggetti parzialmente visibili.</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>Dettaglio poligono</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>I valori più alti conservano più dettagli del bordo della maschera e le aree più piccole.</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>Etichette predefinite</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>Validazione delle etichette</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>Ordina etichette</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>Ordina l’elenco delle etichette alfabeticamente invece di mantenere l’ordine fornito.</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>Mostra campo di testo dell’etichetta</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>Completamento etichette</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>Inizia con</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>Contiene</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>Modello predefinito</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (velocità)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (precisione)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (velocità)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (bilanciato)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (precisione)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (velocità)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (bilanciato)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (precisione)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>Sopprimi le corrispondenze con forme esistenti</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>Quando un candidato dell&apos;Assistenza IA corrisponde a una forma esistente, tale forma viene evidenziata invece di creare una nuova forma.</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Impostazioni</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>Apri il file di configurazione come testo…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>Le modifiche al file di testo vengono applicate al riavvio</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Chiudi</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(nessuna)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>un elemento per riga</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>Errore di configurazione</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>Le etichette predefinite non possono essere vuote quando la validazione delle etichette è impostata su «exact». Disattiva prima la validazione «exact».</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>Scala di sottocampionamento dell’input</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Scala usata solo per l’immagine inviata all’IA; 1,0 mantiene la risoluzione originale.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Intensità di riduzione del rumore dell’input</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Riduce il rumore dell’immagine ridimensionata inviata all’IA; 0,0 disabilita la riduzione del rumore.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Lingua</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>Le modifiche verranno applicate al riavvio.</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Predefinita di sistema</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>Flag immagine predefiniti</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>salvataggio automatico salva automaticamente</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>Indicatori di forma predefiniti</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>Un nome di indicatore per riga. Modelli: ^car$ corrisponde esattamente a car, car a un prefisso, .* a qualsiasi etichetta.</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>Prompt IA</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>smussare levigatezza semplificare contorno</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>duplicato duplicati evitare duplicati rimuovere duplicati</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>Incorpora immagine nel file di etichette</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>Modelli IA</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>Seleziona {mode} nella modalità colore delle forme per modificare questa impostazione.</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>Sezioni delle impostazioni</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>Cerca impostazioni</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>Impostazioni corrispondenti</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} impostazioni corrispondenti</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>Nessuna impostazione corrispondente in questa finestra. Prova un altro termine o cancella la ricerca.</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>Inizia ad annotare</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>Apri un&apos;immagine o una cartella di immagini per iniziare.</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>Apri immagine</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>Apri cartella</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>Oppure trascina qui i file immagine</translation>
     </message>
 </context>
 <context>
@@ -1069,308 +1489,6 @@ Posizione prevista: {path}</translation>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>Tema colore</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Sistema</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>Chiaro</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>Scuro</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>Mostra il popup dell&apos;etichetta per le nuove forme</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>Mostra le etichette delle forme sulla tela</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>Consenti punti al di fuori dei bordi dell&apos;immagine</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>Aspetto e lingua</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>File e salvataggio</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>Disegno e tela</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>Continuare tra le immagini</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>Fonti delle etichette</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>Comportamento delle etichette</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>Assistenza IA</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>Salva automaticamente</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>salvataggio automatico salva automaticamente</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>Incorpora l’immagine nel file JSON delle etichette.</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>Modalità colore forma</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>Automatico</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>Uniforme</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>Per etichetta</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>Spostamento automatico della tavolozza</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>Colore modalità Uniforme</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>Colore di riserva modalità Per etichetta</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>I colori delle singole etichette restano modificabili nel file di configurazione.</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>Mantieni annotazione precedente</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>Mantieni zoom precedente</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>Mantieni luminosità/contrasto precedenti</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>Riempire il poligono durante il disegno</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>Permette ai punti delle forme di estendersi oltre l&apos;immagine, ad es. per oggetti parzialmente visibili.</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>Indicatori di forma predefiniti</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>Un nome di indicatore per riga. Modelli: ^car$ corrisponde esattamente a car, car a un prefisso, .* a qualsiasi etichetta.</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>Prompt IA</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>Dettaglio poligono</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>smussare levigatezza semplificare contorno</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>I valori più alti conservano più dettagli del bordo della maschera e le aree più piccole.</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>duplicato duplicati evitare duplicati rimuovere duplicati</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>Etichette predefinite</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>Incorpora immagine nel file di etichette</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>Validazione delle etichette</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>Ordina etichette</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>Ordina l’elenco delle etichette alfabeticamente invece di mantenere l’ordine fornito.</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>Mostra campo di testo dell’etichetta</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>Completamento etichette</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>Inizia con</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>Contiene</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>Modello predefinito</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (velocità)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (precisione)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (velocità)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (bilanciato)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (precisione)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (velocità)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (bilanciato)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (precisione)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>Sopprimi le corrispondenze con forme esistenti</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>Quando un candidato dell&apos;Assistenza IA corrisponde a una forma esistente, tale forma viene evidenziata invece di creare una nuova forma.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Impostazioni</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>Modelli IA</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>Apri il file di configurazione come testo…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>Le modifiche al file di testo vengono applicate al riavvio</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Chiudi</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(nessuna)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>un elemento per riga</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>Errore di configurazione</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>Le etichette predefinite non possono essere vuote quando la validazione delle etichette è impostata su «exact». Disattiva prima la validazione «exact».</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>Seleziona {mode} nella modalità colore delle forme per modificare questa impostazione.</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Lingua</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>Le modifiche verranno applicate al riavvio.</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>Predefinita di sistema</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>Flag immagine predefiniti</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1413,38 +1531,4 @@ Posizione prevista: {path}</translation>
         <translation>Riga {row}: {error} Le modifiche non sono state applicate.</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>Sezioni delle impostazioni</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>Cerca impostazioni</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>Impostazioni corrispondenti</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>{count} impostazioni corrispondenti</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>Nessuna impostazione corrispondente in questa finestra. Prova un altro termine o cancella la ricerca.</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>Raggio</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>Raggio del cerchio selezionato</translation>
-        </message>
-    </context>
 </TS>

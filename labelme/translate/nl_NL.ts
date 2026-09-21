@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>Selecteer de modus &apos;AI-Points&apos; of &apos;AI-Box&apos; om AI-ondersteunde annotatie in te schakelen</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>Model voor annotatie met AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>Uitvoerformaat voor annotatie met AI</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Model</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>Uitvoerformaat</translation>
     </message>
@@ -56,7 +56,7 @@
     </message>
     <message>
         <source>AI creates annotations from the text prompt</source>
-        <translation>AI genereert annotaties op basis van de tekstprompt</translation>
+        <translation>AI maakt annotaties van de tekstprompt</translation>
     </message>
     <message>
         <source>e.g., dog,cat,bird</source>
@@ -78,15 +78,15 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>Selecteer &apos;Polygon&apos;, &apos;Rectangle&apos; of &apos;AI-Points&apos;-modus om in te schakelen</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Model</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>Model voor annotatie uit tekst</translation>
     </message>
@@ -185,8 +185,12 @@
         <translation>ALT + Klik om punt op vorm te maken</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>Kies de andere hoek. Houd Shift ingedrukt voor een vierkant.</translation>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>Rechtsklik en sleep om vorm te kopiëren</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>Klik op tegenoverliggende hoek voor rechthoek (Shift voor vierkant)</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -216,28 +220,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>Klik en sleep om vorm te draaien</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>Kies de andere hoek. Houd Shift ingedrukt voor een vierkant.</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>Begin met annoteren</translation>
+        <source>Radius</source>
+        <translation>Straal</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>Open een afbeelding of een map met afbeeldingen om te beginnen.</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>Afbeelding openen</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>Map openen</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>Of sleep afbeeldingsbestanden hierheen</translation>
+        <source>Radius of the selected circle</source>
+        <translation>Straal van de geselecteerde cirkel</translation>
     </message>
 </context>
 <context>
@@ -268,6 +264,10 @@
     <message>
         <source>Shape List</source>
         <translation>Vormenlijst</translation>
+    </message>
+    <message>
+        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Selecteer label om te beginnen met annoteren. Druk op &apos;Esc&apos; om te deselecteren.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -356,6 +356,14 @@
         <translation>Automatisch opslaan</translation>
     </message>
     <message>
+        <source>Save With Image Data</source>
+        <translation>Opslaan met Afbeeldingsgegevens</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Afbeeldingsgegevens opslaan in labelbestand</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
         <translation>&amp;Sluiten</translation>
     </message>
@@ -418,6 +426,14 @@
     <message>
         <source>Undo last drawn point</source>
         <translation>Laatste getekende punt ongedaan maken</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>Geselecteerd Punt Verwijderen</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>Geselecteerd punt uit polygoon verwijderen</translation>
     </message>
     <message>
         <source>Undo
@@ -492,14 +508,6 @@ Shapes</source>
         <translation>Labels opslaan onder een nieuwe bestandsnaam</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>Afbeelding in labelbestand insluiten</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>Slaat een kopie van de afbeelding op in het labelbestand</translation>
-    </message>
-    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Label van geselecteerde vorm wijzigen</translation>
     </message>
@@ -518,22 +526,6 @@ Shapes</source>
     <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>Vormen van het klembord in deze afbeelding invoegen</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>Vormen Samenvoegen</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>Geselecteerde maskervormen samenvoegen tot één</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>Geselecteerd hoekpunt verwijderen</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>Verwijdert het geselecteerde hoekpunt uit de polygoon of polylijn</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -580,38 +572,6 @@ Shapes</source>
         <translation>Polygoon vullen tijdens tekenen</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>Vorm erboven selecteren</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>Dichtstbijzijnde vorm boven de selectie selecteren</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>Vorm eronder selecteren</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>Dichtstbijzijnde vorm onder de selectie selecteren</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>Vorm links selecteren</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>Dichtstbijzijnde vorm links van de selectie selecteren</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>Vorm rechts selecteren</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>Dichtstbijzijnde vorm rechts van de selectie selecteren</translation>
-    </message>
-    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Ctrl+Wiel zoomt op het canvas</translation>
     </message>
@@ -634,44 +594,6 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s gestart.</translation>
-    </message>
-    <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>Kies een label om ermee te tekenen. Druk op &apos;Esc&apos; om de selectie op te heffen.</translation>
-    </message>
-    <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>Ongeldige reguliere expressie. De vorige zoekopdracht blijft actief.</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>Uw instellingen konden niet worden geladen.</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>U kunt voorlopig de standaardinstellingen gebruiken. Voordat de instellingen worden gereset, wordt een back-up van uw configuratiebestand opgeslagen.</translation>
-    </message>
-    <message>
-        <source>Command-line settings</source>
-        <translation>Opdrachtregelinstellingen</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>Back-up maken en resetten</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>Doorgaan met standaardinstellingen</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>Het configuratiebestand kon niet worden hersteld.
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>Back-up van de configuratie opgeslagen in %s</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -706,22 +628,6 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
         <translation>AI-inferentie mislukt: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>Grote afbeelding</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>Grote afbeelding vereist meer geheugen</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>De afbeelding is {width}x{height} pixels en heeft voor het decoderen minstens ongeveer {required} MB nodig, meer dan de huidige veiligheidslimiet van {limit} MB. Door de afbeelding te openen kunnen Labelme of andere toepassingen tijdelijk trager reageren.</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>Toch openen</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>Fout bij openen van bestand</translation>
     </message>
@@ -738,12 +644,12 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
         <translation>Geladen %s</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>Afbeeldingen en annotatiebestanden (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>Afbeelding- en labelbestanden (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - Afbeelding of annotaties openen</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - Kies Afbeelding- of labelbestand</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -752,6 +658,10 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s . Annotaties worden opgeslagen/geladen in %s</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - Kies Bestand</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -778,16 +688,20 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
         <translation>Niet beschikbaar in de modus AI-Points, omdat dit model geen puntprompts ondersteunt.</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>De annotatiewijzigingen voor ‘{}’ behouden?</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>Annotaties opslaan naar &quot;{}&quot; voordat u sluit?</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>Niet-opgeslagen wijzigingen</translation>
+        <source>Save annotations?</source>
+        <translation>Annotaties opslaan?</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - Afbeeldingsmap kiezen</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>{} vormen verwijderen? U kunt ze herstellen met Ongedaan Maken.</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - Map Openen</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -804,6 +718,14 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     <message>
         <source>Keep Previous Brightness/Contrast</source>
         <translation>Vorige Helderheid/Contrast Behouden</translation>
+    </message>
+    <message>
+        <source>Configuration Errors</source>
+        <translation>Configuratiefouten</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>Er zijn fouten gevonden bij het laden van de configuratie. Bekijk de onderstaande fouten en herlaad uw configuratie of negeer de foutieve regels.</translation>
     </message>
     <message>
         <source>Reset Layout</source>
@@ -858,18 +780,6 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
 Please select a different model or use AI-Box mode.</source>
         <translation>%s ondersteunt geen puntinvoer.
 Selecteer een ander model of gebruik de AI-Box-modus.</translation>
-    </message>
-    <message>
-        <source>Image not found</source>
-        <translation>Afbeelding niet gevonden</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>Deze annotatie verwijst naar “{name}”, maar die afbeelding is niet gevonden.
-
-Verwachte locatie: {path}</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -938,6 +848,516 @@ Verwachte locatie: {path}</translation>
     <message>
         <source>Configuration Error</source>
         <translation>Configuratiefout</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>Afbeelding in labelbestand insluiten</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>Slaat een kopie van de afbeelding op in het labelbestand</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>Vormen Samenvoegen</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>Geselecteerde maskervormen samenvoegen tot één</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>Geselecteerd hoekpunt verwijderen</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>Verwijdert het geselecteerde hoekpunt uit de polygoon of polylijn</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>Vorm erboven selecteren</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>Dichtstbijzijnde vorm boven de selectie selecteren</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>Vorm eronder selecteren</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>Dichtstbijzijnde vorm onder de selectie selecteren</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>Vorm links selecteren</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>Dichtstbijzijnde vorm links van de selectie selecteren</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>Vorm rechts selecteren</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>Dichtstbijzijnde vorm rechts van de selectie selecteren</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>Kies een label om ermee te tekenen. Druk op &apos;Esc&apos; om de selectie op te heffen.</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>Ongeldige reguliere expressie. De vorige zoekopdracht blijft actief.</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>Uw instellingen konden niet worden geladen.</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>U kunt voorlopig de standaardinstellingen gebruiken. Voordat de instellingen worden gereset, wordt een back-up van uw configuratiebestand opgeslagen.</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>Opdrachtregelinstellingen</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>Back-up maken en resetten</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>Doorgaan met standaardinstellingen</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>Het configuratiebestand kon niet worden hersteld.
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>Back-up van de configuratie opgeslagen in %s</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>Grote afbeelding</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>Grote afbeelding vereist meer geheugen</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>De afbeelding is {width}x{height} pixels en heeft voor het decoderen minstens ongeveer {required} MB nodig, meer dan de huidige veiligheidslimiet van {limit} MB. Door de afbeelding te openen kunnen Labelme of andere toepassingen tijdelijk trager reageren.</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>Toch openen</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>Afbeeldingen en annotatiebestanden (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - Afbeelding of annotaties openen</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>De annotatiewijzigingen voor ‘{}’ behouden?</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>Niet-opgeslagen wijzigingen</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - Afbeeldingsmap kiezen</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>Afbeelding niet gevonden</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>Deze annotatie verwijst naar “{name}”, maar die afbeelding is niet gevonden.
+
+Verwachte locatie: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>Kleurthema</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Systeem</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Licht</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Donker</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>Labeldialoog tonen bij nieuwe vorm</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>Vormlabels op canvas tonen</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>Punten buiten de afbeeldingsgrens toestaan</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>Uiterlijk en taal</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>Bestanden en opslaan</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>Tekenen en canvas</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>Doorgaan tussen afbeeldingen</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>Labelbronnen</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>Labelgedrag</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>AI-assistent</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>Automatisch opslaan</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Afbeeldingsgegevens opslaan in labelbestand</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>Sluit de afbeelding in het JSON-labelbestand in.</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>Vormkleurmodus</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatisch</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>Uniform</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>Per label</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>Automatische paletverschuiving</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>Kleur voor modus Uniform</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>Terugvalkleur voor modus Per label</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>Afzonderlijke labelkleuren blijven bewerkbaar in het configuratiebestand.</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>Vorige annotatie behouden</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>Vorige zoom behouden</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>Vorige helderheid/contrast behouden</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>Polygoon vullen tijdens tekenen</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>Laat vormpunten buiten de afbeelding vallen, bijv. voor gedeeltelijk zichtbare objecten.</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>Polygoondetail</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>Hogere waarden behouden meer details van de maskerrand en kleinere gebieden.</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>Voorgedefinieerde labels</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>Labelvalidatie</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>Labels sorteren</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>Sorteert de labellijst alfabetisch in plaats van de opgegeven volgorde te behouden.</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>Labeltekstveld tonen</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>Labelaanvulling</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>Begint met</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>Bevat</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>Standaardmodel</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (snelheid)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (nauwkeurigheid)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (snelheid)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (gebalanceerd)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (nauwkeurigheid)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (snelheid)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (gebalanceerd)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (nauwkeurigheid)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>Overeenkomsten met bestaande vormen onderdrukken</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>Wanneer een kandidaat van de AI-assistent overeenkomt met een bestaande vorm, wordt die vorm gemarkeerd in plaats van een nieuwe vorm te maken.</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Instellingen</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>Configuratiebestand openen als tekst…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>Wijzigingen in het tekstbestand worden na herstart toegepast</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Sluiten</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(geen)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>één item per regel</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>Configuratiefout</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>Voorgedefinieerde labels mogen niet leeg zijn wanneer labelvalidatie is ingesteld op &apos;exact&apos;. Schakel eerst de &apos;exact&apos;-validatie uit.</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>Schaal voor downsampling van invoer</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Schaal die alleen wordt gebruikt voor de afbeelding die naar AI wordt verzonden; 1,0 behoudt de oorspronkelijke resolutie.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Sterkte van ruisonderdrukking van invoer</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Onderdrukt ruis in de geschaalde afbeelding die naar AI wordt verzonden; 0,0 schakelt ruisonderdrukking uit.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Taal</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>Van kracht na opnieuw opstarten.</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Systeemstandaard</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>Voorgedefinieerde afbeeldingsvlaggen</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>automatisch opslaan</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>Vooraf gedefinieerde vormvlaggen</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>Eén vlagnaam per regel. Patronen: ^car$ komt exact overeen met car, car met een voorvoegsel, .* met elk label.</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>AI Tekst-naar-Annotatie</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>glad vloeiend vereenvoudigen omtrek</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>duplicaat duplicaten voorkomen verwijderen</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>Afbeelding in labelbestand insluiten</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>AI-modellen</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>Selecteer {mode} bij de kleurmodus voor vormen om deze instelling te bewerken.</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>Instellingssecties</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>Instellingen zoeken</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>Overeenkomende instellingen</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} overeenkomende instellingen</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>Geen overeenkomende instellingen in dit dialoogvenster. Probeer een andere term of wis de zoekopdracht.</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>Begin met annoteren</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>Open een afbeelding of een map met afbeeldingen om te beginnen.</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>Afbeelding openen</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>Map openen</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>Of sleep afbeeldingsbestanden hierheen</translation>
     </message>
 </context>
 <context>
@@ -1063,308 +1483,6 @@ Verwachte locatie: {path}</translation>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>Kleurthema</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Systeem</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>Licht</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>Donker</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>Labeldialoog tonen bij nieuwe vorm</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>Vormlabels op canvas tonen</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>Punten buiten de afbeeldingsgrens toestaan</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>Uiterlijk en taal</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>Bestanden en opslaan</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>Tekenen en canvas</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>Doorgaan tussen afbeeldingen</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>Labelbronnen</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>Labelgedrag</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>AI-assistent</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>Automatisch opslaan</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>automatisch opslaan</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>Sluit de afbeelding in het JSON-labelbestand in.</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>Vormkleurmodus</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>Automatisch</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>Uniform</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>Per label</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>Automatische paletverschuiving</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>Kleur voor modus Uniform</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>Terugvalkleur voor modus Per label</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>Afzonderlijke labelkleuren blijven bewerkbaar in het configuratiebestand.</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>Vorige annotatie behouden</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>Vorige zoom behouden</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>Vorige helderheid/contrast behouden</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>Polygoon vullen tijdens tekenen</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>Laat vormpunten buiten de afbeelding vallen, bijv. voor gedeeltelijk zichtbare objecten.</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>Vooraf gedefinieerde vormvlaggen</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>Eén vlagnaam per regel. Patronen: ^car$ komt exact overeen met car, car met een voorvoegsel, .* met elk label.</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>AI Tekst-naar-Annotatie</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>Polygoondetail</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>glad vloeiend vereenvoudigen omtrek</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>Hogere waarden behouden meer details van de maskerrand en kleinere gebieden.</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>duplicaat duplicaten voorkomen verwijderen</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>Voorgedefinieerde labels</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>Afbeelding in labelbestand insluiten</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>Labelvalidatie</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>Labels sorteren</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>Sorteert de labellijst alfabetisch in plaats van de opgegeven volgorde te behouden.</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>Labeltekstveld tonen</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>Labelaanvulling</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>Begint met</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>Bevat</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>Standaardmodel</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (snelheid)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (nauwkeurigheid)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (snelheid)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (gebalanceerd)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (nauwkeurigheid)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (snelheid)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (gebalanceerd)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (nauwkeurigheid)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>Overeenkomsten met bestaande vormen onderdrukken</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>Wanneer een kandidaat van de AI-assistent overeenkomt met een bestaande vorm, wordt die vorm gemarkeerd in plaats van een nieuwe vorm te maken.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Instellingen</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>AI-modellen</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>Configuratiebestand openen als tekst…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>Wijzigingen in het tekstbestand worden na herstart toegepast</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Sluiten</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(geen)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>één item per regel</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>Configuratiefout</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>Voorgedefinieerde labels mogen niet leeg zijn wanneer labelvalidatie is ingesteld op &apos;exact&apos;. Schakel eerst de &apos;exact&apos;-validatie uit.</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>Selecteer {mode} bij de kleurmodus voor vormen om deze instelling te bewerken.</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Taal</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>Van kracht na opnieuw opstarten.</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>Systeemstandaard</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>Voorgedefinieerde afbeeldingsvlaggen</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1407,38 +1525,4 @@ Verwachte locatie: {path}</translation>
         <translation>Rij {row}: {error} Wijzigingen zijn niet toegepast.</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>Instellingssecties</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>Instellingen zoeken</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>Overeenkomende instellingen</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>{count} overeenkomende instellingen</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>Geen overeenkomende instellingen in dit dialoogvenster. Probeer een andere term of wis de zoekopdracht.</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>Straal</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>Straal van de geselecteerde cirkel</translation>
-        </message>
-    </context>
 </TS>

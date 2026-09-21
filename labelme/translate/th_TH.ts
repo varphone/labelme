@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>เลือกโหมด &apos;AI-Points&apos; หรือ &apos;AI-Box&apos; เพื่อเปิดใช้งานแอนโนเทชันด้วย AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>โมเดลสร้างคำอธิบายประกอบด้วย AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>รูปแบบผลลัพธ์คำอธิบายประกอบที่สร้างด้วย AI</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>โมเดล</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>รูปแบบผลลัพธ์</translation>
     </message>
@@ -78,15 +78,15 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>เลือกโหมด &apos;Polygon&apos;, &apos;Rectangle&apos; หรือ &apos;AI-Points&apos; เพื่อเปิดใช้งาน</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>โมเดล</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>พรอมต์</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>โมเดลแปลงข้อความเป็นคำอธิบายประกอบ</translation>
     </message>
@@ -161,10 +161,6 @@
         <translation>คลิกมุมแรกของสี่เหลี่ยม</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>เลือกมุมอีกด้าน กด Shift ค้างไว้เพื่อวาดสี่เหลี่ยมจัตุรัส</translation>
-    </message>
-    <message>
         <source>Click to add point</source>
         <translation>คลิกเพื่อเพิ่มจุด</translation>
     </message>
@@ -187,6 +183,14 @@
     <message>
         <source>ALT + Click to create point on shape</source>
         <translation>ALT + คลิกเพื่อสร้างจุดบนรูปร่าง</translation>
+    </message>
+    <message>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>คลิกขวาและลากเพื่อคัดลอกรูปร่าง</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>คลิกมุมตรงข้ามของสี่เหลี่ยม (Shift สำหรับสี่เหลี่ยมจัตุรัส)</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -216,28 +220,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>คลิกและลากเพื่อหมุนรูปร่าง</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>เลือกมุมอีกด้าน กด Shift ค้างไว้เพื่อวาดสี่เหลี่ยมจัตุรัส</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>เริ่มการใส่คำอธิบายประกอบ</translation>
+        <source>Radius</source>
+        <translation>รัศมี</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>เปิดรูปภาพหรือโฟลเดอร์รูปภาพเพื่อเริ่มต้น</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>เปิดรูปภาพ</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>เปิดโฟลเดอร์</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>หรือลากและวางไฟล์รูปภาพที่นี่</translation>
+        <source>Radius of the selected circle</source>
+        <translation>รัศมีของวงกลมที่เลือก</translation>
     </message>
 </context>
 <context>
@@ -268,6 +264,10 @@
     <message>
         <source>Shape List</source>
         <translation>รายการรูปร่าง</translation>
+    </message>
+    <message>
+        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>เลือกเลเบลเพื่อเริ่มกำกับข้อมูล กด &apos;Esc&apos; เพื่อยกเลิกการเลือก</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -356,6 +356,14 @@
         <translation>บันทึกอัตโนมัติ</translation>
     </message>
     <message>
+        <source>Save With Image Data</source>
+        <translation>บันทึกพร้อมข้อมูลรูป</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>บันทึกข้อมูลรูปในไฟล์เลเบล</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
         <translation>ปิด (&amp;C)</translation>
     </message>
@@ -418,6 +426,14 @@
     <message>
         <source>Undo last drawn point</source>
         <translation>ยกเลิกจุดที่วาดล่าสุด</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>ลบจุดที่เลือก</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>ลบจุดที่เลือกออกจากหลายเหลี่ยม</translation>
     </message>
     <message>
         <source>Undo
@@ -492,14 +508,6 @@ Shapes</source>
         <translation>บันทึกเลเบลด้วยชื่อไฟล์ใหม่</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>ฝังรูปภาพในไฟล์เลเบล</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>เก็บสำเนาของรูปภาพไว้ในไฟล์เลเบล</translation>
-    </message>
-    <message>
         <source>Modify the label of the selected shape</source>
         <translation>แก้ไขเลเบลของรูปร่างที่เลือก</translation>
     </message>
@@ -518,22 +526,6 @@ Shapes</source>
     <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>แทรกรูปร่างจากคลิปบอร์ดลงในภาพนี้</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>รวมรูปร่าง</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>รวมรูปร่างมาสก์ที่เลือกเป็นรูปร่างเดียว</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>ลบจุดยอดที่เลือก</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>ลบจุดยอดที่เลือกออกจากรูปหลายเหลี่ยมหรือเส้นหักมุม</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -580,38 +572,6 @@ Shapes</source>
         <translation>เติมสีหลายเหลี่ยมขณะวาด</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>เลือกรูปร่างด้านบน</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านบนของส่วนที่เลือก</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>เลือกรูปร่างด้านล่าง</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านล่างของส่วนที่เลือก</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>เลือกรูปร่างด้านซ้าย</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านซ้ายของส่วนที่เลือก</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>เลือกรูปร่างด้านขวา</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านขวาของส่วนที่เลือก</translation>
-    </message>
-    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Ctrl+ล้อเลื่อน เพื่อซูมแคนวาส</translation>
     </message>
@@ -634,44 +594,6 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s เริ่มทำงานแล้ว</translation>
-    </message>
-    <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>เลือกป้ายกำกับเพื่อเริ่มวาดด้วยป้ายนั้น กด &apos;Esc&apos; เพื่อล้างการเลือก</translation>
-    </message>
-    <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>นิพจน์ทั่วไปไม่ถูกต้อง ใช้การค้นหาก่อนหน้า</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>ไม่สามารถโหลดการตั้งค่าของคุณได้</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>คุณสามารถใช้การตั้งค่าเริ่มต้นไปก่อนได้ ก่อนรีเซ็ต ระบบจะบันทึกสำเนาสำรองของไฟล์การกำหนดค่าของคุณ</translation>
-    </message>
-    <message>
-        <source>Command-line settings</source>
-        <translation>การตั้งค่าบรรทัดคำสั่ง</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>สำรองข้อมูลและรีเซ็ต</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>ใช้ค่าเริ่มต้นต่อไป</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>ไม่สามารถรีเซ็ตไฟล์การตั้งค่าได้
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>บันทึกข้อมูลสำรองการตั้งค่าไปยัง %s แล้ว</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -706,22 +628,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>การอนุมานของ AI ล้มเหลว: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>รูปภาพขนาดใหญ่</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>รูปภาพขนาดใหญ่ต้องใช้หน่วยความจำเพิ่มขึ้น</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>รูปภาพมีขนาด {width}x{height} พิกเซลและต้องใช้หน่วยความจำอย่างน้อยประมาณ {required} MB เพื่อถอดรหัส ซึ่งเกินขีดจำกัดความปลอดภัยปัจจุบันที่ {limit} MB การเปิดรูปภาพนี้อาจทำให้ Labelme หรือแอปพลิเคชันอื่นตอบสนองช้าลงชั่วคราว</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>เปิดต่อไป</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>เกิดข้อผิดพลาดในการเปิดไฟล์</translation>
     </message>
@@ -738,12 +644,12 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>โหลด %s แล้ว</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>ภาพและไฟล์คำอธิบายประกอบ (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>ไฟล์รูปและเลเบล (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - เปิดภาพหรือคำอธิบายประกอบ</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - เลือกรูปหรือไฟล์เลเบล</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -752,6 +658,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s แอนโนเทชันจะถูกบันทึก/โหลดใน %s</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - เลือกไฟล์</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -778,16 +688,20 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>ไม่สามารถใช้ในโหมด AI-Points ได้ เนื่องจากโมเดลนี้ไม่รองรับพรอมต์แบบจุด</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>เก็บการเปลี่ยนแปลงคำอธิบายประกอบของ &quot;{}&quot; ไว้หรือไม่?</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>บันทึกแอนโนเทชันไปที่ &quot;{}&quot; ก่อนปิดหรือไม่?</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>การเปลี่ยนแปลงที่ยังไม่ได้บันทึก</translation>
+        <source>Save annotations?</source>
+        <translation>บันทึกแอนโนเทชันหรือไม่?</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - เรียกดูโฟลเดอร์ภาพ</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>ลบรูปร่าง {} รายการ? คุณสามารถกู้คืนได้ด้วยคำสั่งยกเลิก</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - เปิดโฟลเดอร์</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -804,6 +718,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Keep Previous Brightness/Contrast</source>
         <translation>คงความสว่าง/คอนทราสต์ก่อนหน้า</translation>
+    </message>
+    <message>
+        <source>Configuration Errors</source>
+        <translation>ข้อผิดพลาดการตั้งค่า</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>พบข้อผิดพลาดขณะโหลดการตั้งค่า กรุณาตรวจสอบด้านล่าง แล้วโหลดการตั้งค่าใหม่หรือข้ามบรรทัดที่มีข้อผิดพลาด</translation>
     </message>
     <message>
         <source>Reset Layout</source>
@@ -858,18 +780,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 Please select a different model or use AI-Box mode.</source>
         <translation>%s ไม่รองรับการกำหนดจุด
 กรุณาเลือกโมเดลอื่นหรือใช้โหมด AI-Box</translation>
-    </message>
-    <message>
-        <source>Image not found</source>
-        <translation>ไม่พบรูปภาพ</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>คำอธิบายประกอบนี้อ้างอิงถึง &quot;{name}&quot; แต่ไม่พบรูปภาพดังกล่าว
-
-ตำแหน่งที่คาดไว้: {path}</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -938,6 +848,516 @@ Expected location: {path}</source>
     <message>
         <source>Configuration Error</source>
         <translation>ข้อผิดพลาดการตั้งค่า</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>ฝังรูปภาพในไฟล์เลเบล</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>เก็บสำเนาของรูปภาพไว้ในไฟล์เลเบล</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>รวมรูปร่าง</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>รวมรูปร่างมาสก์ที่เลือกเป็นรูปร่างเดียว</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>ลบจุดยอดที่เลือก</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>ลบจุดยอดที่เลือกออกจากรูปหลายเหลี่ยมหรือเส้นหักมุม</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>เลือกรูปร่างด้านบน</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านบนของส่วนที่เลือก</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>เลือกรูปร่างด้านล่าง</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านล่างของส่วนที่เลือก</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>เลือกรูปร่างด้านซ้าย</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านซ้ายของส่วนที่เลือก</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>เลือกรูปร่างด้านขวา</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>เลือกรูปร่างที่ใกล้ที่สุดด้านขวาของส่วนที่เลือก</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>เลือกป้ายกำกับเพื่อเริ่มวาดด้วยป้ายนั้น กด &apos;Esc&apos; เพื่อล้างการเลือก</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>นิพจน์ทั่วไปไม่ถูกต้อง ใช้การค้นหาก่อนหน้า</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>ไม่สามารถโหลดการตั้งค่าของคุณได้</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>คุณสามารถใช้การตั้งค่าเริ่มต้นไปก่อนได้ ก่อนรีเซ็ต ระบบจะบันทึกสำเนาสำรองของไฟล์การกำหนดค่าของคุณ</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>การตั้งค่าบรรทัดคำสั่ง</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>สำรองข้อมูลและรีเซ็ต</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>ใช้ค่าเริ่มต้นต่อไป</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>ไม่สามารถรีเซ็ตไฟล์การตั้งค่าได้
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>บันทึกข้อมูลสำรองการตั้งค่าไปยัง %s แล้ว</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>รูปภาพขนาดใหญ่</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>รูปภาพขนาดใหญ่ต้องใช้หน่วยความจำเพิ่มขึ้น</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>รูปภาพมีขนาด {width}x{height} พิกเซลและต้องใช้หน่วยความจำอย่างน้อยประมาณ {required} MB เพื่อถอดรหัส ซึ่งเกินขีดจำกัดความปลอดภัยปัจจุบันที่ {limit} MB การเปิดรูปภาพนี้อาจทำให้ Labelme หรือแอปพลิเคชันอื่นตอบสนองช้าลงชั่วคราว</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>เปิดต่อไป</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>ภาพและไฟล์คำอธิบายประกอบ (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - เปิดภาพหรือคำอธิบายประกอบ</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>เก็บการเปลี่ยนแปลงคำอธิบายประกอบของ &quot;{}&quot; ไว้หรือไม่?</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>การเปลี่ยนแปลงที่ยังไม่ได้บันทึก</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - เรียกดูโฟลเดอร์ภาพ</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>ไม่พบรูปภาพ</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>คำอธิบายประกอบนี้อ้างอิงถึง &quot;{name}&quot; แต่ไม่พบรูปภาพดังกล่าว
+
+ตำแหน่งที่คาดไว้: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>ธีมสี</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>ระบบ</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>สว่าง</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>มืด</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>แสดงป๊อปอัปเลเบลเมื่อสร้างรูปร่างใหม่</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>แสดงเลเบลรูปร่างบนผืนผ้าใบ</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>อนุญาตให้มีจุดอยู่นอกขอบเขตของภาพ</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>ลักษณะที่ปรากฏและภาษา</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>ไฟล์และการบันทึก</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>การวาดและผืนผ้าใบ</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>การทำงานต่อเนื่องระหว่างภาพ</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>แหล่งที่มาของเลเบล</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>ลักษณะการทำงานของเลเบล</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>ความช่วยเหลือจาก AI</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>บันทึกอัตโนมัติ</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>บันทึกข้อมูลรูปในไฟล์เลเบล</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>ฝังรูปภาพไว้ในไฟล์ JSON ของเลเบล</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>โหมดสีรูปร่าง</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>อัตโนมัติ</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>เหมือนกันทั้งหมด</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>ตามป้ายกำกับ</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>การเลื่อนพาเล็ตอัตโนมัติ</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>สีโหมดเหมือนกันทั้งหมด</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>สีสำรองโหมดตามป้ายกำกับ</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>ยังคงแก้ไขสีของแต่ละป้ายกำกับได้ในไฟล์การกำหนดค่า</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>คงแอนโนเทชันก่อนหน้าไว้</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>คงการซูมก่อนหน้าไว้</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>คงความสว่าง/คอนทราสต์ก่อนหน้าไว้</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>เติมสีหลายเหลี่ยมขณะวาด</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>อนุญาตให้จุดของรูปร่างขยายออกไปนอกภาพ เช่น สำหรับวัตถุที่มองเห็นได้บางส่วน</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>รายละเอียดโพลีกอน</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>ค่าที่สูงขึ้นจะคงรายละเอียดขอบมาสก์และพื้นที่ขนาดเล็กไว้มากขึ้น</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>เลเบลที่กำหนดไว้ล่วงหน้า</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>การตรวจสอบเลเบล</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>เรียงลำดับเลเบล</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>เรียงลำดับรายการเลเบลตามตัวอักษรแทนการคงลำดับที่กำหนดไว้</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>แสดงช่องข้อความเลเบล</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>การเติมเลเบลอัตโนมัติ</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>ขึ้นต้นด้วย</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>มี</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>โมเดลเริ่มต้น</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (ความเร็ว)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (ความแม่นยำ)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (ความเร็ว)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (สมดุล)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (ความแม่นยำ)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (ความเร็ว)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (สมดุล)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (ความแม่นยำ)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>ระงับรายการที่ตรงกับรูปร่างที่มีอยู่</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>เมื่อผลลัพธ์จากความช่วยเหลือจาก AI ตรงกับรูปร่างที่มีอยู่ ระบบจะเน้นรูปร่างนั้นแทนการสร้างรูปร่างใหม่</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>การตั้งค่า</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>เปิดไฟล์ตั้งค่าเป็นข้อความ…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>การแก้ไขในไฟล์ข้อความจะมีผลหลังรีสตาร์ท</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>ปิด</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(ไม่มี)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>หนึ่งรายการต่อบรรทัด</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>ข้อผิดพลาดการตั้งค่า</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>เลเบลที่กำหนดไว้ล่วงหน้าต้องไม่ว่างเปล่าขณะที่การตรวจสอบเลเบลถูกตั้งค่าเป็น &apos;exact&apos; โปรดปิดการตรวจสอบ &apos;exact&apos; ก่อน</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>สเกลการลดขนาดภาพอินพุต</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>สเกลที่ใช้เฉพาะกับภาพที่ส่งให้ AI; 1.0 จะคงความละเอียดเดิมไว้</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>ระดับการลดสัญญาณรบกวนของอินพุต</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>ลดสัญญาณรบกวนในภาพที่ปรับขนาดก่อนส่งให้ AI; 0.0 จะปิดการลดสัญญาณรบกวน</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>ภาษา</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>จะมีผลหลังรีสตาร์ท</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>ค่าเริ่มต้นของระบบ</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>แฟล็กรูปภาพที่กำหนดไว้ล่วงหน้า</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>บันทึกอัตโนมัติ บันทึกโดยอัตโนมัติ</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>แฟล็กรูปร่างที่กำหนดไว้ล่วงหน้า</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>หนึ่งชื่อแฟล็กต่อบรรทัด รูปแบบ: ^car$ ตรงกับ car เท่านั้น, car ตรงกับคำนำหน้า, .* ตรงกับทุกป้ายกำกับ</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>AI ข้อความสู่แอนโนเทชัน</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>เรียบ ความเรียบ ลดความซับซ้อน เส้นขอบ</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>ซ้ำ รายการซ้ำ หลีกเลี่ยงรายการซ้ำ ลบรายการซ้ำ</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>ฝังรูปภาพในไฟล์เลเบล</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>โมเดล AI</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>เลือก {mode} ในโหมดสีรูปร่างเพื่อแก้ไขการตั้งค่านี้</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>ส่วนต่างๆ ของการตั้งค่า</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>ค้นหาการตั้งค่า</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>การตั้งค่าที่ตรงกัน</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>พบการตั้งค่าที่ตรงกัน {count} รายการ</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>ไม่พบการตั้งค่าที่ตรงกันในกล่องโต้ตอบนี้ ลองใช้คำอื่นหรือล้างการค้นหา</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>เริ่มการใส่คำอธิบายประกอบ</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>เปิดรูปภาพหรือโฟลเดอร์รูปภาพเพื่อเริ่มต้น</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>เปิดรูปภาพ</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>เปิดโฟลเดอร์</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>หรือลากและวางไฟล์รูปภาพที่นี่</translation>
     </message>
 </context>
 <context>
@@ -1063,308 +1483,6 @@ Expected location: {path}</source>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>ธีมสี</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>ระบบ</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>สว่าง</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>มืด</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>แสดงป๊อปอัปเลเบลเมื่อสร้างรูปร่างใหม่</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>แสดงเลเบลรูปร่างบนผืนผ้าใบ</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>อนุญาตให้มีจุดอยู่นอกขอบเขตของภาพ</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>ลักษณะที่ปรากฏและภาษา</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>ไฟล์และการบันทึก</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>การวาดและผืนผ้าใบ</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>การทำงานต่อเนื่องระหว่างภาพ</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>แหล่งที่มาของเลเบล</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>ลักษณะการทำงานของเลเบล</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>ความช่วยเหลือจาก AI</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>บันทึกอัตโนมัติ</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>บันทึกอัตโนมัติ บันทึกโดยอัตโนมัติ</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>ฝังรูปภาพไว้ในไฟล์ JSON ของเลเบล</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>โหมดสีรูปร่าง</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>อัตโนมัติ</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>เหมือนกันทั้งหมด</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>ตามป้ายกำกับ</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>การเลื่อนพาเล็ตอัตโนมัติ</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>สีโหมดเหมือนกันทั้งหมด</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>สีสำรองโหมดตามป้ายกำกับ</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>ยังคงแก้ไขสีของแต่ละป้ายกำกับได้ในไฟล์การกำหนดค่า</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>คงแอนโนเทชันก่อนหน้าไว้</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>คงการซูมก่อนหน้าไว้</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>คงความสว่าง/คอนทราสต์ก่อนหน้าไว้</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>เติมสีหลายเหลี่ยมขณะวาด</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>อนุญาตให้จุดของรูปร่างขยายออกไปนอกภาพ เช่น สำหรับวัตถุที่มองเห็นได้บางส่วน</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>แฟล็กรูปร่างที่กำหนดไว้ล่วงหน้า</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>หนึ่งชื่อแฟล็กต่อบรรทัด รูปแบบ: ^car$ ตรงกับ car เท่านั้น, car ตรงกับคำนำหน้า, .* ตรงกับทุกป้ายกำกับ</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>AI ข้อความสู่แอนโนเทชัน</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>รายละเอียดโพลีกอน</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>เรียบ ความเรียบ ลดความซับซ้อน เส้นขอบ</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>ค่าที่สูงขึ้นจะคงรายละเอียดขอบมาสก์และพื้นที่ขนาดเล็กไว้มากขึ้น</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>ซ้ำ รายการซ้ำ หลีกเลี่ยงรายการซ้ำ ลบรายการซ้ำ</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>เลเบลที่กำหนดไว้ล่วงหน้า</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>ฝังรูปภาพในไฟล์เลเบล</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>การตรวจสอบเลเบล</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>เรียงลำดับเลเบล</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>เรียงลำดับรายการเลเบลตามตัวอักษรแทนการคงลำดับที่กำหนดไว้</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>แสดงช่องข้อความเลเบล</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>การเติมเลเบลอัตโนมัติ</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>ขึ้นต้นด้วย</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>มี</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>โมเดลเริ่มต้น</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (ความเร็ว)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (ความแม่นยำ)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (ความเร็ว)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (สมดุล)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (ความแม่นยำ)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (ความเร็ว)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (สมดุล)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (ความแม่นยำ)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>ระงับรายการที่ตรงกับรูปร่างที่มีอยู่</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>เมื่อผลลัพธ์จากความช่วยเหลือจาก AI ตรงกับรูปร่างที่มีอยู่ ระบบจะเน้นรูปร่างนั้นแทนการสร้างรูปร่างใหม่</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>การตั้งค่า</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>โมเดล AI</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>เปิดไฟล์ตั้งค่าเป็นข้อความ…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>การแก้ไขในไฟล์ข้อความจะมีผลหลังรีสตาร์ท</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>ปิด</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(ไม่มี)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>หนึ่งรายการต่อบรรทัด</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>ข้อผิดพลาดการตั้งค่า</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>เลเบลที่กำหนดไว้ล่วงหน้าต้องไม่ว่างเปล่าขณะที่การตรวจสอบเลเบลถูกตั้งค่าเป็น &apos;exact&apos; โปรดปิดการตรวจสอบ &apos;exact&apos; ก่อน</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>เลือก {mode} ในโหมดสีรูปร่างเพื่อแก้ไขการตั้งค่านี้</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>ภาษา</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>จะมีผลหลังรีสตาร์ท</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>ค่าเริ่มต้นของระบบ</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>แฟล็กรูปภาพที่กำหนดไว้ล่วงหน้า</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1407,38 +1525,4 @@ Expected location: {path}</source>
         <translation>แถว {row}: {error} ยังไม่ได้นำการเปลี่ยนแปลงไปใช้</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>ส่วนต่างๆ ของการตั้งค่า</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>ค้นหาการตั้งค่า</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>การตั้งค่าที่ตรงกัน</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>พบการตั้งค่าที่ตรงกัน {count} รายการ</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>ไม่พบการตั้งค่าที่ตรงกันในกล่องโต้ตอบนี้ ลองใช้คำอื่นหรือล้างการค้นหา</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>รัศมี</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>รัศมีของวงกลมที่เลือก</translation>
-        </message>
-    </context>
 </TS>

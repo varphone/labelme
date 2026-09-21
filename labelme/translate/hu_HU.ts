@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>Válassza az &apos;AI-Points&apos; vagy &apos;AI-Box&apos; módot az AI-támogatott annotáció engedélyezéséhez</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>AI-támogatott annotációs modell</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>AI-támogatott annotáció kimeneti formátuma</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Modell</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>Kimeneti formátum</translation>
     </message>
@@ -78,15 +78,15 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>Válassza a &apos;Polygon&apos;, &apos;Rectangle&apos; vagy &apos;AI-Points&apos; módot az engedélyezéshez</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Modell</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>Utasítás</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>Szövegből annotáló modell</translation>
     </message>
@@ -185,8 +185,12 @@
         <translation>Kattintson és húzza az alakzat mozgatásához</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>Válassza ki a másik sarkot. Négyzethez tartsa lenyomva a Shift billentyűt.</translation>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>Jobb gombbal kattintás és húzás az alakzat másolásához</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>Kattintson a téglalap ellentétes sarkára (Shift a négyzethez)</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -216,28 +220,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>Kattintson és húzza az alakzat elforgatásához</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>Válassza ki a másik sarkot. Négyzethez tartsa lenyomva a Shift billentyűt.</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>Annotálás indítása</translation>
+        <source>Radius</source>
+        <translation>Sugár</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>A kezdéshez nyisson meg egy képet vagy egy képeket tartalmazó mappát.</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>Kép megnyitása</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>Mappa megnyitása</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>Vagy húzzon ide képfájlokat</translation>
+        <source>Radius of the selected circle</source>
+        <translation>A kiválasztott kör sugara</translation>
     </message>
 </context>
 <context>
@@ -268,6 +264,10 @@
     <message>
         <source>Shape List</source>
         <translation>Alakzatlista</translation>
+    </message>
+    <message>
+        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Válasszon címkét az annotálás megkezdéséhez. Nyomja meg az &apos;Esc&apos; gombot a kijelölés megszüntetéséhez.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -358,6 +358,14 @@
         <translation>Automatikus mentés</translation>
     </message>
     <message>
+        <source>Save With Image Data</source>
+        <translation>Mentés kép adatokkal</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Kép adatok mentése a címke fájlba</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
         <translation>&amp;Bezárás</translation>
     </message>
@@ -424,6 +432,14 @@
     <message>
         <source>Undo last drawn point</source>
         <translation>Utolsó rajzolt pont visszavonása</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>Kijelölt pont eltávolítása</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>Kijelölt pont eltávolítása a sokszögből</translation>
     </message>
     <message>
         <source>Undo
@@ -518,14 +534,6 @@ Shapes</source>
         <translation>Címkék mentése új fájlnéven</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>Kép beágyazása a címkefájlba</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>A kép másolatát a címkefájlban tárolja</translation>
-    </message>
-    <message>
         <source>Copy to Clipboard</source>
         <translation>Másolás a vágólapra</translation>
     </message>
@@ -540,22 +548,6 @@ Shapes</source>
     <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>A vágólap alakzatainak beszúrása ebbe a képbe</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>Alakzatok egyesítése</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>A kijelölt maszk alakzatok egyesítése eggyé</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>Kijelölt csúcspont törlése</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>Törli a kijelölt csúcspontot a sokszögből vagy a töröttvonalból</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -594,38 +586,6 @@ Shapes</source>
         <translation>A kép megjelenítése 100%-on</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>Felső alakzat kijelölése</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>A kijelölés feletti legközelebbi alakzat kijelölése</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>Alsó alakzat kijelölése</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>A kijelölés alatti legközelebbi alakzat kijelölése</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>Bal oldali alakzat kijelölése</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>A kijelöléstől balra lévő legközelebbi alakzat kijelölése</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>Jobb oldali alakzat kijelölése</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>A kijelöléstől jobbra lévő legközelebbi alakzat kijelölése</translation>
-    </message>
-    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>A Ctrl+Görgő nagyítja a vásznat</translation>
     </message>
@@ -648,44 +608,6 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s elindítva.</translation>
-    </message>
-    <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>Válasszon egy címkét a rajzolás megkezdéséhez. Az &apos;Esc&apos; billentyűvel megszüntetheti a kijelölést.</translation>
-    </message>
-    <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>Érvénytelen reguláris kifejezés. Az előző keresés marad érvényben.</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>A beállításait nem sikerült betölteni.</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>Egyelőre használhatja az alapértelmezett beállításokat. A visszaállítás előtt biztonsági másolat készül a konfigurációs fájlról.</translation>
-    </message>
-    <message>
-        <source>Command-line settings</source>
-        <translation>Parancssori beállítások</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>Biztonsági mentés és visszaállítás</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>Folytatás az alapértékekkel</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>Nem sikerült visszaállítani a konfigurációs fájlt.
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>A konfiguráció biztonsági másolata ide lett mentve: %s</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -720,22 +642,6 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
         <translation>Az MI-következtetés sikertelen volt: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>Nagyméretű kép</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>A nagyméretű kép több memóriát igényel</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>A kép {width}x{height} képpontos, és a dekódolásához legalább körülbelül {required} MB szükséges, ami meghaladja a jelenlegi {limit} MB-os biztonsági korlátot. Megnyitása átmenetileg lelassíthatja a Labelme vagy más alkalmazások válaszidejét.</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>Mégis megnyitás</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>Hiba a fájl megnyitásakor</translation>
     </message>
@@ -752,12 +658,12 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
         <translation>%s betöltve</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>Képek és annotációs fájlok (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>Kép és címke fájlok (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - Kép vagy annotációk megnyitása</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - Válasszon képet vagy címke fájlt</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -766,6 +672,10 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s . Az annotációk a %s könyvtárban lesznek mentve/betöltve</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - Fájl kiválasztása</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -792,16 +702,20 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
         <translation>Nem érhető el AI-Points módban, mert ez a modell nem támogatja a pont alapú promptokat.</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>Megtartja a(z) „{}” annotációinak módosításait?</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>Mentse az annotációkat a &quot;{}&quot; fájlba bezárás előtt?</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>Nem mentett módosítások</translation>
+        <source>Save annotations?</source>
+        <translation>Mentse az annotációkat?</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - Képmappa tallózása</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>Törli a {} alakzatot? A Visszavonás paranccsal visszaállíthatja őket.</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - Könyvtár megnyitása</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -810,6 +724,14 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     <message>
         <source>The image is too large to open: {width}x{height} pixels needs about {required} MB, but the decode limit is {limit} MB. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
         <translation>A kép túl nagy a megnyitáshoz: {width}x{height} pixelhez körülbelül {required} MB szükséges, de a dekódolási korlát {limit} MB. Ossza fel a képet csempékre (például a gdal_retile.py segítségével), vagy nyisson meg egy kisebb másolatot.</translation>
+    </message>
+    <message>
+        <source>Configuration Errors</source>
+        <translation>Konfigurációs Hibák</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>Hibák találhatók a konfiguráció betöltése közben. Kérjük, tekintse át az alábbi hibákat, és töltse újra a konfigurációt, vagy hagyja figyelmen kívül a hibás sorokat.</translation>
     </message>
     <message>
         <source>Reset Layout</source>
@@ -864,18 +786,6 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
 Please select a different model or use AI-Box mode.</source>
         <translation>%s nem támogatja a pont alapú promptokat.
 Kérjük, válasszon másik modellt vagy használja az AI-Box módot.</translation>
-    </message>
-    <message>
-        <source>Image not found</source>
-        <translation>A kép nem található</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>Ez az annotáció a(z) „{name}” képre hivatkozik, de a kép nem található.
-
-Várt hely: {path}</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -944,6 +854,516 @@ Várt hely: {path}</translation>
     <message>
         <source>Configuration Error</source>
         <translation>Konfigurációs hiba</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>Kép beágyazása a címkefájlba</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>A kép másolatát a címkefájlban tárolja</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>Alakzatok egyesítése</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>A kijelölt maszk alakzatok egyesítése eggyé</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>Kijelölt csúcspont törlése</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>Törli a kijelölt csúcspontot a sokszögből vagy a töröttvonalból</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>Felső alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>A kijelölés feletti legközelebbi alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>Alsó alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>A kijelölés alatti legközelebbi alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>Bal oldali alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>A kijelöléstől balra lévő legközelebbi alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>Jobb oldali alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>A kijelöléstől jobbra lévő legközelebbi alakzat kijelölése</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>Válasszon egy címkét a rajzolás megkezdéséhez. Az &apos;Esc&apos; billentyűvel megszüntetheti a kijelölést.</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>Érvénytelen reguláris kifejezés. Az előző keresés marad érvényben.</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>A beállításait nem sikerült betölteni.</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>Egyelőre használhatja az alapértelmezett beállításokat. A visszaállítás előtt biztonsági másolat készül a konfigurációs fájlról.</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>Parancssori beállítások</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>Biztonsági mentés és visszaállítás</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>Folytatás az alapértékekkel</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>Nem sikerült visszaállítani a konfigurációs fájlt.
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>A konfiguráció biztonsági másolata ide lett mentve: %s</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>Nagyméretű kép</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>A nagyméretű kép több memóriát igényel</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>A kép {width}x{height} képpontos, és a dekódolásához legalább körülbelül {required} MB szükséges, ami meghaladja a jelenlegi {limit} MB-os biztonsági korlátot. Megnyitása átmenetileg lelassíthatja a Labelme vagy más alkalmazások válaszidejét.</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>Mégis megnyitás</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>Képek és annotációs fájlok (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - Kép vagy annotációk megnyitása</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>Megtartja a(z) „{}” annotációinak módosításait?</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>Nem mentett módosítások</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - Képmappa tallózása</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>A kép nem található</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>Ez az annotáció a(z) „{name}” képre hivatkozik, de a kép nem található.
+
+Várt hely: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>Színtéma</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Rendszer</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Világos</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Sötét</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>Címkefelugró ablak megjelenítése új alakzatnál</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>Alakzatcímkék megjelenítése a vásznon</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>Pontok engedélyezése a kép határain kívül</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>Megjelenés és nyelv</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>Fájlok és mentés</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>Rajzolás és vászon</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>Folytatás képek között</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>Címkeforrások</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>Címkeviselkedés</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>AI-segítség</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>Automatikus mentés</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Képadatok mentése a címkefájlba</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>Beágyazza a képet a címke JSON-fájljába.</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>Alakszín mód</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatikus</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>Egységes</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>Címke szerint</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>Automatikus palettaeltolás</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>Az Egységes mód színe</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>A Címke szerint mód tartalék színe</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>Az egyes címkék színei továbbra is szerkeszthetők a konfigurációs fájlban.</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>Előző annotáció megtartása</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>Előző nagyítás megtartása</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>Előző fényerő/kontraszt megtartása</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>Sokszög kitöltése rajzolás közben</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>Lehetővé teszi, hogy az alakzatpontok túlnyúljanak a képen, pl. részben látható objektumokhoz.</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>Poligon részletessége</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>A magasabb értékek több részletet őriznek meg a maszk határvonalából és a kisebb területekből.</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>Előre definiált címkék</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>Címkeellenőrzés</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>Címkék rendezése</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>A címkelistát ábécérendbe rendezi a megadott sorrend megtartása helyett.</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>Címke szövegmezőjének megjelenítése</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>Címkekiegészítés</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>Ezzel kezdődik</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>Tartalmazza</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>Alapértelmezett modell</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (sebesség)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (pontosság)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (sebesség)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (kiegyensúlyozott)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (pontosság)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (sebesség)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (kiegyensúlyozott)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (pontosság)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>Meglévő alakzatokkal való egyezések elnyomása</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>Ha az AI-segítség egyik jelöltje megegyezik egy meglévő alakzattal, a program új alakzat létrehozása helyett kiemeli azt az alakzatot.</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Beállítások</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>Konfigurációs fájl megnyitása szövegként…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>A szövegfájlban végzett módosítások újraindítás után lépnek érvénybe</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Bezárás</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(nincs)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>soronként egy elem</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>Konfigurációs hiba</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>Az előre definiált címkék nem lehetnek üresek, amíg a címkeellenőrzés „exact” értékre van állítva. Először kapcsolja ki az „exact” ellenőrzést.</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>Bemeneti almintavételezési skála</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Csak a mesterséges intelligenciának küldött képre alkalmazott skála; az 1,0 megtartja az eredeti felbontást.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Bemeneti zajszűrés erőssége</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>A mesterséges intelligenciának küldött átméretezett képet zajszűri; a 0,0 kikapcsolja a zajszűrést.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Nyelv</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>Az újraindítás után lép érvénybe.</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Rendszer alapértelmezése</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>Előre definiált képjelzők</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>automatikus mentés</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>Előre megadott alakzatjelzők</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>Soronként egy jelzőnév. Minták: ^car$ pontosan a car értékre, car egy előtagra, .* minden címkére illeszkedik.</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>AI prompt</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>simítás simaság egyszerűsítés körvonal</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>másolat másolatok ismétlődés elkerülése duplikátumok eltávolítása</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>Kép beágyazása a címkefájlba</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>AI-modellek</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>A beállítás szerkesztéséhez válassza a(z) {mode} lehetőséget az alakzat színmódjánál.</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>Beállítások szakaszai</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>Beállítások keresése</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>Egyező beállítások</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} egyező beállítás</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>Nincs egyező beállítás ebben az ablakban. Próbáljon másik kifejezést, vagy törölje a keresést.</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>Annotálás indítása</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>A kezdéshez nyisson meg egy képet vagy egy képeket tartalmazó mappát.</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>Kép megnyitása</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>Mappa megnyitása</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>Vagy húzzon ide képfájlokat</translation>
     </message>
 </context>
 <context>
@@ -1069,308 +1489,6 @@ Várt hely: {path}</translation>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>Színtéma</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Rendszer</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>Világos</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>Sötét</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>Címkefelugró ablak megjelenítése új alakzatnál</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>Alakzatcímkék megjelenítése a vásznon</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>Pontok engedélyezése a kép határain kívül</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>Megjelenés és nyelv</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>Fájlok és mentés</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>Rajzolás és vászon</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>Folytatás képek között</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>Címkeforrások</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>Címkeviselkedés</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>AI-segítség</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>Automatikus mentés</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>automatikus mentés</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>Beágyazza a képet a címke JSON-fájljába.</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>Alakszín mód</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>Automatikus</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>Egységes</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>Címke szerint</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>Automatikus palettaeltolás</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>Az Egységes mód színe</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>A Címke szerint mód tartalék színe</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>Az egyes címkék színei továbbra is szerkeszthetők a konfigurációs fájlban.</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>Előző annotáció megtartása</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>Előző nagyítás megtartása</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>Előző fényerő/kontraszt megtartása</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>Sokszög kitöltése rajzolás közben</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>Lehetővé teszi, hogy az alakzatpontok túlnyúljanak a képen, pl. részben látható objektumokhoz.</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>Előre megadott alakzatjelzők</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>Soronként egy jelzőnév. Minták: ^car$ pontosan a car értékre, car egy előtagra, .* minden címkére illeszkedik.</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>AI prompt</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>Poligon részletessége</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>simítás simaság egyszerűsítés körvonal</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>A magasabb értékek több részletet őriznek meg a maszk határvonalából és a kisebb területekből.</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>másolat másolatok ismétlődés elkerülése duplikátumok eltávolítása</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>Előre definiált címkék</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>Kép beágyazása a címkefájlba</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>Címkeellenőrzés</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>Címkék rendezése</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>A címkelistát ábécérendbe rendezi a megadott sorrend megtartása helyett.</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>Címke szövegmezőjének megjelenítése</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>Címkekiegészítés</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>Ezzel kezdődik</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>Tartalmazza</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>Alapértelmezett modell</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (sebesség)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (pontosság)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (sebesség)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (kiegyensúlyozott)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (pontosság)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (sebesség)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (kiegyensúlyozott)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (pontosság)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>Meglévő alakzatokkal való egyezések elnyomása</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>Ha az AI-segítség egyik jelöltje megegyezik egy meglévő alakzattal, a program új alakzat létrehozása helyett kiemeli azt az alakzatot.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Beállítások</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>AI-modellek</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>Konfigurációs fájl megnyitása szövegként…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>A szövegfájlban végzett módosítások újraindítás után lépnek érvénybe</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Bezárás</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(nincs)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>soronként egy elem</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>Konfigurációs hiba</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>Az előre definiált címkék nem lehetnek üresek, amíg a címkeellenőrzés „exact” értékre van állítva. Először kapcsolja ki az „exact” ellenőrzést.</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>A beállítás szerkesztéséhez válassza a(z) {mode} lehetőséget az alakzat színmódjánál.</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Nyelv</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>Az újraindítás után lép érvénybe.</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>Rendszer alapértelmezése</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>Előre definiált képjelzők</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1413,38 +1531,4 @@ Várt hely: {path}</translation>
         <translation>{row}. sor: {error} A módosítások nem lettek alkalmazva.</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>Beállítások szakaszai</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>Beállítások keresése</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>Egyező beállítások</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>{count} egyező beállítás</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>Nincs egyező beállítás ebben az ablakban. Próbáljon másik kifejezést, vagy törölje a keresést.</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>Sugár</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>A kiválasztott kör sugara</translation>
-        </message>
-    </context>
 </TS>

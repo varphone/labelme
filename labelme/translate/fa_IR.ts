@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>حالت &apos;AI-Points&apos; یا &apos;AI-Box&apos; را برای فعال‌سازی حاشیه‌نویسی با کمک AI انتخاب کنید</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>مدل حاشیه‌نویسی به کمک AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>قالب خروجی حاشیه‌نویسی به کمک AI</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>مدل</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>قالب خروجی</translation>
     </message>
@@ -78,15 +78,15 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>حالت &apos;Polygon&apos;، &apos;Rectangle&apos; یا &apos;AI-Points&apos; را برای فعال‌سازی انتخاب کنید</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>مدل</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>دستور</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>مدل تبدیل متن به حاشیه‌نویسی</translation>
     </message>
@@ -185,8 +185,12 @@
         <translation>ALT + کلیک برای ایجاد نقطه روی شکل</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>گوشهٔ دیگر را انتخاب کنید. برای مربع، Shift را نگه دارید.</translation>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>کلیک راست و کشیدن برای کپی شکل</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>کلیک روی گوشه مقابل مستطیل (Shift برای مربع)</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -216,28 +220,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>کلیک و کشیدن برای چرخاندن شکل</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>گوشهٔ دیگر را انتخاب کنید. برای مربع، Shift را نگه دارید.</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>برچسب‌گذاری را شروع کنید</translation>
+        <source>Radius</source>
+        <translation>شعاع</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>برای شروع، یک تصویر یا پوشه‌ای از تصاویر را باز کنید.</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>باز کردن تصویر</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>باز کردن پوشه</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>یا فایل‌های تصویری را اینجا بکشید و رها کنید</translation>
+        <source>Radius of the selected circle</source>
+        <translation>شعاع دایره انتخاب‌شده</translation>
     </message>
 </context>
 <context>
@@ -268,6 +264,10 @@
     <message>
         <source>Shape List</source>
         <translation>فهرست شکل‌ها</translation>
+    </message>
+    <message>
+        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>برچسب را انتخاب کنید تا شروع به حاشیه‌نویسی کنید. &apos;Esc&apos; را فشار دهید تا انتخاب لغو شود.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -356,6 +356,14 @@
         <translation>ذخیره خودکار</translation>
     </message>
     <message>
+        <source>Save With Image Data</source>
+        <translation>ذخیره با داده تصویر</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>ذخیره داده تصویر در فایل برچسب</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
         <translation>بستن(&amp;C)</translation>
     </message>
@@ -418,6 +426,14 @@
     <message>
         <source>Undo last drawn point</source>
         <translation>بازگشت آخرین نقطه رسم شده</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>حذف نقطه انتخاب شده</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>حذف نقطه انتخاب شده از چندضلعی</translation>
     </message>
     <message>
         <source>Undo
@@ -492,14 +508,6 @@ Shapes</source>
         <translation>ذخیره برچسب‌ها با نام فایل جدید</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>جاسازی تصویر در فایل برچسب</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>یک نسخه از تصویر را داخل فایل برچسب ذخیره می‌کند</translation>
-    </message>
-    <message>
         <source>Modify the label of the selected shape</source>
         <translation>تغییر برچسب شکل انتخاب شده</translation>
     </message>
@@ -518,22 +526,6 @@ Shapes</source>
     <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>درج شکل‌های کلیپ‌بورد در این تصویر</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>ادغام شکل‌ها</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>ادغام شکل‌های ماسک انتخاب شده در یک شکل</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>حذف رأس انتخاب‌شده</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>رأس انتخاب‌شده را از چندضلعی یا خط شکسته حذف می‌کند</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -580,38 +572,6 @@ Shapes</source>
         <translation>پر کردن چندضلعی هنگام رسم</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>انتخاب شکل بالا</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>انتخاب نزدیک‌ترین شکل بالای انتخاب</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>انتخاب شکل پایین</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>انتخاب نزدیک‌ترین شکل پایین انتخاب</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>انتخاب شکل چپ</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>انتخاب نزدیک‌ترین شکل سمت چپ انتخاب</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>انتخاب شکل راست</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>انتخاب نزدیک‌ترین شکل سمت راست انتخاب</translation>
-    </message>
-    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Ctrl+چرخ روی بوم بزرگ‌نمایی می‌کند</translation>
     </message>
@@ -634,44 +594,6 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s راه‌اندازی شد.</translation>
-    </message>
-    <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>یک برچسب را انتخاب کنید تا با آن شروع به ترسیم کنید. برای لغو انتخاب، &apos;Esc&apos; را فشار دهید.</translation>
-    </message>
-    <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>عبارت منظم نامعتبر است. جستجوی قبلی حفظ می‌شود.</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>تنظیمات شما بارگیری نشد.</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>فعلاً می‌توانید از تنظیمات پیش‌فرض استفاده کنید. پیش از بازنشانی، یک نسخهٔ پشتیبان از فایل پیکربندی شما ذخیره می‌شود.</translation>
-    </message>
-    <message>
-        <source>Command-line settings</source>
-        <translation>تنظیمات خط فرمان</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>پشتیبان‌گیری و بازنشانی</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>ادامه با پیش‌فرض‌ها</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>بازنشانی فایل پیکربندی ممکن نشد.
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>نسخه پشتیبان پیکربندی در %s ذخیره شد</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -706,22 +628,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>استنتاج هوش مصنوعی ناموفق بود: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>تصویر بزرگ</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>تصویر بزرگ به حافظه بیشتری نیاز دارد</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>این تصویر {width}x{height} پیکسل است و برای رمزگشایی دست‌کم حدود {required} مگابایت حافظه نیاز دارد که از حد ایمنی فعلی {limit} مگابایت بیشتر است. باز کردن آن ممکن است موقتاً پاسخ‌گویی Labelme یا برنامه‌های دیگر را کندتر کند.</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>باز کردن در هر صورت</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>خطا در باز کردن فایل</translation>
     </message>
@@ -738,12 +644,12 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>بارگذاری شد %s</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>تصاویر و پرونده‌های حاشیه‌نویسی (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>فایل‌های تصویر و برچسب (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - باز کردن تصویر یا حاشیه‌نویسی‌ها</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - انتخاب فایل تصویر یا برچسب</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -752,6 +658,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s . حاشیه‌نویسی‌ها در %s ذخیره/بارگذاری خواهند شد</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - انتخاب فایل</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -778,16 +688,20 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>در حالت AI-Points در دسترس نیست، زیرا این مدل از دستورات نقطه‌ای پشتیبانی نمی‌کند.</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>تغییرات حاشیه‌نویسی برای «{}» نگه داشته شوند؟</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>قبل از بستن، حاشیه‌نویسی‌ها را در &quot;{}&quot; ذخیره کنید؟</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>تغییرات ذخیره‌نشده</translation>
+        <source>Save annotations?</source>
+        <translation>ذخیره حاشیه‌نویسی‌ها؟</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - مرور پوشهٔ تصاویر</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>حذف {} شکل؟ می‌توانید آن‌ها را با بازگشت بازیابی کنید.</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - باز کردن پوشه</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -804,6 +718,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Keep Previous Brightness/Contrast</source>
         <translation>نگه داشتن روشنایی/کنتراست قبلی</translation>
+    </message>
+    <message>
+        <source>Configuration Errors</source>
+        <translation>خطاهای پیکربندی</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>هنگام بارگیری پیکربندی خطاهایی یافت شد. لطفاً خطاهای زیر را بررسی کنید و پیکربندی خود را مجدداً بارگیری کنید یا خطوط نادرست را نادیده بگیرید.</translation>
     </message>
     <message>
         <source>Reset Layout</source>
@@ -858,18 +780,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 Please select a different model or use AI-Box mode.</source>
         <translation>%s از دستورات نقطه‌ای پشتیبانی نمی‌کند.
 لطفاً مدل دیگری انتخاب کنید یا از حالت AI-Box استفاده کنید.</translation>
-    </message>
-    <message>
-        <source>Image not found</source>
-        <translation>تصویر پیدا نشد</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>این حاشیه‌نویسی به «{name}» اشاره دارد، اما این تصویر پیدا نشد.
-
-محل مورد انتظار: {path}</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -938,6 +848,516 @@ Expected location: {path}</source>
     <message>
         <source>Configuration Error</source>
         <translation>خطای پیکربندی</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>جاسازی تصویر در فایل برچسب</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>یک نسخه از تصویر را داخل فایل برچسب ذخیره می‌کند</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>ادغام شکل‌ها</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>ادغام شکل‌های ماسک انتخاب شده در یک شکل</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>حذف رأس انتخاب‌شده</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>رأس انتخاب‌شده را از چندضلعی یا خط شکسته حذف می‌کند</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>انتخاب شکل بالا</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>انتخاب نزدیک‌ترین شکل بالای انتخاب</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>انتخاب شکل پایین</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>انتخاب نزدیک‌ترین شکل پایین انتخاب</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>انتخاب شکل چپ</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>انتخاب نزدیک‌ترین شکل سمت چپ انتخاب</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>انتخاب شکل راست</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>انتخاب نزدیک‌ترین شکل سمت راست انتخاب</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>یک برچسب را انتخاب کنید تا با آن شروع به ترسیم کنید. برای لغو انتخاب، &apos;Esc&apos; را فشار دهید.</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>عبارت منظم نامعتبر است. جستجوی قبلی حفظ می‌شود.</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>تنظیمات شما بارگیری نشد.</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>فعلاً می‌توانید از تنظیمات پیش‌فرض استفاده کنید. پیش از بازنشانی، یک نسخهٔ پشتیبان از فایل پیکربندی شما ذخیره می‌شود.</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>تنظیمات خط فرمان</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>پشتیبان‌گیری و بازنشانی</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>ادامه با پیش‌فرض‌ها</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>بازنشانی فایل پیکربندی ممکن نشد.
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>نسخه پشتیبان پیکربندی در %s ذخیره شد</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>تصویر بزرگ</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>تصویر بزرگ به حافظه بیشتری نیاز دارد</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>این تصویر {width}x{height} پیکسل است و برای رمزگشایی دست‌کم حدود {required} مگابایت حافظه نیاز دارد که از حد ایمنی فعلی {limit} مگابایت بیشتر است. باز کردن آن ممکن است موقتاً پاسخ‌گویی Labelme یا برنامه‌های دیگر را کندتر کند.</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>باز کردن در هر صورت</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>تصاویر و پرونده‌های حاشیه‌نویسی (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - باز کردن تصویر یا حاشیه‌نویسی‌ها</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>تغییرات حاشیه‌نویسی برای «{}» نگه داشته شوند؟</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>تغییرات ذخیره‌نشده</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - مرور پوشهٔ تصاویر</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>تصویر پیدا نشد</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>این حاشیه‌نویسی به «{name}» اشاره دارد، اما این تصویر پیدا نشد.
+
+محل مورد انتظار: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>تم رنگ</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>سیستم</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>روشن</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>تیره</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>نمایش پنجره برچسب هنگام رسم شکل جدید</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>نمایش برچسب شکل‌ها روی بوم</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>اجازه دادن به نقاط خارج از مرز تصویر</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>ظاهر و زبان</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>فایل‌ها و ذخیره‌سازی</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>رسم و بوم</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>ادامه بین تصاویر</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>منابع برچسب</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>رفتار برچسب</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>دستیار هوش مصنوعی</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>ذخیره خودکار</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>ذخیره داده تصویر در فایل برچسب</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>تصویر را در فایل JSON برچسب جاسازی می‌کند.</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>حالت رنگ شکل</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>خودکار</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>یکنواخت</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>بر اساس برچسب</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>جابجایی خودکار پالت</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>رنگ حالت یکنواخت</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>رنگ جایگزین حالت بر اساس برچسب</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>رنگ هر برچسب همچنان در فایل پیکربندی قابل ویرایش است.</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>نگه داشتن حاشیه‌نویسی قبلی</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>نگه داشتن بزرگ‌نمایی قبلی</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>نگه داشتن روشنایی/کنتراست قبلی</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>پر کردن چندضلعی هنگام رسم</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>به نقاط شکل اجازه می‌دهد فراتر از تصویر امتداد یابند، مثلاً برای اشیای تا حدی قابل مشاهده.</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>جزئیات چندضلعی</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>مقادیر بالاتر جزئیات بیشتری از مرز ماسک و نواحی کوچک‌تر را حفظ می‌کنند.</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>برچسب‌های از پیش تعریف‌شده</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>اعتبارسنجی برچسب</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>مرتب‌سازی برچسب‌ها</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>فهرست برچسب‌ها را به‌جای حفظ ترتیب ارائه‌شده، به‌صورت الفبایی مرتب می‌کند.</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>نمایش فیلد متنی برچسب</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>تکمیل خودکار برچسب</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>شروع می‌شود با</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>شامل</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>مدل پیش‌فرض</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (سرعت)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (دقت)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (سرعت)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (متعادل)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (دقت)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (سرعت)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (متعادل)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (دقت)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>نادیده گرفتن موارد منطبق با شکل‌های موجود</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>هنگامی که یک پیشنهاد دستیار هوش مصنوعی با یک شکل موجود منطبق باشد، به جای ایجاد شکل جدید همان شکل برجسته می‌شود.</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>تنظیمات</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>باز کردن فایل پیکربندی به صورت متن…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>تغییرات فایل متنی پس از راه‌اندازی مجدد اعمال می‌شوند</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>بستن</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(هیچ‌کدام)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>یک مورد در هر خط</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>خطای پیکربندی</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>برچسب‌های از پیش تعریف‌شده نمی‌توانند خالی باشند در حالی که اعتبارسنجی برچسب روی «exact» تنظیم شده است. ابتدا اعتبارسنجی «exact» را غیرفعال کنید.</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>مقیاس کاهش اندازه ورودی</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>مقیاسی که فقط برای تصویر ارسالی به هوش مصنوعی استفاده می‌شود؛ ۱٫۰ وضوح اصلی را حفظ می‌کند.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>شدت نویزگیری ورودی</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>نویز تصویر مقیاس‌گذاری‌شده ارسالی به هوش مصنوعی را کاهش می‌دهد؛ ۰٫۰ نویزگیری را غیرفعال می‌کند.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>زبان</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>پس از راه‌اندازی مجدد اعمال می‌شود.</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>پیش‌فرض سیستم</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>پرچم‌های تصویر از پیش تعریف‌شده</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>ذخیره خودکار ذخیره‌سازی خودکار</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>پرچم‌های از پیش تعریف‌شدهٔ شکل</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>هر نام پرچم در یک خط. الگوها: ^car$ دقیقاً با car، car با پیشوند و .* با هر برچسب مطابقت دارد.</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>پیشنهاد هوش مصنوعی</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>هموار هموارسازی ساده‌سازی مرز</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>تکراری جلوگیری از تکرار حذف تکراری‌ها</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>جاسازی تصویر در فایل برچسب</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>مدل‌های هوش مصنوعی</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>برای ویرایش این تنظیم، {mode} را در حالت رنگ شکل انتخاب کنید.</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>بخش‌های تنظیمات</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>جستجوی تنظیمات</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>تنظیمات مطابق</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} تنظیم مطابق</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>تنظیم مطابقی در این پنجره یافت نشد. عبارت دیگری را امتحان کنید یا جستجو را پاک کنید.</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>برچسب‌گذاری را شروع کنید</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>برای شروع، یک تصویر یا پوشه‌ای از تصاویر را باز کنید.</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>باز کردن تصویر</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>باز کردن پوشه</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>یا فایل‌های تصویری را اینجا بکشید و رها کنید</translation>
     </message>
 </context>
 <context>
@@ -1063,308 +1483,6 @@ Expected location: {path}</source>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>تم رنگ</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>سیستم</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>روشن</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>تیره</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>نمایش پنجره برچسب هنگام رسم شکل جدید</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>نمایش برچسب شکل‌ها روی بوم</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>اجازه دادن به نقاط خارج از مرز تصویر</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>ظاهر و زبان</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>فایل‌ها و ذخیره‌سازی</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>رسم و بوم</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>ادامه بین تصاویر</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>منابع برچسب</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>رفتار برچسب</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>دستیار هوش مصنوعی</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>ذخیره خودکار</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>ذخیره خودکار ذخیره‌سازی خودکار</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>تصویر را در فایل JSON برچسب جاسازی می‌کند.</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>حالت رنگ شکل</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>خودکار</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>یکنواخت</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>بر اساس برچسب</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>جابجایی خودکار پالت</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>رنگ حالت یکنواخت</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>رنگ جایگزین حالت بر اساس برچسب</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>رنگ هر برچسب همچنان در فایل پیکربندی قابل ویرایش است.</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>نگه داشتن حاشیه‌نویسی قبلی</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>نگه داشتن بزرگ‌نمایی قبلی</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>نگه داشتن روشنایی/کنتراست قبلی</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>پر کردن چندضلعی هنگام رسم</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>به نقاط شکل اجازه می‌دهد فراتر از تصویر امتداد یابند، مثلاً برای اشیای تا حدی قابل مشاهده.</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>پرچم‌های از پیش تعریف‌شدهٔ شکل</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>هر نام پرچم در یک خط. الگوها: ^car$ دقیقاً با car، car با پیشوند و .* با هر برچسب مطابقت دارد.</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>پیشنهاد هوش مصنوعی</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>جزئیات چندضلعی</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>هموار هموارسازی ساده‌سازی مرز</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>مقادیر بالاتر جزئیات بیشتری از مرز ماسک و نواحی کوچک‌تر را حفظ می‌کنند.</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>تکراری جلوگیری از تکرار حذف تکراری‌ها</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>برچسب‌های از پیش تعریف‌شده</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>جاسازی تصویر در فایل برچسب</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>اعتبارسنجی برچسب</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>مرتب‌سازی برچسب‌ها</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>فهرست برچسب‌ها را به‌جای حفظ ترتیب ارائه‌شده، به‌صورت الفبایی مرتب می‌کند.</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>نمایش فیلد متنی برچسب</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>تکمیل خودکار برچسب</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>شروع می‌شود با</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>شامل</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>مدل پیش‌فرض</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (سرعت)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (دقت)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (سرعت)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (متعادل)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (دقت)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (سرعت)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (متعادل)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (دقت)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>نادیده گرفتن موارد منطبق با شکل‌های موجود</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>هنگامی که یک پیشنهاد دستیار هوش مصنوعی با یک شکل موجود منطبق باشد، به جای ایجاد شکل جدید همان شکل برجسته می‌شود.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>تنظیمات</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>مدل‌های هوش مصنوعی</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>باز کردن فایل پیکربندی به صورت متن…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>تغییرات فایل متنی پس از راه‌اندازی مجدد اعمال می‌شوند</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>بستن</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(هیچ‌کدام)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>یک مورد در هر خط</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>خطای پیکربندی</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>برچسب‌های از پیش تعریف‌شده نمی‌توانند خالی باشند در حالی که اعتبارسنجی برچسب روی «exact» تنظیم شده است. ابتدا اعتبارسنجی «exact» را غیرفعال کنید.</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>برای ویرایش این تنظیم، {mode} را در حالت رنگ شکل انتخاب کنید.</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>زبان</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>پس از راه‌اندازی مجدد اعمال می‌شود.</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>پیش‌فرض سیستم</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>پرچم‌های تصویر از پیش تعریف‌شده</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1407,38 +1525,4 @@ Expected location: {path}</source>
         <translation>ردیف {row}: {error} تغییرات اعمال نشده‌اند.</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>بخش‌های تنظیمات</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>جستجوی تنظیمات</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>تنظیمات مطابق</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>{count} تنظیم مطابق</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>تنظیم مطابقی در این پنجره یافت نشد. عبارت دیگری را امتحان کنید یا جستجو را پاک کنید.</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>شعاع</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>شعاع دایره انتخاب‌شده</translation>
-        </message>
-    </context>
 </TS>

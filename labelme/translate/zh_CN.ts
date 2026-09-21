@@ -12,8 +12,40 @@
         <translation>在 &apos;AI-Points&apos; 和 &apos;AI-Box&apos; 模式下，AI 会提供标注建议</translation>
     </message>
     <message>
+        <source>Polygon detail</source>
+        <translation>多边形细节</translation>
+    </message>
+    <message>
+        <source>Adjust polygon detail</source>
+        <translation>调整多边形细节</translation>
+    </message>
+    <message>
+        <source>Smoother</source>
+        <translation>更平滑</translation>
+    </message>
+    <message>
+        <source>More detail</source>
+        <translation>更多细节</translation>
+    </message>
+    <message>
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>请选择 &apos;AI-Points&apos; 或 &apos;AI-Box&apos; 模式以启用 AI 辅助标注</translation>
+    </message>
+<message>
+        <source>AI-assisted annotation model</source>
+        <translation>AI 辅助标注模型</translation>
+    </message>
+<message>
+        <source>AI-assisted annotation output format</source>
+        <translation>AI 辅助标注输出格式</translation>
+    </message>
+<message>
+        <source>Model</source>
+        <translation>模型</translation>
+    </message>
+<message>
+        <source>Output format</source>
+        <translation>输出格式</translation>
     </message>
 </context>
 <context>
@@ -45,6 +77,18 @@
     <message>
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>请选择 &apos;Polygon&apos;、&apos;Rectangle&apos; 或 &apos;AI-Points&apos; 模式以启用</translation>
+    </message>
+<message>
+        <source>Model</source>
+        <translation>模型</translation>
+    </message>
+<message>
+        <source>Prompt</source>
+        <translation>提示词</translation>
+    </message>
+<message>
+        <source>Text-to-annotation model</source>
+        <translation>文本转标注模型</translation>
     </message>
 </context>
 <context>
@@ -87,6 +131,62 @@
     <message>
         <source>Editing shapes</source>
         <translation>正在编辑形状</translation>
+    </message>
+    <message>
+        <source>Editing shape: {0}</source>
+        <translation>正在编辑形状：{0}</translation>
+    </message>
+    <message>
+        <source>Polygon</source>
+        <translation>多边形</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>矩形</translation>
+    </message>
+    <message>
+        <source>Oriented Rectangle</source>
+        <translation>有向矩形</translation>
+    </message>
+    <message>
+        <source>Point</source>
+        <translation>点</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>直线</translation>
+    </message>
+    <message>
+        <source>Circle</source>
+        <translation>圆形</translation>
+    </message>
+    <message>
+        <source>LineStrip</source>
+        <translation>折线</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>点集</translation>
+    </message>
+    <message>
+        <source>Quadratic Bezier</source>
+        <translation>二阶曲线</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>三阶曲线</translation>
+    </message>
+    <message>
+        <source>猫氏样条</source>
+        <translation>猫氏样条</translation>
+    </message>
+    <message>
+        <source>B样条</source>
+        <translation>B 样条</translation>
+    </message>
+    <message>
+        <source>Mask</source>
+        <translation>掩膜</translation>
     </message>
     <message>
         <source>Click start point for line</source>
@@ -191,6 +291,10 @@
     <message>
         <source>Click &amp; drag to rotate the shape</source>
         <translation>按住鼠标左键拖动以旋转形状</translation>
+    </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>选择另一个角。按住Shift可绘制正方形。</translation>
     </message>
 </context>
 <context>
@@ -605,6 +709,14 @@ Shapes</source>
         <translation>合并为折线</translation>
     </message>
     <message>
+        <source>Merge Polygons</source>
+        <translation>合并多边形</translation>
+    </message>
+    <message>
+        <source>Merge the selected polygons and fill the gaps between them</source>
+        <translation>合并选中的多边形并填充它们之间的间隙</translation>
+    </message>
+    <message>
         <source>Combine the selected line and linestrip annotations into a single linestrip</source>
         <translation>将选中的直线和折线标注合并为一条折线</translation>
     </message>
@@ -737,12 +849,36 @@ Shapes</source>
         <translation>开始绘制三阶贝塞尔曲线（4 个点）</translation>
     </message>
     <message>
+        <source>猫氏样条</source>
+        <translation>猫氏样条</translation>
+    </message>
+    <message>
+        <source>Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation.</source>
+        <translation>开始绘制猫氏样条曲线；按住 Ctrl 并单击结束创建。</translation>
+    </message>
+    <message>
+        <source>B样条</source>
+        <translation>B 样条</translation>
+    </message>
+    <message>
+        <source>Start drawing a B-spline. Ctrl+LeftClick ends creation.</source>
+        <translation>开始绘制 B 样条曲线；按住 Ctrl 并单击结束创建。</translation>
+    </message>
+    <message>
         <source>Fill Drawing Polygon</source>
         <translation>填充正在绘制的多边形</translation>
     </message>
     <message>
         <source>Fill polygon while drawing</source>
         <translation>绘制过程中填充多边形</translation>
+    </message>
+    <message>
+        <source>Show Minimap</source>
+        <translation>显示小地图</translation>
+    </message>
+    <message>
+        <source>Show or hide the canvas minimap</source>
+        <translation>显示或隐藏画布小地图</translation>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
@@ -782,7 +918,7 @@ Shapes</source>
     </message>
     <message>
         <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
-        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
+        <translation>请选择一个标签开始标注。双击或右键单击可重命名；按 Esc 取消选择。</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -798,7 +934,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Rename Label</source>
-        <translation>Rename Label</translation>
+        <translation>重命名标签</translation>
     </message>
     <message>
         <source>Set Uniform Circle Radius</source>
@@ -818,11 +954,11 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Error reading label data</source>
-        <translation>Error reading label data</translation>
+        <translation>读取标签数据时出错</translation>
     </message>
     <message>
         <source>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</source>
-        <translation>Could not read the image stored in &lt;b&gt;{}&lt;/b&gt;.</translation>
+        <translation>无法读取存储在 &lt;b&gt;{}&lt;/b&gt; 中的图像。</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -830,11 +966,11 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>已在另外 {0} 个标注文件中重命名标签</translation>
     </message>
     <message>
         <source>New label:</source>
-        <translation>New label:</translation>
+        <translation>新标签：</translation>
     </message>
     <message>
         <source>Invalid label</source>
@@ -842,7 +978,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>A label named &apos;{}&apos; already exists.</source>
-        <translation>A label named &apos;{}&apos; already exists.</translation>
+        <translation>名为“{}”的标签已存在。</translation>
     </message>
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
@@ -854,31 +990,43 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Sample spacing</source>
-        <translation>Sample spacing</translation>
+        <translation>采样间距</translation>
     </message>
     <message>
         <source>Search radius</source>
-        <translation>Search radius</translation>
+        <translation>搜索半径</translation>
     </message>
     <message>
         <source>Minimum width</source>
-        <translation>Minimum width</translation>
+        <translation>最小宽度</translation>
     </message>
     <message>
         <source>Maximum width</source>
-        <translation>Maximum width</translation>
+        <translation>最大宽度</translation>
     </message>
     <message>
         <source>Contrast factor</source>
-        <translation>Contrast factor</translation>
+        <translation>对比度系数</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>宽度滤波强度</translation>
+    </message>
+    <message>
+        <source>Use fixed width</source>
+        <translation>使用固定宽度</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定宽度</translation>
     </message>
     <message>
         <source>Override global measurement settings</source>
-        <translation>Override global measurement settings</translation>
+        <translation>覆盖全局测量设置</translation>
     </message>
     <message>
         <source>Invalid Measurement Parameters</source>
-        <translation>Invalid Measurement Parameters</translation>
+        <translation>测量参数无效</translation>
     </message>
     <message>
         <source>No selected files have label annotations to measure</source>
@@ -914,7 +1062,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Measuring line profile…</source>
-        <translation>Measuring line profile…</translation>
+        <translation>正在测量线剖面…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
@@ -922,7 +1070,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Measurement result is out of date</source>
-        <translation>Measurement result is out of date</translation>
+        <translation>测量结果已过期</translation>
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
@@ -930,15 +1078,15 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
-        <translation>Measurement produced {0} samples. Accept automatic width and visibility anchors?</translation>
+        <translation>测量生成了 {0} 个样本。是否接受自动宽度和可见性锚点？</translation>
     </message>
     <message>
         <source>Only accept samples with confidence &gt;= 0.5</source>
-        <translation>Only accept samples with confidence &gt;= 0.5</translation>
+        <translation>仅接受置信度 &gt;= 0.5 的样本</translation>
     </message>
     <message>
         <source>Line profile measurement failed: {0}</source>
-        <translation>Line profile measurement failed: {0}</translation>
+        <translation>线剖面测量失败：{0}</translation>
     </message>
     <message>
         <source>Error saving label data</source>
@@ -970,33 +1118,33 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Previous frame profiles are incompatible: {0}</source>
-        <translation>Previous frame profiles are incompatible: {0}</translation>
+        <translation>上一帧的线剖面不兼容：{0}</translation>
     </message>
     <message>
         <source>Shape {0} ({1}): centerline difference {2:.2f} px</source>
-        <translation>Shape {0} ({1}): centerline difference {2:.2f} px</translation>
+        <translation>形状 {0}（{1}）：中心线差异 {2:.2f} 像素</translation>
     </message>
     <message>
         <source>unlabeled</source>
-        <translation>unlabeled</translation>
+        <translation>未标注</translation>
     </message>
     <message>
         <source>Shape {0}: width difference {1}, visibility difference {2}</source>
-        <translation>Shape {0}: width difference {1}, visibility difference {2}</translation>
+        <translation>形状 {0}：宽度差异 {1}，可见性差异 {2}</translation>
     </message>
     <message>
         <source>n/a</source>
-        <translation>n/a</translation>
+        <translation>不适用</translation>
     </message>
     <message>
         <source>Frame Profile Transfer Preview</source>
-        <translation>Frame Profile Transfer Preview</translation>
+        <translation>帧线剖面传递预览</translation>
     </message>
     <message>
         <source>Copy profiles from the previous frame?
 
 {0}</source>
-        <translation>Copy profiles from the previous frame?
+        <translation>是否从上一帧复制线剖面？
 
 {0}</translation>
     </message>
@@ -1238,6 +1386,196 @@ Please select a different model or use AI-Box mode.</source>
         <source>Configuration Error</source>
         <translation>配置错误</translation>
     </message>
+<message>
+        <source>Save the labels under a new file name</source>
+        <translation>以新的文件名保存标签</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>将图像嵌入标签文件</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>在标签文件中保存一份图像副本</translation>
+    </message>
+<message>
+        <source>Copy to Clipboard</source>
+        <translation>复制到剪贴板</translation>
+    </message>
+<message>
+        <source>Place the selected shapes on the clipboard</source>
+        <translation>将所选形状放入剪贴板</translation>
+    </message>
+<message>
+        <source>Paste from Clipboard</source>
+        <translation>从剪贴板粘贴</translation>
+    </message>
+<message>
+        <source>Insert the clipboard shapes into this image</source>
+        <translation>将剪贴板中的形状插入此图像</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>合并形状</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>将选中的掩码形状合并为一个</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>删除选中的顶点</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>从多边形或折线中删除选中的顶点</translation>
+    </message>
+<message>
+        <source>Keep the whole image visible when the window is resized</source>
+        <translation>调整窗口大小时保持整幅图像可见</translation>
+    </message>
+<message>
+        <source>Fit to Wi&amp;dth</source>
+        <translation>适合宽度(&amp;D)</translation>
+    </message>
+<message>
+        <source>Match the image width to the window when it is resized</source>
+        <translation>调整窗口大小时使图像宽度与窗口一致</translation>
+    </message>
+<message>
+        <source>Make the image appear larger</source>
+        <translation>以更大的尺寸显示图像</translation>
+    </message>
+<message>
+        <source>Make the image appear smaller</source>
+        <translation>以更小的尺寸显示图像</translation>
+    </message>
+<message>
+        <source>&amp;Actual Size</source>
+        <translation>实际大小(&amp;A)</translation>
+    </message>
+<message>
+        <source>Show the image at 100%</source>
+        <translation>以 100% 显示图像</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>选择上方形状</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>选择选中形状上方最近的形状</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>选择下方形状</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>选择选中形状下方最近的形状</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>选择左侧形状</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>选择选中形状左侧最近的形状</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>选择右侧形状</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>选择选中形状右侧最近的形状</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>选择一个标签以开始用它绘制。按 &apos;Esc&apos; 清除选择。</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>正则表达式无效。保留上一次搜索条件。</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>无法加载你的设置。</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>你可以暂时使用默认设置。重置前会先保存配置文件的备份。</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>命令行设置</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>备份并重置</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>使用默认设置继续</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>无法重置配置文件。
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>配置备份已保存至 %s</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>大图像</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>大图像需要更多内存</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>图像尺寸为 {width}x{height} 像素，解码至少需要约 {required} MB，超过当前 {limit} MB 的安全限制。打开图像可能会暂时降低 Labelme 或其他应用程序的响应速度。</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>仍然打开</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>图像与标注文件 (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - 打开图像或标注</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>要保留“{}”的标注更改吗？</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>尚未保存的更改</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - 浏览图像文件夹</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>找不到图像</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>此标注引用了“{name}”，但找不到该图像。
+
+预期位置：{path}</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>
@@ -1299,7 +1637,7 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>Line profile measurement</source>
-        <translation>Line profile measurement</translation>
+        <translation>线剖面测量</translation>
     </message>
     <message>
         <source>Save automatically</source>
@@ -1312,6 +1650,42 @@ Please select a different model or use AI-Box mode.</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>将图像嵌入标签 JSON 文件中。</translation>
+    </message>
+    <message>
+        <source>Show annotation outlines in Minimap</source>
+        <translation>在小地图中显示标注轮廓</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>形状颜色模式</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>自动</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>统一</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>按标签</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>自动调色板偏移</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>统一模式颜色</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>按标签模式的备用颜色</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>单个标签的颜色仍可在配置文件中编辑。</translation>
     </message>
     <message>
         <source>Snap cursor to annotation points</source>
@@ -1375,31 +1749,43 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>Sample spacing</source>
-        <translation>Sample spacing</translation>
+        <translation>采样间距</translation>
     </message>
     <message>
         <source>Pixels along the centerline.</source>
-        <translation>Pixels along the centerline.</translation>
+        <translation>沿中心线的像素数。</translation>
     </message>
     <message>
         <source>Search radius</source>
-        <translation>Search radius</translation>
+        <translation>搜索半径</translation>
     </message>
     <message>
         <source>Pixels sampled on each normal.</source>
-        <translation>Pixels sampled on each normal.</translation>
+        <translation>沿每条法线采样的像素范围。</translation>
     </message>
     <message>
         <source>Minimum width</source>
-        <translation>Minimum width</translation>
+        <translation>最小宽度</translation>
     </message>
     <message>
         <source>Maximum width</source>
-        <translation>Maximum width</translation>
+        <translation>最大宽度</translation>
     </message>
     <message>
         <source>Contrast factor</source>
-        <translation>Contrast factor</translation>
+        <translation>对比度系数</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>宽度滤波强度</translation>
+    </message>
+    <message>
+        <source>Sliding window length as a percentage of measured samples.</source>
+        <translation>滑动窗口长度占测量样本的百分比。</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定宽度</translation>
     </message>
     <message>
         <source>Default model</source>
@@ -1442,6 +1828,14 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Sam3</translation>
     </message>
     <message>
+        <source>Polygon detail</source>
+        <translation>多边形细节</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>值越高，越能保留掩膜边界细节，并减少小区域。</translation>
+    </message>
+    <message>
         <source>Suppress existing Shape matches</source>
         <translation>抑制与已有形状匹配的结果</translation>
     </message>
@@ -1467,7 +1861,7 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>BETA</source>
-        <translation>BETA</translation>
+        <translation>测试版</translation>
     </message>
     <message>
         <source>(none)</source>
@@ -1486,6 +1880,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>当标签验证设置为“exact”时，预定义标签不能为空。请先禁用“exact”验证。</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>输入下采样系数</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>仅用于发送给 AI 的图像；1.0 保持原始分辨率。</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>输入降噪强度</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>对发送给 AI 的缩放图像进行降噪；0.0 表示关闭降噪。</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>语言</translation>
     </message>
@@ -1501,12 +1911,259 @@ Please select a different model or use AI-Box mode.</source>
         <source>Predefined image flags</source>
         <translation>预定义图像标记</translation>
     </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>自动保存 自动储存</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>预定义形状标志</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>每行一个标志名称。模式：^car$ 精确匹配 car，car 匹配前缀，.* 匹配所有标签。</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>AI 文本转标注</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>平滑 光滑 简化 轮廓</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>重复 避免重复 去重</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>将图像嵌入标签文件</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>AI 模型</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>请在形状颜色模式中选择“{mode}”以编辑此设置。</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB：{red}、{green}、{blue}</translation>
+    </message>
 </context>
 <context>
     <name>_SettingsPage</name>
     <message>
         <source>Settings sections</source>
         <translation>设置分区</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>搜索设置</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>匹配的设置</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} 项匹配的设置</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>此对话框中没有匹配的设置。请尝试其他关键词或清除搜索。</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>开始标注</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>打开图像或图像目录以开始。</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>打开图像</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>打开目录</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>或将图像文件拖放到此处</translation>
+    </message>
+</context>
+<context>
+    <name>ModelPicker</name>
+    <message>
+        <source>Manage models…</source>
+        <translation>管理模型…</translation>
+    </message>
+    <message>
+        <source>Download a model…</source>
+        <translation>下载模型…</translation>
+    </message>
+    <message>
+        <source>Choose a model…</source>
+        <translation>选择模型…</translation>
+    </message>
+    <message>
+        <source>Unavailable: {model}</source>
+        <translation>不可用：{model}</translation>
+    </message>
+</context>
+<context>
+    <name>ModelsWidget</name>
+    <message>
+        <source>Downloading…</source>
+        <translation>正在下载…</translation>
+    </message>
+    <message>
+        <source>Download models to use AI offline. You can keep annotating while downloads run.</source>
+        <translation>下载模型以离线使用 AI。下载期间您可以继续标注。</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>点</translation>
+    </message>
+    <message>
+        <source>Boxes</source>
+        <translation>框</translation>
+    </message>
+    <message>
+        <source>Text prompts</source>
+        <translation>文本提示</translation>
+    </message>
+    <message>
+        <source>SAM3 use is subject to the SAM License, including trade-control and end-use restrictions. Read the full agreement before downloading or using it.</source>
+        <translation>使用 SAM3 须遵守 SAM License，包括贸易管制和最终用途限制。下载或使用前请阅读完整协议。</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <source>Delete {model}</source>
+        <translation>删除 {model}</translation>
+    </message>
+    <message>
+        <source>Downloading {filename} · {done} / {total}</source>
+        <translation>正在下载 {filename} · {done} / {total}</translation>
+    </message>
+    <message>
+        <source>Not downloaded</source>
+        <translation>未下载</translation>
+    </message>
+    <message>
+        <source>Best balance of speed and quality for point and box prompts.</source>
+        <translation>点提示和框提示下速度与质量的最佳平衡。</translation>
+    </message>
+    <message>
+        <source>Best for text prompts and finding multiple objects.</source>
+        <translation>最适合文本提示和查找多个对象。</translation>
+    </message>
+    <message>
+        <source>Recommended</source>
+        <translation>推荐</translation>
+    </message>
+    <message>
+        <source>All models</source>
+        <translation>所有模型</translation>
+    </message>
+    <message>
+        <source>License: {license}</source>
+        <translation>许可证：{license}</translation>
+    </message>
+    <message>
+        <source>Details…</source>
+        <translation>详情…</translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation>已下载</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>失败</translation>
+    </message>
+    <message>
+        <source>Queued · position {position}</source>
+        <translation>已排队 · 第 {position} 位</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>重试</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation>下载</translation>
+    </message>
+    <message>
+        <source>Download failed. Check your connection and retry.</source>
+        <translation>下载失败。请检查网络连接并重试。</translation>
+    </message>
+    <message>
+        <source>Delete model</source>
+        <translation>删除模型</translation>
+    </message>
+    <message>
+        <source>Delete {model} from this computer? Its selections will be cleared. Your annotations will not change.</source>
+        <translation>从此计算机删除 {model}？该模型的选择将被清除。您的标注不会改变。</translation>
+    </message>
+</context>
+<context>
+    <name>_LabelFlagsEditor</name>
+    <message>
+        <source>Label pattern</source>
+        <translation>标签模式</translation>
+    </message>
+    <message>
+        <source>Shape flags</source>
+        <translation>形状标志</translation>
+    </message>
+    <message>
+        <source>Add rule</source>
+        <translation>添加规则</translation>
+    </message>
+    <message>
+        <source>One name per line</source>
+        <translation>每行一个名称</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <source>Remove rule</source>
+        <translation>移除规则</translation>
+    </message>
+    <message>
+        <source>Enter a pattern and at least one flag name.</source>
+        <translation>请输入模式和至少一个标志名称。</translation>
+    </message>
+    <message>
+        <source>Duplicate label pattern.</source>
+        <translation>标签模式重复。</translation>
+    </message>
+    <message>
+        <source>Invalid regular expression.</source>
+        <translation>正则表达式无效。</translation>
+    </message>
+    <message>
+        <source>Row {row}: {error} Changes have not been applied.</source>
+        <translation>第 {row} 行：{error} 更改尚未应用。</translation>
     </message>
 </context>
 </TS>

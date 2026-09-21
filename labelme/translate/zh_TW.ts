@@ -15,6 +15,38 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>選擇&apos;AI-Points&apos;或&apos;AI-Box&apos;模式以啟用AI輔助標註</translation>
     </message>
+<message>
+        <source>Polygon detail</source>
+        <translation>多邊形細節</translation>
+    </message>
+<message>
+        <source>Adjust polygon detail</source>
+        <translation>調整多邊形細節</translation>
+    </message>
+<message>
+        <source>Smoother</source>
+        <translation>更平滑</translation>
+    </message>
+<message>
+        <source>More detail</source>
+        <translation>更多細節</translation>
+    </message>
+<message>
+        <source>AI-assisted annotation model</source>
+        <translation>AI 輔助標註模型</translation>
+    </message>
+<message>
+        <source>AI-assisted annotation output format</source>
+        <translation>AI 輔助標註輸出格式</translation>
+    </message>
+<message>
+        <source>Model</source>
+        <translation>模型</translation>
+    </message>
+<message>
+        <source>Output format</source>
+        <translation>輸出格式</translation>
+    </message>
 </context>
 <context>
     <name>AiTextToAnnotationWidget</name>
@@ -45,6 +77,18 @@
     <message>
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>選擇&apos;Polygon&apos;、&apos;Rectangle&apos;或&apos;AI-Points&apos;模式以啟用</translation>
+    </message>
+<message>
+        <source>Model</source>
+        <translation>模型</translation>
+    </message>
+<message>
+        <source>Prompt</source>
+        <translation>提示詞</translation>
+    </message>
+<message>
+        <source>Text-to-annotation model</source>
+        <translation>文字轉標註模型</translation>
     </message>
 </context>
 <context>
@@ -191,6 +235,10 @@
     <message>
         <source>Click &amp; drag to rotate the shape</source>
         <translation>點擊並拖拽以旋轉形狀</translation>
+    </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>選擇另一個角。按住Shift可繪製正方形。</translation>
     </message>
 </context>
 <context>
@@ -605,6 +653,14 @@ Shapes</source>
         <translation>合併為折線</translation>
     </message>
     <message>
+        <source>Merge Polygons</source>
+        <translation>合併多邊形</translation>
+    </message>
+    <message>
+        <source>Merge the selected polygons and fill the gaps between them</source>
+        <translation>合併選取的多邊形並填補其間的間隙</translation>
+    </message>
+    <message>
         <source>Combine the selected line and linestrip annotations into a single linestrip</source>
         <translation>將選中的直線和折線標註合併為一條折線</translation>
     </message>
@@ -855,6 +911,18 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Contrast factor</source>
         <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Use fixed width</source>
+        <translation>使用固定寬度</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
     </message>
     <message>
         <source>Override global measurement settings</source>
@@ -1222,6 +1290,196 @@ Please select a different model or use AI-Box mode.</source>
         <source>Configuration Error</source>
         <translation>設定錯誤</translation>
     </message>
+<message>
+        <source>Save the labels under a new file name</source>
+        <translation>以新的檔案名稱儲存標籤</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>將影像嵌入標籤檔案</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>在標籤檔案中儲存一份影像副本</translation>
+    </message>
+<message>
+        <source>Copy to Clipboard</source>
+        <translation>複製到剪貼板</translation>
+    </message>
+<message>
+        <source>Place the selected shapes on the clipboard</source>
+        <translation>將選中圖形放入剪貼板</translation>
+    </message>
+<message>
+        <source>Paste from Clipboard</source>
+        <translation>從剪貼板粘貼</translation>
+    </message>
+<message>
+        <source>Insert the clipboard shapes into this image</source>
+        <translation>將剪貼板中的圖形插入此圖片</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>合併形狀</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>將選取的遮罩形狀合併為一個</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>刪除選取的頂點</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>從多邊形或折線中刪除選取的頂點</translation>
+    </message>
+<message>
+        <source>Keep the whole image visible when the window is resized</source>
+        <translation>調整視窗大小時保持整張影像可見</translation>
+    </message>
+<message>
+        <source>Fit to Wi&amp;dth</source>
+        <translation>適應寬度(&amp;D)</translation>
+    </message>
+<message>
+        <source>Match the image width to the window when it is resized</source>
+        <translation>調整視窗大小時使影像寬度與視窗一致</translation>
+    </message>
+<message>
+        <source>Make the image appear larger</source>
+        <translation>以較大的尺寸顯示影像</translation>
+    </message>
+<message>
+        <source>Make the image appear smaller</source>
+        <translation>以較小的尺寸顯示影像</translation>
+    </message>
+<message>
+        <source>&amp;Actual Size</source>
+        <translation>實際大小(&amp;A)</translation>
+    </message>
+<message>
+        <source>Show the image at 100%</source>
+        <translation>以 100% 顯示影像</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>選取上方形狀</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>選取選取形狀上方最近的形狀</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>選取下方形狀</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>選取選取形狀下方最近的形狀</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>選取左側形狀</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>選取選取形狀左側最近的形狀</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>選取右側形狀</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>選取選取形狀右側最近的形狀</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>選擇一個標籤以開始用它繪製。按 &apos;Esc&apos; 清除選擇。</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>正規表示式無效。保留上一次搜尋條件。</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>無法載入你的設定。</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>你可以暫時使用預設值。重設前會先儲存設定檔的備份。</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>命令列設定</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>備份並重設</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>使用預設值繼續</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>無法重設設定檔。
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>設定備份已儲存至 %s</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>大型影像</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>大型影像需要更多記憶體</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>影像尺寸為 {width}x{height} 像素，解碼至少需要約 {required} MB，超過目前 {limit} MB 的安全限制。開啟影像可能會暫時降低 Labelme 或其他應用程式的回應速度。</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>仍要開啟</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>影像與標註檔案 (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - 開啟影像或標註</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>要保留「{}」的標註變更嗎？</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>尚未儲存的變更</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - 瀏覽影像資料夾</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>找不到影像</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>此標註參照了「{name}」，但找不到該影像。
+
+預期位置：{path}</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>
@@ -1386,6 +1644,18 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Contrast factor</translation>
     </message>
     <message>
+        <source>Width filter strength</source>
+        <translation>寬度濾波強度</translation>
+    </message>
+    <message>
+        <source>Sliding window length as a percentage of measured samples.</source>
+        <translation>滑動視窗長度佔測量樣本的百分比。</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>固定寬度</translation>
+    </message>
+    <message>
         <source>Default model</source>
         <translation>預設模型</translation>
     </message>
@@ -1470,6 +1740,22 @@ Please select a different model or use AI-Box mode.</source>
         <translation>當標籤驗證設定為「exact」時，預定義標籤不能為空。請先停用「exact」驗證。</translation>
     </message>
     <message>
+        <source>Input downsample scale</source>
+        <translation>輸入下採樣比例</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>僅用於傳送給 AI 的影像；1.0 會保留原始解析度。</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>輸入降噪強度</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>對傳送給 AI 的縮放影像進行降噪；0.0 表示關閉降噪。</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation>語言</translation>
     </message>
@@ -1485,12 +1771,299 @@ Please select a different model or use AI-Box mode.</source>
         <source>Predefined image flags</source>
         <translation>預定義影像標記</translation>
     </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>自動儲存 自動保存</translation>
+    </message>
+<message>
+        <source>Shape Color Mode</source>
+        <translation>形狀顏色模式</translation>
+    </message>
+<message>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+<message>
+        <source>Uniform</source>
+        <translation>統一</translation>
+    </message>
+<message>
+        <source>By Label</source>
+        <translation>依標籤</translation>
+    </message>
+<message>
+        <source>Automatic palette shift</source>
+        <translation>自動調色盤位移</translation>
+    </message>
+<message>
+        <source>Uniform mode color</source>
+        <translation>「統一」模式顏色</translation>
+    </message>
+<message>
+        <source>By Label fallback color</source>
+        <translation>「依標籤」模式備用顏色</translation>
+    </message>
+<message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>仍可在設定檔中編輯各個標籤的顏色。</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>預先定義的形狀旗標</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>每行一個旗標名稱。模式：^car$ 精確符合 car，car 符合前綴，.* 符合所有標籤。</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>AI提示</translation>
+    </message>
+<message>
+        <source>Polygon detail</source>
+        <translation>多邊形細節</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>平滑 光滑 簡化 輪廓</translation>
+    </message>
+<message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>值越高，保留的遮罩邊界細節和較小區域越多。</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>重複 避免重複 去除重複</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>將影像嵌入標籤檔案</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>AI 模型</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>請在形狀顏色模式中選擇「{mode}」以編輯此設定。</translation>
+    </message>
 </context>
 <context>
     <name>_SettingsPage</name>
     <message>
         <source>Settings sections</source>
         <translation>設定區段</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>搜尋設定</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>符合的設定</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} 項符合的設定</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>此對話方塊中沒有符合的設定。請嘗試其他關鍵字或清除搜尋。</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>開始標註</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>開啟影像或影像目錄以開始。</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>開啟影像</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>開啟目錄</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>或將影像檔案拖放到此處</translation>
+    </message>
+</context>
+<context>
+    <name>ModelPicker</name>
+    <message>
+        <source>Manage models…</source>
+        <translation>管理模型…</translation>
+    </message>
+    <message>
+        <source>Download a model…</source>
+        <translation>下載模型…</translation>
+    </message>
+    <message>
+        <source>Choose a model…</source>
+        <translation>選擇模型…</translation>
+    </message>
+    <message>
+        <source>Unavailable: {model}</source>
+        <translation>無法使用：{model}</translation>
+    </message>
+</context>
+<context>
+    <name>ModelsWidget</name>
+    <message>
+        <source>Downloading…</source>
+        <translation>正在下載…</translation>
+    </message>
+    <message>
+        <source>Download models to use AI offline. You can keep annotating while downloads run.</source>
+        <translation>下載模型以離線使用 AI。下載期間您可以繼續標註。</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>點</translation>
+    </message>
+    <message>
+        <source>Boxes</source>
+        <translation>框</translation>
+    </message>
+    <message>
+        <source>Text prompts</source>
+        <translation>文字提示</translation>
+    </message>
+    <message>
+        <source>SAM3 use is subject to the SAM License, including trade-control and end-use restrictions. Read the full agreement before downloading or using it.</source>
+        <translation>使用 SAM3 須遵守 SAM License，包括貿易管制和最終用途限制。下載或使用前請閱讀完整協議。</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>刪除</translation>
+    </message>
+    <message>
+        <source>Delete {model}</source>
+        <translation>刪除 {model}</translation>
+    </message>
+    <message>
+        <source>Downloading {filename} · {done} / {total}</source>
+        <translation>正在下載 {filename} · {done} / {total}</translation>
+    </message>
+    <message>
+        <source>Not downloaded</source>
+        <translation>尚未下載</translation>
+    </message>
+    <message>
+        <source>Best balance of speed and quality for point and box prompts.</source>
+        <translation>點提示和框提示下速度與品質的最佳平衡。</translation>
+    </message>
+    <message>
+        <source>Best for text prompts and finding multiple objects.</source>
+        <translation>最適合文字提示和尋找多個物件。</translation>
+    </message>
+    <message>
+        <source>Recommended</source>
+        <translation>推薦</translation>
+    </message>
+    <message>
+        <source>All models</source>
+        <translation>所有模型</translation>
+    </message>
+    <message>
+        <source>License: {license}</source>
+        <translation>授權條款：{license}</translation>
+    </message>
+    <message>
+        <source>Details…</source>
+        <translation>詳細資訊…</translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation>已下載</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>失敗</translation>
+    </message>
+    <message>
+        <source>Queued · position {position}</source>
+        <translation>已排入佇列 · 第 {position} 位</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>重試</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation>下載</translation>
+    </message>
+    <message>
+        <source>Download failed. Check your connection and retry.</source>
+        <translation>下載失敗。請檢查網路連線並重試。</translation>
+    </message>
+    <message>
+        <source>Delete model</source>
+        <translation>刪除模型</translation>
+    </message>
+    <message>
+        <source>Delete {model} from this computer? Its selections will be cleared. Your annotations will not change.</source>
+        <translation>從此電腦刪除 {model}？此模型的選取將被清除。您的標註不會變更。</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_LabelFlagsEditor</name>
+    <message>
+        <source>Label pattern</source>
+        <translation>標籤模式</translation>
+    </message>
+    <message>
+        <source>Shape flags</source>
+        <translation>形狀旗標</translation>
+    </message>
+    <message>
+        <source>Add rule</source>
+        <translation>新增規則</translation>
+    </message>
+    <message>
+        <source>One name per line</source>
+        <translation>每行一個名稱</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <source>Remove rule</source>
+        <translation>移除規則</translation>
+    </message>
+    <message>
+        <source>Enter a pattern and at least one flag name.</source>
+        <translation>請輸入模式和至少一個旗標名稱。</translation>
+    </message>
+    <message>
+        <source>Duplicate label pattern.</source>
+        <translation>標籤模式重複。</translation>
+    </message>
+    <message>
+        <source>Invalid regular expression.</source>
+        <translation>規則運算式無效。</translation>
+    </message>
+    <message>
+        <source>Row {row}: {error} Changes have not been applied.</source>
+        <translation>第 {row} 行：{error} 變更尚未套用。</translation>
     </message>
 </context>
 </TS>

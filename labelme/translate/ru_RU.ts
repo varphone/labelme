@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>Выберите режим &apos;AI-Points&apos; или &apos;AI-Box&apos;, чтобы включить аннотацию с помощью ИИ</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>Модель разметки с помощью AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>Формат вывода разметки с помощью AI</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>Формат вывода</translation>
     </message>
@@ -78,15 +78,15 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>Выберите режим &apos;Polygon&apos;, &apos;Rectangle&apos; или &apos;AI-Points&apos;, чтобы включить</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>Запрос</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>Модель разметки по тексту</translation>
     </message>
@@ -185,8 +185,12 @@
         <translation>ALT + нажатие — создать точку на фигуре</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>Выберите другой угол. Удерживайте Shift, чтобы нарисовать квадрат.</translation>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>Правый клик и перетаскивание — копировать фигуру</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>Нажмите противоположный угол для прямоугольника (Shift — квадрат)</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -216,28 +220,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>Нажмите и перетащите, чтобы повернуть фигуру</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>Выберите другой угол. Удерживайте Shift, чтобы нарисовать квадрат.</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>Начать аннотирование</translation>
+        <source>Radius</source>
+        <translation>Радиус</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>Чтобы начать, откройте изображение или папку с изображениями.</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>Открыть изображение</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>Открыть папку</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>Или перетащите файлы изображений сюда</translation>
+        <source>Radius of the selected circle</source>
+        <translation>Радиус выбранной окружности</translation>
     </message>
 </context>
 <context>
@@ -268,6 +264,10 @@
     <message>
         <source>Shape List</source>
         <translation>Список фигур</translation>
+    </message>
+    <message>
+        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Выберите метку, чтобы начать разметку. Нажмите &apos;Esc&apos;, чтобы снять выбор.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -346,6 +346,14 @@
         <translation>Сохранять автоматически</translation>
     </message>
     <message>
+        <source>Save With Image Data</source>
+        <translation>Сохранять вместе с данными изображения</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Сохранять данные изображения в файле разметки</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
         <translation>&amp;Закрыть</translation>
     </message>
@@ -408,6 +416,14 @@
     <message>
         <source>Undo last drawn point</source>
         <translation>Отменить последнюю нарисованную точку</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>Удалить выбранную точку</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>Удалить выбранную точку из полигона</translation>
     </message>
     <message>
         <source>Undo last add and edit of shape</source>
@@ -477,14 +493,6 @@ Shapes</source>
         <translation>Сохранить метки под новым именем файла</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>Встроить изображение в файл разметки</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>Сохраняет копию изображения внутри файла разметки</translation>
-    </message>
-    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Изменить метку выбранной фигуры</translation>
     </message>
@@ -503,22 +511,6 @@ Shapes</source>
     <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>Вставить фигуры из буфера обмена в это изображение</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>Объединить фигуры</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>Объединить выбранные фигуры-маски в одну</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>Удалить выбранную вершину</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>Удаляет выбранную вершину из полигона или ломаной</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -565,38 +557,6 @@ Shapes</source>
         <translation>Заполнять полигон во время рисования</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>Выбрать фигуру выше</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>Выбрать ближайшую фигуру над выделением</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>Выбрать фигуру ниже</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>Выбрать ближайшую фигуру под выделением</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>Выбрать фигуру слева</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>Выбрать ближайшую фигуру слева от выделения</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>Выбрать фигуру справа</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>Выбрать ближайшую фигуру справа от выделения</translation>
-    </message>
-    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Ctrl+Колесо масштабирует холст</translation>
     </message>
@@ -619,44 +579,6 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s запущен.</translation>
-    </message>
-    <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>Выберите метку, чтобы начать рисовать ею. Нажмите &apos;Esc&apos;, чтобы снять выделение.</translation>
-    </message>
-    <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>Недопустимое регулярное выражение. Сохранён предыдущий поиск.</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>Не удалось загрузить ваши настройки.</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>Пока можно использовать настройки по умолчанию. Перед сбросом будет сохранена резервная копия вашего файла конфигурации.</translation>
-    </message>
-    <message>
-        <source>Command-line settings</source>
-        <translation>Настройки командной строки</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>Создать копию и сбросить</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>Продолжить с настройками по умолчанию</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>Не удалось сбросить файл конфигурации.
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>Резервная копия конфигурации сохранена в %s</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -691,22 +613,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Инференс ИИ не удался: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>Большое изображение</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>Для большого изображения требуется больше памяти</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>Размер изображения — {width}x{height} пикселей, и для декодирования требуется не менее примерно {required} МБ, что превышает текущий безопасный предел в {limit} МБ. При открытии Labelme или другие приложения могут временно работать медленнее.</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>Всё равно открыть</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>Ошибка при открытии файла</translation>
     </message>
@@ -723,12 +629,12 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>%s загружен</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>Изображения и файлы аннотаций (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>Файлы изображения и меток (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - Открыть изображение или аннотации</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s — выберите файл изображения или меток</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -737,6 +643,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s. Разметка будет сохраняться/загружаться в %s</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s — выбрать файл</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -763,16 +673,20 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Недоступно в режиме AI-Points, так как эта модель не поддерживает точечные запросы.</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>Сохранить изменения аннотаций для «{}»?</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>Сохранить аннотации в &quot;{}&quot; перед закрытием?</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>Несохранённые изменения</translation>
+        <source>Save annotations?</source>
+        <translation>Сохранить аннотации?</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - Выбрать папку изображений</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>Удалить {} фигур? Вы можете восстановить их с помощью команды «Отменить».</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s — открыть папку</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -789,6 +703,14 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Keep Previous Brightness/Contrast</source>
         <translation>Сохранять яркость/контраст предыдущего изображения</translation>
+    </message>
+    <message>
+        <source>Configuration Errors</source>
+        <translation>Ошибки конфигурации</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>Были найдены ошибки при загрузке конфигурации. Пожалуйста, просмотрите ошибки ниже и перезагрузите конфигурацию или игнорируйте ошибочные строки.</translation>
     </message>
     <message>
         <source>Reset Layout</source>
@@ -863,18 +785,6 @@ Please select a different model or use AI-Box mode.</source>
 Выберите другую модель или используйте режим AI-Box.</translation>
     </message>
     <message>
-        <source>Image not found</source>
-        <translation>Изображение не найдено</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>Эта аннотация ссылается на «{name}», но изображение не найдено.
-
-Ожидаемое расположение: {path}</translation>
-    </message>
-    <message>
         <source>File list is disabled when a label file is opened</source>
         <translation>Список файлов отключён при открытии файла меток</translation>
     </message>
@@ -941,6 +851,516 @@ Expected location: {path}</source>
     <message>
         <source>Configuration Error</source>
         <translation>Ошибка конфигурации</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>Встроить изображение в файл разметки</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>Сохраняет копию изображения внутри файла разметки</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>Объединить фигуры</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>Объединить выбранные фигуры-маски в одну</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>Удалить выбранную вершину</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>Удаляет выбранную вершину из полигона или ломаной</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>Выбрать фигуру выше</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>Выбрать ближайшую фигуру над выделением</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>Выбрать фигуру ниже</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>Выбрать ближайшую фигуру под выделением</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>Выбрать фигуру слева</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>Выбрать ближайшую фигуру слева от выделения</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>Выбрать фигуру справа</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>Выбрать ближайшую фигуру справа от выделения</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>Выберите метку, чтобы начать рисовать ею. Нажмите &apos;Esc&apos;, чтобы снять выделение.</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>Недопустимое регулярное выражение. Сохранён предыдущий поиск.</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>Не удалось загрузить ваши настройки.</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>Пока можно использовать настройки по умолчанию. Перед сбросом будет сохранена резервная копия вашего файла конфигурации.</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>Настройки командной строки</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>Создать копию и сбросить</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>Продолжить с настройками по умолчанию</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>Не удалось сбросить файл конфигурации.
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>Резервная копия конфигурации сохранена в %s</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>Большое изображение</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>Для большого изображения требуется больше памяти</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>Размер изображения — {width}x{height} пикселей, и для декодирования требуется не менее примерно {required} МБ, что превышает текущий безопасный предел в {limit} МБ. При открытии Labelme или другие приложения могут временно работать медленнее.</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>Всё равно открыть</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>Изображения и файлы аннотаций (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - Открыть изображение или аннотации</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>Сохранить изменения аннотаций для «{}»?</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>Несохранённые изменения</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - Выбрать папку изображений</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>Изображение не найдено</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>Эта аннотация ссылается на «{name}», но изображение не найдено.
+
+Ожидаемое расположение: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>Цветовая тема</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Системная</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Светлая</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Тёмная</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>Показывать всплывающее окно метки для новой фигуры</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>Показывать метки фигур на холсте</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>Разрешить точки за пределами границ изображения</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>Внешний вид и язык</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>Файлы и сохранение</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>Рисование и холст</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>Продолжение работы между изображениями</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>Источники меток</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>Поведение меток</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>Помощь ИИ</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>Автоматически сохранять</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Сохранять данные изображения в файле меток</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>Встраивает изображение в JSON-файл меток.</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>Режим цвета фигур</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>Единый</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>По метке</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>Автоматический сдвиг палитры</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>Цвет режима «Единый»</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>Резервный цвет режима «По метке»</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>Цвета отдельных меток по-прежнему можно изменять в файле конфигурации.</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>Сохранять предыдущую разметку</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>Сохранять предыдущий масштаб</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>Сохранять яркость/контраст предыдущего изображения</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>Заполнять многоугольник при рисовании</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>Позволяет точкам фигур выходить за пределы изображения, например для частично видимых объектов.</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>Детализация полигона</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>Более высокие значения сохраняют больше деталей границы маски и более мелкие области.</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>Предустановленные метки</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>Проверка меток</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>Сортировать метки</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>Сортирует список меток по алфавиту вместо сохранения заданного порядка.</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>Показывать текстовое поле метки</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>Автодополнение меток</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>Начинается с</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>Содержит</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>Модель по умолчанию</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (скорость)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (точность)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (скорость)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (сбалансированный)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (точность)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (скорость)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (сбалансированный)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (точность)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>Подавлять совпадения с существующими фигурами</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>Если кандидат от Помощи ИИ совпадает с существующей фигурой, эта фигура выделяется вместо создания новой фигуры.</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>Открыть файл конфигурации как текст…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>Изменения в текстовом файле применяются после перезапуска</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(нет)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>по одному элементу на строку</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>Ошибка конфигурации</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>Предустановленные метки не могут быть пустыми, пока проверка меток установлена в «exact». Сначала отключите проверку «exact».</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>Масштаб уменьшения входного изображения</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Масштаб, используемый только для изображения, отправляемого ИИ; значение 1,0 сохраняет исходное разрешение.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Интенсивность подавления шума во входном изображении</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Подавляет шум в масштабированном изображении, отправляемом ИИ; значение 0,0 отключает подавление шума.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>Вступает в силу после перезапуска.</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Системный язык</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>Предустановленные флаги изображения</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>автосохранение автоматическое сохранение</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>Предопределённые флаги фигур</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>Одно имя флага на строку. Шаблоны: ^car$ точно соответствует car, car — префиксу, .* — любой метке.</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>ИИ: текст → разметка</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>сглаживание гладкость упрощение контур</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>дубликат дубликаты избегать дубликатов удаление дубликатов</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>Встраивать изображение в файл меток</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>Модели ИИ</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>Чтобы изменить эту настройку, выберите {mode} в режиме цвета фигур.</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>Разделы настроек</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>Поиск настроек</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>Подходящие настройки</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>Найдено настроек: {count}</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>В этом окне нет подходящих настроек. Попробуйте другой запрос или очистите поиск.</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>Начать аннотирование</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>Чтобы начать, откройте изображение или папку с изображениями.</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>Открыть изображение</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>Открыть папку</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>Или перетащите файлы изображений сюда</translation>
     </message>
 </context>
 <context>
@@ -1066,308 +1486,6 @@ Expected location: {path}</source>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>Цветовая тема</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Системная</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>Светлая</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>Тёмная</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>Показывать всплывающее окно метки для новой фигуры</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>Показывать метки фигур на холсте</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>Разрешить точки за пределами границ изображения</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>Внешний вид и язык</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>Файлы и сохранение</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>Рисование и холст</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>Продолжение работы между изображениями</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>Источники меток</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>Поведение меток</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>Помощь ИИ</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>Автоматически сохранять</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>автосохранение автоматическое сохранение</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>Встраивает изображение в JSON-файл меток.</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>Режим цвета фигур</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>Автоматически</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>Единый</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>По метке</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>Автоматический сдвиг палитры</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>Цвет режима «Единый»</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>Резервный цвет режима «По метке»</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>Цвета отдельных меток по-прежнему можно изменять в файле конфигурации.</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>Сохранять предыдущую разметку</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>Сохранять предыдущий масштаб</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>Сохранять яркость/контраст предыдущего изображения</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>Заполнять многоугольник при рисовании</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>Позволяет точкам фигур выходить за пределы изображения, например для частично видимых объектов.</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>Предопределённые флаги фигур</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>Одно имя флага на строку. Шаблоны: ^car$ точно соответствует car, car — префиксу, .* — любой метке.</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>ИИ: текст → разметка</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>Детализация полигона</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>сглаживание гладкость упрощение контур</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>Более высокие значения сохраняют больше деталей границы маски и более мелкие области.</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>дубликат дубликаты избегать дубликатов удаление дубликатов</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>Предустановленные метки</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>Встраивать изображение в файл меток</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>Проверка меток</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>Сортировать метки</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>Сортирует список меток по алфавиту вместо сохранения заданного порядка.</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>Показывать текстовое поле метки</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>Автодополнение меток</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>Начинается с</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>Содержит</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>Модель по умолчанию</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (скорость)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (точность)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (скорость)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (сбалансированный)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (точность)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (скорость)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (сбалансированный)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (точность)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>Подавлять совпадения с существующими фигурами</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>Если кандидат от Помощи ИИ совпадает с существующей фигурой, эта фигура выделяется вместо создания новой фигуры.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Настройки</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>Модели ИИ</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>Открыть файл конфигурации как текст…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>Изменения в текстовом файле применяются после перезапуска</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Закрыть</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(нет)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>по одному элементу на строку</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>Ошибка конфигурации</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>Предустановленные метки не могут быть пустыми, пока проверка меток установлена в «exact». Сначала отключите проверку «exact».</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>Чтобы изменить эту настройку, выберите {mode} в режиме цвета фигур.</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Язык</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>Вступает в силу после перезапуска.</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>Системный язык</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>Предустановленные флаги изображения</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1410,38 +1528,4 @@ Expected location: {path}</source>
         <translation>Строка {row}: {error} Изменения не применены.</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>Разделы настроек</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>Поиск настроек</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>Подходящие настройки</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>Найдено настроек: {count}</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>В этом окне нет подходящих настроек. Попробуйте другой запрос или очистите поиск.</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>Радиус</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>Радиус выбранной окружности</translation>
-        </message>
-    </context>
 </TS>

@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>Chọn chế độ &apos;AI-Points&apos; hoặc &apos;AI-Box&apos; để bật Chú thích Hỗ trợ AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>Mô hình chú thích có AI hỗ trợ</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>Định dạng đầu ra chú thích có AI hỗ trợ</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Mô hình</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>Định dạng đầu ra</translation>
     </message>
@@ -72,21 +72,21 @@
     </message>
     <message>
         <source>AI creates annotations from the text prompt</source>
-        <translation>AI tạo chú thích dựa trên nội dung lời nhắc văn bản</translation>
+        <translation>AI tạo chú thích từ lời nhắc văn bản</translation>
     </message>
     <message>
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>Chọn chế độ &apos;Polygon&apos;, &apos;Rectangle&apos; hoặc &apos;AI-Points&apos; để bật</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Mô hình</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>Lời nhắc</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>Mô hình chuyển văn bản thành chú thích</translation>
     </message>
@@ -185,8 +185,12 @@
         <translation>ALT + Nhấn để tạo điểm trên hình dạng</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>Chọn góc còn lại. Giữ Shift để vẽ hình vuông.</translation>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>Nhấn chuột phải và kéo để sao chép hình dạng</translation>
+    </message>
+    <message>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>Nhấn góc đối diện cho hình chữ nhật (Shift để tạo hình vuông)</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -216,28 +220,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>Nhấn và kéo để xoay hình dạng</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>Chọn góc còn lại. Giữ Shift để vẽ hình vuông.</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>Bắt đầu chú thích</translation>
+        <source>Radius</source>
+        <translation>Bán kính</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>Mở một hình ảnh hoặc thư mục hình ảnh để bắt đầu.</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>Mở hình ảnh</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>Mở thư mục</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>Hoặc kéo và thả tệp hình ảnh vào đây</translation>
+        <source>Radius of the selected circle</source>
+        <translation>Bán kính của hình tròn đã chọn</translation>
     </message>
 </context>
 <context>
@@ -268,6 +264,10 @@
     <message>
         <source>Shape List</source>
         <translation>Danh sách Hình dạng</translation>
+    </message>
+    <message>
+        <source>Select label to start annotating for it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Chọn nhãn để bắt đầu chú thích. Nhấn &apos;Esc&apos; để bỏ chọn.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -356,6 +356,14 @@
         <translation>Tự động lưu</translation>
     </message>
     <message>
+        <source>Save With Image Data</source>
+        <translation>Lưu với Dữ liệu Hình ảnh</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Lưu dữ liệu hình ảnh trong tệp nhãn</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
         <translation>Đóng(&amp;C)</translation>
     </message>
@@ -418,6 +426,14 @@
     <message>
         <source>Undo last drawn point</source>
         <translation>Hoàn tác điểm vẽ cuối cùng</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>Xóa Điểm đã Chọn</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>Xóa điểm đã chọn khỏi đa giác</translation>
     </message>
     <message>
         <source>Undo
@@ -492,14 +508,6 @@ Shapes</source>
         <translation>Lưu nhãn với tên tệp mới</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>Nhúng Hình ảnh vào Tệp nhãn</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>Lưu một bản sao của hình ảnh bên trong tệp nhãn</translation>
-    </message>
-    <message>
         <source>Modify the label of the selected shape</source>
         <translation>Sửa đổi nhãn của hình dạng đã chọn</translation>
     </message>
@@ -518,22 +526,6 @@ Shapes</source>
     <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>Chèn các hình dạng trong clipboard vào ảnh này</translation>
-    </message>
-    <message>
-        <source>Merge Shapes</source>
-        <translation>Gộp Hình dạng</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>Gộp các hình dạng mask đã chọn thành một</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>Xóa Đỉnh đã Chọn</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>Xóa đỉnh đã chọn khỏi đa giác hoặc đường gấp khúc</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -580,38 +572,6 @@ Shapes</source>
         <translation>Tô đa giác khi vẽ</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>Chọn hình dạng phía trên</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>Chọn hình dạng gần nhất phía trên vùng chọn</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>Chọn hình dạng phía dưới</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>Chọn hình dạng gần nhất phía dưới vùng chọn</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>Chọn hình dạng bên trái</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>Chọn hình dạng gần nhất bên trái vùng chọn</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>Chọn hình dạng bên phải</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>Chọn hình dạng gần nhất bên phải vùng chọn</translation>
-    </message>
-    <message>
         <source>Ctrl+Wheel zooms the canvas</source>
         <translation>Ctrl+Bánh xe phóng to/thu nhỏ canvas</translation>
     </message>
@@ -634,44 +594,6 @@ Shapes</source>
     <message>
         <source>%s started.</source>
         <translation>%s đã khởi động.</translation>
-    </message>
-    <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>Chọn một nhãn để bắt đầu vẽ với nhãn đó. Nhấn &apos;Esc&apos; để xóa lựa chọn.</translation>
-    </message>
-    <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>Biểu thức chính quy không hợp lệ. Giữ nguyên tìm kiếm trước đó.</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>Không thể tải cài đặt của bạn.</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>Bạn có thể dùng cài đặt mặc định lúc này. Trước khi đặt lại, một bản sao lưu của tệp cấu hình sẽ được lưu.</translation>
-    </message>
-    <message>
-        <source>Command-line settings</source>
-        <translation>Cài đặt dòng lệnh</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>Sao lưu và đặt lại</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>Tiếp tục với mặc định</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>Không thể đặt lại tệp cấu hình.
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>Đã lưu bản sao lưu cấu hình vào %s</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -706,22 +628,6 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
         <translation>Suy luận AI thất bại: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>Ảnh lớn</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>Ảnh lớn cần thêm bộ nhớ</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>Ảnh có kích thước {width}x{height} pixel và cần ít nhất khoảng {required} MB để giải mã, vượt quá giới hạn an toàn hiện tại là {limit} MB. Việc mở ảnh có thể tạm thời làm Labelme hoặc các ứng dụng khác phản hồi chậm hơn.</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>Vẫn mở</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>Lỗi khi mở tệp</translation>
     </message>
@@ -738,12 +644,12 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
         <translation>Đã tải %s</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>Hình ảnh và tệp chú thích (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>Tệp Hình ảnh &amp; Nhãn (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - Mở hình ảnh hoặc chú thích</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - Chọn tệp Hình ảnh hoặc Nhãn</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -752,6 +658,10 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s . Chú thích sẽ được lưu/tải trong %s</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - Chọn Tệp</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -778,16 +688,20 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
         <translation>Không khả dụng trong chế độ AI-Points vì mô hình này không hỗ trợ lời nhắc điểm.</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>Giữ lại các thay đổi chú thích cho &quot;{}&quot;?</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>Lưu chú thích vào &quot;{}&quot; trước khi đóng?</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>Thay đổi chưa lưu</translation>
+        <source>Save annotations?</source>
+        <translation>Lưu chú thích?</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - Duyệt thư mục hình ảnh</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>Xóa {} hình dạng? Bạn có thể khôi phục chúng bằng Hoàn tác.</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - Mở Thư mục</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -804,6 +718,14 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
     <message>
         <source>Keep Previous Brightness/Contrast</source>
         <translation>Giữ Độ sáng/Độ tương phản Trước đó</translation>
+    </message>
+    <message>
+        <source>Configuration Errors</source>
+        <translation>Lỗi Cấu hình</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>Đã tìm thấy lỗi khi tải cấu hình. Vui lòng xem lại các lỗi bên dưới và tải lại cấu hình hoặc bỏ qua các dòng bị lỗi.</translation>
     </message>
     <message>
         <source>Reset Layout</source>
@@ -858,18 +780,6 @@ Chuyển mô hình AI Text-to-Annotation sang &apos;SAM3 (smart)&apos;, hoặc �
 Please select a different model or use AI-Box mode.</source>
         <translation>%s không hỗ trợ gợi ý điểm.
 Vui lòng chọn mô hình khác hoặc sử dụng chế độ AI-Box.</translation>
-    </message>
-    <message>
-        <source>Image not found</source>
-        <translation>Không tìm thấy ảnh</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>Chú thích này tham chiếu đến &quot;{name}&quot;, nhưng không tìm thấy ảnh đó.
-
-Vị trí dự kiến: {path}</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -938,6 +848,516 @@ Vị trí dự kiến: {path}</translation>
     <message>
         <source>Configuration Error</source>
         <translation>Lỗi Cấu hình</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>Nhúng Hình ảnh vào Tệp nhãn</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>Lưu một bản sao của hình ảnh bên trong tệp nhãn</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>Gộp Hình dạng</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>Gộp các hình dạng mask đã chọn thành một</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>Xóa Đỉnh đã Chọn</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>Xóa đỉnh đã chọn khỏi đa giác hoặc đường gấp khúc</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>Chọn hình dạng phía trên</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>Chọn hình dạng gần nhất phía trên vùng chọn</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>Chọn hình dạng phía dưới</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>Chọn hình dạng gần nhất phía dưới vùng chọn</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>Chọn hình dạng bên trái</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>Chọn hình dạng gần nhất bên trái vùng chọn</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>Chọn hình dạng bên phải</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>Chọn hình dạng gần nhất bên phải vùng chọn</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>Chọn một nhãn để bắt đầu vẽ với nhãn đó. Nhấn &apos;Esc&apos; để xóa lựa chọn.</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>Biểu thức chính quy không hợp lệ. Giữ nguyên tìm kiếm trước đó.</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>Không thể tải cài đặt của bạn.</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>Bạn có thể dùng cài đặt mặc định lúc này. Trước khi đặt lại, một bản sao lưu của tệp cấu hình sẽ được lưu.</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>Cài đặt dòng lệnh</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>Sao lưu và đặt lại</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>Tiếp tục với mặc định</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>Không thể đặt lại tệp cấu hình.
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>Đã lưu bản sao lưu cấu hình vào %s</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>Ảnh lớn</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>Ảnh lớn cần thêm bộ nhớ</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>Ảnh có kích thước {width}x{height} pixel và cần ít nhất khoảng {required} MB để giải mã, vượt quá giới hạn an toàn hiện tại là {limit} MB. Việc mở ảnh có thể tạm thời làm Labelme hoặc các ứng dụng khác phản hồi chậm hơn.</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>Vẫn mở</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>Hình ảnh và tệp chú thích (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - Mở hình ảnh hoặc chú thích</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>Giữ lại các thay đổi chú thích cho &quot;{}&quot;?</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>Thay đổi chưa lưu</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - Duyệt thư mục hình ảnh</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>Không tìm thấy ảnh</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>Chú thích này tham chiếu đến &quot;{name}&quot;, nhưng không tìm thấy ảnh đó.
+
+Vị trí dự kiến: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>Chủ đề màu</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Hệ thống</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Sáng</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Tối</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>Hiển thị cửa sổ nhãn khi tạo hình dạng mới</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>Hiển thị nhãn của hình dạng trên canvas</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>Cho phép các điểm nằm ngoài ranh giới ảnh</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>Giao diện và ngôn ngữ</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>Tệp và lưu</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>Vẽ và canvas</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>Tiếp tục giữa các ảnh</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>Nguồn nhãn</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>Hành vi nhãn</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>Hỗ trợ AI</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>Tự động lưu</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Lưu dữ liệu hình ảnh trong tệp nhãn</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>Nhúng hình ảnh vào tệp JSON nhãn.</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>Chế độ màu hình dạng</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Tự động</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>Đồng nhất</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>Theo nhãn</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>Dịch bảng màu tự động</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>Màu của chế độ Đồng nhất</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>Màu dự phòng của chế độ Theo nhãn</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>Màu của từng nhãn vẫn có thể chỉnh sửa trong Tệp cấu hình.</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>Giữ chú thích trước đó</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>Giữ mức thu phóng trước đó</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>Giữ độ sáng/độ tương phản trước đó</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>Tô đa giác khi vẽ</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>Cho phép các điểm của hình vượt ra ngoài ảnh, ví dụ cho các đối tượng hiển thị một phần.</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>Độ chi tiết đa giác</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>Giá trị cao hơn giữ lại nhiều chi tiết đường biên mặt nạ và các vùng nhỏ hơn.</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>Nhãn định sẵn</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>Kiểm tra nhãn</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>Sắp xếp nhãn</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>Sắp xếp danh sách nhãn theo thứ tự bảng chữ cái thay vì giữ nguyên thứ tự đã cung cấp.</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>Hiển thị trường văn bản nhãn</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>Tự động hoàn thành nhãn</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>Bắt đầu bằng</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>Chứa</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>Mô hình mặc định</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (tốc độ)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (độ chính xác)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (tốc độ)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (cân bằng)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (độ chính xác)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (tốc độ)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (cân bằng)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (độ chính xác)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>Chặn các kết quả trùng với hình dạng hiện có</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>Khi một kết quả của Hỗ trợ AI trùng với hình dạng hiện có, hình dạng đó sẽ được làm nổi bật thay vì tạo hình dạng mới.</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Cài đặt</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>Mở tệp cấu hình dưới dạng văn bản…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>Chỉnh sửa trong tệp văn bản sẽ áp dụng sau khi khởi động lại</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Đóng</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(không có)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>mỗi dòng một mục</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>Lỗi Cấu hình</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>Nhãn định sẵn không được để trống khi kiểm tra nhãn được đặt thành &apos;exact&apos;. Vui lòng tắt kiểm tra &apos;exact&apos; trước.</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>Tỷ lệ giảm mẫu đầu vào</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Tỷ lệ chỉ áp dụng cho ảnh gửi đến AI; 1,0 giữ nguyên độ phân giải gốc.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Cường độ khử nhiễu đầu vào</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Khử nhiễu ảnh đã thu nhỏ trước khi gửi đến AI; 0,0 tắt khử nhiễu.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Ngôn ngữ</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>Có hiệu lực sau khi khởi động lại.</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Mặc định của hệ thống</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>Cờ hình ảnh định sẵn</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>tự động lưu lưu tự động</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>Cờ hình dạng định sẵn</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>Mỗi dòng một tên cờ. Mẫu: ^car$ khớp chính xác với car, car khớp tiền tố, .* khớp mọi nhãn.</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>AI Văn bản sang Chú thích</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>làm mịn độ mịn đơn giản hóa đường viền</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>trùng lặp tránh trùng lặp loại bỏ trùng lặp</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>Nhúng hình ảnh vào tệp nhãn</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>Mô hình AI</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>Chọn {mode} trong chế độ màu hình để chỉnh sửa cài đặt này.</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>Các phần cài đặt</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>Tìm kiếm cài đặt</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>Cài đặt phù hợp</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} cài đặt phù hợp</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>Không có cài đặt phù hợp trong hộp thoại này. Hãy thử từ khác hoặc xóa tìm kiếm.</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>Bắt đầu chú thích</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>Mở một hình ảnh hoặc thư mục hình ảnh để bắt đầu.</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>Mở hình ảnh</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>Mở thư mục</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>Hoặc kéo và thả tệp hình ảnh vào đây</translation>
     </message>
 </context>
 <context>
@@ -1063,308 +1483,6 @@ Vị trí dự kiến: {path}</translation>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>Chủ đề màu</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Hệ thống</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>Sáng</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>Tối</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>Hiển thị cửa sổ nhãn khi tạo hình dạng mới</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>Hiển thị nhãn của hình dạng trên canvas</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>Cho phép các điểm nằm ngoài ranh giới ảnh</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>Giao diện và ngôn ngữ</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>Tệp và lưu</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>Vẽ và canvas</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>Tiếp tục giữa các ảnh</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>Nguồn nhãn</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>Hành vi nhãn</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>Hỗ trợ AI</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>Tự động lưu</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>tự động lưu lưu tự động</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>Nhúng hình ảnh vào tệp JSON nhãn.</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>Chế độ màu hình dạng</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>Tự động</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>Đồng nhất</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>Theo nhãn</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>Dịch bảng màu tự động</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>Màu của chế độ Đồng nhất</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>Màu dự phòng của chế độ Theo nhãn</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>Màu của từng nhãn vẫn có thể chỉnh sửa trong Tệp cấu hình.</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>Giữ chú thích trước đó</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>Giữ mức thu phóng trước đó</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>Giữ độ sáng/độ tương phản trước đó</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>Tô đa giác khi vẽ</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>Cho phép các điểm của hình vượt ra ngoài ảnh, ví dụ cho các đối tượng hiển thị một phần.</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>Cờ hình dạng định sẵn</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>Mỗi dòng một tên cờ. Mẫu: ^car$ khớp chính xác với car, car khớp tiền tố, .* khớp mọi nhãn.</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>AI Văn bản sang Chú thích</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>Độ chi tiết đa giác</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>làm mịn độ mịn đơn giản hóa đường viền</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>Giá trị cao hơn giữ lại nhiều chi tiết đường biên mặt nạ và các vùng nhỏ hơn.</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>trùng lặp tránh trùng lặp loại bỏ trùng lặp</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>Nhãn định sẵn</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>Nhúng hình ảnh vào tệp nhãn</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>Kiểm tra nhãn</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>Sắp xếp nhãn</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>Sắp xếp danh sách nhãn theo thứ tự bảng chữ cái thay vì giữ nguyên thứ tự đã cung cấp.</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>Hiển thị trường văn bản nhãn</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>Tự động hoàn thành nhãn</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>Bắt đầu bằng</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>Chứa</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>Mô hình mặc định</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (tốc độ)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (độ chính xác)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (tốc độ)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (cân bằng)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (độ chính xác)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (tốc độ)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (cân bằng)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (độ chính xác)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>Chặn các kết quả trùng với hình dạng hiện có</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>Khi một kết quả của Hỗ trợ AI trùng với hình dạng hiện có, hình dạng đó sẽ được làm nổi bật thay vì tạo hình dạng mới.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Cài đặt</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>Mô hình AI</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>Mở tệp cấu hình dưới dạng văn bản…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>Chỉnh sửa trong tệp văn bản sẽ áp dụng sau khi khởi động lại</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Đóng</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(không có)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>mỗi dòng một mục</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>Lỗi Cấu hình</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>Nhãn định sẵn không được để trống khi kiểm tra nhãn được đặt thành &apos;exact&apos;. Vui lòng tắt kiểm tra &apos;exact&apos; trước.</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>Chọn {mode} trong chế độ màu hình để chỉnh sửa cài đặt này.</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Ngôn ngữ</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>Có hiệu lực sau khi khởi động lại.</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>Mặc định của hệ thống</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>Cờ hình ảnh định sẵn</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1407,38 +1525,4 @@ Vị trí dự kiến: {path}</translation>
         <translation>Dòng {row}: {error} Các thay đổi chưa được áp dụng.</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>Các phần cài đặt</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>Tìm kiếm cài đặt</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>Cài đặt phù hợp</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>{count} cài đặt phù hợp</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>Không có cài đặt phù hợp trong hộp thoại này. Hãy thử từ khác hoặc xóa tìm kiếm.</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>Bán kính</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>Bán kính của hình tròn đã chọn</translation>
-        </message>
-    </context>
 </TS>

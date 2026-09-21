@@ -31,19 +31,19 @@
         <source>Select &apos;AI-Points&apos; or &apos;AI-Box&apos; mode to enable AI-Assisted Annotation</source>
         <translation>Επιλέξτε τη λειτουργία &apos;AI-Points&apos; ή &apos;AI-Box&apos; για να ενεργοποιήσετε τον σχολιασμό υποβοηθούμενο από AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation model</source>
         <translation>Μοντέλο σχολιασμού με υποβοήθηση AI</translation>
     </message>
-    <message>
+<message>
         <source>AI-assisted annotation output format</source>
         <translation>Μορφή εξόδου σχολιασμού με υποβοήθηση AI</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Μοντέλο</translation>
     </message>
-    <message>
+<message>
         <source>Output format</source>
         <translation>Μορφή εξόδου</translation>
     </message>
@@ -78,15 +78,15 @@
         <source>Select &apos;Polygon&apos;, &apos;Rectangle&apos;, or &apos;AI-Points&apos; mode to enable</source>
         <translation>Επιλέξτε τη λειτουργία &apos;Polygon&apos;, &apos;Rectangle&apos; ή &apos;AI-Points&apos; για ενεργοποίηση</translation>
     </message>
-    <message>
+<message>
         <source>Model</source>
         <translation>Μοντέλο</translation>
     </message>
-    <message>
+<message>
         <source>Prompt</source>
         <translation>Προτροπή</translation>
     </message>
-    <message>
+<message>
         <source>Text-to-annotation model</source>
         <translation>Μοντέλο σχολιασμού από κείμενο</translation>
     </message>
@@ -157,8 +157,8 @@
         <translation>Κάντε κλικ στην πρώτη γωνία για ορθογώνιο</translation>
     </message>
     <message>
-        <source>Choose the other corner. Hold Shift for a square.</source>
-        <translation>Επιλέξτε την άλλη γωνία. Κρατήστε πατημένο το Shift για τετράγωνο.</translation>
+        <source>Click opposite corner for rectangle (Shift for square)</source>
+        <translation>Κάντε κλικ στην αντίθετη γωνία για ορθογώνιο (Shift για τετράγωνο)</translation>
     </message>
     <message>
         <source>Click to add point</source>
@@ -191,6 +191,10 @@
     <message>
         <source>Click &amp; drag to move shape</source>
         <translation>Κάντε κλικ και σύρετε για να μετακινήσετε το σχήμα</translation>
+    </message>
+    <message>
+        <source>Right-click &amp; drag to copy shape</source>
+        <translation>Δεξί κλικ &amp; σύρσιμο για αντιγραφή σχήματος</translation>
     </message>
     <message>
         <source>Click points to include or Shift+Click to exclude. Ctrl+LeftClick ends creation.</source>
@@ -232,28 +236,20 @@
         <source>Click &amp; drag to rotate the shape</source>
         <translation>Κάντε κλικ και σύρετε για να περιστρέψετε το σχήμα</translation>
     </message>
+<message>
+        <source>Choose the other corner. Hold Shift for a square.</source>
+        <translation>Επιλέξτε την άλλη γωνία. Κρατήστε πατημένο το Shift για τετράγωνο.</translation>
+    </message>
 </context>
 <context>
-    <name>EmptyStateWidget</name>
+    <name>CircleRadiusWidget</name>
     <message>
-        <source>Start annotating</source>
-        <translation>Ξεκινήστε την επισήμανση</translation>
+        <source>Radius</source>
+        <translation>Ακτίνα</translation>
     </message>
     <message>
-        <source>Open an image or a directory of images to begin.</source>
-        <translation>Ανοίξτε μια εικόνα ή έναν φάκελο εικόνων για να ξεκινήσετε.</translation>
-    </message>
-    <message>
-        <source>Open Image</source>
-        <translation>Άνοιγμα εικόνας</translation>
-    </message>
-    <message>
-        <source>Open Directory</source>
-        <translation>Άνοιγμα φακέλου</translation>
-    </message>
-    <message>
-        <source>Or drag and drop image files here</source>
-        <translation>Ή σύρετε και αποθέστε αρχεία εικόνας εδώ</translation>
+        <source>Radius of the selected circle</source>
+        <translation>Ακτίνα του επιλεγμένου κύκλου</translation>
     </message>
 </context>
 <context>
@@ -297,6 +293,14 @@
     <message>
         <source>Save automatically</source>
         <translation>Αυτόματη αποθήκευση</translation>
+    </message>
+    <message>
+        <source>Save With Image Data</source>
+        <translation>Αποθήκευση με δεδομένα εικόνας</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Αποθήκευση δεδομένων εικόνας σε αρχείο ετικέτας</translation>
     </message>
     <message>
         <source>&amp;Change Output Dir</source>
@@ -384,14 +388,6 @@
         <translation>Δημιουργήστε ένα αντίγραφο των επιλεγμένων σχημάτων</translation>
     </message>
     <message>
-        <source>Merge Shapes</source>
-        <translation>Συγχώνευση σχημάτων</translation>
-    </message>
-    <message>
-        <source>Merge the selected mask shapes into one</source>
-        <translation>Συγχώνευση των επιλεγμένων σχημάτων μάσκας σε ένα</translation>
-    </message>
-    <message>
         <source>Undo last point</source>
         <translation>Τελευταίο σημείο</translation>
     </message>
@@ -407,6 +403,14 @@
     <message>
         <source>Undo last add and edit of shape</source>
         <translation>Αναίρεση τελευταίας προσθήκης και επεξεργασίας σχήματος</translation>
+    </message>
+    <message>
+        <source>Remove Selected Point</source>
+        <translation>Κατάργηση επιλεγμένου σημείου</translation>
+    </message>
+    <message>
+        <source>Remove selected point from polygon</source>
+        <translation>Αφαίρεση επιλεγμένου σημείου από πολύγωνο</translation>
     </message>
     <message>
         <source>Start drawing polygons</source>
@@ -530,38 +534,6 @@ Shapes</source>
         <translation>Εναλλαγή όλων των σχημάτων</translation>
     </message>
     <message>
-        <source>Select Shape Above</source>
-        <translation>Επιλογή σχήματος επάνω</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape above the selection</source>
-        <translation>Επιλογή του πλησιέστερου σχήματος επάνω από την επιλογή</translation>
-    </message>
-    <message>
-        <source>Select Shape Below</source>
-        <translation>Επιλογή σχήματος κάτω</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape below the selection</source>
-        <translation>Επιλογή του πλησιέστερου σχήματος κάτω από την επιλογή</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Left</source>
-        <translation>Επιλογή σχήματος αριστερά</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape left of the selection</source>
-        <translation>Επιλογή του πλησιέστερου σχήματος αριστερά από την επιλογή</translation>
-    </message>
-    <message>
-        <source>Select Shape to the Right</source>
-        <translation>Επιλογή σχήματος δεξιά</translation>
-    </message>
-    <message>
-        <source>Select the nearest shape right of the selection</source>
-        <translation>Επιλογή του πλησιέστερου σχήματος δεξιά από την επιλογή</translation>
-    </message>
-    <message>
         <source>Zoom</source>
         <translation>Εστίαση</translation>
     </message>
@@ -618,16 +590,16 @@ Shapes</source>
         <translation>Αναζήτηση ονόματος αρχείου</translation>
     </message>
     <message>
-        <source>Invalid regular expression. Previous search kept.</source>
-        <translation>Μη έγκυρη κανονική έκφραση. Διατηρείται η προηγούμενη αναζήτηση.</translation>
-    </message>
-    <message>
         <source>File List</source>
         <translation>Λίστα αρχείων</translation>
     </message>
     <message>
-        <source>Command-line settings</source>
-        <translation>Ρυθμίσεις γραμμής εντολών</translation>
+        <source>Configuration Errors</source>
+        <translation>Σφάλματα διαμόρφωσης</translation>
+    </message>
+    <message>
+        <source>Errors were found while loading the configuration. Please review the errors below and reload your configuration or ignore the erroneous lines.</source>
+        <translation>Βρέθηκαν σφάλματα κατά τη φόρτωση της διαμόρφωσης. Ελέγξτε τα παρακάτω σφάλματα και φορτώστε ξανά τη διαμόρφωσή σας ή αγνοήστε τις λανθασμένες γραμμές.</translation>
     </message>
     <message>
         <source>Mask Output Unavailable</source>
@@ -694,22 +666,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Η συμπερασματική επεξεργασία ΤΝ απέτυχε: %s</translation>
     </message>
     <message>
-        <source>Large image</source>
-        <translation>Μεγάλη εικόνα</translation>
-    </message>
-    <message>
-        <source>Large image requires more memory</source>
-        <translation>Η μεγάλη εικόνα απαιτεί περισσότερη μνήμη</translation>
-    </message>
-    <message>
-        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
-        <translation>Η εικόνα είναι {width}x{height} pixel και χρειάζεται τουλάχιστον περίπου {required} MB για αποκωδικοποίηση, πάνω από το τρέχον όριο ασφαλείας των {limit} MB. Το άνοιγμά της ενδέχεται να κάνει προσωρινά το Labelme ή άλλες εφαρμογές να ανταποκρίνονται πιο αργά.</translation>
-    </message>
-    <message>
-        <source>Open Anyway</source>
-        <translation>Άνοιγμα ούτως ή άλλως</translation>
-    </message>
-    <message>
         <source>Error opening file</source>
         <translation>Σφάλμα κατά το άνοιγμα του αρχείου</translation>
     </message>
@@ -726,12 +682,12 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Φορτώθηκε %s</translation>
     </message>
     <message>
-        <source>Images and annotation files (%s)</source>
-        <translation>Εικόνες και αρχεία επισημειώσεων (%s)</translation>
+        <source>Image &amp; Label files (%s)</source>
+        <translation>Αρχεία εικόνας και ετικέτας (%s)</translation>
     </message>
     <message>
-        <source>%s - Open Image or Annotations</source>
-        <translation>%s - Άνοιγμα εικόνας ή επισημειώσεων</translation>
+        <source>%s - Choose Image or Label file</source>
+        <translation>%s - Επιλέξτε αρχείο εικόνας ή ετικέτας</translation>
     </message>
     <message>
         <source>%s - Save/Load Annotations in Directory</source>
@@ -740,6 +696,10 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>%s . Annotations will be saved/loaded in %s</source>
         <translation>%s . Οι σχολιασμοί θα αποθηκεύονται/φορτώνονται στο %s</translation>
+    </message>
+    <message>
+        <source>%s - Choose File</source>
+        <translation>%s - Επιλογή αρχείου</translation>
     </message>
     <message>
         <source>Label files (*%s)</source>
@@ -766,16 +726,20 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Μη διαθέσιμο στη λειτουργία AI-Points, επειδή αυτό το μοντέλο δεν υποστηρίζει εντολές σημείων.</translation>
     </message>
     <message>
-        <source>Keep the annotation changes for &quot;{}&quot;?</source>
-        <translation>Να διατηρηθούν οι αλλαγές επισημειώσεων για το «{}»;</translation>
+        <source>Save annotations to &quot;{}&quot; before closing?</source>
+        <translation>Να αποθηκευτούν οι σχολιασμοί στο &quot;{}&quot; πριν το κλείσιμο;</translation>
     </message>
     <message>
-        <source>Unsaved changes</source>
-        <translation>Μη αποθηκευμένες αλλαγές</translation>
+        <source>Save annotations?</source>
+        <translation>Αποθήκευση σχολιασμών;</translation>
     </message>
     <message>
-        <source>%s - Browse Image Folder</source>
-        <translation>%s - Επιλογή φακέλου εικόνων</translation>
+        <source>Delete {} shapes? You can restore them with Undo.</source>
+        <translation>Διαγραφή {} σχημάτων; Μπορείτε να τα επαναφέρετε με την Αναίρεση.</translation>
+    </message>
+    <message>
+        <source>%s - Open Directory</source>
+        <translation>%s - Άνοιγμα καταλόγου</translation>
     </message>
     <message>
         <source>The image is too large to open: {width}x{height} pixels exceeds the {max_side} pixel per-side limit of the raster engine. Raising the decode limit will not help. Split the image into tiles (for example with gdal_retile.py) or open a smaller copy.</source>
@@ -794,24 +758,8 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Αποθήκευση των ετικετών με νέο όνομα αρχείου</translation>
     </message>
     <message>
-        <source>Embed Image in Label File</source>
-        <translation>Ενσωμάτωση εικόνας στο αρχείο ετικέτας</translation>
-    </message>
-    <message>
-        <source>Store a copy of the image inside the label file</source>
-        <translation>Αποθηκεύει ένα αντίγραφο της εικόνας μέσα στο αρχείο ετικέτας</translation>
-    </message>
-    <message>
         <source>Insert the clipboard shapes into this image</source>
         <translation>Εισαγωγή των σχημάτων του προχείρου σε αυτήν την εικόνα</translation>
-    </message>
-    <message>
-        <source>Delete Selected Vertex</source>
-        <translation>Διαγραφή επιλεγμένης κορυφής</translation>
-    </message>
-    <message>
-        <source>Delete the selected vertex from the polygon or line strip</source>
-        <translation>Διαγράφει την επιλεγμένη κορυφή από το πολύγωνο ή την τεθλασμένη γραμμή</translation>
     </message>
     <message>
         <source>Rectangle</source>
@@ -890,36 +838,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Ctrl+Ροδέλα κάνει ζουμ στον καμβά</translation>
     </message>
     <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>Επιλέξτε μια ετικέτα για να ξεκινήσετε να σχεδιάζετε με αυτήν. Πατήστε &apos;Esc&apos; για να αποεπιλέξετε την ετικέτα.</translation>
-    </message>
-    <message>
-        <source>Your settings couldn’t be loaded.</source>
-        <translation>Δεν ήταν δυνατή η φόρτωση των ρυθμίσεών σας.</translation>
-    </message>
-    <message>
-        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
-        <translation>Μπορείτε προς το παρόν να χρησιμοποιήσετε τις προεπιλεγμένες ρυθμίσεις. Πριν από την επαναφορά θα αποθηκευτεί ένα αντίγραφο ασφαλείας του αρχείου διαμόρφωσής σας.</translation>
-    </message>
-    <message>
-        <source>Back up and reset</source>
-        <translation>Αντίγραφο και επαναφορά</translation>
-    </message>
-    <message>
-        <source>Continue with defaults</source>
-        <translation>Συνέχεια με προεπιλογές</translation>
-    </message>
-    <message>
-        <source>Could not reset the Config File.
-%s</source>
-        <translation>Δεν ήταν δυνατή η επαναφορά του αρχείου ρυθμίσεων.
-%s</translation>
-    </message>
-    <message>
-        <source>Configuration backup saved to %s</source>
-        <translation>Το αντίγραφο ασφαλείας των ρυθμίσεων αποθηκεύτηκε στο %s</translation>
-    </message>
-    <message>
         <source>AI-Points Unavailable</source>
         <translation>AI-Points μη διαθέσιμο</translation>
     </message>
@@ -928,18 +846,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 Please select a different model or use AI-Box mode.</source>
         <translation>%s δεν υποστηρίζει εντολές σημείων.
 Επιλέξτε διαφορετικό μοντέλο ή χρησιμοποιήστε τη λειτουργία AI-Box.</translation>
-    </message>
-    <message>
-        <source>Image not found</source>
-        <translation>Η εικόνα δεν βρέθηκε</translation>
-    </message>
-    <message>
-        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
-
-Expected location: {path}</source>
-        <translation>Αυτή η επισήμανση αναφέρεται στην εικόνα «{name}», αλλά η εικόνα δεν βρέθηκε.
-
-Αναμενόμενη τοποθεσία: {path}</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -1012,6 +918,516 @@ Expected location: {path}</source>
     <message>
         <source>Configuration Error</source>
         <translation>Σφάλμα διαμόρφωσης</translation>
+    </message>
+<message>
+        <source>Merge Shapes</source>
+        <translation>Συγχώνευση σχημάτων</translation>
+    </message>
+<message>
+        <source>Merge the selected mask shapes into one</source>
+        <translation>Συγχώνευση των επιλεγμένων σχημάτων μάσκας σε ένα</translation>
+    </message>
+<message>
+        <source>Select Shape Above</source>
+        <translation>Επιλογή σχήματος επάνω</translation>
+    </message>
+<message>
+        <source>Select the nearest shape above the selection</source>
+        <translation>Επιλογή του πλησιέστερου σχήματος επάνω από την επιλογή</translation>
+    </message>
+<message>
+        <source>Select Shape Below</source>
+        <translation>Επιλογή σχήματος κάτω</translation>
+    </message>
+<message>
+        <source>Select the nearest shape below the selection</source>
+        <translation>Επιλογή του πλησιέστερου σχήματος κάτω από την επιλογή</translation>
+    </message>
+<message>
+        <source>Select Shape to the Left</source>
+        <translation>Επιλογή σχήματος αριστερά</translation>
+    </message>
+<message>
+        <source>Select the nearest shape left of the selection</source>
+        <translation>Επιλογή του πλησιέστερου σχήματος αριστερά από την επιλογή</translation>
+    </message>
+<message>
+        <source>Select Shape to the Right</source>
+        <translation>Επιλογή σχήματος δεξιά</translation>
+    </message>
+<message>
+        <source>Select the nearest shape right of the selection</source>
+        <translation>Επιλογή του πλησιέστερου σχήματος δεξιά από την επιλογή</translation>
+    </message>
+<message>
+        <source>Invalid regular expression. Previous search kept.</source>
+        <translation>Μη έγκυρη κανονική έκφραση. Διατηρείται η προηγούμενη αναζήτηση.</translation>
+    </message>
+<message>
+        <source>Command-line settings</source>
+        <translation>Ρυθμίσεις γραμμής εντολών</translation>
+    </message>
+<message>
+        <source>Large image</source>
+        <translation>Μεγάλη εικόνα</translation>
+    </message>
+<message>
+        <source>Large image requires more memory</source>
+        <translation>Η μεγάλη εικόνα απαιτεί περισσότερη μνήμη</translation>
+    </message>
+<message>
+        <source>The image is {width}x{height} pixels and needs at least about {required} MB to decode, above the current {limit} MB safety limit. Opening it may temporarily make Labelme or other applications less responsive.</source>
+        <translation>Η εικόνα είναι {width}x{height} pixel και χρειάζεται τουλάχιστον περίπου {required} MB για αποκωδικοποίηση, πάνω από το τρέχον όριο ασφαλείας των {limit} MB. Το άνοιγμά της ενδέχεται να κάνει προσωρινά το Labelme ή άλλες εφαρμογές να ανταποκρίνονται πιο αργά.</translation>
+    </message>
+<message>
+        <source>Open Anyway</source>
+        <translation>Άνοιγμα ούτως ή άλλως</translation>
+    </message>
+<message>
+        <source>Images and annotation files (%s)</source>
+        <translation>Εικόνες και αρχεία επισημειώσεων (%s)</translation>
+    </message>
+<message>
+        <source>%s - Open Image or Annotations</source>
+        <translation>%s - Άνοιγμα εικόνας ή επισημειώσεων</translation>
+    </message>
+<message>
+        <source>Keep the annotation changes for &quot;{}&quot;?</source>
+        <translation>Να διατηρηθούν οι αλλαγές επισημειώσεων για το «{}»;</translation>
+    </message>
+<message>
+        <source>Unsaved changes</source>
+        <translation>Μη αποθηκευμένες αλλαγές</translation>
+    </message>
+<message>
+        <source>%s - Browse Image Folder</source>
+        <translation>%s - Επιλογή φακέλου εικόνων</translation>
+    </message>
+<message>
+        <source>Embed Image in Label File</source>
+        <translation>Ενσωμάτωση εικόνας στο αρχείο ετικέτας</translation>
+    </message>
+<message>
+        <source>Store a copy of the image inside the label file</source>
+        <translation>Αποθηκεύει ένα αντίγραφο της εικόνας μέσα στο αρχείο ετικέτας</translation>
+    </message>
+<message>
+        <source>Delete Selected Vertex</source>
+        <translation>Διαγραφή επιλεγμένης κορυφής</translation>
+    </message>
+<message>
+        <source>Delete the selected vertex from the polygon or line strip</source>
+        <translation>Διαγράφει την επιλεγμένη κορυφή από το πολύγωνο ή την τεθλασμένη γραμμή</translation>
+    </message>
+<message>
+        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
+        <translation>Επιλέξτε μια ετικέτα για να ξεκινήσετε να σχεδιάζετε με αυτήν. Πατήστε &apos;Esc&apos; για να αποεπιλέξετε την ετικέτα.</translation>
+    </message>
+<message>
+        <source>Your settings couldn’t be loaded.</source>
+        <translation>Δεν ήταν δυνατή η φόρτωση των ρυθμίσεών σας.</translation>
+    </message>
+<message>
+        <source>You can use default settings for now. Resetting saves a backup of your configuration file first.</source>
+        <translation>Μπορείτε προς το παρόν να χρησιμοποιήσετε τις προεπιλεγμένες ρυθμίσεις. Πριν από την επαναφορά θα αποθηκευτεί ένα αντίγραφο ασφαλείας του αρχείου διαμόρφωσής σας.</translation>
+    </message>
+<message>
+        <source>Back up and reset</source>
+        <translation>Αντίγραφο και επαναφορά</translation>
+    </message>
+<message>
+        <source>Continue with defaults</source>
+        <translation>Συνέχεια με προεπιλογές</translation>
+    </message>
+<message>
+        <source>Could not reset the Config File.
+%s</source>
+        <translation>Δεν ήταν δυνατή η επαναφορά του αρχείου ρυθμίσεων.
+%s</translation>
+    </message>
+<message>
+        <source>Configuration backup saved to %s</source>
+        <translation>Το αντίγραφο ασφαλείας των ρυθμίσεων αποθηκεύτηκε στο %s</translation>
+    </message>
+<message>
+        <source>Image not found</source>
+        <translation>Η εικόνα δεν βρέθηκε</translation>
+    </message>
+<message>
+        <source>This annotation refers to &quot;{name}&quot;, but that image could not be found.
+
+Expected location: {path}</source>
+        <translation>Αυτή η επισήμανση αναφέρεται στην εικόνα «{name}», αλλά η εικόνα δεν βρέθηκε.
+
+Αναμενόμενη τοποθεσία: {path}</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Color theme</source>
+        <translation>Θέμα χρώματος</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Σύστημα</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Φωτεινό</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Σκοτεινό</translation>
+    </message>
+    <message>
+        <source>Show label popup on new shape</source>
+        <translation>Εμφάνιση αναδυόμενου παραθύρου ετικέτας σε νέο σχήμα</translation>
+    </message>
+    <message>
+        <source>Show shape labels on canvas</source>
+        <translation>Εμφάνιση ετικετών σχήματος στον καμβά</translation>
+    </message>
+    <message>
+        <source>Allow points outside the image boundary</source>
+        <translation>Να επιτρέπονται σημεία εκτός των ορίων της εικόνας</translation>
+    </message>
+    <message>
+        <source>Appearance and language</source>
+        <translation>Εμφάνιση και γλώσσα</translation>
+    </message>
+    <message>
+        <source>Files and saving</source>
+        <translation>Αρχεία και αποθήκευση</translation>
+    </message>
+    <message>
+        <source>Drawing and canvas</source>
+        <translation>Σχεδίαση και καμβάς</translation>
+    </message>
+    <message>
+        <source>Continue between images</source>
+        <translation>Συνέχεια μεταξύ εικόνων</translation>
+    </message>
+    <message>
+        <source>Label sources</source>
+        <translation>Πηγές ετικετών</translation>
+    </message>
+    <message>
+        <source>Label behavior</source>
+        <translation>Συμπεριφορά ετικετών</translation>
+    </message>
+    <message>
+        <source>AI assist</source>
+        <translation>Βοήθεια AI</translation>
+    </message>
+    <message>
+        <source>Save automatically</source>
+        <translation>Αυτόματη αποθήκευση</translation>
+    </message>
+    <message>
+        <source>Save image data in label file</source>
+        <translation>Αποθήκευση δεδομένων εικόνας σε αρχείο ετικέτας</translation>
+    </message>
+    <message>
+        <source>Embeds the image in the label JSON file.</source>
+        <translation>Ενσωματώνει την εικόνα στο αρχείο JSON της ετικέτας.</translation>
+    </message>
+    <message>
+        <source>Shape Color Mode</source>
+        <translation>Λειτουργία χρώματος σχήματος</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Αυτόματο</translation>
+    </message>
+    <message>
+        <source>Uniform</source>
+        <translation>Ομοιόμορφο</translation>
+    </message>
+    <message>
+        <source>By Label</source>
+        <translation>Ανά ετικέτα</translation>
+    </message>
+    <message>
+        <source>Automatic palette shift</source>
+        <translation>Αυτόματη μετατόπιση παλέτας</translation>
+    </message>
+    <message>
+        <source>Uniform mode color</source>
+        <translation>Χρώμα λειτουργίας «Ομοιόμορφο»</translation>
+    </message>
+    <message>
+        <source>By Label fallback color</source>
+        <translation>Εφεδρικό χρώμα λειτουργίας «Ανά ετικέτα»</translation>
+    </message>
+    <message>
+        <source>Individual Label colors remain editable in the Config File.</source>
+        <translation>Τα μεμονωμένα χρώματα ετικετών παραμένουν επεξεργάσιμα στο αρχείο ρυθμίσεων.</translation>
+    </message>
+    <message>
+        <source>Keep previous annotation</source>
+        <translation>Διατήρηση προηγούμενου σχολιασμού</translation>
+    </message>
+    <message>
+        <source>Keep previous zoom</source>
+        <translation>Διατήρηση προηγούμενου ζουμ</translation>
+    </message>
+    <message>
+        <source>Keep previous brightness/contrast</source>
+        <translation>Διατήρηση προηγούμενης φωτεινότητας/αντίθεσης</translation>
+    </message>
+    <message>
+        <source>Fill polygon while drawing</source>
+        <translation>Γεμίστε πολύγωνο ενώ σχεδιάζετε</translation>
+    </message>
+    <message>
+        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
+        <translation>Επιτρέπει στα σημεία των σχημάτων να εκτείνονται πέρα από την εικόνα, π.χ. για μερικώς ορατά αντικείμενα.</translation>
+    </message>
+    <message>
+        <source>Polygon detail</source>
+        <translation>Λεπτομέρεια πολυγώνου</translation>
+    </message>
+    <message>
+        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
+        <translation>Οι υψηλότερες τιμές διατηρούν περισσότερες λεπτομέρειες του ορίου της μάσκας και μικρότερες περιοχές.</translation>
+    </message>
+    <message>
+        <source>Predefined labels</source>
+        <translation>Προκαθορισμένες ετικέτες</translation>
+    </message>
+    <message>
+        <source>Label validation</source>
+        <translation>Επικύρωση ετικέτας</translation>
+    </message>
+    <message>
+        <source>Sort labels</source>
+        <translation>Ταξινόμηση ετικετών</translation>
+    </message>
+    <message>
+        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
+        <translation>Ταξινομεί τη λίστα ετικετών αλφαβητικά αντί να διατηρεί την παρεχόμενη σειρά.</translation>
+    </message>
+    <message>
+        <source>Show label text field</source>
+        <translation>Εμφάνιση πεδίου κειμένου ετικέτας</translation>
+    </message>
+    <message>
+        <source>Label completion</source>
+        <translation>Αυτόματη συμπλήρωση ετικετών</translation>
+    </message>
+    <message>
+        <source>Starts with</source>
+        <translation>Αρχίζει με</translation>
+    </message>
+    <message>
+        <source>Contains</source>
+        <translation>Περιέχει</translation>
+    </message>
+    <message>
+        <source>Default model</source>
+        <translation>Προεπιλεγμένο μοντέλο</translation>
+    </message>
+    <message>
+        <source>EfficientSam (speed)</source>
+        <translation>EfficientSam (ταχύτητα)</translation>
+    </message>
+    <message>
+        <source>EfficientSam (accuracy)</source>
+        <translation>EfficientSam (ακρίβεια)</translation>
+    </message>
+    <message>
+        <source>Sam (speed)</source>
+        <translation>Sam (ταχύτητα)</translation>
+    </message>
+    <message>
+        <source>Sam (balanced)</source>
+        <translation>Sam (ισορροπημένο)</translation>
+    </message>
+    <message>
+        <source>Sam (accuracy)</source>
+        <translation>Sam (ακρίβεια)</translation>
+    </message>
+    <message>
+        <source>Sam2 (speed)</source>
+        <translation>Sam2 (ταχύτητα)</translation>
+    </message>
+    <message>
+        <source>Sam2 (balanced)</source>
+        <translation>Sam2 (ισορροπημένο)</translation>
+    </message>
+    <message>
+        <source>Sam2 (accuracy)</source>
+        <translation>Sam2 (ακρίβεια)</translation>
+    </message>
+    <message>
+        <source>Sam3</source>
+        <translation>Sam3</translation>
+    </message>
+    <message>
+        <source>Suppress existing Shape matches</source>
+        <translation>Καταστολή αντιστοιχιών με υπάρχοντα σχήματα</translation>
+    </message>
+    <message>
+        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
+        <translation>Όταν ένα υποψήφιο αποτέλεσμα της Βοήθειας AI αντιστοιχεί σε υπάρχον σχήμα, επισημαίνεται εκείνο το σχήμα αντί να δημιουργηθεί νέο σχήμα.</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Ρυθμίσεις</translation>
+    </message>
+    <message>
+        <source>Open config file as text…</source>
+        <translation>Άνοιγμα αρχείου ρυθμίσεων ως κείμενο…</translation>
+    </message>
+    <message>
+        <source>Edits made in the text file apply after restart</source>
+        <translation>Οι αλλαγές στο αρχείο κειμένου εφαρμόζονται μετά την επανεκκίνηση</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Κλείσιμο</translation>
+    </message>
+    <message>
+        <source>BETA</source>
+        <translation>BETA</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation>(καμία)</translation>
+    </message>
+    <message>
+        <source>one item per line</source>
+        <translation>ένα στοιχείο ανά γραμμή</translation>
+    </message>
+    <message>
+        <source>Configuration Error</source>
+        <translation>Σφάλμα διαμόρφωσης</translation>
+    </message>
+    <message>
+        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
+        <translation>Οι προκαθορισμένες ετικέτες δεν μπορούν να είναι κενές όταν η επικύρωση ετικέτας έχει οριστεί σε «exact». Απενεργοποιήστε πρώτα την επικύρωση «exact».</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>Κλίμακα υποδειγματοληψίας εισόδου</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Κλίμακα που χρησιμοποιείται μόνο για την εικόνα που αποστέλλεται στην ΤΝ· το 1,0 διατηρεί την αρχική ανάλυση.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Ισχύς αποθορυβοποίησης εισόδου</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Αποθορυβοποιεί την κλιμακωμένη εικόνα που αποστέλλεται στην ΤΝ· το 0,0 απενεργοποιεί την αποθορυβοποίηση.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Γλώσσα</translation>
+    </message>
+    <message>
+        <source>Takes effect after restart.</source>
+        <translation>Εφαρμόζεται μετά την επανεκκίνηση.</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Προεπιλογή συστήματος</translation>
+    </message>
+    <message>
+        <source>Predefined image flags</source>
+        <translation>Προκαθορισμένες σημαίες εικόνας</translation>
+    </message>
+<message>
+        <source>autosave auto save</source>
+        <translation>αυτόματη αποθήκευση</translation>
+    </message>
+<message>
+        <source>Predefined shape flags</source>
+        <translation>Προκαθορισμένες σημαίες σχημάτων</translation>
+    </message>
+<message>
+        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
+        <translation>Ένα όνομα σημαίας ανά γραμμή. Μοτίβα: ^car$ αντιστοιχεί ακριβώς στο car, car σε πρόθεμα, .* σε κάθε ετικέτα.</translation>
+    </message>
+<message>
+        <source>AI Text-to-Annotation</source>
+        <translation>AI Text-to-Annotation</translation>
+    </message>
+<message>
+        <source>smooth smoothness simplify outline</source>
+        <translation>ομαλό εξομάλυνση απλοποίηση περίγραμμα</translation>
+    </message>
+<message>
+        <source>duplicate duplicates avoid duplicates deduplicate</source>
+        <translation>διπλότυπο διπλότυπα αποφυγή αφαίρεση διπλοτύπων</translation>
+    </message>
+<message>
+        <source>Embed image in label file</source>
+        <translation>Ενσωμάτωση εικόνας στο αρχείο ετικέτας</translation>
+    </message>
+<message>
+        <source>AI Models</source>
+        <translation>Μοντέλα AI</translation>
+    </message>
+<message>
+        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
+        <translation>Επιλέξτε {mode} στη λειτουργία χρώματος σχήματος για να επεξεργαστείτε αυτή τη ρύθμιση.</translation>
+    </message>
+</context>
+<context>
+    <name>_ColorSwatchButton</name>
+    <message>
+        <source>RGB: {red}, {green}, {blue}</source>
+        <translation>RGB: {red}, {green}, {blue}</translation>
+    </message>
+</context>
+<context>
+    <name>_SettingsPage</name>
+    <message>
+        <source>Settings sections</source>
+        <translation>Ενότητες ρυθμίσεων</translation>
+    </message>
+<message>
+        <source>Search settings</source>
+        <translation>Αναζήτηση ρυθμίσεων</translation>
+    </message>
+<message>
+        <source>Matching settings</source>
+        <translation>Αντίστοιχες ρυθμίσεις</translation>
+    </message>
+<message>
+        <source>{count} matching settings</source>
+        <translation>{count} αντίστοιχες ρυθμίσεις</translation>
+    </message>
+<message>
+        <source>No matching settings in this dialog. Try another term or clear search.</source>
+        <translation>Δεν βρέθηκαν αντίστοιχες ρυθμίσεις σε αυτό το παράθυρο. Δοκιμάστε άλλον όρο ή εκκαθαρίστε την αναζήτηση.</translation>
+    </message>
+</context>
+<context>
+    <name>EmptyStateWidget</name>
+    <message>
+        <source>Start annotating</source>
+        <translation>Ξεκινήστε την επισήμανση</translation>
+    </message>
+    <message>
+        <source>Open an image or a directory of images to begin.</source>
+        <translation>Ανοίξτε μια εικόνα ή έναν φάκελο εικόνων για να ξεκινήσετε.</translation>
+    </message>
+    <message>
+        <source>Open Image</source>
+        <translation>Άνοιγμα εικόνας</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>Άνοιγμα φακέλου</translation>
+    </message>
+    <message>
+        <source>Or drag and drop image files here</source>
+        <translation>Ή σύρετε και αποθέστε αρχεία εικόνας εδώ</translation>
     </message>
 </context>
 <context>
@@ -1137,308 +1553,6 @@ Expected location: {path}</source>
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Color theme</source>
-        <translation>Θέμα χρώματος</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Σύστημα</translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation>Φωτεινό</translation>
-    </message>
-    <message>
-        <source>Dark</source>
-        <translation>Σκοτεινό</translation>
-    </message>
-    <message>
-        <source>Show label popup on new shape</source>
-        <translation>Εμφάνιση αναδυόμενου παραθύρου ετικέτας σε νέο σχήμα</translation>
-    </message>
-    <message>
-        <source>Show shape labels on canvas</source>
-        <translation>Εμφάνιση ετικετών σχήματος στον καμβά</translation>
-    </message>
-    <message>
-        <source>Allow points outside the image boundary</source>
-        <translation>Να επιτρέπονται σημεία εκτός των ορίων της εικόνας</translation>
-    </message>
-    <message>
-        <source>Appearance and language</source>
-        <translation>Εμφάνιση και γλώσσα</translation>
-    </message>
-    <message>
-        <source>Files and saving</source>
-        <translation>Αρχεία και αποθήκευση</translation>
-    </message>
-    <message>
-        <source>Drawing and canvas</source>
-        <translation>Σχεδίαση και καμβάς</translation>
-    </message>
-    <message>
-        <source>Continue between images</source>
-        <translation>Συνέχεια μεταξύ εικόνων</translation>
-    </message>
-    <message>
-        <source>Label sources</source>
-        <translation>Πηγές ετικετών</translation>
-    </message>
-    <message>
-        <source>Label behavior</source>
-        <translation>Συμπεριφορά ετικετών</translation>
-    </message>
-    <message>
-        <source>AI assist</source>
-        <translation>Βοήθεια AI</translation>
-    </message>
-    <message>
-        <source>Save automatically</source>
-        <translation>Αυτόματη αποθήκευση</translation>
-    </message>
-    <message>
-        <source>autosave auto save</source>
-        <translation>αυτόματη αποθήκευση</translation>
-    </message>
-    <message>
-        <source>Embeds the image in the label JSON file.</source>
-        <translation>Ενσωματώνει την εικόνα στο αρχείο JSON της ετικέτας.</translation>
-    </message>
-    <message>
-        <source>Shape Color Mode</source>
-        <translation>Λειτουργία χρώματος σχήματος</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation>Αυτόματο</translation>
-    </message>
-    <message>
-        <source>Uniform</source>
-        <translation>Ομοιόμορφο</translation>
-    </message>
-    <message>
-        <source>By Label</source>
-        <translation>Ανά ετικέτα</translation>
-    </message>
-    <message>
-        <source>Automatic palette shift</source>
-        <translation>Αυτόματη μετατόπιση παλέτας</translation>
-    </message>
-    <message>
-        <source>Uniform mode color</source>
-        <translation>Χρώμα λειτουργίας «Ομοιόμορφο»</translation>
-    </message>
-    <message>
-        <source>By Label fallback color</source>
-        <translation>Εφεδρικό χρώμα λειτουργίας «Ανά ετικέτα»</translation>
-    </message>
-    <message>
-        <source>Individual Label colors remain editable in the Config File.</source>
-        <translation>Τα μεμονωμένα χρώματα ετικετών παραμένουν επεξεργάσιμα στο αρχείο ρυθμίσεων.</translation>
-    </message>
-    <message>
-        <source>Keep previous annotation</source>
-        <translation>Διατήρηση προηγούμενου σχολιασμού</translation>
-    </message>
-    <message>
-        <source>Keep previous zoom</source>
-        <translation>Διατήρηση προηγούμενου ζουμ</translation>
-    </message>
-    <message>
-        <source>Keep previous brightness/contrast</source>
-        <translation>Διατήρηση προηγούμενης φωτεινότητας/αντίθεσης</translation>
-    </message>
-    <message>
-        <source>Fill polygon while drawing</source>
-        <translation>Γεμίστε πολύγωνο ενώ σχεδιάζετε</translation>
-    </message>
-    <message>
-        <source>Let shape points extend beyond the image, e.g. for partially visible objects.</source>
-        <translation>Επιτρέπει στα σημεία των σχημάτων να εκτείνονται πέρα από την εικόνα, π.χ. για μερικώς ορατά αντικείμενα.</translation>
-    </message>
-    <message>
-        <source>Predefined shape flags</source>
-        <translation>Προκαθορισμένες σημαίες σχημάτων</translation>
-    </message>
-    <message>
-        <source>One flag name per line. Patterns: ^car$ matches car exactly, car matches a prefix, .* matches every label.</source>
-        <translation>Ένα όνομα σημαίας ανά γραμμή. Μοτίβα: ^car$ αντιστοιχεί ακριβώς στο car, car σε πρόθεμα, .* σε κάθε ετικέτα.</translation>
-    </message>
-    <message>
-        <source>AI Text-to-Annotation</source>
-        <translation>AI Text-to-Annotation</translation>
-    </message>
-    <message>
-        <source>Polygon detail</source>
-        <translation>Λεπτομέρεια πολυγώνου</translation>
-    </message>
-    <message>
-        <source>smooth smoothness simplify outline</source>
-        <translation>ομαλό εξομάλυνση απλοποίηση περίγραμμα</translation>
-    </message>
-    <message>
-        <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
-        <translation>Οι υψηλότερες τιμές διατηρούν περισσότερες λεπτομέρειες του ορίου της μάσκας και μικρότερες περιοχές.</translation>
-    </message>
-    <message>
-        <source>duplicate duplicates avoid duplicates deduplicate</source>
-        <translation>διπλότυπο διπλότυπα αποφυγή αφαίρεση διπλοτύπων</translation>
-    </message>
-    <message>
-        <source>Predefined labels</source>
-        <translation>Προκαθορισμένες ετικέτες</translation>
-    </message>
-    <message>
-        <source>Embed image in label file</source>
-        <translation>Ενσωμάτωση εικόνας στο αρχείο ετικέτας</translation>
-    </message>
-    <message>
-        <source>Label validation</source>
-        <translation>Επικύρωση ετικέτας</translation>
-    </message>
-    <message>
-        <source>Sort labels</source>
-        <translation>Ταξινόμηση ετικετών</translation>
-    </message>
-    <message>
-        <source>Sort the label list alphabetically instead of keeping the provided order.</source>
-        <translation>Ταξινομεί τη λίστα ετικετών αλφαβητικά αντί να διατηρεί την παρεχόμενη σειρά.</translation>
-    </message>
-    <message>
-        <source>Show label text field</source>
-        <translation>Εμφάνιση πεδίου κειμένου ετικέτας</translation>
-    </message>
-    <message>
-        <source>Label completion</source>
-        <translation>Αυτόματη συμπλήρωση ετικετών</translation>
-    </message>
-    <message>
-        <source>Starts with</source>
-        <translation>Αρχίζει με</translation>
-    </message>
-    <message>
-        <source>Contains</source>
-        <translation>Περιέχει</translation>
-    </message>
-    <message>
-        <source>Default model</source>
-        <translation>Προεπιλεγμένο μοντέλο</translation>
-    </message>
-    <message>
-        <source>EfficientSam (speed)</source>
-        <translation>EfficientSam (ταχύτητα)</translation>
-    </message>
-    <message>
-        <source>EfficientSam (accuracy)</source>
-        <translation>EfficientSam (ακρίβεια)</translation>
-    </message>
-    <message>
-        <source>Sam (speed)</source>
-        <translation>Sam (ταχύτητα)</translation>
-    </message>
-    <message>
-        <source>Sam (balanced)</source>
-        <translation>Sam (ισορροπημένο)</translation>
-    </message>
-    <message>
-        <source>Sam (accuracy)</source>
-        <translation>Sam (ακρίβεια)</translation>
-    </message>
-    <message>
-        <source>Sam2 (speed)</source>
-        <translation>Sam2 (ταχύτητα)</translation>
-    </message>
-    <message>
-        <source>Sam2 (balanced)</source>
-        <translation>Sam2 (ισορροπημένο)</translation>
-    </message>
-    <message>
-        <source>Sam2 (accuracy)</source>
-        <translation>Sam2 (ακρίβεια)</translation>
-    </message>
-    <message>
-        <source>Sam3</source>
-        <translation>Sam3</translation>
-    </message>
-    <message>
-        <source>Suppress existing Shape matches</source>
-        <translation>Καταστολή αντιστοιχιών με υπάρχοντα σχήματα</translation>
-    </message>
-    <message>
-        <source>When an AI Assist candidate matches an existing Shape, highlight that Shape instead of creating a new Shape.</source>
-        <translation>Όταν ένα υποψήφιο αποτέλεσμα της Βοήθειας AI αντιστοιχεί σε υπάρχον σχήμα, επισημαίνεται εκείνο το σχήμα αντί να δημιουργηθεί νέο σχήμα.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Ρυθμίσεις</translation>
-    </message>
-    <message>
-        <source>AI Models</source>
-        <translation>Μοντέλα AI</translation>
-    </message>
-    <message>
-        <source>Open config file as text…</source>
-        <translation>Άνοιγμα αρχείου ρυθμίσεων ως κείμενο…</translation>
-    </message>
-    <message>
-        <source>Edits made in the text file apply after restart</source>
-        <translation>Οι αλλαγές στο αρχείο κειμένου εφαρμόζονται μετά την επανεκκίνηση</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Κλείσιμο</translation>
-    </message>
-    <message>
-        <source>BETA</source>
-        <translation>BETA</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation>(καμία)</translation>
-    </message>
-    <message>
-        <source>one item per line</source>
-        <translation>ένα στοιχείο ανά γραμμή</translation>
-    </message>
-    <message>
-        <source>Configuration Error</source>
-        <translation>Σφάλμα διαμόρφωσης</translation>
-    </message>
-    <message>
-        <source>Predefined labels cannot be empty while Label validation is set to exact. Disable exact validation first.</source>
-        <translation>Οι προκαθορισμένες ετικέτες δεν μπορούν να είναι κενές όταν η επικύρωση ετικέτας έχει οριστεί σε «exact». Απενεργοποιήστε πρώτα την επικύρωση «exact».</translation>
-    </message>
-    <message>
-        <source>Select {mode} in Shape Color Mode to edit this setting.</source>
-        <translation>Επιλέξτε {mode} στη λειτουργία χρώματος σχήματος για να επεξεργαστείτε αυτή τη ρύθμιση.</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Γλώσσα</translation>
-    </message>
-    <message>
-        <source>Takes effect after restart.</source>
-        <translation>Εφαρμόζεται μετά την επανεκκίνηση.</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation>Προεπιλογή συστήματος</translation>
-    </message>
-    <message>
-        <source>Predefined image flags</source>
-        <translation>Προκαθορισμένες σημαίες εικόνας</translation>
-    </message>
-</context>
-<context>
-    <name>_ColorSwatchButton</name>
-    <message>
-        <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
-    </message>
-</context>
-<context>
     <name>_LabelFlagsEditor</name>
     <message>
         <source>Label pattern</source>
@@ -1481,38 +1595,4 @@ Expected location: {path}</source>
         <translation>Γραμμή {row}: {error} Οι αλλαγές δεν εφαρμόστηκαν.</translation>
     </message>
 </context>
-<context>
-    <name>_SettingsPage</name>
-    <message>
-        <source>Settings sections</source>
-        <translation>Ενότητες ρυθμίσεων</translation>
-    </message>
-    <message>
-        <source>Search settings</source>
-        <translation>Αναζήτηση ρυθμίσεων</translation>
-    </message>
-    <message>
-        <source>Matching settings</source>
-        <translation>Αντίστοιχες ρυθμίσεις</translation>
-    </message>
-    <message>
-        <source>{count} matching settings</source>
-        <translation>{count} αντίστοιχες ρυθμίσεις</translation>
-    </message>
-    <message>
-        <source>No matching settings in this dialog. Try another term or clear search.</source>
-        <translation>Δεν βρέθηκαν αντίστοιχες ρυθμίσεις σε αυτό το παράθυρο. Δοκιμάστε άλλον όρο ή εκκαθαρίστε την αναζήτηση.</translation>
-    </message>
-</context>
-    <context>
-        <name>CircleRadiusWidget</name>
-        <message>
-            <source>Radius</source>
-            <translation>Ακτίνα</translation>
-        </message>
-        <message>
-            <source>Radius of the selected circle</source>
-            <translation>Ακτίνα του επιλεγμένου κύκλου</translation>
-        </message>
-    </context>
 </TS>
