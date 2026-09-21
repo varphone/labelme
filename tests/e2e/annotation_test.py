@@ -254,6 +254,42 @@ def test_ai_points_mode_keeps_selected_sam3_and_rejects_click(
             id="linestrip",
         ),
         pytest.param(
+            "bezier2",
+            [(0.25, 0.75), (0.75, 0.75)],
+            (0.5, 0.25),
+            Qt.KeyboardModifier.NoModifier,
+            3,
+            None,
+            id="bezier2",
+        ),
+        pytest.param(
+            "bezier3",
+            [(0.25, 0.75), (0.75, 0.75), (0.35, 0.25)],
+            (0.65, 0.25),
+            Qt.KeyboardModifier.NoModifier,
+            4,
+            None,
+            id="bezier3",
+        ),
+        pytest.param(
+            "catmull_rom",
+            [(0.2, 0.7), (0.4, 0.25), (0.65, 0.75)],
+            (0.85, 0.35),
+            Qt.KeyboardModifier.ControlModifier,
+            4,
+            None,
+            id="catmull_rom",
+        ),
+        pytest.param(
+            "bspline",
+            [(0.2, 0.7), (0.4, 0.25), (0.65, 0.75)],
+            (0.85, 0.35),
+            Qt.KeyboardModifier.ControlModifier,
+            4,
+            None,
+            id="bspline",
+        ),
+        pytest.param(
             "ai_points_to_shape",
             [],
             (0.5, 0.5),
@@ -444,8 +480,22 @@ def test_annotate_shape_types(
         assert all(shape.group_id == shapes[0].group_id for shape in shapes)
     else:
         assert all(shape.group_id is None for shape in shapes)
+    if expected_shape_type in (
+        "bezier2",
+        "bezier3",
+        "catmull_rom",
+        "bspline",
+    ):
+        assert all(not shape.closed for shape in shapes)
+    shape = shapes[0]
     if expected_num_points is not None:
         assert len(shapes[0].points) == expected_num_points
+    if expected_shape_type == "bezier2":
+        assert shape.points[1, 1] < shape.points[2, 1]
+        assert (shape.points[1] != shape.points[2]).any()
+    elif expected_shape_type == "bezier3":
+        assert (shape.points[1] != shape.points[2]).any()
+        assert (shape.points[2] != shape.points[3]).any()
 
     win._save_label_file(save_as=False)
     assert_labelfile_sanity(out_file)

@@ -45,7 +45,7 @@ def _draw_rectangle(
 def _expected_landing_pos(canvas: Canvas, image_pos: QPointF) -> QPointF:
     """Image position where a click lands after widget-coordinate rounding."""
     widget_pos = image_to_widget_pos(canvas=canvas, image_pos=image_pos)
-    return canvas._transform_point_widget_to_image(QPointF(widget_pos))
+    return canvas.transform_widget_point_to_image(QPointF(widget_pos))
 
 
 def _draw_line(

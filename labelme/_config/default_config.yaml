@@ -37,6 +37,8 @@ shape:
   hvertex_fill_color: [255, 255, 255, 255]
   point_size: 8
   show_labels: false
+minimap:
+  show_shape_outlines: true
 mask_polygonization:
   detail: 60
 ai:
@@ -98,6 +100,10 @@ canvas:
     line: false
     point: false
     linestrip: false
+    bezier2: false
+    bezier3: false
+    catmull_rom: false
+    bspline: false
     ai_points_to_shape: false
     ai_box_to_shape: true
 shortcuts:
@@ -124,6 +130,10 @@ shortcuts:
   create_line:
   create_point:
   create_linestrip:
+  create_bezier2:
+  create_bezier3:
+  create_catmull_rom:
+  create_bspline:
   edit_shape: Ctrl+J
   delete_shape: Delete
   duplicate_shape: Ctrl+D

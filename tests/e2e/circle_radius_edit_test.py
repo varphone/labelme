@@ -92,7 +92,7 @@ def test_edit_selected_circle_radius_via_toolbar(
     )
 
     canvas = win._canvas_widgets.canvas
-    win._switch_canvas_mode(edit=True)
+    win._switch_canvas_mode(edit=True, create_mode=None)
     select_shape(qtbot=qtbot, canvas=canvas, shape_index=0)
 
     widget = _radius_widget(win)
@@ -163,8 +163,8 @@ def test_circle_radius_widget_follows_selection(
     )
 
     canvas = win._canvas_widgets.canvas
-    win._switch_canvas_mode(edit=True)
-    win._set_zoom(100.0)
+    win._switch_canvas_mode(edit=True, create_mode=None)
+    win._set_zoom(value=100.0, pos=None)
     qtbot.wait(50)
 
     # No selection: the radius control is disabled.

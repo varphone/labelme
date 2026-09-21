@@ -5,6 +5,7 @@ import math
 import os
 from collections.abc import Sequence
 
+from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._shape import Shape
 
 
@@ -40,7 +41,7 @@ def validate_frame_mapping(
             raise ValueError(f"frame Shape type mismatch at index {index}")
         if len(previous.points) != len(current.points):
             raise ValueError(f"frame Shape path mismatch at index {index}")
-        if previous.shape_type == "linestrip":
+        if previous.shape_type in LINE_PROFILE_SHAPE_TYPES:
             previous_mode = (
                 None
                 if previous.line_profile is None
@@ -64,7 +65,7 @@ def transfer_frame_profiles(
     validate_frame_mapping(previous_shapes, current_shapes)
     result = [shape.copy() for shape in current_shapes]
     for previous, current in zip(previous_shapes, result):
-        if current.shape_type == "linestrip":
+        if current.shape_type in LINE_PROFILE_SHAPE_TYPES:
             current.line_profile = previous.line_profile
     return result
 

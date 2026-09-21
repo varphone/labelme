@@ -723,7 +723,7 @@ def test_profile_survives_canvas_backup_and_restore(canvas: Canvas) -> None:
         points=np.array([(10, 20), (80, 20)], dtype=np.float64),
         line_profile=profile,
     )
-    canvas.load_shapes([shape])
+    canvas.load_shapes(shapes=[shape])
     canvas.shapes[0].line_profile = LineProfile(reviewed=True)
     canvas.backup_shapes()
 
@@ -745,7 +745,7 @@ def test_line_profile_preview_toggle_only_controls_profile_layer(
         points=np.array([(10, 25), (80, 25)], dtype=np.float64),
         line_profile=profile,
     )
-    canvas.load_shapes([shape])
+    canvas.load_shapes(shapes=[shape])
     canvas.selected_shapes = [canvas.shapes[0]]
 
     def render_profile() -> int:
@@ -768,7 +768,7 @@ def test_line_profile_preview_toggle_only_controls_profile_layer(
     assert render_profile() > 0
     canvas.set_show_line_profile_preview(False)
     assert render_profile() == 0
-    canvas._refresh_hover_state(QPointF(10.0, 25.0))
+    canvas._refresh_hover_state(pos=QPointF(10.0, 25.0))
     assert canvas._find_line_profile_anchor_at_point(QPointF(10.0, 25.0)) is None
     assert canvas.hovered_shape is canvas.shapes[0]
     assert canvas._hovered_vertex == 0
@@ -815,14 +815,14 @@ def test_profile_anchor_hit_testing_scales_and_reports_status(
         points=np.array([(0.0, 25.0), (99.0, 25.0)], dtype=np.float64),
         line_profile=profile,
     )
-    canvas.load_shapes([shape])
+    canvas.load_shapes(shapes=[shape])
     canvas.selected_shapes = [canvas.shapes[0]]
     statuses: list[str] = []
     canvas.status_updated.connect(statuses.append)
 
     for scale in (0.25, 1.0, 4.0):
         canvas.scale = scale
-        canvas._refresh_hover_state(QPointF(0.0, 25.0))
+        canvas._refresh_hover_state(pos=QPointF(0.0, 25.0))
         assert (
             canvas._find_line_profile_anchor_at_point(QPointF(0.0, 25.0))
             is not None
@@ -830,9 +830,9 @@ def test_profile_anchor_hit_testing_scales_and_reports_status(
 
     assert any("anchor" in status.lower() for status in statuses)
 
-    canvas._refresh_hover_state(QPointF(0.0, 25.0))
+    canvas._refresh_hover_state(pos=QPointF(0.0, 25.0))
     assert canvas._line_profile_hover == ("width", 0, 0)
-    canvas._refresh_hover_state(QPointF(0.0, 65.0))
+    canvas._refresh_hover_state(pos=QPointF(0.0, 65.0))
     assert canvas._line_profile_hover == ("width", 0, 1)
     radius_handle = canvas._find_line_profile_anchor_at_point(QPointF(0.0, 65.0))
     assert radius_handle is not None
@@ -859,7 +859,7 @@ def test_profile_preview_handles_dense_anchors_edges_and_large_width(
         ),
         line_profile=profile,
     )
-    canvas.load_shapes([shape])
+    canvas.load_shapes(shapes=[shape])
     canvas.selected_shapes = [canvas.shapes[0]]
     canvas.scale = 4.0
     image = QtGui.QImage(_WIDTH, _HEIGHT, QtGui.QImage.Format.Format_ARGB32)
@@ -883,7 +883,7 @@ def test_profile_anchor_hit_testing_does_not_change_plain_shape_behavior(
         points=np.array([(10, 10), (40, 30)], dtype=np.float64),
         closed=True,
     )
-    canvas.load_shapes([shape])
+    canvas.load_shapes(shapes=[shape])
     canvas.selected_shapes = [canvas.shapes[0]]
 
     assert canvas._find_line_profile_anchor_at_point(QPointF(20, 20)) is None

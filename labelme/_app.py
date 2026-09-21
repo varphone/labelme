@@ -50,6 +50,7 @@ from ._model_manager import ModelManager
 from ._label_flags import compile_label_flags
 from ._line_measurement import LineMeasurement
 from ._line_measurement import MeasurementParameters
+from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._line_profile import AnchorSource
 from ._line_profile import LineProfile
 from ._line_profile import ProfileAnchor
@@ -57,6 +58,7 @@ from ._line_profile import ProfileValue
 from ._line_profile import cumulative_lengths
 from ._line_profile import insert_visibility_anchor
 from ._line_profile import insert_width_anchor
+from ._line_profile import line_profile_points
 from ._line_profile import merge_profiles
 from ._line_profile import point_to_position
 from ._line_profile import position_to_point
@@ -86,9 +88,189 @@ from ._widgets import LabelListWidgetItem
 from ._widgets import LineMeasurementWorker
 from ._widgets import LineProfileBatchWorker
 from ._widgets import LineProfilePanel
+from ._widgets import MinimapWidget
 from ._widgets import Palette
 from ._widgets import SettingsDialog
 from ._widgets import StatusStats
+
+
+def _polygon_signed_area(points: np.ndarray) -> float:
+    return float(
+        0.5
+        * np.sum(
+            points[:, 0] * np.roll(points[:, 1], -1)
+            - points[:, 1] * np.roll(points[:, 0], -1)
+        )
+    )
+
+
+def _segments_intersect(
+    first_start: np.ndarray,
+    first_end: np.ndarray,
+    second_start: np.ndarray,
+    second_end: np.ndarray,
+) -> bool:
+    """Return whether two segments cross away from their endpoints."""
+
+    def cross(origin: np.ndarray, a: np.ndarray, b: np.ndarray) -> float:
+        first = a - origin
+        second = b - origin
+        return float(first[0] * second[1] - first[1] * second[0])
+
+    first_orientation = cross(first_start, first_end, second_start)
+    second_orientation = cross(first_start, first_end, second_end)
+    third_orientation = cross(second_start, second_end, first_start)
+    fourth_orientation = cross(second_start, second_end, first_end)
+    epsilon = 1e-9
+    if any(
+        abs(orientation) <= epsilon
+        for orientation in (
+            first_orientation,
+            second_orientation,
+            third_orientation,
+            fourth_orientation,
+        )
+    ):
+        return False
+    return (first_orientation > 0) != (second_orientation > 0) and (
+        (third_orientation > 0) != (fourth_orientation > 0)
+    )
+
+
+def _is_simple_polygon(points: np.ndarray) -> bool:
+    segment_count = len(points)
+    for first_index in range(segment_count):
+        first_start = points[first_index]
+        first_end = points[(first_index + 1) % segment_count]
+        for second_index in range(first_index + 1, segment_count):
+            if second_index in (
+                (first_index + 1) % segment_count,
+                (first_index - 1) % segment_count,
+            ):
+                continue
+            if _segments_intersect(
+                first_start,
+                first_end,
+                points[second_index],
+                points[(second_index + 1) % segment_count],
+            ):
+                return False
+    return True
+
+
+def _connect_polygon_boundaries(
+    first: np.ndarray, second: np.ndarray
+) -> np.ndarray | None:
+    distances = np.linalg.norm(first[:, None, :] - second[None, :, :], axis=2)
+    first_index, second_index = np.unravel_index(
+        np.argmin(distances), distances.shape
+    )
+    candidates: list[tuple[int, np.ndarray]] = []
+    first_centroid = np.mean(first, axis=0)
+    second_centroid = np.mean(second, axis=0)
+
+    def facing_edge_count(
+        polygon: np.ndarray,
+        start_index: np.intp,
+        direction: int,
+        other_centroid: np.ndarray,
+    ) -> int:
+        count = 0
+        for step in range(min(len(polygon), 128)):
+            current_index = (start_index + direction * step) % len(polygon)
+            edge_index = (
+                current_index if direction == 1 else (current_index - 1) % len(polygon)
+            )
+            edge_start = polygon[edge_index]
+            edge_end = polygon[(edge_index + 1) % len(polygon)]
+            edge_vector = edge_end - edge_start
+            edge_length = float(np.linalg.norm(edge_vector))
+            if edge_length <= 1e-9:
+                break
+            edge_midpoint = (edge_start + edge_end) / 2
+            outward_normal = np.array([-edge_vector[1], edge_vector[0]])
+            if float(outward_normal @ (polygon.mean(axis=0) - edge_midpoint)) > 0:
+                outward_normal = -outward_normal
+            to_other = other_centroid - edge_midpoint
+            to_other_length = float(np.linalg.norm(to_other))
+            if (
+                to_other_length <= 1e-9
+                or float(outward_normal @ to_other)
+                <= 0.2 * edge_length * to_other_length
+            ):
+                break
+            count += 1
+        return count
+
+    for first_direction in (1, -1):
+        for second_direction in (1, -1):
+            first_interface_steps = facing_edge_count(
+                first,
+                first_index,
+                first_direction,
+                second_centroid,
+            )
+            second_interface_steps = facing_edge_count(
+                second,
+                second_index,
+                second_direction,
+                first_centroid,
+            )
+            if (first_interface_steps == 0) != (second_interface_steps == 0):
+                first_interface_steps = second_interface_steps = 0
+            first_end = (
+                first_index + first_direction * first_interface_steps
+            ) % len(first)
+            first_start = (
+                (first_end - first_direction) % len(first)
+                if first_interface_steps == 0
+                else first_end
+            )
+            outer_point_count = (
+                len(first) - first_interface_steps + 1
+                if first_interface_steps > 0
+                else len(first)
+            )
+            first_order = [
+                (first_start + first_direction * offset) % len(first)
+                for offset in range(outer_point_count)
+            ]
+            second_order = [
+                (second_index - second_direction * offset) % len(second)
+                for offset in range(
+                    len(second) - second_interface_steps + 1
+                    if second_interface_steps > 0
+                    else len(second)
+                )
+            ]
+            candidate = np.concatenate((first[first_order], second[second_order]))
+            if _is_simple_polygon(candidate):
+                candidates.append(
+                    (first_interface_steps + second_interface_steps, candidate)
+                )
+    if not candidates:
+        return None
+    return max(
+        candidates,
+        key=lambda item: (item[0], -abs(_polygon_signed_area(item[1]))),
+    )[1]
+
+
+def _merge_polygon_points(polygons: list[np.ndarray]) -> np.ndarray | None:
+    """Connect polygon boundaries while retaining their original vertices."""
+    if not polygons:
+        return None
+    merged = np.asarray(polygons[0], dtype=np.float64)
+    for polygon in polygons[1:]:
+        connected = _connect_polygon_boundaries(
+            merged, np.asarray(polygon, dtype=np.float64)
+        )
+        if connected is None:
+            return None
+        merged = connected
+    return merged
+
+
 from ._widgets import ToolBar
 from ._widgets import UniqueLabelQListWidget
 from ._widgets import ZoomWidget
@@ -131,6 +313,7 @@ class _CanvasWidgets(NamedTuple):
     surface: QtWidgets.QStackedWidget
     zoom_widget: ZoomWidget
     scroll_bars: dict[Qt.Orientation, QtWidgets.QScrollBar]
+    minimap: MinimapWidget
 
 
 class _ViewportState(NamedTuple):
@@ -177,6 +360,7 @@ class _Actions(NamedTuple):
     toggle_snap_to_point: QtGui.QAction
     copy_annotations_to_next: QtGui.QAction
     merge_linestrips: QtGui.QAction
+    merge_polygons: QtGui.QAction
     measure_line_profile: QtGui.QAction
     delete_selected_files: QtGui.QAction
     export_selected_files: QtGui.QAction
@@ -201,6 +385,10 @@ class _Actions(NamedTuple):
     create_line_mode: QtGui.QAction
     create_point_mode: QtGui.QAction
     create_line_strip_mode: QtGui.QAction
+    create_bezier2_mode: QtGui.QAction
+    create_bezier3_mode: QtGui.QAction
+    create_catmull_rom_mode: QtGui.QAction
+    create_bspline_mode: QtGui.QAction
     create_ai_points_to_shape_mode: QtGui.QAction
     create_ai_box_to_shape_mode: QtGui.QAction
     open_next_img: QtGui.QAction
@@ -217,6 +405,7 @@ class _Actions(NamedTuple):
     hide_all: QtGui.QAction
     show_all: QtGui.QAction
     toggle_all: QtGui.QAction
+    show_minimap: QtGui.QAction
     open_dir: QtGui.QAction
     zoom_widget_action: QtWidgets.QWidgetAction
     circle_radius_action: QtWidgets.QWidgetAction
@@ -598,6 +787,12 @@ class MainWindow(QtWidgets.QMainWindow):
             ),
             enabled=False,
         )
+        merge_polygons = action(
+            text=self.tr("Merge Polygons"),
+            slot=self.merge_polygons,
+            tip=self.tr("Merge the selected polygons and fill the gaps between them"),
+            enabled=False,
+        )
         measure_line_profile = action(
             text=self.tr("Measure Line Profile"),
             slot=self.measure_selected_line_profile,
@@ -816,6 +1011,42 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Click to place linestrip points; Ctrl+click places the last one."
             ),
         )
+        create_bezier2_mode = image_action(
+            text=self.tr("Quadratic Bezier"),
+            slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier2"),
+            shortcut=shortcuts["create_bezier2"],
+            icon="phosphor/bezier-quadratic.svg",
+            tip=self.tr("Start drawing a quadratic Bezier curve (3 points)"),
+            enabled=False,
+        )
+        create_bezier3_mode = image_action(
+            text=self.tr("Cubic Bezier"),
+            slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bezier3"),
+            shortcut=shortcuts["create_bezier3"],
+            icon="phosphor/bezier-cubic.svg",
+            tip=self.tr("Start drawing a cubic Bezier curve (4 points)"),
+            enabled=False,
+        )
+        create_catmull_rom_mode = image_action(
+            text=self.tr("猫氏样条"),
+            slot=lambda: self._switch_canvas_mode(
+                edit=False, create_mode="catmull_rom"
+            ),
+            shortcut=shortcuts.get("create_catmull_rom"),
+            icon="phosphor/catmull-rom.svg",
+            tip=self.tr(
+                "Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation."
+            ),
+            enabled=False,
+        )
+        create_bspline_mode = image_action(
+            text=self.tr("B样条"),
+            slot=lambda: self._switch_canvas_mode(edit=False, create_mode="bspline"),
+            shortcut=shortcuts.get("create_bspline"),
+            icon="phosphor/b-spline.svg",
+            tip=self.tr("Start drawing a B-spline. Ctrl+LeftClick ends creation."),
+            enabled=False,
+        )
         create_ai_points_to_shape_mode = image_action(
             text=self.tr("AI-Points"),
             slot=lambda: self._switch_canvas_mode(
@@ -938,6 +1169,13 @@ class MainWindow(QtWidgets.QMainWindow):
             icon="phosphor/eye.svg",
             tip=self.tr("Toggle all shapes"),
         )
+        show_minimap = action(
+            text=self.tr("Show Minimap"),
+            tip=self.tr("Show or hide the canvas minimap"),
+            checkable=True,
+            checked=True,
+        )
+        show_minimap.toggled.connect(self._canvas_widgets.minimap.setVisible)
         show_line_profile_preview = action(
             text=self.tr("Show Line Profile Preview"),
             icon="phosphor/eye.svg",
@@ -1043,6 +1281,10 @@ class MainWindow(QtWidgets.QMainWindow):
             ("point", create_point_mode),
             ("line", create_line_mode),
             ("linestrip", create_line_strip_mode),
+            ("bezier2", create_bezier2_mode),
+            ("bezier3", create_bezier3_mode),
+            ("catmull_rom", create_catmull_rom_mode),
+            ("bspline", create_bspline_mode),
             ("ai_points_to_shape", create_ai_points_to_shape_mode),
             ("ai_box_to_shape", create_ai_box_to_shape_mode),
         ]
@@ -1087,9 +1329,6 @@ class MainWindow(QtWidgets.QMainWindow):
             add_point_to_edge,
             split_linestrip,
             separator(),
-            copy_annotations_to_next,
-            merge_linestrips,
-            separator(),
             insert_line_profile_anchor,
             delete_line_profile_anchor,
             clear_line_profile,
@@ -1097,6 +1336,7 @@ class MainWindow(QtWidgets.QMainWindow):
             copy_profiles_from_previous_frame,
             copy_annotations_to_next,
             merge_linestrips,
+            merge_polygons,
             measure_line_profile,
             separator(),
             keep_prev_action,
@@ -1118,6 +1358,7 @@ class MainWindow(QtWidgets.QMainWindow):
             toggle_snap_to_point=toggle_snap_to_point,
             copy_annotations_to_next=copy_annotations_to_next,
             merge_linestrips=merge_linestrips,
+            merge_polygons=merge_polygons,
             measure_line_profile=measure_line_profile,
             delete_selected_files=delete_selected_files,
             export_selected_files=export_selected_files,
@@ -1142,6 +1383,10 @@ class MainWindow(QtWidgets.QMainWindow):
             create_line_mode=create_line_mode,
             create_point_mode=create_point_mode,
             create_line_strip_mode=create_line_strip_mode,
+            create_bezier2_mode=create_bezier2_mode,
+            create_bezier3_mode=create_bezier3_mode,
+            create_catmull_rom_mode=create_catmull_rom_mode,
+            create_bspline_mode=create_bspline_mode,
             create_ai_points_to_shape_mode=create_ai_points_to_shape_mode,
             create_ai_box_to_shape_mode=create_ai_box_to_shape_mode,
             open_next_img=open_next_img,
@@ -1158,6 +1403,7 @@ class MainWindow(QtWidgets.QMainWindow):
             hide_all=hide_all,
             show_all=show_all,
             toggle_all=toggle_all,
+            show_minimap=show_minimap,
             open_dir=open_dir,
             zoom_widget_action=zoom_widget_action,
             circle_radius_action=circle_radius_action,
@@ -1212,7 +1458,12 @@ class MainWindow(QtWidgets.QMainWindow):
         help_menu = self.menuBar().addMenu(self.tr("&Help"))
         label_menu = QtWidgets.QMenu()
         label_menu.addActions(
-            (self._actions.edit, self._actions.delete, self._actions.merge_linestrips)
+            (
+                self._actions.edit,
+                self._actions.delete,
+                self._actions.merge_linestrips,
+                self._actions.merge_polygons,
+            )
         )
         self._docks.label_list.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu
@@ -1257,6 +1508,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.hide_all,
                 self._actions.show_all,
                 self._actions.toggle_all,
+                None,
+                self._actions.show_minimap,
                 self._actions.show_line_profile_preview,
                 separator(),
                 self._actions.zoom_in,
@@ -1461,6 +1714,17 @@ class MainWindow(QtWidgets.QMainWindow):
             Qt.Orientation.Vertical: scroll_area.verticalScrollBar(),
             Qt.Orientation.Horizontal: scroll_area.horizontalScrollBar(),
         }
+        minimap = MinimapWidget(canvas=canvas, viewport=scroll_area.viewport())
+        minimap.set_show_shape_outlines(
+            self._config["minimap"]["show_shape_outlines"]
+        )
+        minimap.center_requested.connect(self._center_canvas_on_image_point)
+        for bar in scroll_bars.values():
+            bar.valueChanged.connect(minimap.update)
+        zoom_widget.valueChanged.connect(minimap.update)
+        canvas.new_shape.connect(minimap.update)
+        canvas.shape_moved.connect(minimap.update)
+        canvas.selection_changed.connect(lambda _: minimap.update())
         canvas.scroll_request.connect(self._on_scroll_request)
         canvas.pan_request.connect(self._on_pan_request)
 
@@ -1503,6 +1767,7 @@ class MainWindow(QtWidgets.QMainWindow):
             surface=surface,
             zoom_widget=zoom_widget,
             scroll_bars=scroll_bars,
+            minimap=minimap,
         )
 
     def _setup_dock_widgets(self) -> _DockWidgets:
@@ -1932,9 +2197,14 @@ class MainWindow(QtWidgets.QMainWindow):
         selected = self._docks.label_list.selected_items()
         selected_shapes = [s for item in selected if (s := item.shape()) is not None]
         can_merge = len(selected_shapes) >= 2 and all(
-            s.shape_type in ("line", "linestrip") for s in selected_shapes
+            s.shape_type in LINE_PROFILE_SHAPE_TYPES for s in selected_shapes
         )
         self._actions.merge_linestrips.setEnabled(can_merge)
+        self._actions.merge_polygons.setEnabled(
+            len(selected_shapes) >= 2
+            and all(s.shape_type == "polygon" for s in selected_shapes)
+            and len({s.label for s in selected_shapes}) == 1
+        )
         self._label_list_menu_origin = self._docks.label_list.mapToGlobal(point)
         try:
             # PySide6 type QMenu.exec() argument too narrowly
@@ -1986,10 +2256,10 @@ class MainWindow(QtWidgets.QMainWindow):
             image = QtGui.QImage.fromData(annotation.image_data)
             if image.isNull():
                 self.show_error_message(
-                    self.tr("Error reading label data"),
-                    self.tr("Could not read the image stored in <b>{}</b>.").format(
-                        label_path
-                    ),
+                    title=self.tr("Error reading label data"),
+                    message=self.tr(
+                        "Could not read the image stored in <b>{}</b>."
+                    ).format(label_path),
                 )
                 return False
             shapes = [
@@ -2024,8 +2294,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 )
             except (LabelFileError, OSError, ValueError) as error:
                 self.show_error_message(
-                    self.tr("Error saving label data"),
-                    self.tr("<b>{}</b>").format(error),
+                    title=self.tr("Error saving label data"),
+                    message=self.tr("<b>{}</b>").format(error),
                 )
                 return False
 
@@ -2034,7 +2304,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tr("Renamed label in {0} other annotation files").format(
                     len(staged)
                 ),
-                5000,
+                delay=5000,
             )
         return True
 
@@ -2080,16 +2350,16 @@ class MainWindow(QtWidgets.QMainWindow):
         existing_item = unique_label_list.find_label_item(new_label)
         if existing_item is not None and existing_item is not item:
             self.show_error_message(
-                self.tr("Invalid label"),
-                self.tr("A label named '{}' already exists.").format(new_label),
+                title=self.tr("Invalid label"),
+                message=self.tr("A label named '{}' already exists.").format(new_label),
             )
             return
         configured_labels = self._config["labels"] or []
         is_configured_label = old_label in configured_labels
         if not self.validate_label(new_label) and not is_configured_label:
             self.show_error_message(
-                self.tr("Invalid label"),
-                self.tr("Invalid label '{}' with validation type '{}'").format(
+                title=self.tr("Invalid label"),
+                message=self.tr("Invalid label '{}' with validation type '{}'").format(
                     new_label, self._config["validate_label"]
                 ),
             )
@@ -2129,9 +2399,9 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         for shape in changed_shapes:
             shape.label = new_label
-            annotation_item = self._docks.label_list.find_item_by_shape(shape)
+            annotation_item = self._docks.label_list.find_item_by_shape(shape=shape)
             annotation_item.set_label(
-                text=format_shape_label(shape),
+                text=format_shape_label(shape=shape),
                 color=new_color,
             )
         self._label_dialog.rename_label_history(old_label, new_label)
@@ -2297,9 +2567,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self._actions.merge.setEnabled(can_merge_shapes(selected_shapes))
         self._actions.copy.setEnabled(n_selected)
         self._actions.edit.setEnabled(n_selected)
+        self._actions.merge_polygons.setEnabled(
+            len(selected_shapes) >= 2
+            and all(shape.shape_type == "polygon" for shape in selected_shapes)
+            and len({shape.label for shape in selected_shapes}) == 1
+        )
         self._actions.measure_line_profile.setEnabled(
             len(selected_shapes) == 1
-            and selected_shapes[0].shape_type == "linestrip"
+            and selected_shapes[0].shape_type in LINE_PROFILE_SHAPE_TYPES
             and self._image_path is not None
         )
         self._sync_circle_radius_widget()
@@ -2776,13 +3051,14 @@ class MainWindow(QtWidgets.QMainWindow):
         property_value = anchor.width if kind == "width" else anchor.visibility
         if property_value is None:
             return
+        centerline = line_profile_points(shape.points, shape.shape_type)
         if mode == "position":
-            position = point_to_position(shape.points, [point.x(), point.y()])
+            position = point_to_position(centerline, [point.x(), point.y()])
             value = property_value.value
         else:
             if kind != "width":
                 return
-            center_point = position_to_point(shape.points, anchor.position)
+            center_point = position_to_point(centerline, anchor.position)
             value = 2.0 * math.hypot(
                 point.x() - center_point[0], point.y() - center_point[1]
             )
@@ -2939,7 +3215,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 "Batch measurement complete: {0} files, {1} linestrips, "
                 "{2} skipped, {3} failed, {4} canceled"
             ).format(processed, processed_shapes, skipped, failed, canceled),
-            10000,
+            delay=10000,
         )
         current_path = self._line_profile_batch_current_image_path
         if current_path is None:
@@ -2961,7 +3237,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def _on_batch_line_profile_failed(self, message: str) -> None:
         self.show_status_message(
             self.tr("Batch line-profile measurement failed: {0}").format(message),
-            10000,
+            delay=10000,
         )
 
     def _on_batch_line_profile_finished(self) -> None:
@@ -2978,14 +3254,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def measure_selected_line_profile(self) -> None:
         selected = self._canvas_widgets.canvas.selected_shapes
-        if len(selected) != 1 or selected[0].shape_type != "linestrip":
+        if len(selected) != 1 or selected[0].shape_type not in LINE_PROFILE_SHAPE_TYPES:
             return
         if self._line_measurement_thread is not None:
             return
         shape = selected[0]
         canvas = self._canvas_widgets.canvas
-        image = _utils.img_qt_to_rgb_arr(img_qt=canvas.pixmap.toImage())
-        points = shape.points.copy()
+        image = _utils.img_qt_to_rgb_arr(canvas.pixmap.toImage())
+        points = line_profile_points(shape.points, shape.shape_type)
         token = _line_measurement_token(shape=shape, pixmap_hash=canvas._pixmap_hash)
         parameters = self._line_measurement_parameters(profile=shape.line_profile)
         progress = QProgressDialog(
@@ -3505,6 +3781,21 @@ class MainWindow(QtWidgets.QMainWindow):
             ),
             constrain_to_center=constrain_to_center,
         )
+        self._canvas_widgets.minimap.update()
+
+    def _center_canvas_on_image_point(self, point: QtCore.QPointF) -> None:
+        canvas = self._canvas_widgets.canvas
+        scroll_area = self.centralWidget()
+        assert isinstance(scroll_area, QtWidgets.QScrollArea)
+        viewport = scroll_area.viewport()
+        viewport_center = QtCore.QPointF(viewport.rect().center())
+        current = canvas.mapFrom(viewport, viewport_center.toPoint())
+        target = canvas.transform_image_point_to_widget(
+            point, area=canvas.sizeHint()
+        )
+        self._move_canvas_view(
+            step=-(target - current), constrain_to_center=False
+        )
 
     def set_scroll_value(self, *, orientation: Qt.Orientation, value: float) -> None:
         self._canvas_widgets.scroll_bars[orientation].setValue(int(value))
@@ -3974,7 +4265,10 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         changed = False
         for target, source in zip(current, mapped):
-            if source.line_profile is None or target.shape_type != "linestrip":
+            if (
+                source.line_profile is None
+                or target.shape_type not in LINE_PROFILE_SHAPE_TYPES
+            ):
                 continue
             if target.line_profile == source.line_profile:
                 continue
@@ -4006,6 +4300,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self._canvas_widgets.canvas.adjustSize()
         self._canvas_widgets.canvas.update()
+        self._canvas_widgets.minimap.update()
 
     def _adjust_scale(self) -> None:
         if self._zoom_mode == _ZoomMode.FIT_WINDOW:
@@ -4389,7 +4684,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tr("Exported {count} files to {dir}").format(
                 count=len(items), dir=target_dir
             ),
-            5000,
+            delay=5000,
         )
 
     @property
@@ -4520,10 +4815,16 @@ class MainWindow(QtWidgets.QMainWindow):
                 action.setChecked(value)
             if key_path == ("canvas", "fill_drawing"):
                 self._canvas_widgets.canvas.set_fill_drawing(value=value)
+            elif key_path == ("snap_to_point",):
+                self._canvas_widgets.canvas.set_snap_to_point(value=value)
         elif key_path == ("shape", "show_labels"):
             canvas = self._canvas_widgets.canvas
             canvas.set_show_labels(value=self._config["shape"]["show_labels"])
             canvas.update()
+        elif key_path == ("minimap", "show_shape_outlines"):
+            self._canvas_widgets.minimap.set_show_shape_outlines(
+                self._config["minimap"]["show_shape_outlines"]
+            )
         elif key_path == ("mask_polygonization", "detail"):
             detail = self._config["mask_polygonization"]["detail"]
             self._ai_annotation.set_polygon_detail(detail)
@@ -4910,13 +5211,56 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.update()
         self.mark_dirty()
 
+    def merge_polygons(self) -> None:
+        """Merge selected polygons into one filled, connected polygon."""
+        canvas = self._canvas_widgets.canvas
+        shapes = list(canvas.selected_shapes)
+        if len(shapes) < 2 or any(shape.shape_type != "polygon" for shape in shapes):
+            return
+        labels = {shape.label for shape in shapes}
+        if len(labels) != 1 or not shapes:
+            return
+        all_points: list[np.ndarray] = []
+        for shape in shapes:
+            points = np.asarray(shape.points, dtype=np.float64)
+            if len(points) < 3:
+                continue
+            all_points.append(points)
+        if not all_points:
+            return
+        merged_points = _merge_polygon_points(polygons=all_points)
+        if merged_points is None or len(merged_points) < 3:
+            return
+        first = shapes[0]
+        merged = Shape(
+            label=first.label,
+            group_id=first.group_id,
+            shape_type="polygon",
+            flags=first.flags,
+            description=first.description,
+            points=merged_points,
+            other_data=copy.deepcopy(first.other_data),
+        )
+        for shape in shapes:
+            if shape in canvas.selected_shapes:
+                canvas.selected_shapes.remove(shape)
+            canvas.shapes.remove(shape)
+        canvas.shapes.append(merged)
+        canvas.backup_shapes()
+        self.remove_labels(shapes=shapes)
+        self.add_label(shape=merged)
+        canvas.deselect_shape()
+        canvas.select_shapes(shapes=[merged])
+        canvas.update()
+        self.mark_dirty()
+
     def copy_annotations_to_next(self) -> None:
         if self._image_path is None:
             return
         canvas = self._canvas_widgets.canvas
         if not canvas.shapes:
             self.show_status_message(
-                self.tr("Current file has no annotations to copy"), 3000
+                self.tr("Current file has no annotations to copy"), delay=3000
             )
             return
 
@@ -4957,8 +5301,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     )
                 except (LabelFileError, OSError, ValueError) as e:
                     self.show_error_message(
-                        self.tr("Error saving label data"),
-                        self.tr("<b>%s</b>") % e,
+                        title=self.tr("Error saving label data"),
+                        message=self.tr("<b>%s</b>") % e,
                     )
                     return
                 item.setCheckState(Qt.CheckState.Checked)

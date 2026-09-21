@@ -85,7 +85,7 @@ def test_split_linestrip_at_vertex(
     original_points = shape.points.copy()
     assert len(original_points) == 3
 
-    win._switch_canvas_mode(edit=True)
+    win._switch_canvas_mode(edit=True, create_mode=None)
     _select_linestrip(qtbot=qtbot, canvas=canvas, shape_index=0)
 
     # Hover the middle vertex (index 1).
@@ -143,7 +143,7 @@ def test_split_linestrip_refuses_at_endpoint(
     shape = canvas.shapes[0]
     num_before = len(canvas.shapes)
 
-    win._switch_canvas_mode(edit=True)
+    win._switch_canvas_mode(edit=True, create_mode=None)
     _select_linestrip(qtbot=qtbot, canvas=canvas, shape_index=0)
 
     # Hover the first endpoint (index 0); the action is disabled because
@@ -167,7 +167,7 @@ def test_split_linestrip_refuses_for_polygon(
     win = main_win(file_or_dir=str(data_path / "annotated/2011_000003.json"))
     show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
     canvas = win._canvas_widgets.canvas
-    win._switch_canvas_mode(edit=True)
+    win._switch_canvas_mode(edit=True, create_mode=None)
 
     # The annotated file contains polygon shapes; the action stays disabled
     # even when a vertex is hovered, because the selected shape is not a

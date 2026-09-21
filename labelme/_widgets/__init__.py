@@ -21,6 +21,7 @@ from .line_profile_batch_worker import LineProfileBatchWorker
 from .line_profile_panel import LineProfilePanel
 from .line_profile_visibility_widget import LineProfileVisibilityWidget
 from .line_profile_width_widget import LineProfileWidthWidget
+from .minimap import MinimapWidget
 
 __all__ = [
     "AiAssistedAnnotationWidget",
@@ -39,6 +40,7 @@ __all__ = [
     "LineProfilePanel",
     "LineProfileVisibilityWidget",
     "LineProfileWidthWidget",
+    "MinimapWidget",
     "Palette",
     "SettingsDialog",
     "StatusStats",

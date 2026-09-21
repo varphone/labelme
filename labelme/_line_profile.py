@@ -11,6 +11,14 @@ from typing import cast
 
 PathMode = Literal["continuous", "visible_only"]
 Parameterization = Literal["normalized_arc_length"]
+LINE_PROFILE_SHAPE_TYPES = (
+    "line",
+    "linestrip",
+    "bezier2",
+    "bezier3",
+    "catmull_rom",
+    "bspline",
+)
 AnchorSource = Literal["auto", "manual"]
 MeasurementOverrideKey = Literal[
     "sample_spacing",
@@ -239,8 +247,10 @@ def validate_profile(
         shape_type = getattr(shape, "shape_type", None)
         if isinstance(shape, dict):
             shape_type = shape.get("shape_type")
-        if shape_type != "linestrip":
-            raise ValueError("line_profile is only supported for linestrip")
+        if shape_type not in LINE_PROFILE_SHAPE_TYPES:
+            raise ValueError(
+                "line_profile is only supported for open line and curve shapes"
+            )
         points = getattr(shape, "points", None)
         if isinstance(shape, dict):
             points = shape.get("points")
@@ -256,6 +266,20 @@ def evaluate_profile(
 ) -> tuple[float | None, float | None]:
     """Evaluate width and visibility independently at one shared position."""
     return profile.evaluate_width(position), profile.evaluate_visibility(position)
+
+
+def line_profile_points(
+    points: Sequence[Sequence[float]], shape_type: str
+) -> list[tuple[float, float]] | Sequence[Sequence[float]]:
+    """Return the polyline used by line-profile geometry and sampling."""
+    if shape_type in ("bezier2", "bezier3", "catmull_rom", "bspline"):
+        from ._shape import line_profile_centerline
+
+        return [
+            tuple(point)
+            for point in line_profile_centerline(points, shape_type)  # type: ignore[arg-type]
+        ]
+    return points
 
 
 def migrate_line_profile_json(value: object) -> dict[str, Any]:

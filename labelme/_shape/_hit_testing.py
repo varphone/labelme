@@ -3,7 +3,12 @@ from __future__ import annotations
 import numpy as np
 import numpy.typing as npt
 
+from ._model import BEZIER_SHAPE_TYPES
+from ._model import SPLINE_SHAPE_TYPES
 from ._model import Shape
+from ._model import bezier_degree
+from ._model import bezier_sample_points
+from ._model import spline_sample_points
 from ._oriented_rectangle import _get_rotation_handles
 from ._oriented_rectangle import _is_full_oriented_rectangle
 
@@ -37,6 +42,68 @@ def nearest_edge_index(
 ) -> int | None:
     if len(shape.points) == 0:
         return None
+    if shape.shape_type in BEZIER_SHAPE_TYPES:
+        expected = bezier_degree(shape.shape_type) + 1
+        if len(shape.points) != expected:
+            return None
+        curve = bezier_sample_points(shape.points)
+        segments = curve[1:] - curve[:-1]
+        length_squared = (segments * segments).sum(axis=1)
+        starts = curve[:-1]
+        t = np.clip(
+            ((point - starts) * segments).sum(axis=1)
+            / np.where(length_squared == 0, 1.0, length_squared),
+            0.0,
+            1.0,
+        )
+        projections = starts + t[:, None] * segments
+        distances = np.linalg.norm(point - projections, axis=1)
+        return _find_closest_index_within(
+            distances=distances, epsilon=image_epsilon
+        )
+    if shape.shape_type in SPLINE_SHAPE_TYPES:
+        if len(shape.points) < 2:
+            return None
+        curve = spline_sample_points(shape.points, shape.shape_type)
+        segments = curve[1:] - curve[:-1]
+        length_squared = (segments * segments).sum(axis=1)
+        starts = curve[:-1]
+        t = np.clip(
+            ((point - starts) * segments).sum(axis=1)
+            / np.where(length_squared == 0, 1.0, length_squared),
+            0.0,
+            1.0,
+        )
+        projections = starts + t[:, None] * segments
+        nearest = _find_closest_index_within(
+            distances=np.linalg.norm(point - projections, axis=1),
+            epsilon=image_epsilon,
+        )
+        if nearest is None:
+            return None
+        if shape.shape_type == "bspline":
+            # A B-spline does not generally pass through its control points.
+            # Use the control polygon to decide which knot interval an
+            # inserted point belongs to; the sampled curve alone has no
+            # one-to-one relationship with the control points.
+            control_starts = shape.points[:-1]
+            control_ends = shape.points[1:]
+            control_segments = control_ends - control_starts
+            control_lengths = (control_segments * control_segments).sum(axis=1)
+            control_t = np.clip(
+                ((point - control_starts) * control_segments).sum(axis=1)
+                / np.where(control_lengths == 0, 1.0, control_lengths),
+                0.0,
+                1.0,
+            )
+            control_projections = control_starts + control_t[:, None] * control_segments
+            control_index = int(
+                np.argmin(np.linalg.norm(point - control_projections, axis=1))
+            )
+            return control_index + 1
+        # Sampling creates many segments per knot interval. Canvas insertion
+        # expects the index of the following knot, not the sampled segment.
+        return min(nearest // 24 + 1, len(shape.points) - 1)
     # Edge i runs from points[i - 1] to points[i] (so edge 0 is the segment
     # that closes a polygon from its last point back to its first).
     edge_starts = np.roll(shape.points, shift=1, axis=0)

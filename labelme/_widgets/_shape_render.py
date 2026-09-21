@@ -12,14 +12,17 @@ from PySide6 import QtCore
 from PySide6 import QtGui
 
 from .. import _utils
+from .._shape import BEZIER_SHAPE_TYPES
 from .._shape import CIRCLE_POINT_COUNT
 from .._shape import LINE_POINT_COUNT
 from .._shape import ORIENTED_RECTANGLE_POINT_COUNT
 from .._shape import RECTANGLE_POINT_COUNT
+from .._shape import SPLINE_SHAPE_TYPES
 from .._shape import Shape
 from .._shape import get_rotation_handle
 from .._shape import nearest_edge_index
 from .._shape import oriented_rectangle_arrow_points
+from .._shape import spline_sample_points
 
 
 @dataclasses.dataclass(frozen=True)
@@ -84,6 +87,8 @@ class ShapeRenderContext:
 # Shapes are stroked in widget space, so the outline keeps this many screen
 # pixels at every zoom level.
 _OUTLINE_WIDTH: Final[float] = 2.0
+_BEZIER2_POINT_COUNT: Final[int] = 3
+_BEZIER3_POINT_COUNT: Final[int] = 4
 
 
 def render_shape(
@@ -163,6 +168,9 @@ def _paint_mask(
 @dataclasses.dataclass(frozen=True)
 class _ShapePaths:
     line: QtGui.QPainterPath = dataclasses.field(default_factory=QtGui.QPainterPath)
+    control_polygon: QtGui.QPainterPath = dataclasses.field(
+        default_factory=QtGui.QPainterPath
+    )
     vertices: QtGui.QPainterPath = dataclasses.field(default_factory=QtGui.QPainterPath)
     negative_vertices: QtGui.QPainterPath = dataclasses.field(
         default_factory=QtGui.QPainterPath
@@ -183,6 +191,19 @@ def _paint_shape_points(
 ) -> None:
     palette = context.palette
     paths = _build_shape_points_paths(shape=shape, context=context)
+    color = palette.select_line if context.selected else palette.line
+    line_pen = QtGui.QPen(color, _OUTLINE_WIDTH, context.line_style)
+
+    if paths.control_polygon.length() > 0:
+        control_color = QtGui.QColor(color)
+        control_color.setAlpha(160)
+        control_pen = QtGui.QPen(control_color)
+        control_pen.setWidth(1)
+        control_pen.setStyle(QtCore.Qt.PenStyle.DashLine)
+        control_pen.setDashPattern([2, 3])
+        painter.setPen(control_pen)
+        painter.drawPath(paths.control_polygon)
+        painter.setPen(line_pen)
 
     painter.drawPath(paths.line)
     _paint_filled_vertices(
@@ -197,7 +218,14 @@ def _paint_shape_points(
         highlighted=context.rotation_highlight is not None,
         palette=palette,
     )
-    if context.fill and shape.shape_type not in ["line", "linestrip", "points", "mask"]:
+    if context.fill and shape.shape_type not in [
+        "line",
+        "linestrip",
+        "bezier2",
+        "bezier3",
+        "points",
+        "mask",
+    ]:
         fill = palette.select_fill if context.selected else palette.fill
         painter.fillPath(paths.line, fill)
     if paths.orientation_arrow.length() > 0:
@@ -312,6 +340,46 @@ def _build_shape_points_paths(
         assert len(points) in [1, 2]
     elif shape.shape_type == "oriented_rectangle":
         assert len(points) in [1, 2, 4]
+    elif shape.shape_type in SPLINE_SHAPE_TYPES:
+        curve = spline_sample_points(points, shape.shape_type)
+        if len(curve) > 0:
+            paths.line.moveTo(QtCore.QPointF(*(curve[0] * scale)))
+            for point in curve[1:]:
+                paths.line.lineTo(QtCore.QPointF(*(point * scale)))
+        for i in range(len(points)):
+            _build_shape_point_path(
+                path=paths.vertices, shape=shape, context=context, vertex_index=i
+            )
+        if len(points) > 1:
+            paths.control_polygon.moveTo(QtCore.QPointF(*(points[0] * scale)))
+            for point in points[1:]:
+                paths.control_polygon.lineTo(QtCore.QPointF(*(point * scale)))
+        return paths
+    elif shape.shape_type in ("bezier2", "bezier3"):
+        if len(points) > 0:
+            paths.line.moveTo(QtCore.QPointF(*(points[0] * scale)))
+        if len(points) > 1:
+            paths.control_polygon.moveTo(QtCore.QPointF(*(points[0] * scale)))
+            for point in points[1:]:
+                paths.control_polygon.lineTo(QtCore.QPointF(*(point * scale)))
+        if shape.shape_type == "bezier2" and len(points) >= _BEZIER2_POINT_COUNT:
+            paths.line.quadTo(
+                QtCore.QPointF(*(points[1] * scale)),
+                QtCore.QPointF(*(points[2] * scale)),
+            )
+        elif shape.shape_type == "bezier3" and len(points) >= _BEZIER3_POINT_COUNT:
+            paths.line.cubicTo(
+                QtCore.QPointF(*(points[1] * scale)),
+                QtCore.QPointF(*(points[2] * scale)),
+                QtCore.QPointF(*(points[3] * scale)),
+            )
+        elif len(points) > 1:
+            paths.line.lineTo(QtCore.QPointF(*(points[-1] * scale)))
+        for i in range(len(points)):
+            _build_shape_point_path(
+                path=paths.vertices, shape=shape, context=context, vertex_index=i
+            )
+        return paths
     elif shape.shape_type == "points":
         assert len(points) == len(shape.point_labels)
 
@@ -362,7 +430,9 @@ def is_hit_by_point(
     point_size: int,
     epsilon: float,
 ) -> bool:
-    if shape.shape_type in ("line", "linestrip"):
+    if shape.shape_type in (
+        "line", "linestrip", "bezier2", "bezier3", *SPLINE_SHAPE_TYPES
+    ):
         return (
             nearest_edge_index(shape=shape, point=point, image_epsilon=epsilon / scale)
             is not None
@@ -395,6 +465,26 @@ def _build_outline_path(*, shape: Shape) -> QtGui.QPainterPath:
     ):
         # Neither the first edge being dragged nor a finished loop yet.
         pass
+    elif shape.shape_type in BEZIER_SHAPE_TYPES:
+        # A Bezier path is not drawable until all its control points exist.
+        # Keep incomplete mid-draw shapes out of the shared outline path so
+        # bounds and hit testing do not expose a control polygon as the curve.
+        if shape.shape_type == "bezier2" and len(points) == _BEZIER2_POINT_COUNT:
+            path.moveTo(QtCore.QPointF(*points[0]))
+            path.quadTo(QtCore.QPointF(*points[1]), QtCore.QPointF(*points[2]))
+        elif shape.shape_type == "bezier3" and len(points) == _BEZIER3_POINT_COUNT:
+            path.moveTo(QtCore.QPointF(*points[0]))
+            path.cubicTo(
+                QtCore.QPointF(*points[1]),
+                QtCore.QPointF(*points[2]),
+                QtCore.QPointF(*points[3]),
+            )
+    elif shape.shape_type in SPLINE_SHAPE_TYPES:
+        curve = spline_sample_points(points, shape.shape_type)
+        if len(curve) > 0:
+            path.moveTo(QtCore.QPointF(*curve[0]))
+            for point in curve[1:]:
+                path.lineTo(QtCore.QPointF(*point))
     elif len(points) > 0:
         # lineTo, unlike addPolygon, drops a repeated point instead of adding a
         # zero-length segment the stroker would cap with a dot.

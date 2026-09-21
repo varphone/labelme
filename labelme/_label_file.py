@@ -73,6 +73,8 @@ def _validate_shape_semantics(
         "circle": 2,
         "mask": 2,
         "oriented_rectangle": 4,
+        "bezier2": 3,
+        "bezier3": 4,
     }
     expected_point_count = EXACT_POINT_COUNT_BY_SHAPE_TYPE.get(shape_type)
     if expected_point_count is not None and len(points) != expected_point_count:
@@ -195,8 +197,17 @@ def _load_shape_json_obj(shape_json_obj: dict) -> ShapeDict:
     if "line_profile" in shape_json_obj:
         raw_line_profile = shape_json_obj["line_profile"]
         try:
-            if shape_type != "linestrip":
-                raise ValueError("line_profile is only supported for linestrip")
+            if shape_type not in (
+                "line",
+                "linestrip",
+                "bezier2",
+                "bezier3",
+                "catmull_rom",
+                "bspline",
+            ):
+                raise ValueError(
+                    "line_profile is only supported for open line and curve shapes"
+                )
             line_profile = LineProfile.from_json_obj(raw_line_profile)
         except ValueError as e:
             line_profile_error = str(e)

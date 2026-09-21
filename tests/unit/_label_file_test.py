@@ -120,6 +120,40 @@ def test_read_label_file_normalizes_legacy_rectangle_points(
 
 
 @pytest.mark.parametrize(
+    ("shape_type", "points"),
+    [
+        ("bezier2", [[10, 80], [50, 10], [90, 80]]),
+        ("bezier3", [[10, 80], [10, 10], [90, 10], [90, 80]]),
+        ("catmull_rom", [[10, 80], [50, 10], [90, 80]]),
+        ("bspline", [[10, 80], [50, 10], [90, 80]]),
+    ],
+)
+def test_load_shape_accepts_curve_shape_types(
+    annotated_raw: dict[str, Any],
+    annotated_dst: Path,
+    shape_type: str,
+    points: list[list[int]],
+) -> None:
+    annotated_raw["shapes"] = [
+        {
+            "label": "curve",
+            "points": points,
+            "group_id": None,
+            "shape_type": shape_type,
+            "flags": {},
+            "description": "",
+            "score": None,
+        }
+    ]
+    _dump_json(path=annotated_dst, raw=annotated_raw)
+
+    label_data = read_label_file(filename=str(annotated_dst))
+
+    assert label_data.shapes[0]["shape_type"] == shape_type
+    assert label_data.shapes[0]["points"] == points
+
+
+@pytest.mark.parametrize(
     "mutator,error_match",
     [
         (lambda raw: raw.pop("imagePath"), "imagePath"),
@@ -578,7 +612,7 @@ def test_shape_codec_preserves_profile_on_unsupported_shape_type() -> None:
         shape_json_obj={
             "label": "stripe",
             "points": [[0.0, 0.0], [10.0, 0.0]],
-            "shape_type": "line",
+            "shape_type": "rectangle",
             "line_profile": raw_profile,
         }
     )
