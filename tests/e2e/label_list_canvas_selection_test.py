@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 from typing import Final
 
@@ -220,6 +221,102 @@ def test_rename_label_list_item_updates_matching_shapes_in_all_files(
     ]
     assert other_labels.count("person") == 0
     assert other_labels.count("pedestrian") == 4
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
+def test_set_uniform_circle_radius_from_label_menu_updates_all_files(
+    qtbot: QtBot,
+    main_win: MainWinFactory,
+    data_path: Path,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    pause: bool,
+) -> None:
+    work_dir = tmp_path / "circles"
+    work_dir.mkdir()
+    for index, source_name in enumerate(("2011_000003.jpg", "2011_000006.jpg"), 1):
+        image_name = f"{index:02d}-{source_name}"
+        shutil.copyfile(data_path / "raw" / source_name, work_dir / image_name)
+        shapes = [
+            {
+                "label": "bead",
+                "points": [[50.0, 50.0], [60.0, 50.0]],
+                "shape_type": "circle",
+                "flags": {},
+                "description": "",
+                "group_id": None,
+                "mask": None,
+            }
+        ]
+        if index == 1:
+            shapes.append(
+                {
+                    "label": "bead",
+                    "points": [[10.0, 10.0], [20.0, 20.0], [10.0, 30.0]],
+                    "shape_type": "polygon",
+                    "flags": {},
+                    "description": "",
+                    "group_id": None,
+                    "mask": None,
+                }
+            )
+        else:
+            shapes.append(
+                {
+                    "label": "other",
+                    "points": [[100.0, 100.0], [110.0, 100.0]],
+                    "shape_type": "circle",
+                    "flags": {},
+                    "description": "",
+                    "group_id": None,
+                    "mask": None,
+                }
+            )
+        (work_dir / image_name).with_suffix(".json").write_text(
+            json.dumps(
+                {
+                    "version": "4.0.0",
+                    "flags": {},
+                    "shapes": shapes,
+                    "imagePath": image_name,
+                    "imageData": None,
+                }
+            )
+        )
+
+    win = main_win(file_or_dir=str(work_dir), config_overrides={"auto_save": True})
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+
+    item = win._docks.unique_label_list.find_label_item(label="bead")
+    assert item is not None
+    menu = win._build_unique_label_list_context_menu(item=item)
+    action = next(
+        action
+        for action in menu.actions()
+        if action.text() == "Set Uniform Circle Radius"
+    )
+    monkeypatch.setattr(
+        QInputDialog,
+        "getDouble",
+        lambda *_args, **_kwargs: (5.0, True),
+    )
+    action.trigger()
+    menu.deleteLater()
+
+    current_data = json.loads((work_dir / "01-2011_000003.json").read_text())
+    other_data = json.loads((work_dir / "02-2011_000006.json").read_text())
+    current_circle = current_data["shapes"][0]
+    other_circle = other_data["shapes"][0]
+    assert current_circle["points"] == [[50.0, 50.0], [55.0, 50.0]]
+    assert other_circle["points"] == [[50.0, 50.0], [55.0, 50.0]]
+    assert current_data["shapes"][1]["points"] == [
+        [10.0, 10.0],
+        [20.0, 20.0],
+        [10.0, 30.0],
+    ]
+    assert other_data["shapes"][1]["points"] == [[100.0, 100.0], [110.0, 100.0]]
 
     close_or_pause(qtbot=qtbot, widget=win, pause=pause)
 

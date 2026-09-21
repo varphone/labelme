@@ -801,6 +801,22 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Rename Label</translation>
     </message>
     <message>
+        <source>Set Uniform Circle Radius</source>
+        <translation>设置圆统一半径</translation>
+    </message>
+    <message>
+        <source>Radius:</source>
+        <translation>半径：</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>未找到标签为“{0}”的圆。</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>已在另外 {1} 个标注文件中设置 {0} 个圆的半径。</translation>
+    </message>
+    <message>
         <source>Error reading label data</source>
         <translation>Error reading label data</translation>
     </message>
