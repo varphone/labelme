@@ -1418,4 +1418,15 @@ Expected location: {path}</source>
         <translation>이 대화상자에 일치하는 설정이 없습니다. 다른 검색어를 입력하거나 검색을 지우세요.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>반지름</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>선택한 원의 반지름</translation>
+        </message>
+    </context>
 </TS>

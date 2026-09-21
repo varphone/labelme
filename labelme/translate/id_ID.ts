@@ -1418,4 +1418,15 @@ Shapes</source>
         <translation>Tidak ada pengaturan yang cocok dalam dialog ini. Coba istilah lain atau hapus pencarian.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Jari-jari</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Jari-jari lingkaran yang dipilih</translation>
+        </message>
+    </context>
 </TS>

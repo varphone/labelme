@@ -1424,4 +1424,15 @@ Posizione prevista: {path}</translation>
         <translation>Nessuna impostazione corrispondente in questa finestra. Prova un altro termine o cancella la ricerca.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Raggio</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Raggio del cerchio selezionato</translation>
+        </message>
+    </context>
 </TS>

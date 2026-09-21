@@ -1418,4 +1418,15 @@ Expected location: {path}</source>
         <translation>ไม่พบการตั้งค่าที่ตรงกันในกล่องโต้ตอบนี้ ลองใช้คำอื่นหรือล้างการค้นหา</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>รัศมี</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>รัศมีของวงกลมที่เลือก</translation>
+        </message>
+    </context>
 </TS>

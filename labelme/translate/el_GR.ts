@@ -1420,4 +1420,15 @@ Expected location: {path}</source>
         <translation>Δεν βρέθηκαν αντίστοιχες ρυθμίσεις σε αυτό το παράθυρο. Δοκιμάστε άλλον όρο ή εκκαθαρίστε την αναζήτηση.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Ακτίνα</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Ακτίνα του επιλεγμένου κύκλου</translation>
+        </message>
+    </context>
 </TS>

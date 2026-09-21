@@ -1424,4 +1424,15 @@ Erwarteter Speicherort: {path}</translation>
         <translation>Keine passenden Einstellungen in diesem Dialog. Versuchen Sie einen anderen Begriff oder löschen Sie die Suche.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Radius</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Radius des ausgewählten Kreises</translation>
+        </message>
+    </context>
 </TS>

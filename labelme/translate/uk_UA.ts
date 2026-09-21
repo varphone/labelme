@@ -1421,4 +1421,15 @@ Expected location: {path}</source>
         <translation>У цьому вікні немає відповідних налаштувань. Спробуйте інший запит або очистьте пошук.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Радіус</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Радіус вибраного кола</translation>
+        </message>
+    </context>
 </TS>

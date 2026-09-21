@@ -1418,4 +1418,15 @@ Expected location: {path}</source>
         <translation>تنظیم مطابقی در این پنجره یافت نشد. عبارت دیگری را امتحان کنید یا جستجو را پاک کنید.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>شعاع</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>شعاع دایره انتخاب‌شده</translation>
+        </message>
+    </context>
 </TS>

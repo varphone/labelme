@@ -2,6 +2,7 @@ from ._ai_assisted_annotation_widget import AiAssistedAnnotationWidget
 from ._ai_text_to_annotation_widget import AiTextToAnnotationWidget
 from ._brightness_contrast_dialog import BrightnessContrastDialog
 from ._canvas import Canvas
+from .circle_radius_widget import CircleRadiusWidget
 from ._empty_state import EmptyStateWidget
 from ._label_dialog import LabelDialog
 from ._label_dialog import LabelDialogEntry
@@ -21,6 +22,7 @@ __all__ = [
     "AiTextToAnnotationWidget",
     "BrightnessContrastDialog",
     "Canvas",
+    "CircleRadiusWidget",
     "EmptyStateWidget",
     "LabelDialog",
     "LabelDialogEntry",

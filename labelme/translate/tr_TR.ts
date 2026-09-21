@@ -1424,4 +1424,15 @@ Beklenen konum: {path}</translation>
         <translation>Bu iletişim kutusunda eşleşen ayar yok. Başka bir terim deneyin veya aramayı temizleyin.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Yarıçap</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Seçili dairenin yarıçapı</translation>
+        </message>
+    </context>
 </TS>

@@ -1418,4 +1418,15 @@ Oczekiwana lokalizacja: {path}</translation>
         <translation>Brak pasujących ustawień w tym oknie. Spróbuj innego hasła lub wyczyść wyszukiwanie.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Promień</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Promień wybranego okręgu</translation>
+        </message>
+    </context>
 </TS>

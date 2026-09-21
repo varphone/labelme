@@ -1418,4 +1418,15 @@ Local esperado: {path}</translation>
         <translation>Nenhuma configuração correspondente nesta janela. Tente outro termo ou limpe a pesquisa.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Raio</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Raio do círculo selecionado</translation>
+        </message>
+    </context>
 </TS>

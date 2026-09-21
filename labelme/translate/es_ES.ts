@@ -1418,4 +1418,15 @@ Ubicación esperada: {path}</translation>
         <translation>No hay ajustes coincidentes en este diálogo. Pruebe otro término o borre la búsqueda.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Radio</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Radio del círculo seleccionado</translation>
+        </message>
+    </context>
 </TS>

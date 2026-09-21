@@ -1424,4 +1424,15 @@ Várt hely: {path}</translation>
         <translation>Nincs egyező beállítás ebben az ablakban. Próbáljon másik kifejezést, vagy törölje a keresést.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Sugár</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>A kiválasztott kör sugara</translation>
+        </message>
+    </context>
 </TS>

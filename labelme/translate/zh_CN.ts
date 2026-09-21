@@ -1424,4 +1424,15 @@ Expected location: {path}</source>
         <translation>此对话框中没有匹配的设置。请尝试其他关键词或清除搜索。</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>半径</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>所选圆的半径</translation>
+        </message>
+    </context>
 </TS>

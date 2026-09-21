@@ -1432,4 +1432,15 @@ Expected location: {path}</source>
         <translation>このダイアログに一致する設定はありません。別の語句を試すか、検索をクリアしてください。</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>半径</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>選択した円の半径</translation>
+        </message>
+    </context>
 </TS>

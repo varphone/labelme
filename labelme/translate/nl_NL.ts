@@ -1418,4 +1418,15 @@ Verwachte locatie: {path}</translation>
         <translation>Geen overeenkomende instellingen in dit dialoogvenster. Probeer een andere term of wis de zoekopdracht.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Straal</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Straal van de geselecteerde cirkel</translation>
+        </message>
+    </context>
 </TS>

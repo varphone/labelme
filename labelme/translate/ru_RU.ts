@@ -1421,4 +1421,15 @@ Expected location: {path}</source>
         <translation>В этом окне нет подходящих настроек. Попробуйте другой запрос или очистите поиск.</translation>
     </message>
 </context>
+    <context>
+        <name>CircleRadiusWidget</name>
+        <message>
+            <source>Radius</source>
+            <translation>Радиус</translation>
+        </message>
+        <message>
+            <source>Radius of the selected circle</source>
+            <translation>Радиус выбранной окружности</translation>
+        </message>
+    </context>
 </TS>
