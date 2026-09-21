@@ -46,8 +46,6 @@ from ._label_file import read_image_file
 from ._label_file import read_label_file
 from ._label_file import write_label_file
 from ._label_flags import apply_default_flags
-from ._model_manager import ModelManager
-from ._label_flags import compile_label_flags
 from ._line_measurement import LineMeasurement
 from ._line_measurement import MeasurementParameters
 from ._line_measurement import _simplify_measurement_samples
@@ -71,6 +69,7 @@ from ._line_profile_batch import BatchReport
 from ._line_profile_sequence import compare_frames
 from ._line_profile_sequence import transfer_frame_profiles
 from ._line_profile_sequence import validate_frame_mapping
+from ._model_manager import ModelManager
 from ._shape import CIRCLE_POINT_COUNT
 from ._shape import Shape
 from ._shape import ShapeType
@@ -1524,6 +1523,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.hide_all,
                 self._actions.show_all,
                 self._actions.toggle_all,
+                separator(),
                 self._actions.show_minimap,
                 self._actions.show_line_profile_preview,
                 separator(),
@@ -1747,6 +1747,7 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.new_shape.connect(minimap.update)
         canvas.shape_moved.connect(minimap.update)
         canvas.selection_changed.connect(lambda _: minimap.update())
+        canvas.drawing_polygon.connect(minimap.set_mouse_passthrough)
         canvas.scroll_request.connect(self._on_scroll_request)
         canvas.pan_request.connect(self._on_pan_request)
 
@@ -1908,12 +1909,12 @@ class MainWindow(QtWidgets.QMainWindow):
             dock_widget.setFeatures(features)
             if self._config[config_key]["show"] is False:
                 dock_widget.setVisible(False)
-        # Establish the existing right-side dock container first, preserving
-        # its original top-to-bottom order. The new editor is then split from
-        # that container as a single full-height column on its left.
+        # Keep all auxiliary panels in one right-side column. A horizontal split
+        # would consume most of the default window width and leave the canvas
+        # too narrow for portrait images to expose their vertical scroll range.
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, line_profile)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, flag)
-        self.splitDockWidget(line_profile, flag, Qt.Orientation.Horizontal)
+        self.splitDockWidget(line_profile, flag, Qt.Orientation.Vertical)
         for dock_widget in (file, shape, label):
             self.splitDockWidget(flag, dock_widget, Qt.Orientation.Vertical)
 
@@ -2170,9 +2171,10 @@ class MainWindow(QtWidgets.QMainWindow):
         )
 
     def _switch_canvas_mode(self, *, edit: bool, create_mode: str | None) -> None:
-        self._canvas_widgets.canvas.set_editing(value=edit)
-        if create_mode is not None:
-            self._canvas_widgets.canvas.create_mode = create_mode
+        self._canvas_widgets.canvas.set_editing(
+            value=edit, create_mode=create_mode
+        )
+        self._refresh_status_stats()
         if edit:
             for _, draw_action in self._actions.draw:
                 draw_action.setEnabled(True)
@@ -2484,7 +2486,7 @@ class MainWindow(QtWidgets.QMainWindow):
             )
         return True
 
-    def validate_label(self, label: str) -> bool:
+    def validate_label(self, *, label: str) -> bool:
         policy = self._config["validate_label"]
         if policy is None:
             return True
@@ -2523,7 +2525,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if not accepted or not new_label or new_label == old_label:
             return
 
-        existing_item = unique_label_list.find_label_item(new_label)
+        existing_item = unique_label_list.find_label_item(label=new_label)
         if existing_item is not None and existing_item is not item:
             self.show_error_message(
                 title=self.tr("Invalid label"),
@@ -2532,7 +2534,7 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         configured_labels = self._config["labels"] or []
         is_configured_label = old_label in configured_labels
-        if not self.validate_label(new_label) and not is_configured_label:
+        if not self.validate_label(label=new_label) and not is_configured_label:
             self.show_error_message(
                 title=self.tr("Invalid label"),
                 message=self.tr("Invalid label '{}' with validation type '{}'").format(
@@ -2586,7 +2588,7 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.update()
         self.mark_dirty()
 
-    def _edit_label(self, value: object | None = None) -> None:
+    def _edit_label(self) -> None:
         items = self._docks.label_list.selected_items()
         if not items:
             logger.warning("No label is selected, so cannot edit label.")
@@ -3993,11 +3995,16 @@ class MainWindow(QtWidgets.QMainWindow):
             self._docks.label_list.clearSelection()
             assert isinstance(flags, dict)
             shapes = self._canvas_widgets.canvas.set_last_label(text=text, flags=flags)
+            apply_default_flags(shapes=shapes, label_flags=self._config["label_flags"])
             for shape in shapes:
                 if group_id is not None or shape.group_id is None:
                     shape.group_id = group_id
                 shape.description = description
                 self.add_label(shape=shape)
+            # Replace the unlabeled draft snapshot so undo restores the
+            # committed annotation rather than the pre-dialog placeholder.
+            self._canvas_widgets.canvas.shape_backups.pop()
+            self._canvas_widgets.canvas.backup_shapes()
             self._actions.edit_mode.setEnabled(True)
             self._actions.undo_last_point.setEnabled(False)
             self._actions.undo.setEnabled(True)
@@ -4006,26 +4013,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self._canvas_widgets.canvas.undo_last_line()
             self._canvas_widgets.canvas.shape_backups.pop()
             return
-
-        self._docks.label_list.clearSelection()
-        shapes = self._canvas_widgets.canvas.set_last_label(
-            text=entry.label, flags=entry.flags
-        )
-        apply_default_flags(shapes=shapes, label_flags=self._config["label_flags"])
-        for shape in shapes:
-            if entry.group_id is not None or shape.group_id is None:
-                shape.group_id = entry.group_id
-            shape.description = entry.description
-            self.add_label(shape=shape)
-        # The draft snapshot was taken before the dialog ran, so retake it now
-        # or undo would strip the group id and description along with the
-        # next change.
-        self._canvas_widgets.canvas.shape_backups.pop()
-        self._canvas_widgets.canvas.backup_shapes()
-        self._actions.edit_mode.setEnabled(True)
-        self._actions.undo_last_point.setEnabled(False)
-        self._actions.undo.setEnabled(True)
-        self.mark_dirty()
 
     def _on_inference_produced_no_shapes(self) -> None:
         self.show_status_message(
@@ -4053,13 +4040,29 @@ class MainWindow(QtWidgets.QMainWindow):
     def _on_scroll_request(self, delta: int, orientation: Qt.Orientation, /) -> None:
         units = -delta * 0.1  # natural scroll
         bar = self._canvas_widgets.scroll_bars[orientation]
-        value = bar.value() + bar.singleStep() * units
-        self.set_scroll_value(orientation=orientation, value=value)
+        old_value = bar.value()
+        requested_value = old_value + bar.singleStep() * units
+        # _move_canvas_view lets the scrollbar consume the movement first and
+        # carries any remainder into view_offset, so wheel scrolling can reach
+        # the same blank space as middle-button Pan and Minimap navigation.
+        step = old_value - requested_value
+        self._move_canvas_view(
+            step=(
+                QtCore.QPointF(step, 0.0)
+                if orientation == Qt.Orientation.Horizontal
+                else QtCore.QPointF(0.0, step)
+            ),
+            constrain_to_center=False,
+        )
 
     def _on_pan_request(self, step: QtCore.QPoint, /) -> None:
         # Pan moves the viewport opposite to the cursor delta so the image
-        # tracks the grabbed point one-for-one in widget pixels.
-        self._move_canvas_view(step=QtCore.QPointF(step), constrain_to_center=True)
+        # tracks the grabbed point one-for-one in widget pixels. Keep the
+        # offset policy consistent with Minimap navigation: users may move
+        # the image beyond the viewport edge while zoomed in.
+        self._move_canvas_view(
+            step=QtCore.QPointF(step), constrain_to_center=False
+        )
 
     def _move_canvas_view(
         self, *, step: QtCore.QPointF, constrain_to_center: bool
@@ -4087,8 +4090,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _center_canvas_on_image_point(self, point: QtCore.QPointF) -> None:
         canvas = self._canvas_widgets.canvas
-        scroll_area = self.centralWidget()
-        assert isinstance(scroll_area, QtWidgets.QScrollArea)
+        scroll_area = self._canvas_widgets.scroll_area
         viewport = scroll_area.viewport()
         viewport_center = QtCore.QPointF(viewport.rect().center())
         current = canvas.mapFrom(viewport, viewport_center.toPoint())
@@ -4441,8 +4443,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # viewport first.
         target_viewport = self._viewport_states.get(self._image_path)
         if (
-            target_viewport is None
-            and self._config["keep_prev_scale"]
+            self._config["keep_prev_scale"]
             and self._prev_image_path is not None
         ):
             target_viewport = self._viewport_states.get(self._prev_image_path)
@@ -4584,7 +4585,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mark_dirty()
         self._sync_line_profile_widgets()
 
-    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
+    def resizeEvent(self, a0: QtGui.QResizeEvent, /) -> None:
         if (
             self._canvas_widgets.canvas
             and not self._image.isNull()
@@ -4885,7 +4886,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.reset_state()
             self.mark_clean()
-            self.update_action_states(False)
+            self.update_action_states(value=False)
             self._canvas_widgets.canvas.setEnabled(False)
             self._actions.save_as.setEnabled(False)
             self._docks.file_list.setFocus()
@@ -4968,7 +4969,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.reset_state()
             self.mark_clean()
-            self.update_action_states(False)
+            self.update_action_states(value=False)
             self._canvas_widgets.canvas.setEnabled(False)
             self._actions.save_as.setEnabled(False)
             self._docks.file_list.setFocus()
@@ -5465,11 +5466,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mark_dirty()
 
     def delete_selected_shapes(self) -> None:
-        msg = self.tr(
-            "Permanently delete {} shapes? This action cannot be undone."
-        ).format(len(self._canvas_widgets.canvas.selected_shapes))
-        if not self._confirm_deletion(message=msg):
-            return
         self.remove_labels(shapes=self._canvas_widgets.canvas.delete_selected())
         self.mark_dirty()
     def split_linestrip(self) -> None:
@@ -5558,7 +5554,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.remove_labels(shapes=shapes)
         self.add_label(shape=merged)
         canvas.deselect_shape()
-        canvas.select_shapes([merged])
+        canvas.select_shapes(shapes=[merged])
         canvas.update()
         self.mark_dirty()
 
@@ -5661,7 +5657,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 return
 
         self.show_status_message(
-            self.tr("No unannotated file found after the current file"), 3000
+            self.tr("No unannotated file found after the current file"), delay=3000
         )
 
 
@@ -5796,9 +5792,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle(self._get_window_title(dirty=self._is_changed))
 
     def _update_status_stats(self, mouse_pos: QtCore.QPointF, /) -> None:
+        self._status_mouse_pos = QtCore.QPointF(mouse_pos)
+        self._refresh_status_stats()
+
+    def _refresh_status_stats(self) -> None:
         stats: list[str] = []
         stats.append(f"mode={self._canvas_widgets.canvas.mode.name}")
-        stats.append(f"x={mouse_pos.x():6.1f}, y={mouse_pos.y():6.1f}")
+        if self._status_mouse_pos is not None:
+            stats.append(
+                f"x={self._status_mouse_pos.x():6.1f}, "
+                f"y={self._status_mouse_pos.y():6.1f}"
+            )
         self._status_bar.stats.setText(" | ".join(stats))
 
 

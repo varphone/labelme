@@ -775,7 +775,26 @@ class Canvas(QtWidgets.QWidget):
                 messages.append(self.tr("Enter or Space to finalize"))
         else:
             assert self.mode == _CanvasMode.EDIT
-            messages.append(self.tr("Editing shapes"))
+            if len(self.selected_shapes) == 1:
+                shape = self.selected_shapes[0]
+                shape_name = {
+                    "polygon": self.tr("Polygon"),
+                    "rectangle": self.tr("Rectangle"),
+                    "oriented_rectangle": self.tr("Oriented Rectangle"),
+                    "point": self.tr("Point"),
+                    "line": self.tr("Line"),
+                    "circle": self.tr("Circle"),
+                    "linestrip": self.tr("LineStrip"),
+                    "points": self.tr("Points"),
+                    "bezier2": self.tr("Quadratic Bezier"),
+                    "bezier3": self.tr("Cubic Bezier"),
+                    "catmull_rom": self.tr("猫氏样条"),
+                    "bspline": self.tr("B样条"),
+                    "mask": self.tr("Mask"),
+                }[shape.shape_type]
+                messages.append(self.tr("Editing shape: {0}").format(shape_name))
+            else:
+                messages.append(self.tr("Editing shapes"))
         if extra_messages:
             messages.extend(extra_messages)
         self.status_updated.emit(" • ".join(messages))
@@ -1656,6 +1675,7 @@ class Canvas(QtWidgets.QWidget):
     def select_shapes(self, *, shapes: list[Shape]) -> None:
         self.selection_changed.emit(shapes)
         self.update()
+        self._update_status(extra_messages=None)
 
     def select_neighbor_shape(self, *, key: Qt.Key) -> None:
         """Select the nearest visible shape in the arrow key's direction.
@@ -1832,7 +1852,7 @@ class Canvas(QtWidgets.QWidget):
         )
         return shape, kind, index, mode
 
-    def _record_drag_anchor(self, shapes: list[Shape], click: QPointF) -> None:
+    def _record_drag_anchor(self, *, shapes: list[Shape], click: QPointF) -> None:
         if not shapes:
             self._drag_anchor = None
             return
@@ -2267,7 +2287,7 @@ class Canvas(QtWidgets.QWidget):
         else:
             painter.drawEllipse(point, size / 2.0, size / 2.0)
 
-    def _draw_active_shape_layer(self, painter: QtGui.QPainter) -> None:
+    def _draw_active_shape_layer(self, painter: QtGui.QPainter, /) -> None:
         if self._current is None:
             return
         assert len(self._line.points) == len(self._line.point_labels)

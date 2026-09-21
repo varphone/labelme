@@ -864,6 +864,8 @@ class SettingsDialog(QtWidgets.QDialog):
         layout.addLayout(button_layout)
         self.setLayout(layout)
 
+        # The page contains the editor chain; connect its actual last editor
+        # to the footer so Qt does not fall back to the nested widget order.
         last_editor = page._tab_order[-1] if page._tab_order else page
         QtWidgets.QWidget.setTabOrder(last_editor, open_button)
         QtWidgets.QWidget.setTabOrder(open_button, close_button)

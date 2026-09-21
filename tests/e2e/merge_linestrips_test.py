@@ -9,7 +9,7 @@ from pytestqt.qtbot import QtBot
 from labelme._app import MainWindow
 from labelme._shape import Shape
 from labelme._widgets._canvas import Canvas
-from labelme._widgets.label_list_widget import LabelListWidget
+from labelme._widgets._label_list_widget import LabelListWidget
 
 from .conftest import MainWinFactory
 from .conftest import click_canvas_fraction

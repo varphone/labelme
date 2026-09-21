@@ -223,6 +223,7 @@ def _paint_shape_points(
         "linestrip",
         "bezier2",
         "bezier3",
+        *SPLINE_SHAPE_TYPES,
         "points",
         "mask",
     ]:
