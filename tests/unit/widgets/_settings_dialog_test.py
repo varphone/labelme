@@ -939,7 +939,7 @@ def test_tab_order_connects_page_and_footer(
 ) -> None:
     with qtbot.waitExposed(dialog):
         dialog.show()
-    last_editor = dialog._editors[("ai", "suppress_existing_shape_matches")]
+    last_editor = dialog._editors[("line_profile_measurement", "fixed_width")]
     last_editor.setFocus()
     qtbot.keyClick(last_editor, QtCore.Qt.Key.Key_Tab)
     open_button = dialog.focusWidget()

@@ -413,6 +413,16 @@ class _SettingsPage(QtWidgets.QWidget):
         self._groups = [group_box for _title, _icon, group_box in groups]
         self._scrolling_to_group = False
         self._editors = editors
+        # The schema groups are rendered in Group order, while the settings
+        # tuple also serves configuration loading and may contain a feature
+        # group before an older group. Follow the visible page order for
+        # keyboard navigation instead of relying on dict insertion order.
+        self._tab_order = tuple(
+            editors[setting.key_path]
+            for group in typing.get_args(schema.Group)
+            for setting in schema.SETTINGS
+            if setting.group == group
+        )
         self._search_index: list[tuple[schema.Setting, tuple[str, ...], str]] = []
         settings_by_path = {setting.key_path: setting for setting in schema.SETTINGS}
         for key_path, editor in editors.items():
@@ -464,7 +474,7 @@ class _SettingsPage(QtWidgets.QWidget):
             widget.installEventFilter(self)
 
         self.setFocusProxy(self._search)
-        for before, after in pairwise([self._search, navigation, *editors.values()]):
+        for before, after in pairwise([self._search, navigation, *self._tab_order]):
             QtWidgets.QWidget.setTabOrder(before, after)
 
         navigation.currentRowChanged.connect(self._scroll_to_group)
@@ -854,7 +864,8 @@ class SettingsDialog(QtWidgets.QDialog):
         layout.addLayout(button_layout)
         self.setLayout(layout)
 
-        QtWidgets.QWidget.setTabOrder(page, open_button)
+        last_editor = page._tab_order[-1] if page._tab_order else page
+        QtWidgets.QWidget.setTabOrder(last_editor, open_button)
         QtWidgets.QWidget.setTabOrder(open_button, close_button)
 
         DEFAULT_DIALOG_SIZE: typing.Final = QtCore.QSize(760, 590)
