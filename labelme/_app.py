@@ -1514,7 +1514,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._actions.hide_all,
                 self._actions.show_all,
                 self._actions.toggle_all,
-                None,
                 self._actions.show_minimap,
                 self._actions.show_line_profile_preview,
                 separator(),
@@ -1691,6 +1690,12 @@ class MainWindow(QtWidgets.QMainWindow):
         canvas.set_show_labels(value=self._config["shape"]["show_labels"])
         canvas.set_ai_existing_shape_suppression(
             enabled=self._config["ai"]["suppress_existing_shape_matches"]
+        )
+        canvas.set_ai_downsample_scale(
+            scale=self._config["ai"]["downsample_scale"]
+        )
+        canvas.set_ai_denoise_strength(
+            strength=self._config["ai"]["denoise_strength"]
         )
         canvas.set_draft_palette(
             palette=Palette(
@@ -2455,13 +2460,23 @@ class MainWindow(QtWidgets.QMainWindow):
             else self._label_list_menu_origin
         )
 
-        text, flags, group_id, description = self._label_dialog.popup(
+        locked = tuple(
+            field
+            for field, editable in (
+                ("label", edit_text),
+                ("flags", edit_flags),
+                ("group_id", edit_group_id),
+                ("description", edit_description),
+            )
+            if not editable
+        )
+        entry = self._label_dialog.popup(
             text=first_shape.label if edit_text else "",
             position=menu_origin,
             flags=first_shape.flags if edit_flags else None,
             group_id=first_shape.group_id if edit_group_id else None,
             description=first_shape.description if edit_description else None,
-            flags_disabled=not edit_flags,
+            locked=locked,
         )
 
         if not edit_text:
@@ -2472,11 +2487,13 @@ class MainWindow(QtWidgets.QMainWindow):
         if not edit_description:
             self._label_dialog.edit_description.setDisabled(False)
 
-        if text is None:
-            assert flags is None
-            assert group_id is None
-            assert description is None
+        if entry is None:
             return
+
+        text = entry.label
+        flags = entry.flags
+        group_id = entry.group_id
+        description = entry.description
 
         if not self.validate_label(label=text):
             self.show_error_message(
@@ -3786,9 +3803,18 @@ class MainWindow(QtWidgets.QMainWindow):
         description = ""
         if self._config["display_label_popup"] or not text:
             previous_text = self._label_dialog.edit.text()
-            text, flags, group_id, description = self._label_dialog.popup(text=text)
-            if not text:
+            entry = self._label_dialog.popup(text=text)
+            if entry is None:
+                text = None
+                flags = None
+                group_id = None
+                description = None
                 self._label_dialog.edit.setText(previous_text)
+            else:
+                text = entry.label
+                flags = entry.flags
+                group_id = entry.group_id
+                description = entry.description
 
         if text and not self.validate_label(label=text):
             self.show_error_message(
@@ -4413,6 +4439,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self._canvas_widgets.canvas.update()
         self._canvas_widgets.minimap.update()
 
+    def _apply_zoom_to_canvas(self) -> None:
+        if self._image.isNull():
+            logger.warning("image is null, cannot apply zoom")
+            return
+        self._canvas_widgets.canvas.scale = self._canvas_widgets.zoom_widget.scale
+
     def _adjust_scale(self) -> None:
         if self._zoom_mode == _ZoomMode.FIT_WINDOW:
             scale = self._fit_window_scale()
@@ -5008,6 +5040,14 @@ class MainWindow(QtWidgets.QMainWindow):
         elif key_path == ("ai", "suppress_existing_shape_matches"):
             self._canvas_widgets.canvas.set_ai_existing_shape_suppression(
                 enabled=self._config["ai"]["suppress_existing_shape_matches"]
+            )
+        elif key_path == ("ai", "downsample_scale"):
+            self._canvas_widgets.canvas.set_ai_downsample_scale(
+                scale=self._config["ai"]["downsample_scale"]
+            )
+        elif key_path == ("ai", "denoise_strength"):
+            self._canvas_widgets.canvas.set_ai_denoise_strength(
+                strength=self._config["ai"]["denoise_strength"]
             )
         elif key_path == ("snap_to_point",):
             self._canvas_widgets.canvas.set_snap_to_point(
