@@ -6,6 +6,7 @@ import zlib
 from collections.abc import Callable
 from pathlib import Path
 from typing import cast
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -17,6 +18,9 @@ from labelme import __appname__
 from labelme import _app
 from labelme import _automation
 from labelme._label_file import ShapeDict
+from labelme._line_profile import LineProfile
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
 from labelme._shape import Shape
 
 
@@ -114,6 +118,29 @@ def test_format_window_title(
         )
         == expected
     )
+
+
+def test_nearest_profile_anchor_index_keeps_width_and_visibility_in_sync() -> None:
+    position = _app._nearest_line_profile_anchor_index(
+        (
+            ProfileAnchor(0.0, visibility=ProfileValue(0.1, "auto", 1.0, False)),
+            ProfileAnchor(0.52, visibility=ProfileValue(0.2, "auto", 1.0, False)),
+            ProfileAnchor(1.0, visibility=ProfileValue(0.3, "auto", 1.0, False)),
+        ),
+        0.5,
+    )
+    width = _app._nearest_line_profile_anchor_index(
+        (
+            ProfileAnchor(0.0, width=ProfileValue(4.0, "auto", 1.0, False)),
+            ProfileAnchor(0.49, width=ProfileValue(5.0, "auto", 1.0, False)),
+            ProfileAnchor(1.0, width=ProfileValue(6.0, "auto", 1.0, False)),
+        ),
+        0.5,
+    )
+
+    assert position == 1
+    assert width == 1
+    assert _app._nearest_line_profile_anchor_index((), 0.5) is None
 
 
 def _make_png_bytes(
@@ -394,6 +421,82 @@ def test_shapes_from_dicts_carries_over_the_shape_fields() -> None:
     np.testing.assert_array_equal(shape.mask, mask)
     assert shape.points.dtype == np.float64
     assert shape.points.tolist() == [[1.0, 2.0], [3.0, 4.0]]
+
+
+def test_shapes_from_dicts_and_shape_to_dict_carry_line_profile() -> None:
+    profile = LineProfile(reviewed=True)
+    shape_dict = ShapeDict(
+        label="stripe",
+        points=[[1.0, 2.0], [3.0, 4.0]],
+        shape_type="linestrip",
+        flags={},
+        description="",
+        group_id=None,
+        mask=None,
+        other_data={},
+        line_profile=profile,
+    )
+
+    (shape,) = _app._shapes_from_dicts(shape_dicts=[shape_dict], label_flags=None)
+
+    assert shape.line_profile is profile
+    result = _app._shape_to_dict(shape)
+    assert result["line_profile"] is profile
+
+
+def test_line_measurement_token_changes_when_shape_state_changes() -> None:
+    shape = Shape(
+        shape_type="linestrip",
+        points=np.array([[0.0, 0.0], [10.0, 0.0]]),
+        line_profile=LineProfile(),
+    )
+    before = _app._line_measurement_token(shape=shape, pixmap_hash=1)
+    shape.points[1, 0] = 11.0
+    after = _app._line_measurement_token(shape=shape, pixmap_hash=1)
+
+    assert before != after
+
+
+def test_cancel_line_measurement_stops_worker_thread_and_progress() -> None:
+    window = _app.MainWindow.__new__(_app.MainWindow)
+    window._line_measurement_worker = Mock()
+    window._line_measurement_thread = Mock()
+    window._line_measurement_progress = Mock()
+
+    window._cancel_line_measurement()
+
+    window._line_measurement_worker.cancel.assert_called_once_with()
+    window._line_measurement_thread.requestInterruption.assert_called_once_with()
+    window._line_measurement_thread.quit.assert_called_once_with()
+    window._line_measurement_progress.close.assert_called_once_with()
+
+
+def test_line_measurement_parameters_apply_shape_overrides() -> None:
+    profile = LineProfile(
+        measurement_overrides=(
+            ("sample_spacing", 3.0),
+            ("contrast_factor", 0.8),
+        )
+    )
+
+    class StubWindow:
+        _config = {
+            "line_profile_measurement": {
+                "sample_spacing": 8.0,
+                "search_radius": 32.0,
+                "min_width": 1.0,
+                "max_width": 256.0,
+                "contrast_factor": 0.35,
+            }
+        }
+
+    parameters = _app.MainWindow._line_measurement_parameters(
+        StubWindow(), profile=profile
+    )
+
+    assert parameters.sample_spacing == 3.0
+    assert parameters.search_radius == 32.0
+    assert parameters.contrast_factor == 0.8
 
 
 def test_shape_to_dict_maps_all_fields() -> None:
