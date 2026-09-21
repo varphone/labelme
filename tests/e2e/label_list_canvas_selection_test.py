@@ -226,6 +226,84 @@ def test_rename_label_list_item_updates_matching_shapes_in_all_files(
 
 
 @pytest.mark.gui
+def test_rename_label_uses_background_batch_with_progress(
+    qtbot: QtBot,
+    main_win: MainWinFactory,
+    data_path: Path,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    pause: bool,
+) -> None:
+    work_dir = tmp_path / "rename"
+    work_dir.mkdir()
+    for index, source_name in enumerate(("2011_000003.jpg", "2011_000006.jpg"), 1):
+        image_name = f"{index:02d}-{source_name}"
+        shutil.copyfile(data_path / "raw" / source_name, work_dir / image_name)
+        shapes = [
+            {
+                "label": "old",
+                "points": [[50.0, 50.0]],
+                "shape_type": "point",
+                "flags": {},
+                "description": "",
+                "group_id": None,
+                "mask": None,
+            }
+        ]
+        if index == 2:
+            shapes.append(
+                {
+                    "label": "other",
+                    "points": [[100.0, 100.0]],
+                    "shape_type": "point",
+                    "flags": {},
+                    "description": "",
+                    "group_id": None,
+                    "mask": None,
+                }
+            )
+        (work_dir / image_name).with_suffix(".json").write_text(
+            json.dumps(
+                {
+                    "version": "4.0.0",
+                    "flags": {},
+                    "shapes": shapes,
+                    "imagePath": image_name,
+                    "imageData": None,
+                }
+            )
+        )
+
+    win = main_win(file_or_dir=str(work_dir), config_overrides={"auto_save": True})
+    show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
+    item = win._docks.unique_label_list.find_label_item(label="old")
+    assert item is not None
+    monkeypatch.setattr(
+        QInputDialog,
+        "getText",
+        lambda *_args, **_kwargs: ("new", True),
+    )
+
+    win._rename_label(item)
+    assert win._annotation_batch_progress is not None
+
+    def files_updated() -> None:
+        for index in (1, 2):
+            data = json.loads(
+                (
+                    work_dir / f"{index:02d}-2011_00000{3 if index == 1 else 6}.json"
+                ).read_text()
+            )
+            assert data["shapes"][0]["label"] == "new"
+
+    qtbot.waitUntil(files_updated, timeout=3000)
+    qtbot.waitUntil(lambda: win._annotation_batch_thread is None, timeout=3000)
+    assert item.data(Qt.ItemDataRole.UserRole) == "new"
+
+    close_or_pause(qtbot=qtbot, widget=win, pause=pause)
+
+
+@pytest.mark.gui
 def test_set_uniform_circle_radius_from_label_menu_updates_all_files(
     qtbot: QtBot,
     main_win: MainWinFactory,
@@ -305,6 +383,20 @@ def test_set_uniform_circle_radius_from_label_menu_updates_all_files(
     action.trigger()
     menu.deleteLater()
 
+    def files_updated() -> None:
+        current_data = json.loads((work_dir / "01-2011_000003.json").read_text())
+        other_data = json.loads((work_dir / "02-2011_000006.json").read_text())
+        assert current_data["shapes"][0]["points"] == [
+            [50.0, 50.0],
+            [55.0, 50.0],
+        ]
+        assert other_data["shapes"][0]["points"] == [
+            [50.0, 50.0],
+            [55.0, 50.0],
+        ]
+
+    qtbot.waitUntil(files_updated, timeout=3000)
+    qtbot.waitUntil(lambda: win._annotation_batch_thread is None, timeout=3000)
     current_data = json.loads((work_dir / "01-2011_000003.json").read_text())
     other_data = json.loads((work_dir / "02-2011_000006.json").read_text())
     current_circle = current_data["shapes"][0]

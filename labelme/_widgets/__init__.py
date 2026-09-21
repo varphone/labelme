@@ -16,6 +16,7 @@ from ._status import StatusStats
 from ._tool_bar import ToolBar
 from ._unique_label_qlist_widget import UniqueLabelQListWidget
 from ._zoom_widget import ZoomWidget
+from .annotation_batch_worker import AnnotationBatchWorker
 from .line_measurement_worker import LineMeasurementWorker
 from .line_profile_batch_worker import LineProfileBatchWorker
 from .line_profile_panel import LineProfilePanel
@@ -26,6 +27,7 @@ from .minimap import MinimapWidget
 __all__ = [
     "AiAssistedAnnotationWidget",
     "AiTextToAnnotationWidget",
+    "AnnotationBatchWorker",
     "BrightnessContrastDialog",
     "Canvas",
     "CircleRadiusWidget",

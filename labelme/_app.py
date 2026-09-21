@@ -36,6 +36,8 @@ from . import _ai_models
 from . import _automation
 from . import _config
 from . import _utils
+from ._annotation_batch import AnnotationBatchReport
+from ._annotation_batch import _circle_points_with_radius
 from ._label_file import LABEL_FILE_SUFFIX
 from ._label_file import Annotation
 from ._label_file import ImageNotFoundError
@@ -79,6 +81,7 @@ from ._shape_clipboard import ShapeClipboard
 from ._shape_color import resolve_shape_color
 from ._widgets import AiAssistedAnnotationWidget
 from ._widgets import AiTextToAnnotationWidget
+from ._widgets import AnnotationBatchWorker
 from ._widgets import BrightnessContrastDialog
 from ._widgets import Canvas
 from ._widgets import CircleRadiusWidget
@@ -432,6 +435,15 @@ class _Menus(NamedTuple):
     label_list: QtWidgets.QMenu
 
 
+@dataclasses.dataclass(frozen=True)
+class _AnnotationBatchContext:
+    operation: Literal["rename", "circle_radius"]
+    item: QtWidgets.QListWidgetItem
+    label: str
+    new_label: str | None = None
+    radius: float | None = None
+
+
 def _try_load_config(
     *, config_file: Path | None, config_overrides: dict
 ) -> dict | None:
@@ -455,6 +467,10 @@ class MainWindow(QtWidgets.QMainWindow):
     _line_profile_batch_worker: LineProfileBatchWorker | None
     _line_profile_batch_progress: QProgressDialog | None
     _line_profile_batch_current_image_path: str | None
+    _annotation_batch_thread: QThread | None
+    _annotation_batch_worker: AnnotationBatchWorker | None
+    _annotation_batch_progress: QProgressDialog | None
+    _annotation_batch_context: _AnnotationBatchContext | None
 
     _text_osam_session: _automation.OsamSession | None = None
     _is_changed: bool = False
@@ -515,6 +531,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self._line_profile_batch_worker = None
         self._line_profile_batch_progress = None
         self._line_profile_batch_current_image_path = None
+        self._annotation_batch_thread = None
+        self._annotation_batch_worker = None
+        self._annotation_batch_progress = None
+        self._annotation_batch_context = None
 
         self._shape_clipboard = ShapeClipboard(parent=self)
 
@@ -2255,6 +2275,8 @@ class MainWindow(QtWidgets.QMainWindow):
         return menu
 
     def _set_uniform_circle_radius(self, item: QtWidgets.QListWidgetItem) -> None:
+        if self._annotation_batch_thread is not None:
+            return
         unique_label_list = self._docks.unique_label_list
         if unique_label_list.row(item) < 0:
             logger.warning("The label item no longer belongs to the label list.")
@@ -2286,201 +2308,190 @@ class MainWindow(QtWidgets.QMainWindow):
         if not accepted or not math.isfinite(radius) or radius <= 0:
             return
 
-        other_result = self._set_circle_radius_in_other_files(
-            label=label, radius=radius
+        context = _AnnotationBatchContext(
+            operation="circle_radius",
+            item=item,
+            label=label,
+            radius=radius,
         )
-        if other_result is None:
-            return
-        other_circle_count, other_file_count = other_result
+        self._start_annotation_batch(
+            context=context,
+            filenames=self._other_annotation_paths(),
+        )
 
+    def _other_annotation_paths(self) -> list[str]:
+        current_label_path = (
+            None
+            if self._label_file_path is None
+            else Path(self._label_file_path).resolve()
+        )
+        paths: list[str] = []
+        for row in range(self._docks.file_list.count()):
+            file_item = self._docks.file_list.item(row)
+            assert file_item is not None
+            label_path = _resolve_label_path(
+                image_or_label_path=file_item.text(),
+                output_dir=self._output_dir,
+            )
+            if not Path(label_path).is_file():
+                continue
+            if current_label_path is not None and Path(label_path).resolve() == (
+                current_label_path
+            ):
+                continue
+            paths.append(label_path)
+        return paths
+
+    def _start_annotation_batch(
+        self,
+        *,
+        context: _AnnotationBatchContext,
+        filenames: list[str],
+    ) -> None:
+        self._annotation_batch_context = context
+        if not filenames:
+            self._on_annotation_batch_succeeded(
+                AnnotationBatchReport(files_updated=0, shapes_updated=0)
+            )
+            self._annotation_batch_context = None
+            return
+
+        progress_text = (
+            self.tr("Renaming label in annotation files…")
+            if context.operation == "rename"
+            else self.tr("Setting circle radius in annotation files…")
+        )
+        progress = QProgressDialog(
+            progress_text,
+            self.tr("Cancel"),
+            0,
+            len(filenames),
+            self,
+        )
+        progress.setWindowTitle(self.tr("Batch Annotation Update"))
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setAutoClose(False)
+        progress.setAutoReset(False)
+
+        thread = QThread(self)
+        worker = AnnotationBatchWorker()
+        worker.moveToThread(thread)
+
+        worker.progress.connect(self._on_annotation_batch_progress)
+        worker.succeeded.connect(self._on_annotation_batch_succeeded)
+        worker.failed.connect(self._on_annotation_batch_failed)
+        worker.canceled.connect(self._on_annotation_batch_canceled)
+        worker.succeeded.connect(thread.quit)
+        worker.failed.connect(thread.quit)
+        worker.canceled.connect(thread.quit)
+        thread.finished.connect(worker.deleteLater)
+        thread.finished.connect(thread.deleteLater)
+        thread.finished.connect(self._on_annotation_batch_finished)
+        progress.canceled.connect(lambda: worker.cancel())
+
+        if context.operation == "rename":
+            assert context.new_label is not None
+            thread.started.connect(
+                lambda: worker.rename_label(
+                    filenames,
+                    context.label,
+                    context.new_label,
+                    self._config["with_image_data"],
+                )
+            )
+        else:
+            assert context.radius is not None
+            thread.started.connect(
+                lambda: worker.set_circle_radius(
+                    filenames,
+                    context.label,
+                    context.radius,
+                    self._config["with_image_data"],
+                )
+            )
+
+        self._annotation_batch_thread = thread
+        self._annotation_batch_worker = worker
+        self._annotation_batch_progress = progress
+        progress.show()
+        thread.start()
+
+    def _on_annotation_batch_progress(self, completed: int, total: int) -> None:
+        if self._annotation_batch_progress is None:
+            return
+        self._annotation_batch_progress.setRange(0, total)
+        self._annotation_batch_progress.setValue(completed)
+
+    def _on_annotation_batch_succeeded(self, result: object) -> None:
+        if not isinstance(result, AnnotationBatchReport):
+            return
+        context = self._annotation_batch_context
+        if context is None:
+            return
+        if self._annotation_batch_progress is not None:
+            self._annotation_batch_progress.close()
+        if context.operation == "rename":
+            self._finish_rename_label(context=context, report=result)
+        else:
+            self._finish_circle_radius(context=context, report=result)
+
+    def _on_annotation_batch_failed(self, message: str) -> None:
+        if self._annotation_batch_progress is not None:
+            self._annotation_batch_progress.close()
+        self.show_error_message(
+            title=self.tr("Batch Annotation Update Failed"),
+            message=self.tr("<b>{}</b>").format(message),
+        )
+
+    def _on_annotation_batch_canceled(self) -> None:
+        if self._annotation_batch_progress is not None:
+            self._annotation_batch_progress.close()
+        self.show_status_message(self.tr("Batch annotation update canceled."))
+
+    def _on_annotation_batch_finished(self) -> None:
+        if self._annotation_batch_progress is not None:
+            self._annotation_batch_progress.close()
+            self._annotation_batch_progress.deleteLater()
+        self._annotation_batch_progress = None
+        self._annotation_batch_worker = None
+        self._annotation_batch_thread = None
+        self._annotation_batch_context = None
+
+    def _finish_circle_radius(
+        self,
+        *,
+        context: _AnnotationBatchContext,
+        report: AnnotationBatchReport,
+    ) -> None:
+        assert context.radius is not None
         current_shapes = [
             shape
             for shape in self._canvas_widgets.canvas.shapes
-            if shape.label == label and shape.shape_type == "circle"
+            if shape.label == context.label and shape.shape_type == "circle"
         ]
         if current_shapes:
             canvas = self._canvas_widgets.canvas
             canvas.backup_shapes()
             for shape in current_shapes:
-                _set_circle_radius(shape=shape, radius=radius)
+                _set_circle_radius(shape=shape, radius=context.radius)
             canvas.update()
             self._sync_circle_radius_widget()
             self.mark_dirty()
 
-        circle_count = len(current_shapes) + other_circle_count
+        circle_count = len(current_shapes) + report.shapes_updated
         if circle_count == 0:
             self.show_status_message(
-                self.tr("No circles found for label '{0}'.").format(label),
+                self.tr("No circles found for label '{0}'.").format(context.label),
                 delay=5000,
             )
         else:
             self.show_status_message(
                 self.tr(
                     "Set the radius of {0} circles in {1} other annotation files."
-                ).format(circle_count, other_file_count),
+                ).format(circle_count, report.files_updated),
                 delay=5000,
             )
-
-    def _set_circle_radius_in_other_files(
-        self, *, label: str, radius: float
-    ) -> tuple[int, int] | None:
-        current_label_path = (
-            None
-            if self._label_file_path is None
-            else Path(self._label_file_path).resolve()
-        )
-        staged: list[tuple[str, Annotation, int, int]] = []
-        other_circle_count = 0
-
-        for row in range(self._docks.file_list.count()):
-            file_item = self._docks.file_list.item(row)
-            assert file_item is not None
-            label_path = _resolve_label_path(
-                image_or_label_path=file_item.text(),
-                output_dir=self._output_dir,
-            )
-            if not QtCore.QFile.exists(label_path):
-                continue
-            if current_label_path is not None and Path(label_path).resolve() == (
-                current_label_path
-            ):
-                continue
-
-            annotation = self._read_annotation_file(label_path=label_path)
-            if annotation is None:
-                return None
-            matching_shapes = [
-                shape
-                for shape in annotation.shapes
-                if shape["label"] == label and shape["shape_type"] == "circle"
-            ]
-            if not matching_shapes:
-                continue
-
-            image = QtGui.QImage.fromData(annotation.image_data)
-            if image.isNull():
-                self.show_error_message(
-                    title=self.tr("Error reading label data"),
-                    message=self.tr(
-                        "Could not read the image stored in <b>{}</b>."
-                    ).format(label_path),
-                )
-                return None
-
-            for shape in matching_shapes:
-                shape["points"] = _circle_points_with_radius(
-                    points=shape["points"], radius=radius
-                )
-            other_circle_count += len(matching_shapes)
-            staged.append(
-                (
-                    label_path,
-                    annotation,
-                    image.height(),
-                    image.width(),
-                )
-            )
-
-        for label_path, annotation, image_height, image_width in staged:
-            try:
-                write_label_file(
-                    filename=label_path,
-                    annotation=annotation,
-                    image_height=image_height,
-                    image_width=image_width,
-                    save_image_data=self._config["with_image_data"],
-                )
-            except (LabelFileError, OSError, ValueError) as error:
-                self.show_error_message(
-                    title=self.tr("Error saving label data"),
-                    message=self.tr("<b>{}</b>").format(error),
-                )
-                return None
-
-        return other_circle_count, len(staged)
-
-    def _rename_label_in_other_files(self, old_label: str, new_label: str) -> bool:
-        current_label_path = (
-            None
-            if self._label_file_path is None
-            else Path(self._label_file_path).resolve()
-        )
-        staged: list[tuple[str, Annotation, int, int]] = []
-
-        for row in range(self._docks.file_list.count()):
-            file_item = self._docks.file_list.item(row)
-            assert file_item is not None
-            label_path = _resolve_label_path(
-                image_or_label_path=file_item.text(),
-                output_dir=self._output_dir,
-            )
-            if not QtCore.QFile.exists(label_path):
-                continue
-            if current_label_path is not None and Path(label_path).resolve() == (
-                current_label_path
-            ):
-                continue
-
-            annotation = self._read_annotation_file(label_path=label_path)
-            if annotation is None:
-                return False
-            if not any(shape["label"] == old_label for shape in annotation.shapes):
-                continue
-
-            image = QtGui.QImage.fromData(annotation.image_data)
-            if image.isNull():
-                self.show_error_message(
-                    title=self.tr("Error reading label data"),
-                    message=self.tr(
-                        "Could not read the image stored in <b>{}</b>."
-                    ).format(label_path),
-                )
-                return False
-            shapes = [
-                cast(
-                    ShapeDict,
-                    {
-                        **shape,
-                        "label": (
-                            new_label if shape["label"] == old_label else shape["label"]
-                        ),
-                    },
-                )
-                for shape in annotation.shapes
-            ]
-            staged.append(
-                (
-                    label_path,
-                    dataclasses.replace(annotation, shapes=shapes),
-                    image.height(),
-                    image.width(),
-                )
-            )
-
-        for label_path, annotation, image_height, image_width in staged:
-            try:
-                write_label_file(
-                    filename=label_path,
-                    annotation=annotation,
-                    image_height=image_height,
-                    image_width=image_width,
-                    save_image_data=self._config["with_image_data"],
-                )
-            except (LabelFileError, OSError, ValueError) as error:
-                self.show_error_message(
-                    title=self.tr("Error saving label data"),
-                    message=self.tr("<b>{}</b>").format(error),
-                )
-                return False
-
-        if staged:
-            self.show_status_message(
-                self.tr("Renamed label in {0} other annotation files").format(
-                    len(staged)
-                ),
-                delay=5000,
-            )
-        return True
 
     def validate_label(self, *, label: str) -> bool:
         policy = self._config["validate_label"]
@@ -2496,6 +2507,8 @@ class MainWindow(QtWidgets.QMainWindow):
         )
 
     def _rename_label(self, value: object | None = None) -> None:
+        if self._annotation_batch_thread is not None:
+            return
         unique_label_list = self._docks.unique_label_list
         item = (
             value
@@ -2539,11 +2552,29 @@ class MainWindow(QtWidgets.QMainWindow):
             )
             return
 
-        if not self._rename_label_in_other_files(
-            old_label=old_label,
+        context = _AnnotationBatchContext(
+            operation="rename",
+            item=item,
+            label=old_label,
             new_label=new_label,
-        ):
-            return
+        )
+        self._start_annotation_batch(
+            context=context,
+            filenames=self._other_annotation_paths(),
+        )
+
+    def _finish_rename_label(
+        self,
+        *,
+        context: _AnnotationBatchContext,
+        report: AnnotationBatchReport,
+    ) -> None:
+        assert context.new_label is not None
+        item = context.item
+        old_label = context.label
+        new_label = context.new_label
+        unique_label_list = self._docks.unique_label_list
+        configured_labels = self._config["labels"] or []
 
         renamed_configured_labels = [
             new_label if label == old_label else label for label in configured_labels
@@ -2583,6 +2614,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self._sync_setting_controls(key_path=("labels",))
         canvas.update()
         self.mark_dirty()
+        if report.files_updated:
+            self.show_status_message(
+                self.tr("Renamed label in {0} other annotation files").format(
+                    report.files_updated
+                ),
+                delay=5000,
+            )
 
     def _edit_label(self) -> None:
         items = self._docks.label_list.selected_items()
@@ -3382,6 +3420,15 @@ class MainWindow(QtWidgets.QMainWindow):
             self._line_measurement_thread.quit()
         if self._line_measurement_progress is not None:
             self._line_measurement_progress.close()
+
+    def _cancel_annotation_batch(self) -> None:
+        if self._annotation_batch_worker is not None:
+            self._annotation_batch_worker.cancel()
+        if self._annotation_batch_thread is not None:
+            self._annotation_batch_thread.requestInterruption()
+            self._annotation_batch_thread.quit()
+        if self._annotation_batch_progress is not None:
+            self._annotation_batch_progress.close()
 
     def _cancel_line_profile_batch(self) -> None:
         if self._line_profile_batch_worker is not None:
@@ -4654,6 +4701,7 @@ class MainWindow(QtWidgets.QMainWindow):
             a0.ignore()
             return
         self._cancel_line_measurement()
+        self._cancel_annotation_batch()
         self._cancel_line_profile_batch()
         self._window_state.setValue(WINDOW_SIZE_KEY, self.size())
         self._window_state.setValue(WINDOW_POSITION_KEY, self.pos())
@@ -5946,23 +5994,6 @@ def _circle_radius(*, points: np.ndarray) -> float:
     if len(points) != CIRCLE_POINT_COUNT:
         raise ValueError("circle shapes must have exactly two points")
     return float(np.linalg.norm(points[1] - points[0]))
-
-
-def _circle_points_with_radius(
-    *, points: np.ndarray | list[list[float]], radius: float
-) -> list[list[float]]:
-    point_array = np.asarray(points, dtype=np.float64)
-    if point_array.shape != (CIRCLE_POINT_COUNT, 2):
-        raise ValueError("circle shapes must have exactly two points")
-
-    center = point_array[0].copy()
-    direction = point_array[1] - center
-    length = float(np.linalg.norm(direction))
-    if length <= np.finfo(np.float64).eps:
-        direction = np.array([1.0, 0.0], dtype=np.float64)
-    else:
-        direction /= length
-    return np.stack((center, center + direction * radius)).tolist()
 
 
 def _set_circle_radius(*, shape: Shape, radius: float) -> None:
