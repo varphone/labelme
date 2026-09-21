@@ -17,6 +17,9 @@ def test_actions_follow_image_and_shapes(
     *, main_win: MainWinFactory, data_path: Path
 ) -> None:
     win = main_win(config_overrides={"auto_save": False})
+    assert [
+        shortcut.toString() for shortcut in win._actions.remove_point.shortcuts()
+    ] == ["X", "Backspace"]
     curve_actions = (
         win._actions.create_bezier2_mode,
         win._actions.create_bezier3_mode,
