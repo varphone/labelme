@@ -13,6 +13,7 @@ from ._label_file import write_label_file
 from ._line_measurement import MEASUREMENT_VERSION
 from ._line_measurement import MeasurementParameters
 from ._line_measurement import MeasurementSample
+from ._line_measurement import _simplify_measurement_samples
 from ._line_measurement import measure_line_profile
 from ._line_profile import LINE_PROFILE_SHAPE_TYPES
 from ._line_profile import LineProfile
@@ -178,7 +179,7 @@ def _measure_annotation_file(
             parameters=_parameters_for_profile(options.parameters, profile),
         )
         shape["line_profile"] = _profile_from_measurement(
-            measurement.samples,
+            _simplify_measurement_samples(samples=measurement.samples),
             existing=profile,
         )
         processed += 1
@@ -252,6 +253,10 @@ def _profile_from_measurement(
     manual = {
         anchor.position: anchor
         for anchor in (() if existing is None else existing.anchors)
+        if any(
+            value is not None and value.confirmed
+            for value in (anchor.width, anchor.visibility)
+        )
     }
     measured: list[ProfileAnchor] = []
     for sample in samples:
@@ -313,7 +318,15 @@ def _parameters_for_profile(
 ) -> MeasurementParameters:
     if not isinstance(profile, LineProfile) or not profile.measurement_overrides:
         return parameters
-    return dataclasses.replace(parameters, **dict(profile.measurement_overrides))
+    overrides = dict(profile.measurement_overrides)
+    if "fixed_width" not in overrides:
+        return dataclasses.replace(parameters, **overrides)
+    fixed_width = overrides.pop("fixed_width")
+    return dataclasses.replace(
+        parameters,
+        fixed_width=None if fixed_width <= 0.0 else fixed_width,
+        **overrides,
+    )
 
 
 def _report_batch_progress(options: BatchOptions, completed: int, total: int) -> None:

@@ -50,3 +50,39 @@ class IntegerSlider(QtWidgets.QWidget):
     def _on_value_changed(self, value: int, /) -> None:
         self._value_label.setNum(value)
         self.value_changed.emit(value)
+
+
+class _SuffixedIntegerSlider(IntegerSlider):
+    """Integer slider variant used by settings that display a unit suffix."""
+
+    def __init__(
+        self,
+        *,
+        minimum: int,
+        maximum: int,
+        value: int,
+        suffix: str,
+        parent: QtWidgets.QWidget | None = None,
+    ) -> None:
+        self._suffix = suffix
+        super().__init__(
+            minimum=minimum,
+            maximum=maximum,
+            value=value,
+            parent=parent,
+        )
+        self._value_label.setMinimumWidth(
+            self._value_label.fontMetrics().horizontalAdvance(f"{maximum}{suffix}")
+        )
+        self._slider.sliderMoved.connect(self._set_value_label)
+
+    def set_value(self, value: int, /) -> None:
+        self._slider.setValue(value)
+        self._set_value_label(self._slider.value())
+
+    def _on_value_changed(self, value: int, /) -> None:
+        self._set_value_label(value)
+        self.value_changed.emit(value)
+
+    def _set_value_label(self, value: int, /) -> None:
+        self._value_label.setText(f"{value}{self._suffix}")

@@ -7,6 +7,8 @@ from labelme._line_measurement import MeasurementParameters
 from labelme._line_measurement import MeasurementSample
 from labelme._line_measurement import _recommend_neighbor_widths
 from labelme._line_measurement import _sample_positions
+from labelme._line_measurement import _simplify_measurement_samples
+from labelme._line_measurement import _smooth_sample_widths
 from labelme._line_measurement import measure_line_profile
 
 
@@ -20,7 +22,7 @@ def test_measure_line_profile_detects_local_bright_stripe() -> None:
         parameters=MeasurementParameters(sample_spacing=20, search_radius=12),
     )
 
-    assert result.measurement_version == "line-profile-measurement-v3"
+    assert result.measurement_version == "line-profile-measurement-v4"
     assert len(result.samples) >= 2
     middle = result.samples[len(result.samples) // 2]
     assert middle.width == pytest.approx(7.0, abs=0.5)
@@ -152,6 +154,83 @@ def test_sample_positions_deduplicate_repeated_vertices() -> None:
     )
 
     assert positions == pytest.approx([0.0, 1.0])
+
+
+def test_sample_positions_do_not_treat_smooth_curve_tessellation_as_vertices() -> None:
+    points = [[float(x), 20.0] for x in np.linspace(0.0, 1000.0, 129)]
+
+    positions = _sample_positions(points=points, sample_spacing=20.0)
+
+    assert len(positions) == 51
+    assert positions == pytest.approx(np.linspace(0.0, 1.0, 51))
+
+
+def test_smooth_sample_widths_removes_an_isolated_spike() -> None:
+    samples = tuple(
+        MeasurementSample(index / 4, width, 1.0, 0.9)
+        for index, width in enumerate((10.0, 10.0, 28.0, 10.0, 10.0))
+    )
+
+    smoothed = _smooth_sample_widths(samples=samples)
+
+    assert [sample.width for sample in smoothed] == pytest.approx(
+        [10.0, 10.0, 10.0, 10.0, 10.0]
+    )
+
+
+def test_smooth_sample_widths_uses_the_whole_line_average_at_full_strength() -> None:
+    samples = tuple(
+        MeasurementSample(index / 3, width, 1.0, 0.9)
+        for index, width in enumerate((10.0, 20.0, 30.0, 40.0))
+    )
+
+    smoothed = _smooth_sample_widths(samples=samples, strength=100.0)
+
+    assert [sample.width for sample in smoothed] == pytest.approx([25.0] * 4)
+
+
+def test_measure_line_profile_applies_fixed_width_to_every_sample() -> None:
+    image = np.full((48, 112), 20, dtype=np.uint8)
+    image[17:24, 8:104] = 220
+
+    result = measure_line_profile(
+        image,
+        [[8.0, 20.0], [103.0, 20.0]],
+        parameters=MeasurementParameters(
+            sample_spacing=20, search_radius=12, fixed_width=19.0
+        ),
+    )
+
+    assert result.samples
+    assert [sample.width for sample in result.samples] == pytest.approx(
+        [19.0] * len(result.samples)
+    )
+
+
+def test_simplify_measurement_samples_keeps_width_changes() -> None:
+    samples = tuple(
+        MeasurementSample(index / 4, width, 1.0, 0.9)
+        for index, width in enumerate((10.0, 10.5, 14.0, 13.5, 14.0))
+    )
+
+    simplified = _simplify_measurement_samples(samples=samples)
+
+    assert [sample.position for sample in simplified] == pytest.approx(
+        [0.0, 0.5, 1.0]
+    )
+
+
+def test_simplify_measurement_samples_drops_consistent_width_repeats() -> None:
+    samples = tuple(
+        MeasurementSample(index / 4, width, 1.0, 0.9)
+        for index, width in enumerate((10.0, 10.4, 9.8, 10.3, 10.0))
+    )
+
+    simplified = _simplify_measurement_samples(samples=samples)
+
+    assert len(simplified) == 2
+    assert simplified[0] is samples[0]
+    assert simplified[-1] is samples[-1]
 
 
 def test_measure_line_profile_does_not_call_a_dim_line_perfectly_visible() -> None:

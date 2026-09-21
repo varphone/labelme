@@ -46,7 +46,7 @@ The optional `line_profile` object contains:
   ],
   "min_width": null,
   "max_width": null,
-  "measurement_version": "line-profile-measurement-v3",
+  "measurement_version": "line-profile-measurement-v4",
   "reviewed": false
 }
 ```
@@ -59,7 +59,8 @@ are invalid. Each property stores its own `source` (`auto` or `manual`),
 The current automatic measurement version uses bilinear normal sampling,
 local background-trend removal, subpixel threshold crossings, and a visibility
 score that combines local signal-to-noise, stripe/background contrast, and
-displayed intensity for bright stripes. Existing profiles keep their stored
+displayed intensity for bright stripes. Widths are stabilized with the
+configurable sliding filter before anchor simplification. Existing profiles keep their stored
 `measurement_version`; remeasurement writes the current version.
 The fixed round-trip example is in
 [`docs/line_profile_example.json`](line_profile_example.json).
@@ -69,6 +70,11 @@ defaults. When present, its keys override the global Settings values for that
 linestrip only; clearing the override returns the linestrip to global defaults.
 The override is part of the profile and therefore follows the same backup,
 undo, and save workflow as other profile edits.
+
+`width_filter_strength` controls the sliding width-filter window as a
+percentage of measured samples from 1 to 100. At 100, every sample receives the
+average width of the complete line. `fixed_width` uses the given width for all
+measured width anchors; zero disables this mode.
 
 Older LabelMe versions ignore unknown Shape fields and therefore retain their
 ordinary centerline behavior. LabelMe keeps malformed profile data in memory

@@ -15,6 +15,7 @@ from .._config import _schema as schema
 from .._config._shape_color import RGB_CHANNEL_COUNT
 from .._utils._qt import new_icon
 from ._integer_slider import IntegerSlider
+from ._integer_slider import _SuffixedIntegerSlider
 
 ApplySetting = Callable[[tuple[str, ...], object], bool]
 PreviewShapeColor = Callable[[tuple[str, ...], list[int] | None], None]
@@ -1055,6 +1056,9 @@ class SettingsDialog(QtWidgets.QDialog):
                 setting=setting, value=value, items=enum_items, min_width=140
             )
         if setting.kind == "int":
+            # Older configs may store integral slider values as floats.
+            if isinstance(value, float) and value.is_integer():
+                value = int(value)
             assert isinstance(value, int)
             if setting.minimum is None and setting.maximum is None:
                 # Qt's integer widgets are 32-bit, but Config Files accept Python ints.
@@ -1069,11 +1073,22 @@ class SettingsDialog(QtWidgets.QDialog):
                 return integer_edit
             assert setting.minimum is not None
             assert setting.maximum is not None
-            slider = IntegerSlider(
-                minimum=setting.minimum,
-                maximum=setting.maximum,
-                value=value,
-            )
+            if setting.key_path == (
+                "line_profile_measurement",
+                "width_filter_strength",
+            ):
+                slider = _SuffixedIntegerSlider(
+                    minimum=setting.minimum,
+                    maximum=setting.maximum,
+                    value=value,
+                    suffix="%",
+                )
+            else:
+                slider = IntegerSlider(
+                    minimum=setting.minimum,
+                    maximum=setting.maximum,
+                    value=value,
+                )
             slider.setMinimumWidth(180)
             slider.value_changed.connect(
                 lambda new_value: self._apply(setting.key_path, new_value)
@@ -1202,6 +1217,8 @@ class SettingsDialog(QtWidgets.QDialog):
         elif isinstance(editor, QtWidgets.QComboBox):
             editor.setCurrentIndex(max(editor.findData(value), 0))
         elif isinstance(editor, IntegerSlider):
+            if isinstance(value, float) and value.is_integer():
+                value = int(value)
             assert isinstance(value, int)
             editor.set_value(value)
         elif isinstance(editor, QtWidgets.QLineEdit):
