@@ -370,6 +370,33 @@ def test_overlapping_rasterizes_existing_circle_as_a_disk() -> None:
 
 
 @pytest.mark.parametrize(
+    ("shape_type", "points"),
+    [
+        ("bezier2", [[0, 0], [5, 10], [10, 0]]),
+        ("bezier3", [[0, 0], [2, 10], [8, 10], [10, 0]]),
+        ("catmull_rom", [[0, 0], [5, 10], [10, 0]]),
+        ("bspline", [[0, 0], [5, 10], [10, 0]]),
+    ],
+)
+def test_overlapping_rasterizes_existing_curve(
+    *, shape_type: ShapeType, points: list[list[int]]
+) -> None:
+    existing = Shape(
+        shape_type=shape_type,
+        points=np.asarray(points, dtype=np.float64),
+    )
+    detection = Detection(bbox=(0.0, 0.0, 10.0, 10.0))
+
+    result = match_detections_to_existing_shapes(
+        detections=[detection],
+        existing_shapes=[existing],
+    )
+
+    assert result.new_detections == []
+    assert result.matching_shapes == [existing]
+
+
+@pytest.mark.parametrize(
     ("shape_type", "extra_points"),
     [
         ("point", []),

@@ -129,6 +129,18 @@ ignore = ["UP040"]
 [tool.ruff.lint.per-file-ignores]
 # Literal expected values are the substance of an assertion, not a magic value.
 "tests/**" = ["PLR2004"]
+# Geometry implementations compare against coordinate dimensions, control-point
+# arities, and documented numerical thresholds.
+"examples/utils.py" = ["PLR2004"]
+"labelme/_app.py" = ["PLR2004"]
+"labelme/_label_file.py" = ["PLR2004"]
+"labelme/_line_measurement.py" = ["PLR2004"]
+"labelme/_line_profile.py" = ["PLR2004"]
+"labelme/_line_profile_batch.py" = ["PLR2004"]
+"labelme/_shape/_hit_testing.py" = ["PLR2004"]
+"labelme/_shape/_model.py" = ["PLR2004"]
+"labelme/_utils/_shape.py" = ["PLR2004"]
+"labelme/_widgets/_canvas.py" = ["PLR2004"]
 
 [tool.ruff.lint.isort]
 force-single-line = true

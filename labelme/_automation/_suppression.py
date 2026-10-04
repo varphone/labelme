@@ -8,7 +8,11 @@ import PIL.Image
 import PIL.ImageDraw
 from numpy.typing import NDArray
 
+from .._shape import BEZIER_SHAPE_TYPES
+from .._shape import SPLINE_SHAPE_TYPES
 from .._shape import Shape
+from .._shape import bezier_sample_points
+from .._shape import spline_sample_points
 from ._geometry import _round_bbox_to_int
 from ._geometry import shape_to_xyxy_bbox
 from ._shape_builders import Detection
@@ -178,6 +182,8 @@ def _local_mask_from_shape(*, shape: Shape) -> _LocalMask | None:
         "circle",
         "oriented_rectangle",
         "mask",
+        *BEZIER_SHAPE_TYPES,
+        *SPLINE_SHAPE_TYPES,
     ):
         return None
     bbox = shape_to_xyxy_bbox(shape=shape)
@@ -233,6 +239,22 @@ def _rasterize_shape(
         draw = PIL.ImageDraw.Draw(image)
         points_local = [tuple(point) for point in (shape.points - [xmin, ymin])]
         draw.polygon(points_local, fill=1)
+        return np.asarray(image, dtype=np.bool_)
+    if shape.shape_type in BEZIER_SHAPE_TYPES:
+        image = PIL.Image.new("L", (width, height), 0)
+        draw = PIL.ImageDraw.Draw(image)
+        sampled = bezier_sample_points(points=shape.points) - [xmin, ymin]
+        points_local = [tuple(point) for point in sampled]
+        draw.line(points_local, fill=1, width=1)
+        return np.asarray(image, dtype=np.bool_)
+    if shape.shape_type in SPLINE_SHAPE_TYPES:
+        image = PIL.Image.new("L", (width, height), 0)
+        draw = PIL.ImageDraw.Draw(image)
+        sampled = spline_sample_points(
+            points=shape.points, shape_type=shape.shape_type
+        ) - [xmin, ymin]
+        points_local = [tuple(point) for point in sampled]
+        draw.line(points_local, fill=1, width=1)
         return np.asarray(image, dtype=np.bool_)
     raise ValueError(f"Unsupported shape_type: {shape.shape_type!r}")
 

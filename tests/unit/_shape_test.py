@@ -7,8 +7,13 @@ import pytest
 from loguru import logger
 
 from labelme import _shape
+from labelme._line_profile import LineProfile
 from labelme._shape import Shape
 from labelme._shape import ShapeType
+from labelme._shape import _model as shape_model
+from labelme._shape import bezier_point
+from labelme._shape import bezier_sample_points
+from labelme._shape import spline_sample_points
 
 
 def _make_oriented_rectangle(points: list[tuple[float, float]], /) -> Shape:
@@ -21,6 +26,76 @@ def _make_oriented_rectangle(points: list[tuple[float, float]], /) -> Shape:
 
 def _make_axis_aligned_oriented_rectangle() -> Shape:
     return _make_oriented_rectangle([(0.0, 0.0), (10.0, 0.0), (10.0, 4.0), (0.0, 4.0)])
+
+
+def _make_profiled_linestrip() -> Shape:
+    return Shape(
+        shape_type="linestrip",
+        points=np.array([[0.0, 0.0], [10.0, 0.0]], dtype=np.float64),
+        line_profile=LineProfile.from_json_obj(
+            value={
+                "schema_version": 2,
+                "path_mode": "continuous",
+                "parameterization": "normalized_arc_length",
+                "anchors": [
+                    {
+                        "position": 0.5,
+                        "width": {
+                            "value": 4.0,
+                            "source": "manual",
+                            "confidence": 1.0,
+                            "confirmed": True,
+                        },
+                        "visibility": None,
+                    }
+                ],
+                "min_width": None,
+                "max_width": None,
+                "measurement_version": None,
+                "reviewed": False,
+            }
+        ),
+    )
+
+
+def test_shape_vertex_edit_remaps_profile_and_copy_is_independent() -> None:
+    shape = _make_profiled_linestrip()
+    copied = shape.copy()
+
+    shape.move_vertex(i=1, pos=(20.0, 0.0))
+
+    assert shape.line_profile is not None
+    assert shape.line_profile.anchors[0].position == pytest.approx(0.25)
+    assert copied.line_profile is not None
+    assert copied.line_profile.anchors[0].position == pytest.approx(0.5)
+
+
+def test_shape_translation_does_not_change_profile() -> None:
+    shape = _make_profiled_linestrip()
+    before = shape.line_profile
+
+    shape.translate(offset=(10.0, 20.0))
+
+    assert shape.line_profile == before
+
+
+def test_shape_profile_edit_rolls_back_when_remap_fails(
+    *,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    shape = _make_profiled_linestrip()
+    before_points = shape.points.copy()
+    before_profile = shape.line_profile
+
+    def fail_remap(*_args: object, **_kwargs: object) -> object:
+        raise ValueError("cannot remap")
+
+    monkeypatch.setattr(shape_model, "remap_profile", fail_remap)
+    with pytest.raises(ValueError, match="cannot remap"):
+        shape.move_vertex(i=1, pos=(20.0, 0.0))
+
+    np.testing.assert_array_equal(shape.points, before_points)
+    assert shape.line_profile == before_profile
 
 
 def test_rotate_oriented_rectangle_around_origin() -> None:
@@ -195,11 +270,57 @@ def _make_open_linestrip() -> Shape:
         ("line", False),
         ("circle", False),
         ("points", False),
+        ("bezier2", False),
+        ("bezier3", False),
+        ("catmull_rom", True),
+        ("bspline", True),
         ("mask", False),
     ],
 )
 def test_can_add_point(*, shape_type: ShapeType, expected: bool) -> None:
     assert Shape(shape_type=shape_type).can_add_point() is expected
+
+
+def test_catmull_rom_avoids_overshoot_with_close_vertices() -> None:
+    points = np.array(
+        [(0.0, 0.0), (100.0, 100.0), (101.0, 101.0), (200.0, 0.0)],
+        dtype=np.float64,
+    )
+
+    sampled = spline_sample_points(
+        points=points, shape_type="catmull_rom", samples_per_segment=64
+    )
+
+    assert sampled[:, 1].max() <= 102.0
+
+
+@pytest.mark.parametrize(
+    ("points", "t", "expected"),
+    [
+        (
+            np.array([[0.0, 0.0], [5.0, 10.0], [10.0, 0.0]]),
+            0.5,
+            (5.0, 5.0),
+        ),
+        (
+            np.array([[0.0, 0.0], [0.0, 10.0], [10.0, 10.0], [10.0, 0.0]]),
+            0.5,
+            (5.0, 7.5),
+        ),
+    ],
+)
+def test_bezier_point_evaluates_quadratic_and_cubic_curves(
+    *, points: np.ndarray, t: float, expected: tuple[float, float]
+) -> None:
+    assert bezier_point(points=points, t=t) == pytest.approx(expected)
+
+
+def test_bezier_sample_points_includes_endpoints() -> None:
+    points = np.array([[1.0, 2.0], [4.0, 8.0], [9.0, 3.0]])
+    sampled = bezier_sample_points(points=points, samples=5)
+    assert sampled.shape == (5, 2)
+    assert sampled[0] == pytest.approx(points[0])
+    assert sampled[-1] == pytest.approx(points[-1])
 
 
 def test_constructor_rejects_unknown_shape_type() -> None:
@@ -274,6 +395,21 @@ def test_can_remove_point_linestrip_requires_more_than_two() -> None:
 
     shape.remove_point(i=1)
     assert len(shape.points) == 2
+    assert shape.can_remove_point() is False
+
+
+@pytest.mark.parametrize("shape_type", ["catmull_rom", "bspline"])
+def test_can_remove_point_spline_requires_more_than_three(
+    *,
+    shape_type: ShapeType,
+) -> None:
+    shape = Shape(
+        shape_type=shape_type,
+        points=np.asarray([(0, 0), (1, 1), (2, 0), (3, 1)], dtype=np.float64),
+    )
+    assert shape.can_remove_point() is True
+    shape.remove_point(i=1)
+    assert len(shape.points) == 3
     assert shape.can_remove_point() is False
 
 
@@ -466,6 +602,24 @@ def test_nearest_edge_index_matches_drawn_edge_for_linestrip() -> None:
     )
 
     assert index == 1
+
+
+def test_nearest_edge_index_uses_bspline_control_polygon_order() -> None:
+    shape = Shape(
+        shape_type="bspline",
+        points=np.array(
+            [(0.0, 0.0), (20.0, 100.0), (80.0, 100.0), (100.0, 0.0)],
+            dtype=np.float64,
+        ),
+    )
+
+    # The B-spline itself does not pass through (80, 100), so insertion must
+    # use the nearest control-polygon interval rather than a curve sample span.
+    index = _shape.nearest_edge_index(
+        shape=shape, point=np.array([90.0, 70.0]), image_epsilon=40.0
+    )
+
+    assert index == 3
 
 
 def test_nearest_vertex_index_returns_nearest_within_epsilon() -> None:

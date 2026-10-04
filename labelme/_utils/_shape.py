@@ -5,29 +5,22 @@ from __future__ import annotations
 
 import math
 import uuid
-from typing import TypedDict
+from typing import cast
 
 import numpy as np
 import PIL.Image
 import PIL.ImageDraw
 from numpy.typing import NDArray
 
-from .._shape import CIRCLE_POINT_COUNT
-from .._shape import LINE_POINT_COUNT
-from .._shape import MIN_POLYGON_POINT_COUNT
-from .._shape import ORIENTED_RECTANGLE_POINT_COUNT
-from .._shape import RECTANGLE_POINT_COUNT
-
-
-class ShapeDict(TypedDict):
-    label: str
-    points: list[list[float]]
-    shape_type: str
-    flags: dict[str, bool]
-    description: str
-    group_id: int | None
-    mask: NDArray[np.bool_] | None
-    other_data: dict
+from labelme._shape import CIRCLE_POINT_COUNT
+from labelme._shape import LINE_POINT_COUNT
+from labelme._shape import MIN_POLYGON_POINT_COUNT
+from labelme._shape import ORIENTED_RECTANGLE_POINT_COUNT
+from labelme._shape import RECTANGLE_POINT_COUNT
+from labelme._shape import ShapeType
+from labelme._shape import bezier_sample_points
+from labelme._shape import spline_sample_points
+from labelme._shape_dict import ShapeDict
 
 
 def shape_to_mask(
@@ -41,7 +34,7 @@ def shape_to_mask(
 ) -> NDArray[np.bool_]:
     mask = PIL.Image.fromarray(np.zeros(img_shape[:2], dtype=np.uint8))
     draw = PIL.ImageDraw.Draw(mask)
-    xy = [tuple(point) for point in points]
+    xy = [(point[0], point[1]) for point in points]
     if shape_type == "circle":
         assert len(xy) == CIRCLE_POINT_COUNT, (
             "Shape of shape_type=circle must have 2 points"
@@ -63,10 +56,23 @@ def shape_to_mask(
         assert len(xy) == LINE_POINT_COUNT, (
             "Shape of shape_type=line must have 2 points"
         )
-        draw.line(xy=xy, fill=1, width=line_width)  # ty: ignore[invalid-argument-type]
+        draw.line(xy=xy, fill=1, width=line_width)
     elif shape_type == "linestrip":
         # joint="curve" rounds the joints so wide lines have no notch at turns.
-        draw.line(xy=xy, fill=1, width=line_width, joint="curve")  # ty: ignore[invalid-argument-type]
+        draw.line(xy=xy, fill=1, width=line_width, joint="curve")
+    elif shape_type in ("bezier2", "bezier3"):
+        assert len(xy) == (3 if shape_type == "bezier2" else 4), (
+            f"Shape of shape_type={shape_type} has an invalid point count"
+        )
+        curve = bezier_sample_points(points=np.asarray(points, dtype=np.float64))
+        draw.line(xy=[tuple(point) for point in curve], fill=1, width=line_width)
+    elif shape_type in ("catmull_rom", "bspline"):
+        assert len(xy) >= 3, "Spline shapes must have at least 3 points"
+        curve = spline_sample_points(
+            points=np.asarray(points, dtype=np.float64),
+            shape_type=cast(ShapeType, shape_type),
+        )
+        draw.line(xy=[tuple(point) for point in curve], fill=1, width=line_width)
     elif shape_type == "point":
         assert len(xy) == 1, "Shape of shape_type=point must have 1 points"
         cx, cy = xy[0]
@@ -76,12 +82,12 @@ def shape_to_mask(
         assert len(xy) == ORIENTED_RECTANGLE_POINT_COUNT, (
             "Shape of shape_type=oriented_rectangle must have 4 points"
         )
-        draw.polygon(xy=xy, outline=1, fill=1)  # ty: ignore[invalid-argument-type]
+        draw.polygon(xy=xy, outline=1, fill=1)
     elif shape_type in [None, "polygon"]:
         assert len(xy) >= MIN_POLYGON_POINT_COUNT, (
             "Polygon must have points more than 2"
         )
-        draw.polygon(xy=xy, outline=1, fill=1)  # ty: ignore[invalid-argument-type]
+        draw.polygon(xy=xy, outline=1, fill=1)
     else:
         raise ValueError(f"shape_type={shape_type!r} is not supported.")
     return np.array(mask, dtype=bool)

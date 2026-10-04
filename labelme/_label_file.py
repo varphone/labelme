@@ -24,8 +24,9 @@ from numpy.typing import NDArray
 from labelme import __version__
 
 from . import _utils
+from ._line_profile import LineProfile
 from ._shape import ShapeType
-from ._utils._shape import ShapeDict
+from ._shape_dict import ShapeDict
 
 PIL.Image.MAX_IMAGE_PIXELS = None
 
@@ -71,6 +72,8 @@ def _validate_shape_semantics(
         "circle": 2,
         "mask": 2,
         "oriented_rectangle": 4,
+        "bezier2": 3,
+        "bezier3": 4,
     }
     expected_point_count = EXACT_POINT_COUNT_BY_SHAPE_TYPE.get(shape_type)
     if expected_point_count is not None and len(points) != expected_point_count:
@@ -92,6 +95,31 @@ def _validate_shape_semantics(
         raise ValueError(f"mask must decode to a 2D image, got shape {mask.shape}")
 
 
+def _normalize_shape_points(
+    *, shape_type: str, points: list[list[float]]
+) -> list[list[float]]:
+    if shape_type != "rectangle" or len(points) != 4:
+        return points
+
+    xs = {point[0] for point in points}
+    ys = {point[1] for point in points}
+    if len(xs) != 2 or len(ys) != 2:
+        return points
+
+    xmin, xmax = min(xs), max(xs)
+    ymin, ymax = min(ys), max(ys)
+    corners = {
+        (xmin, ymin),
+        (xmax, ymin),
+        (xmax, ymax),
+        (xmin, ymax),
+    }
+    if {(point[0], point[1]) for point in points} != corners:
+        return points
+
+    return [[xmin, ymin], [xmax, ymax]]
+
+
 def _load_shape_json_obj(*, shape_json_obj: dict) -> ShapeDict:
     POINT_COORDINATE_COUNT: Final = 2
     SHAPE_KEYS: Final[set[str]] = {
@@ -102,6 +130,7 @@ def _load_shape_json_obj(*, shape_json_obj: dict) -> ShapeDict:
         "flags",
         "description",
         "mask",
+        "line_profile",
     }
 
     if "label" not in shape_json_obj:
@@ -132,6 +161,7 @@ def _load_shape_json_obj(*, shape_json_obj: dict) -> ShapeDict:
     if not isinstance(shape_json_obj["shape_type"], str):
         raise TypeError(f"shape_type must be str: {shape_json_obj['shape_type']}")
     shape_type: str = shape_json_obj["shape_type"]
+    points = _normalize_shape_points(shape_type=shape_type, points=points)
 
     flags = _validate_flags(flags=shape_json_obj.get("flags"))
 
@@ -162,7 +192,29 @@ def _load_shape_json_obj(*, shape_json_obj: dict) -> ShapeDict:
 
     _validate_shape_semantics(shape_type=shape_type, points=points, mask=mask)
 
+    line_profile = None
+    line_profile_error = None
+    if "line_profile" in shape_json_obj:
+        raw_line_profile = shape_json_obj["line_profile"]
+        try:
+            if shape_type not in (
+                "line",
+                "linestrip",
+                "bezier2",
+                "bezier3",
+                "catmull_rom",
+                "bspline",
+            ):
+                raise ValueError(
+                    "line_profile is only supported for open line and curve shapes"
+                )
+            line_profile = LineProfile.from_json_obj(value=raw_line_profile)
+        except ValueError as e:
+            line_profile_error = str(e)
+
     other_data = {k: v for k, v in shape_json_obj.items() if k not in SHAPE_KEYS}
+    if line_profile_error is not None:
+        other_data["line_profile"] = shape_json_obj["line_profile"]
 
     loaded: ShapeDict = ShapeDict(
         label=label,
@@ -174,15 +226,25 @@ def _load_shape_json_obj(*, shape_json_obj: dict) -> ShapeDict:
         mask=mask,
         other_data=other_data,
     )
-    if set(loaded.keys()) != SHAPE_KEYS | {"other_data"}:
-        raise RuntimeError(
-            f"unexpected keys: {set(loaded.keys())} != {SHAPE_KEYS | {'other_data'}}"
-        )
+    if line_profile is not None:
+        loaded["line_profile"] = line_profile
+    if line_profile_error is not None:
+        loaded["line_profile_error"] = line_profile_error
+    expected_keys = SHAPE_KEYS - {"line_profile"} | {"other_data"}
+    if line_profile is not None:
+        expected_keys.add("line_profile")
+    if line_profile_error is not None:
+        expected_keys.add("line_profile_error")
+    if set(loaded.keys()) != expected_keys:
+        raise RuntimeError(f"unexpected keys: {set(loaded.keys())} != {expected_keys}")
     return loaded
 
 
 def _dump_shape_to_json_obj(*, shape: ShapeDict) -> dict[str, Any]:
     json_obj: dict[str, Any] = dict(shape["other_data"])
+    line_profile = shape.get("line_profile")
+    if line_profile is not None:
+        json_obj["line_profile"] = line_profile.to_json_obj()
     json_obj.update(
         label=shape["label"],
         points=[list(point) for point in shape["points"]],

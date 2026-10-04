@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+from typing import cast
 
 import numpy as np
 import pytest
@@ -14,6 +15,7 @@ from labelme._automation._geometry import compute_oriented_rectangle_from_mask
 from labelme._automation._geometry import compute_polygons_from_mask
 from labelme._automation._geometry import shape_to_xyxy_bbox
 from labelme._shape import Shape
+from labelme._shape import ShapeType
 
 
 def test_round_bbox_to_int_uses_ties_to_even_for_tuple_and_array() -> None:
@@ -146,6 +148,27 @@ def test_shape_to_xyxy_bbox_polygon() -> None:
 
     assert bbox is not None
     assert bbox.tolist() == pytest.approx([1, 2, 10, 12])
+
+
+@pytest.mark.parametrize("shape_type", ["bezier2", "bezier3"])
+def test_shape_to_xyxy_bbox_bezier_uses_curve_extent(*, shape_type: str) -> None:
+    points = (
+        [[0.0, 0.0], [5.0, 10.0], [10.0, 0.0]]
+        if shape_type == "bezier2"
+        else [[0.0, 0.0], [0.0, 10.0], [10.0, 10.0], [10.0, 0.0]]
+    )
+    shape = Shape(
+        shape_type=cast(ShapeType, shape_type),
+        points=np.array(points, dtype=np.float64),
+    )
+
+    bbox = shape_to_xyxy_bbox(shape=shape)
+
+    assert bbox is not None
+    assert bbox.tolist() == pytest.approx(
+        [0.0, 0.0, 10.0, 5.0 if shape_type == "bezier2" else 7.5],
+        abs=0.1,
+    )
 
 
 def test_shape_to_xyxy_bbox_returns_none_when_polygon_has_too_few_points() -> None:
