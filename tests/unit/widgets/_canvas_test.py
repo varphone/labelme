@@ -17,6 +17,11 @@ from PySide6.QtCore import Qt
 from pytestqt.qtbot import QtBot
 
 from labelme._automation._ai_assist import AiAssistProposal
+from labelme._line_profile import LineProfile
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
+from labelme._line_profile import profile_boundary_points
+from labelme._line_profile import profile_boundary_polygon
 from labelme._shape import Shape
 from labelme._shape import ShapeType
 from labelme._widgets._canvas import _CREATE_MODE_TO_SHAPE_TYPE
@@ -703,8 +708,281 @@ def test_shape_visibility_survives_backup_and_restore(*, canvas: Canvas) -> None
     canvas.load_shapes(shapes=[shape.copy()])
     assert canvas.shapes[0].visible is False
 
+
+@pytest.mark.gui
+def test_profile_survives_canvas_backup_and_restore(*, canvas: Canvas) -> None:
+    profile = LineProfile(
+        anchors=(
+            # Full-width values are intentionally distinct from the geometry.
+            ProfileAnchor(0.0, width=ProfileValue(4.0, "manual", 1.0, confirmed=True)),
+        )
+    )
+    shape = Shape(
+        label="profiled",
+        shape_type="linestrip",
+        points=np.array([(10, 20), (80, 20)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.shapes[0].line_profile = LineProfile(reviewed=True)
+    canvas.backup_shapes()
+
     canvas.restore_last_shape()
-    assert canvas.shapes[0].visible is False
+
+    assert canvas.shapes[0].line_profile == profile
+
+
+@pytest.mark.gui
+def test_line_profile_preview_toggle_only_controls_profile_layer(
+    *,
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        anchors=(
+            ProfileAnchor(0.0, width=ProfileValue(8.0, "auto", 0.8, confirmed=False)),
+        )
+    )
+    shape = Shape(
+        label="profiled",
+        shape_type="linestrip",
+        points=np.array([(10, 25), (80, 25)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+
+    def render_profile() -> int:
+        image = QtGui.QImage(
+            _WIDTH,
+            _HEIGHT,
+            QtGui.QImage.Format.Format_ARGB32,
+        )
+        image.fill(QtCore.Qt.GlobalColor.transparent)
+        painter = QtGui.QPainter(image)
+        canvas._draw_line_profile_layer(painter)
+        painter.end()
+        return sum(
+            image.pixelColor(x, y).alpha()
+            for x in range(_WIDTH)
+            for y in range(_HEIGHT)
+        )
+
+    canvas.set_show_line_profile_preview(True)
+    assert render_profile() > 0
+    canvas.set_show_line_profile_preview(False)
+    assert render_profile() == 0
+    canvas._refresh_hover_state(pos=QPointF(10.0, 25.0))
+    assert canvas._find_line_profile_anchor_at_point(point=QPointF(10.0, 25.0)) is None
+    assert canvas.hovered_shape is canvas.shapes[0]
+    assert canvas._hovered_vertex == 0
+
+
+@pytest.mark.gui
+def test_profile_boundary_sampling_handles_an_acute_turn() -> None:
+    profile = LineProfile(
+        anchors=(
+            ProfileAnchor(0.0, width=ProfileValue(6.0, "auto", 0.8, confirmed=False)),
+            ProfileAnchor(1.0, width=ProfileValue(10.0, "auto", 0.8, confirmed=False)),
+        )
+    )
+
+    left, right = profile_boundary_points(
+        profile=profile,
+        points=[[10.0, 10.0], [50.0, 10.0], [52.0, 40.0]],
+        samples=32,
+    )
+
+    assert len(left) == len(right) == 32
+    assert all(np.isfinite(point).all() for point in (*left, *right))
+
+    polygon = profile_boundary_polygon(
+        profile=profile,
+        points=[[10.0, 10.0], [50.0, 10.0], [52.0, 40.0]],
+        samples=32,
+    )
+    assert len(polygon) == 64
+    assert polygon[0] == left[0]
+    assert polygon[-1] == right[0]
+
+
+@pytest.mark.gui
+def test_profile_anchor_hit_testing_scales_and_reports_status(
+    *,
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        anchors=(
+            ProfileAnchor(0.0, width=ProfileValue(80.0, "manual", 1.0, confirmed=True)),
+        )
+    )
+    shape = Shape(
+        label="profiled",
+        shape_type="linestrip",
+        points=np.array([(0.0, 25.0), (99.0, 25.0)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    statuses: list[str] = []
+    canvas.status_updated.connect(statuses.append)
+
+    for scale in (0.25, 1.0, 4.0):
+        canvas.scale = scale
+        canvas._refresh_hover_state(pos=QPointF(0.0, 25.0))
+        assert (
+            canvas._find_line_profile_anchor_at_point(point=QPointF(0.0, 25.0))
+            is not None
+        )
+
+    assert any("anchor" in status.lower() for status in statuses)
+
+    canvas._refresh_hover_state(pos=QPointF(0.0, 25.0))
+    assert canvas._line_profile_hover == ("width", 0, 0)
+    canvas._refresh_hover_state(pos=QPointF(0.0, 65.0))
+    assert canvas._line_profile_hover == ("width", 0, 1)
+    radius_handle = canvas._find_line_profile_anchor_at_point(point=QPointF(0.0, 65.0))
+    assert radius_handle is not None
+    assert radius_handle[1:] == ("width", 0, "width")
+
+
+@pytest.mark.parametrize(
+    ("shape_type", "expected"),
+    [
+        ("bezier3", "Editing shape: Cubic Bezier"),
+        ("catmull_rom", "Editing shape: 猫氏样条"),
+    ],
+)
+def test_status_names_single_selected_shape(
+    *, canvas: Canvas, shape_type: ShapeType, expected: str
+) -> None:
+    canvas.load_shapes(
+        shapes=[
+            Shape(
+                shape_type=shape_type,
+                points=np.array(
+                    [[0.0, 0.0], [20.0, 20.0], [40.0, 0.0], [60.0, 20.0]],
+                    dtype=np.float64,
+                )[: (4 if shape_type == "bezier3" else 4)],
+            )
+        ]
+    )
+    canvas.selected_shapes = [canvas.shapes[0]]
+    statuses: list[str] = []
+    canvas.status_updated.connect(statuses.append)
+
+    canvas._update_status(extra_messages=None)
+
+    assert statuses[-1] == expected
+
+
+def test_status_is_updated_when_shape_is_selected_programmatically(
+    *,
+    canvas: Canvas,
+) -> None:
+    shape = Shape(
+        shape_type="bezier3",
+        points=np.array(
+            [[0.0, 0.0], [20.0, 20.0], [40.0, 0.0], [60.0, 20.0]],
+            dtype=np.float64,
+        ),
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    statuses: list[str] = []
+    canvas.status_updated.connect(statuses.append)
+
+    canvas.select_shapes(shapes=[canvas.shapes[0]])
+
+    assert statuses[-1] == "Editing shape: Cubic Bezier"
+
+
+@pytest.mark.gui
+def test_profile_preview_handles_dense_anchors_edges_and_large_width(
+    *,
+    canvas: Canvas,
+) -> None:
+    profile = LineProfile(
+        anchors=tuple(
+            ProfileAnchor(
+                index / 20.0,
+                width=ProfileValue(200.0 + index, "auto", 0.4, confirmed=False),
+            )
+            for index in range(21)
+        )
+    )
+    shape = Shape(
+        label="dense",
+        shape_type="linestrip",
+        points=np.array([(0.0, 0.0), (30.0, 5.0), (99.0, 49.0)], dtype=np.float64),
+        line_profile=profile,
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+    canvas.scale = 4.0
+    image = QtGui.QImage(_WIDTH, _HEIGHT, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtCore.Qt.GlobalColor.transparent)
+    painter = QtGui.QPainter(image)
+    canvas._draw_line_profile_layer(painter)
+    painter.end()
+    assert image.isNull() is False
+    assert (
+        sum(
+            image.pixelColor(x, y).alpha()
+            for x in range(_WIDTH)
+            for y in range(_HEIGHT)
+        )
+        > 0
+    )
+
+
+@pytest.mark.gui
+def test_line_profile_width_handle_size_is_screen_constant(
+    *, canvas: Canvas, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    sizes: list[float] = []
+
+    def record_vertex(*, size: float, **_: object) -> None:
+        sizes.append(size)
+
+    monkeypatch.setattr(
+        "labelme._widgets._canvas._draw_line_profile_vertex", record_vertex
+    )
+    image = QtGui.QImage(_WIDTH, _HEIGHT, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtCore.Qt.GlobalColor.transparent)
+    painter = QtGui.QPainter(image)
+    try:
+        for scale in (1.0, 4.0):
+            canvas.scale = scale
+            canvas._draw_line_profile_width_handle(
+                painter=painter,
+                center=(20.0, 20.0),
+                handle=(20.0, 30.0),
+                radius=10.0,
+                color=QtGui.QColor(30, 190, 80),
+                hovered_handle=False,
+                hovered_index=None,
+            )
+    finally:
+        painter.end()
+
+    assert sizes == [canvas._point_size] * 4
+
+
+@pytest.mark.gui
+def test_profile_anchor_hit_testing_does_not_change_plain_shape_behavior(
+    *,
+    canvas: Canvas,
+) -> None:
+    shape = Shape(
+        label="plain",
+        shape_type="rectangle",
+        points=np.array([(10, 10), (40, 30)], dtype=np.float64),
+        closed=True,
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [canvas.shapes[0]]
+
+    assert canvas._find_line_profile_anchor_at_point(point=QPointF(20, 20)) is None
 
 
 def _make_rectangle(*, label: str | None) -> Shape:
@@ -785,6 +1063,57 @@ def test_finalize_with_empty_inference_resets_state_and_notifies(
     assert len(inference_no_shapes_emissions) == 1
     assert canvas._current is None
     assert canvas.shapes == []
+
+
+@pytest.mark.gui
+def test_finalize_releases_drawing_state(*, canvas: Canvas) -> None:
+    canvas.create_mode = "rectangle"
+    canvas._current = _DraftShape(
+        shape_type="rectangle",
+        points=(QPointF(0, 0), QPointF(10, 10)),
+        point_labels=(1, 1),
+    )
+    drawing_polygon_emissions: list[bool] = []
+    canvas.drawing_polygon.connect(drawing_polygon_emissions.append)
+
+    canvas._finalize()
+
+    assert drawing_polygon_emissions == [False]
+    assert canvas._current is None
+    assert len(canvas.shapes) == 1
+
+
+@pytest.mark.gui
+def test_line_profile_render_geometry_is_cached_until_shape_changes(
+    *, canvas: Canvas
+) -> None:
+    shape = Shape(
+        shape_type="linestrip",
+        points=np.array([[10.0, 20.0], [80.0, 20.0]], dtype=np.float64),
+        line_profile=LineProfile(
+            anchors=(
+                ProfileAnchor(
+                    0.5, width=ProfileValue(8.0, "auto", 0.9, confirmed=False)
+                ),
+            )
+        ),
+    )
+    canvas.load_shapes(shapes=[shape])
+    assert shape.line_profile is not None
+
+    first = canvas._line_profile_render_geometry_for_shape(
+        shape=shape, profile=shape.line_profile
+    )
+    second = canvas._line_profile_render_geometry_for_shape(
+        shape=shape, profile=shape.line_profile
+    )
+    assert first is second
+
+    shape.points[1, 1] = 30.0
+    third = canvas._line_profile_render_geometry_for_shape(
+        shape=shape, profile=shape.line_profile
+    )
+    assert third is not first
 
 
 @pytest.mark.gui
@@ -870,6 +1199,14 @@ def test_ai_proposal_uses_out_of_bounds_setting(
             lambda canvas: canvas.set_ai_existing_shape_suppression(enabled=True),
             id="existing-shape-suppression",
         ),
+        pytest.param(
+            lambda canvas: canvas.set_ai_downsample_scale(scale=0.3),
+            id="downsample-scale",
+        ),
+        pytest.param(
+            lambda canvas: canvas.set_ai_denoise_strength(strength=0.4),
+            id="denoise-strength",
+        ),
     ],
 )
 def test_changing_ai_assist_setting_clears_highlights(
@@ -883,6 +1220,49 @@ def test_changing_ai_assist_setting_clears_highlights(
     change_setting(canvas)
 
     assert canvas._ai_existing_shape_highlights == []
+
+
+@pytest.mark.parametrize("shape_type", ["linestrip", "catmull_rom", "bspline"])
+def test_split_line_at_vertex_preserves_line_shape_type(
+    *, canvas: Canvas, shape_type: ShapeType
+) -> None:
+    points = np.array(
+        [(0.0, 0.0), (10.0, 20.0), (30.0, 5.0), (50.0, 25.0), (70.0, 0.0)],
+        dtype=np.float64,
+    )
+    shape = Shape(shape_type=shape_type, points=points)
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [shape]
+    canvas._last_hovered_vertex = 2
+
+    assert canvas.can_split_linestrip
+    result = canvas.split_linestrip()
+
+    assert result is not None
+    original, left, right = result
+    assert original is shape
+    assert left.shape_type == right.shape_type == shape_type
+    np.testing.assert_array_equal(left.points, points[:3])
+    np.testing.assert_array_equal(right.points, points[2:])
+
+
+@pytest.mark.parametrize("shape_type", ["catmull_rom", "bspline"])
+def test_split_short_spline_at_vertex(*, canvas: Canvas, shape_type: ShapeType) -> None:
+    shape = Shape(
+        shape_type=shape_type,
+        points=np.array([(0.0, 0.0), (30.0, 20.0), (60.0, 0.0)], dtype=np.float64),
+    )
+    canvas.load_shapes(shapes=[shape])
+    canvas.selected_shapes = [shape]
+    canvas._last_hovered_vertex = 1
+
+    assert canvas.can_split_linestrip
+    result = canvas.split_linestrip()
+
+    assert result is not None
+    _, left, right = result
+    assert left.shape_type == right.shape_type == shape_type
+    assert len(left.points) == len(right.points) == 2
 
 
 @pytest.mark.gui

@@ -19,8 +19,18 @@ Group = Literal[
     "Label sources",
     "Label behavior",
     "AI assist",
+    "Line profile measurement",
 ]
-Kind = Literal["bool", "color", "enum", "int", "str_list", "language", "label_flags"]
+Kind = Literal[
+    "bool",
+    "color",
+    "enum",
+    "float",
+    "int",
+    "str_list",
+    "language",
+    "label_flags",
+]
 
 # Group names double as headings. QT_TRANSLATE_NOOP marks them for
 # pyside6-lupdate under the SettingsDialog context (where they are resolved via
@@ -34,6 +44,7 @@ _TRANSLATABLE_GROUPS: Final = (
     QT_TRANSLATE_NOOP("SettingsDialog", "Label sources"),
     QT_TRANSLATE_NOOP("SettingsDialog", "Label behavior"),
     QT_TRANSLATE_NOOP("SettingsDialog", "AI assist"),
+    QT_TRANSLATE_NOOP("SettingsDialog", "Line profile measurement"),
 )
 assert set(_TRANSLATABLE_GROUPS) == set(typing.get_args(Group))
 
@@ -53,8 +64,10 @@ class Setting:
     # Optional muted caption rendered beneath the control.
     note: str | None = None
     search_aliases: str = ""
-    minimum: int | None = None
-    maximum: int | None = None
+    # Bounds for numeric controls. Required for ``kind="float"``.
+    minimum: float | int | None = None
+    maximum: float | int | None = None
+    decimals: int = 2
     # Marks a feature shipped for early use: renders a "BETA" badge beside the
     # label so users expect rough edges and report issues. Drop when it stabilizes.
     beta: bool = False
@@ -114,6 +127,15 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         kind="bool",
     ),
     Setting(
+        key_path=("minimap", "show_shape_outlines"),
+        group="Drawing and canvas",
+        label=cast(
+            str,
+            QT_TRANSLATE_NOOP("SettingsDialog", "Show annotation outlines in Minimap"),
+        ),
+        kind="bool",
+    ),
+    Setting(
         key_path=("shape_color", "mode"),
         group="Drawing and canvas",
         label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Shape Color Mode")),
@@ -147,6 +169,22 @@ SETTINGS: Final[tuple[Setting, ...]] = (
             QT_TRANSLATE_NOOP(
                 "SettingsDialog",
                 "Individual Label colors remain editable in the Config File.",
+            ),
+        ),
+    ),
+    Setting(
+        key_path=("snap_to_point",),
+        group="Drawing and canvas",
+        label=cast(
+            str, QT_TRANSLATE_NOOP("SettingsDialog", "Snap cursor to annotation points")
+        ),
+        kind="bool",
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "While drawing, the cursor snaps to the nearest existing "
+                "annotation point.",
             ),
         ),
     ),
@@ -275,6 +313,89 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         ),
     ),
     Setting(
+        key_path=("line_profile_measurement", "sample_spacing"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Sample spacing")),
+        kind="float",
+        minimum=0.1,
+        maximum=4096.0,
+        decimals=1,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP("SettingsDialog", "Pixels along the centerline."),
+        ),
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "search_radius"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Search radius")),
+        kind="float",
+        minimum=0.5,
+        maximum=4096.0,
+        decimals=1,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP("SettingsDialog", "Pixels sampled on each normal."),
+        ),
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "min_width"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Minimum width")),
+        kind="float",
+        minimum=0.1,
+        maximum=4096.0,
+        decimals=1,
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "max_width"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Maximum width")),
+        kind="float",
+        minimum=0.1,
+        maximum=4096.0,
+        decimals=1,
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "contrast_factor"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Contrast factor")),
+        kind="float",
+        minimum=0.0,
+        maximum=1.0,
+        decimals=2,
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "width_filter_strength"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Width filter strength")),
+        kind="int",
+        minimum=1,
+        maximum=100,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "Sliding window length as a percentage of measured samples.",
+            ),
+        ),
+    ),
+    Setting(
+        key_path=("line_profile_measurement", "fixed_width"),
+        group="Line profile measurement",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Fixed width")),
+        kind="float",
+        minimum=0.0,
+        maximum=4096.0,
+        decimals=1,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog", "Set to 0 to measure the width from the image."
+            ),
+        ),
+    ),
+    Setting(
         # Choices are the models' display names, matching the format
         # AiAssistedAnnotationWidget itself stores in ai.default (see
         # _ai_assisted_annotation_widget.py, where the dock combobox looks up
@@ -331,6 +452,39 @@ SETTINGS: Final[tuple[Setting, ...]] = (
         ),
         minimum=0,
         maximum=100,
+    ),
+    Setting(
+        key_path=("ai", "downsample_scale"),
+        group="AI assist",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Input downsample scale")),
+        kind="float",
+        minimum=0.0,
+        maximum=1.0,
+        decimals=2,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "Scale used only for the image sent to AI; 1.0 keeps the original "
+                "resolution.",
+            ),
+        ),
+    ),
+    Setting(
+        key_path=("ai", "denoise_strength"),
+        group="AI assist",
+        label=cast(str, QT_TRANSLATE_NOOP("SettingsDialog", "Input denoise strength")),
+        kind="float",
+        minimum=0.0,
+        maximum=1.0,
+        decimals=2,
+        note=cast(
+            str,
+            QT_TRANSLATE_NOOP(
+                "SettingsDialog",
+                "Denoises the scaled image sent to AI; 0.0 disables denoising.",
+            ),
+        ),
     ),
     Setting(
         key_path=("ai", "suppress_existing_shape_matches"),

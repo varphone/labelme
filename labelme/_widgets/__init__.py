@@ -15,18 +15,34 @@ from ._status import StatusStats
 from ._tool_bar import ToolBar
 from ._unique_label_qlist_widget import UniqueLabelQListWidget
 from ._zoom_widget import ZoomWidget
+from .annotation_batch_worker import AnnotationBatchWorker
+from .circle_radius_widget import CircleRadiusWidget
+from .line_measurement_worker import LineMeasurementWorker
+from .line_profile_batch_worker import LineProfileBatchWorker
+from .line_profile_panel import LineProfilePanel
+from .line_profile_visibility_widget import LineProfileVisibilityWidget
+from .line_profile_width_widget import LineProfileWidthWidget
+from .minimap import MinimapWidget
 
 __all__ = [
     "AiAssistedAnnotationWidget",
     "AiTextToAnnotationWidget",
+    "AnnotationBatchWorker",
     "BrightnessContrastDialog",
     "Canvas",
+    "CircleRadiusWidget",
     "EmptyStateWidget",
     "LabelDialog",
     "LabelDialogEntry",
     "LabelDialogField",
     "LabelListWidget",
     "LabelListWidgetItem",
+    "LineMeasurementWorker",
+    "LineProfileBatchWorker",
+    "LineProfilePanel",
+    "LineProfileVisibilityWidget",
+    "LineProfileWidthWidget",
+    "MinimapWidget",
     "Palette",
     "SettingsDialog",
     "StatusStats",

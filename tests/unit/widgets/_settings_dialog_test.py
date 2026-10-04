@@ -119,6 +119,63 @@ def test_polygon_detail_slider_applies_integer_value(
     assert (("mask_polygonization", "detail"), 40) in applied
 
 
+def test_ai_input_preprocessing_controls_use_normalized_float_ranges(
+    *, dialog: SettingsDialog, applied: Applied
+) -> None:
+    downsample = dialog._editors[("ai", "downsample_scale")]
+    denoise = dialog._editors[("ai", "denoise_strength")]
+    assert isinstance(downsample, QtWidgets.QDoubleSpinBox)
+    assert isinstance(denoise, QtWidgets.QDoubleSpinBox)
+    assert downsample.value() == 1.0
+    assert denoise.value() == 0.0
+    assert downsample.minimum() == 0.0
+    assert downsample.maximum() == 1.0
+    assert denoise.minimum() == 0.0
+    assert denoise.maximum() == 1.0
+    assert (
+        downsample.buttonSymbols()
+        == QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows
+    )
+    assert (
+        denoise.buttonSymbols() == QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows
+    )
+
+    downsample.setValue(0.3)
+    denoise.setValue(0.4)
+
+    assert (("ai", "downsample_scale"), 0.3) in applied
+    assert (("ai", "denoise_strength"), 0.4) in applied
+
+
+def test_line_profile_width_filter_strength_uses_slider(
+    *, dialog: SettingsDialog, applied: Applied
+) -> None:
+    slider = dialog._editors[("line_profile_measurement", "width_filter_strength")]
+    assert isinstance(slider, IntegerSlider)
+    assert slider.value == 20
+    assert slider.findChildren(QtWidgets.QLabel)[0].text() == "20%"
+
+    slider.set_value(65)
+
+    assert (("line_profile_measurement", "width_filter_strength"), 65) in applied
+
+
+def test_line_profile_width_filter_slider_accepts_legacy_float_config(
+    *, qtbot: QtBot, applied: Applied
+) -> None:
+    dialog = _make_dialog(
+        qtbot=qtbot,
+        applied=applied,
+        overrides={"line_profile_measurement": {"width_filter_strength": 35.0}},
+        succeed=True,
+        previewed=None,
+    )
+    slider = dialog._editors[("line_profile_measurement", "width_filter_strength")]
+
+    assert isinstance(slider, IntegerSlider)
+    assert slider.value == 35
+
+
 def test_unbounded_integer_edit_accepts_python_ints(
     *, qtbot: QtBot, applied: Applied
 ) -> None:
@@ -910,7 +967,7 @@ def test_tab_order_connects_page_and_footer(
 ) -> None:
     with qtbot.waitExposed(dialog):
         dialog.show()
-    last_editor = dialog._editors[("ai", "suppress_existing_shape_matches")]
+    last_editor = dialog._editors[("line_profile_measurement", "fixed_width")]
     last_editor.setFocus()
     qtbot.keyClick(last_editor, QtCore.Qt.Key.Key_Tab)
     open_button = dialog.focusWidget()

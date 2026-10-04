@@ -121,6 +121,62 @@
         <translation>Enter або пробіл для завершення</translation>
     </message>
     <message>
+        <source>Polygon</source>
+        <translation>Багатокутник</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>Прямокутник</translation>
+    </message>
+    <message>
+        <source>Oriented Rectangle</source>
+        <translation>Орієнтований прямокутник</translation>
+    </message>
+    <message>
+        <source>Point</source>
+        <translation>Точка</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>Лінія</translation>
+    </message>
+    <message>
+        <source>Circle</source>
+        <translation>Коло</translation>
+    </message>
+    <message>
+        <source>LineStrip</source>
+        <translation>LineStrip</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>Точки</translation>
+    </message>
+    <message>
+        <source>Quadratic Bezier</source>
+        <translation>Quadratic Bezier</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>Cubic Bezier</translation>
+    </message>
+    <message>
+        <source>猫氏样条</source>
+        <translation>猫氏样条</translation>
+    </message>
+    <message>
+        <source>B样条</source>
+        <translation>B样条</translation>
+    </message>
+    <message>
+        <source>Mask</source>
+        <translation>Mask</translation>
+    </message>
+    <message>
+        <source>Editing shape: {0}</source>
+        <translation>Editing shape: {0}</translation>
+    </message>
+    <message>
         <source>Editing shapes</source>
         <translation>Редагування фігур</translation>
     </message>
@@ -141,6 +197,22 @@
         <translation>Натисніть наступну точку або завершіть через Ctrl/Cmd+Click для linestrip</translation>
     </message>
     <message>
+        <source>Click start point for quadratic Bezier curve</source>
+        <translation>Click start point for quadratic Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click control point for Bezier curve</source>
+        <translation>Click control point for Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click end point for quadratic Bezier curve</source>
+        <translation>Click end point for quadratic Bezier curve</translation>
+    </message>
+    <message>
+        <source>Click second control point for cubic Bezier curve</source>
+        <translation>Click second control point for cubic Bezier curve</translation>
+    </message>
+    <message>
         <source>Click center point for circle</source>
         <translation>Натисніть центральну точку для кола</translation>
     </message>
@@ -159,6 +231,18 @@
     <message>
         <source>Click to add point</source>
         <translation>Натисніть, щоб додати точку</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to adjust profile width</source>
+        <translation>Click &amp; drag to adjust profile width</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move width anchor</source>
+        <translation>Click &amp; drag to move width anchor</translation>
+    </message>
+    <message>
+        <source>Click &amp; drag to move visibility anchor</source>
+        <translation>Click &amp; drag to move visibility anchor</translation>
     </message>
     <message>
         <source>Click &amp; drag to move point</source>
@@ -206,6 +290,17 @@
     </message>
 </context>
 <context>
+    <name>CircleRadiusWidget</name>
+    <message>
+        <source>Radius</source>
+        <translation>Radius</translation>
+    </message>
+    <message>
+        <source>Radius of the selected circle</source>
+        <translation>Radius of the selected circle</translation>
+    </message>
+</context>
+<context>
     <name>EmptyStateWidget</name>
     <message>
         <source>Start annotating</source>
@@ -245,6 +340,87 @@
     <message>
         <source>Description</source>
         <translation>Опис</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfilePanel</name>
+    <message>
+        <source>Select a linestrip to edit its width and visibility profile.</source>
+        <translation>Select a linestrip to edit its width and visibility profile.</translation>
+    </message>
+    <message>
+        <source>Profile Actions</source>
+        <translation>Profile Actions</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation>Anchor</translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation>Position</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Width</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Visibility</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileVisibilityWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Автоматично</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Manual</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmed</translation>
+    </message>
+    <message>
+        <source>Visibility</source>
+        <translation>Visibility</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>Source</translation>
+    </message>
+    <message>
+        <source>Confidence</source>
+        <translation>Confidence</translation>
+    </message>
+</context>
+<context>
+    <name>LineProfileWidthWidget</name>
+    <message>
+        <source>Automatic</source>
+        <translation>Автоматично</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Manual</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confirmed</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Width</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>Source</translation>
+    </message>
+    <message>
+        <source>Confidence</source>
+        <translation>Confidence</translation>
     </message>
 </context>
 <context>
@@ -308,6 +484,14 @@
         <translation>Видалити поточний файл мітки</translation>
     </message>
     <message>
+        <source>Delete &amp;Image and Label File</source>
+        <translation>Delete &amp;Image and Label File</translation>
+    </message>
+    <message>
+        <source>Delete current image and its label file</source>
+        <translation>Delete current image and its label file</translation>
+    </message>
+    <message>
         <source>Keep Previous Annotation</source>
         <translation>Зберегти попередню анотацію</translation>
     </message>
@@ -318,6 +502,86 @@
     <message>
         <source>Keep Previous Brightness/Contrast</source>
         <translation>Зберегти попередню яскравість/контраст</translation>
+    </message>
+    <message>
+        <source>Snap to Point</source>
+        <translation>Snap to Point</translation>
+    </message>
+    <message>
+        <source>Snap the cursor to the nearest annotation point while drawing</source>
+        <translation>Snap the cursor to the nearest annotation point while drawing</translation>
+    </message>
+    <message>
+        <source>Copy Annotations to Next Unannotated File</source>
+        <translation>Copy Annotations to Next Unannotated File</translation>
+    </message>
+    <message>
+        <source>Save the current annotations to the next file that has no label file</source>
+        <translation>Save the current annotations to the next file that has no label file</translation>
+    </message>
+    <message>
+        <source>Merge into Linestrip</source>
+        <translation>Merge into Linestrip</translation>
+    </message>
+    <message>
+        <source>Combine the selected line and linestrip annotations into a single linestrip</source>
+        <translation>Combine the selected line and linestrip annotations into a single linestrip</translation>
+    </message>
+    <message>
+        <source>Merge Polygons</source>
+        <translation>Merge Polygons</translation>
+    </message>
+    <message>
+        <source>Merge the selected polygons and fill the gaps between them</source>
+        <translation>Merge the selected polygons and fill the gaps between them</translation>
+    </message>
+    <message>
+        <source>Measure Line Profile</source>
+        <translation>Measure Line Profile</translation>
+    </message>
+    <message>
+        <source>Measure width and visibility along the selected linestrip</source>
+        <translation>Measure width and visibility along the selected linestrip</translation>
+    </message>
+    <message>
+        <source>Delete Selected Files</source>
+        <translation>Delete Selected Files</translation>
+    </message>
+    <message>
+        <source>Permanently delete the selected files and their label files</source>
+        <translation>Permanently delete the selected files and their label files</translation>
+    </message>
+    <message>
+        <source>Export Selected Files</source>
+        <translation>Export Selected Files</translation>
+    </message>
+    <message>
+        <source>Copy the selected files and their label files to a directory</source>
+        <translation>Copy the selected files and their label files to a directory</translation>
+    </message>
+    <message>
+        <source>Export Annotated Files</source>
+        <translation>Export Annotated Files</translation>
+    </message>
+    <message>
+        <source>Copy the selected annotated files and their label files to a directory</source>
+        <translation>Copy the selected annotated files and their label files to a directory</translation>
+    </message>
+    <message>
+        <source>Fill Missing Line Profiles</source>
+        <translation>Fill Missing Line Profiles</translation>
+    </message>
+    <message>
+        <source>Measure selected annotations that do not have profile anchors</source>
+        <translation>Measure selected annotations that do not have profile anchors</translation>
+    </message>
+    <message>
+        <source>Rebuild Line Profiles</source>
+        <translation>Rebuild Line Profiles</translation>
+    </message>
+    <message>
+        <source>Force remeasure all selected line-profile annotations</source>
+        <translation>Force remeasure all selected line-profile annotations</translation>
     </message>
     <message>
         <source>Delete Shapes</source>
@@ -381,6 +645,54 @@
         <translation>Скасувати останнє додавання та редагування фігури</translation>
     </message>
     <message>
+        <source>Split Line at Vertex</source>
+        <translation>Split Line at Vertex</translation>
+    </message>
+    <message>
+        <source>Split the selected line into two at the hovered vertex</source>
+        <translation>Split the selected line into two at the hovered vertex</translation>
+    </message>
+    <message>
+        <source>Insert Profile Anchor</source>
+        <translation>Insert Profile Anchor</translation>
+    </message>
+    <message>
+        <source>Insert an interpolated profile anchor</source>
+        <translation>Insert an interpolated profile anchor</translation>
+    </message>
+    <message>
+        <source>Delete Profile Anchor</source>
+        <translation>Delete Profile Anchor</translation>
+    </message>
+    <message>
+        <source>Delete the active profile anchor</source>
+        <translation>Delete the active profile anchor</translation>
+    </message>
+    <message>
+        <source>Clear Line Profile</source>
+        <translation>Clear Line Profile</translation>
+    </message>
+    <message>
+        <source>Remove profile metadata and keep the centerline</source>
+        <translation>Remove profile metadata and keep the centerline</translation>
+    </message>
+    <message>
+        <source>Line Profile Measurement Parameters</source>
+        <translation>Line Profile Measurement Parameters</translation>
+    </message>
+    <message>
+        <source>Override measurement defaults for this linestrip</source>
+        <translation>Override measurement defaults for this linestrip</translation>
+    </message>
+    <message>
+        <source>Copy Profiles from Previous Frame</source>
+        <translation>Copy Profiles from Previous Frame</translation>
+    </message>
+    <message>
+        <source>Copy only compatible line profiles from the previous frame</source>
+        <translation>Copy only compatible line profiles from the previous frame</translation>
+    </message>
+    <message>
         <source>Start drawing polygons</source>
         <translation>Почніть малювати багатокутники</translation>
     </message>
@@ -407,6 +719,38 @@
     <message>
         <source>Start drawing points</source>
         <translation>Почніть малювати точки</translation>
+    </message>
+    <message>
+        <source>Quadratic Bezier</source>
+        <translation>Quadratic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a quadratic Bezier curve (3 points)</source>
+        <translation>Start drawing a quadratic Bezier curve (3 points)</translation>
+    </message>
+    <message>
+        <source>Cubic Bezier</source>
+        <translation>Cubic Bezier</translation>
+    </message>
+    <message>
+        <source>Start drawing a cubic Bezier curve (4 points)</source>
+        <translation>Start drawing a cubic Bezier curve (4 points)</translation>
+    </message>
+    <message>
+        <source>猫氏样条</source>
+        <translation>猫氏样条</translation>
+    </message>
+    <message>
+        <source>Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation.</source>
+        <translation>Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation.</translation>
+    </message>
+    <message>
+        <source>B样条</source>
+        <translation>B样条</translation>
+    </message>
+    <message>
+        <source>Start drawing a B-spline. Ctrl+LeftClick ends creation.</source>
+        <translation>Start drawing a B-spline. Ctrl+LeftClick ends creation.</translation>
     </message>
     <message>
         <source>&amp;Next Image</source>
@@ -481,6 +825,22 @@ Shapes</source>
     <message>
         <source>Toggle all shapes</source>
         <translation>Переключити всі фігури</translation>
+    </message>
+    <message>
+        <source>Show Minimap</source>
+        <translation>Show Minimap</translation>
+    </message>
+    <message>
+        <source>Show or hide the canvas minimap</source>
+        <translation>Show or hide the canvas minimap</translation>
+    </message>
+    <message>
+        <source>Show Line Profile Preview</source>
+        <translation>Show Line Profile Preview</translation>
+    </message>
+    <message>
+        <source>Show variable-width profile boundaries and handles</source>
+        <translation>Show variable-width profile boundaries and handles</translation>
     </message>
     <message>
         <source>Select Shape Above</source>
@@ -567,12 +927,20 @@ Shapes</source>
         <translation>Повторити</translation>
     </message>
     <message>
+        <source>Line Profile</source>
+        <translation>Line Profile</translation>
+    </message>
+    <message>
         <source>Flags</source>
         <translation>Прапори</translation>
     </message>
     <message>
         <source>Shape List</source>
         <translation>Список фігур</translation>
+    </message>
+    <message>
+        <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
+        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
     </message>
     <message>
         <source>Label List</source>
@@ -611,12 +979,172 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
 Перемкніть модель AI Text-to-Annotation на &apos;SAM3 (smart)&apos; або встановіть формат виводу &apos;Rectangle&apos;.</translation>
     </message>
     <message>
+        <source>Rename Label</source>
+        <translation>Rename Label</translation>
+    </message>
+    <message>
+        <source>Set Uniform Circle Radius</source>
+        <translation>Set Uniform Circle Radius</translation>
+    </message>
+    <message>
+        <source>Radius:</source>
+        <translation>Radius:</translation>
+    </message>
+    <message>
+        <source>Renaming label in annotation files…</source>
+        <translation>Renaming label in annotation files…</translation>
+    </message>
+    <message>
+        <source>Setting circle radius in annotation files…</source>
+        <translation>Setting circle radius in annotation files…</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update</source>
+        <translation>Batch Annotation Update</translation>
+    </message>
+    <message>
+        <source>Batch Annotation Update Failed</source>
+        <translation>Batch Annotation Update Failed</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;{}&lt;/b&gt;</source>
+        <translation>&lt;b&gt;{}&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Batch annotation update canceled.</source>
+        <translation>Batch annotation update canceled.</translation>
+    </message>
+    <message>
+        <source>No circles found for label &apos;{0}&apos;.</source>
+        <translation>No circles found for label &apos;{0}&apos;.</translation>
+    </message>
+    <message>
+        <source>Set the radius of {0} circles in {1} other annotation files.</source>
+        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+    </message>
+    <message>
+        <source>New label:</source>
+        <translation>New label:</translation>
+    </message>
+    <message>
         <source>Invalid label</source>
         <translation>Недійсна мітка</translation>
     </message>
     <message>
+        <source>A label named &apos;{}&apos; already exists.</source>
+        <translation>A label named &apos;{}&apos; already exists.</translation>
+    </message>
+    <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
         <translation>Недійсна мітка &quot;{}&quot; з типом перевірки &quot;{}&quot;</translation>
+    </message>
+    <message>
+        <source>Renamed label in {0} other annotation files</source>
+        <translation>Renamed label in {0} other annotation files</translation>
+    </message>
+    <message>
+        <source>{count} files selected</source>
+        <translation>{count} files selected</translation>
+    </message>
+    <message>
+        <source>Sample spacing</source>
+        <translation>Sample spacing</translation>
+    </message>
+    <message>
+        <source>Search radius</source>
+        <translation>Search radius</translation>
+    </message>
+    <message>
+        <source>Minimum width</source>
+        <translation>Minimum width</translation>
+    </message>
+    <message>
+        <source>Maximum width</source>
+        <translation>Maximum width</translation>
+    </message>
+    <message>
+        <source>Contrast factor</source>
+        <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Override global measurement settings</source>
+        <translation>Override global measurement settings</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>Width filter strength</translation>
+    </message>
+    <message>
+        <source>Use fixed width</source>
+        <translation>Use fixed width</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>Fixed width</translation>
+    </message>
+    <message>
+        <source>Invalid Measurement Parameters</source>
+        <translation>Invalid Measurement Parameters</translation>
+    </message>
+    <message>
+        <source>No selected files have label annotations to measure</source>
+        <translation>No selected files have label annotations to measure</translation>
+    </message>
+    <message>
+        <source>fill missing line profiles</source>
+        <translation>fill missing line profiles</translation>
+    </message>
+    <message>
+        <source>rebuild line profiles</source>
+        <translation>rebuild line profiles</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile Measurement</source>
+        <translation>Batch Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>{0} in {1} selected label files?</source>
+        <translation>{0} in {1} selected label files?</translation>
+    </message>
+    <message>
+        <source>Measuring line profiles…</source>
+        <translation>Measuring line profiles…</translation>
+    </message>
+    <message>
+        <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
+        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+    </message>
+    <message>
+        <source>Batch line-profile measurement failed: {0}</source>
+        <translation>Batch line-profile measurement failed: {0}</translation>
+    </message>
+    <message>
+        <source>Measuring line profile…</source>
+        <translation>Measuring line profile…</translation>
+    </message>
+    <message>
+        <source>Line Profile Measurement</source>
+        <translation>Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>Measurement result is out of date</source>
+        <translation>Measurement result is out of date</translation>
+    </message>
+    <message>
+        <source>Accept Line Profile Measurement</source>
+        <translation>Accept Line Profile Measurement</translation>
+    </message>
+    <message>
+        <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
+        <translation>Measurement produced {0} samples. Accept automatic width and visibility anchors?</translation>
+    </message>
+    <message>
+        <source>Only accept samples with confidence &gt;= 0.5</source>
+        <translation>Only accept samples with confidence &gt;= 0.5</translation>
+    </message>
+    <message>
+        <source>Line profile measurement failed: {0}</source>
+        <translation>Line profile measurement failed: {0}</translation>
     </message>
     <message>
         <source>Saved</source>
@@ -669,6 +1197,38 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Loaded %s</source>
         <translation>Завантажено %s</translation>
+    </message>
+    <message>
+        <source>Previous frame profiles are incompatible: {0}</source>
+        <translation>Previous frame profiles are incompatible: {0}</translation>
+    </message>
+    <message>
+        <source>Shape {0} ({1}): centerline difference {2:.2f} px</source>
+        <translation>Shape {0} ({1}): centerline difference {2:.2f} px</translation>
+    </message>
+    <message>
+        <source>unlabeled</source>
+        <translation>unlabeled</translation>
+    </message>
+    <message>
+        <source>Shape {0}: width difference {1}, visibility difference {2}</source>
+        <translation>Shape {0}: width difference {1}, visibility difference {2}</translation>
+    </message>
+    <message>
+        <source>n/a</source>
+        <translation>n/a</translation>
+    </message>
+    <message>
+        <source>Frame Profile Transfer Preview</source>
+        <translation>Frame Profile Transfer Preview</translation>
+    </message>
+    <message>
+        <source>Copy profiles from the previous frame?
+
+{0}</source>
+        <translation>Copy profiles from the previous frame?
+
+{0}</translation>
     </message>
     <message>
         <source>Images and annotation files (%s)</source>
@@ -733,6 +1293,30 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     <message>
         <source>Polygon</source>
         <translation>Багатокутник</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>Preview</translation>
+    </message>
+    <message>
+        <source>Measure</source>
+        <translation>Measure</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Insert</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Clear</translation>
+    </message>
+    <message>
+        <source>Copy Previous</source>
+        <translation>Copy Previous</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>Parameters</translation>
     </message>
     <message>
         <source>Save the labels under a new file name</source>
@@ -835,10 +1419,6 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
         <translation>Ctrl+колесо масштабує полотно</translation>
     </message>
     <message>
-        <source>Choose a label to start drawing with it. Press &apos;Esc&apos; to clear the selection.</source>
-        <translation>Виберіть мітку, щоб почати малювати нею. Натисніть &apos;Esc&apos;, щоб зняти виділення.</translation>
-    </message>
-    <message>
         <source>Your settings couldn’t be loaded.</source>
         <translation>Не вдалося завантажити ваші налаштування.</translation>
     </message>
@@ -879,6 +1459,30 @@ Please select a different model or use AI-Box mode.</source>
         <translation>Помилка видалення файлу анотацій</translation>
     </message>
     <message>
+        <source>Permanently delete this image and its label file? This action cannot be undone.</source>
+        <translation>Permanently delete this image and its label file? This action cannot be undone.</translation>
+    </message>
+    <message>
+        <source>Batch Line Profile</source>
+        <translation>Batch Line Profile</translation>
+    </message>
+    <message>
+        <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
+        <translation>Permanently delete {count} files and their label files? This action cannot be undone.</translation>
+    </message>
+    <message>
+        <source>Choose Export Directory</source>
+        <translation>Choose Export Directory</translation>
+    </message>
+    <message>
+        <source>Exported {count} annotated files to {dir}</source>
+        <translation>Exported {count} annotated files to {dir}</translation>
+    </message>
+    <message>
+        <source>Exported {count} files to {dir}</source>
+        <translation>Exported {count} files to {dir}</translation>
+    </message>
+    <message>
         <source>Image not found</source>
         <translation>Зображення не знайдено</translation>
     </message>
@@ -889,6 +1493,14 @@ Expected location: {path}</source>
         <translation>Ця анотація посилається на «{name}», але зображення не знайдено.
 
 Очікуване розташування: {path}</translation>
+    </message>
+    <message>
+        <source>Current file has no annotations to copy</source>
+        <translation>Current file has no annotations to copy</translation>
+    </message>
+    <message>
+        <source>No unannotated file found after the current file</source>
+        <translation>No unannotated file found after the current file</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -1140,6 +1752,10 @@ Expected location: {path}</source>
         <translation>Допомога ШІ</translation>
     </message>
     <message>
+        <source>Line profile measurement</source>
+        <translation>Line profile measurement</translation>
+    </message>
+    <message>
         <source>Save automatically</source>
         <translation>Зберігати автоматично</translation>
     </message>
@@ -1150,6 +1766,10 @@ Expected location: {path}</source>
     <message>
         <source>Embeds the image in the label JSON file.</source>
         <translation>Вбудовує зображення у JSON-файл мітки.</translation>
+    </message>
+    <message>
+        <source>Show annotation outlines in Minimap</source>
+        <translation>Show annotation outlines in Minimap</translation>
     </message>
     <message>
         <source>Shape Color Mode</source>
@@ -1184,6 +1804,14 @@ Expected location: {path}</source>
         <translation>Кольори окремих міток і надалі можна редагувати у файлі конфігурації.</translation>
     </message>
     <message>
+        <source>Snap cursor to annotation points</source>
+        <translation>Snap cursor to annotation points</translation>
+    </message>
+    <message>
+        <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
+        <translation>While drawing, the cursor snaps to the nearest existing annotation point.</translation>
+    </message>
+    <message>
         <source>Keep previous annotation</source>
         <translation>Зберегти попередню анотацію</translation>
     </message>
@@ -1212,6 +1840,50 @@ Expected location: {path}</source>
         <translation>Одна назва прапорця на рядок. Шаблони: ^car$ точно відповідає car, car — префіксу, .* — будь-якій мітці.</translation>
     </message>
     <message>
+        <source>Sample spacing</source>
+        <translation>Sample spacing</translation>
+    </message>
+    <message>
+        <source>Pixels along the centerline.</source>
+        <translation>Pixels along the centerline.</translation>
+    </message>
+    <message>
+        <source>Search radius</source>
+        <translation>Search radius</translation>
+    </message>
+    <message>
+        <source>Pixels sampled on each normal.</source>
+        <translation>Pixels sampled on each normal.</translation>
+    </message>
+    <message>
+        <source>Minimum width</source>
+        <translation>Minimum width</translation>
+    </message>
+    <message>
+        <source>Maximum width</source>
+        <translation>Maximum width</translation>
+    </message>
+    <message>
+        <source>Contrast factor</source>
+        <translation>Contrast factor</translation>
+    </message>
+    <message>
+        <source>Width filter strength</source>
+        <translation>Width filter strength</translation>
+    </message>
+    <message>
+        <source>Sliding window length as a percentage of measured samples.</source>
+        <translation>Sliding window length as a percentage of measured samples.</translation>
+    </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>Fixed width</translation>
+    </message>
+    <message>
+        <source>Set to 0 to measure the width from the image.</source>
+        <translation>Set to 0 to measure the width from the image.</translation>
+    </message>
+    <message>
         <source>AI Text-to-Annotation</source>
         <translation>AI: текст в анотацію</translation>
     </message>
@@ -1226,6 +1898,22 @@ Expected location: {path}</source>
     <message>
         <source>Higher values preserve more Mask boundary detail and smaller lands.</source>
         <translation>Вищі значення зберігають більше деталей межі маски та менші області.</translation>
+    </message>
+    <message>
+        <source>Input downsample scale</source>
+        <translation>Input downsample scale</translation>
+    </message>
+    <message>
+        <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
+        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+    </message>
+    <message>
+        <source>Input denoise strength</source>
+        <translation>Input denoise strength</translation>
+    </message>
+    <message>
+        <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
+        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

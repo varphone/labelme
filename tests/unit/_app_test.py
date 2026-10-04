@@ -5,7 +5,9 @@ import struct
 import zlib
 from collections.abc import Callable
 from pathlib import Path
+from typing import ClassVar
 from typing import cast
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -16,8 +18,11 @@ from PySide6 import QtGui
 from labelme import __appname__
 from labelme import _app
 from labelme import _automation
-from labelme._label_file import ShapeDict
+from labelme._line_profile import LineProfile
+from labelme._line_profile import ProfileAnchor
+from labelme._line_profile import ProfileValue
 from labelme._shape import Shape
+from labelme._shape_dict import ShapeDict
 
 
 @pytest.mark.parametrize(
@@ -114,6 +119,35 @@ def test_format_window_title(
         )
         == expected
     )
+
+
+def test_nearest_profile_anchor_index_keeps_width_and_visibility_in_sync() -> None:
+    position = _app._nearest_line_profile_anchor_index(
+        anchors=(
+            ProfileAnchor(
+                0.0, visibility=ProfileValue(0.1, "auto", 1.0, confirmed=False)
+            ),
+            ProfileAnchor(
+                0.52, visibility=ProfileValue(0.2, "auto", 1.0, confirmed=False)
+            ),
+            ProfileAnchor(
+                1.0, visibility=ProfileValue(0.3, "auto", 1.0, confirmed=False)
+            ),
+        ),
+        position=0.5,
+    )
+    width = _app._nearest_line_profile_anchor_index(
+        anchors=(
+            ProfileAnchor(0.0, width=ProfileValue(4.0, "auto", 1.0, confirmed=False)),
+            ProfileAnchor(0.49, width=ProfileValue(5.0, "auto", 1.0, confirmed=False)),
+            ProfileAnchor(1.0, width=ProfileValue(6.0, "auto", 1.0, confirmed=False)),
+        ),
+        position=0.5,
+    )
+
+    assert position == 1
+    assert width == 1
+    assert _app._nearest_line_profile_anchor_index(anchors=(), position=0.5) is None
 
 
 def _make_png_bytes(
@@ -371,6 +405,59 @@ def test_shapes_from_dicts_gives_each_shape_its_own_flags() -> None:
     ]
 
 
+def test_merge_polygons_initializes_point_labels() -> None:
+    first = Shape(
+        label="object",
+        shape_type="polygon",
+        points=np.array([[0.0, 0.0], [2.0, 0.0], [1.0, 2.0]], dtype=np.float64),
+    )
+    second = Shape(
+        label="object",
+        shape_type="polygon",
+        points=np.array([[3.0, 0.0], [5.0, 0.0], [4.0, 2.0]], dtype=np.float64),
+    )
+    canvas = Mock()
+    canvas.selected_shapes = [first, second]
+    canvas.shapes = [first, second]
+    window = Mock()
+    window._canvas_widgets.canvas = canvas
+    removed_shapes: list[Shape] = []
+    window.remove_labels = lambda *, shapes: removed_shapes.extend(shapes)
+
+    _app.MainWindow.merge_polygons(window)
+
+    merged = window.add_label.call_args.kwargs["shape"]
+    np.testing.assert_array_equal(merged.point_labels, np.ones(len(merged.points)))
+    assert removed_shapes == [first, second]
+    assert len(merged.points) == len(first.points) + len(second.points)
+    for point in np.concatenate((first.points, second.points)):
+        assert any(
+            np.array_equal(point, merged_point) for merged_point in merged.points
+        )
+    assert canvas.shapes == [merged]
+    assert canvas.selected_shapes == []
+
+
+def test_merge_polygons_connects_the_full_facing_edge() -> None:
+    first = np.array([[0.0, 0.0], [10.0, 0.0], [10.0, 10.0], [0.0, 10.0]])
+    second = np.array([[0.0, 20.0], [10.0, 20.0], [10.0, 30.0], [0.0, 30.0]])
+
+    merged = _app._merge_polygon_points(polygons=[first, second])
+
+    assert merged is not None
+    assert len(merged) == 8
+    assert any(
+        np.array_equal(merged[index], [10.0, 10.0])
+        and np.array_equal(merged[(index + 1) % len(merged)], [10.0, 20.0])
+        for index in range(len(merged))
+    )
+    assert any(
+        np.array_equal(merged[index], [0.0, 20.0])
+        and np.array_equal(merged[(index + 1) % len(merged)], [0.0, 10.0])
+        for index in range(len(merged))
+    )
+
+
 def test_shapes_from_dicts_carries_over_the_shape_fields() -> None:
     mask = np.ones((2, 3), dtype=bool)
     shape_dict = ShapeDict(
@@ -394,6 +481,112 @@ def test_shapes_from_dicts_carries_over_the_shape_fields() -> None:
     np.testing.assert_array_equal(shape.mask, mask)
     assert shape.points.dtype == np.float64
     assert shape.points.tolist() == [[1.0, 2.0], [3.0, 4.0]]
+
+
+def test_shapes_from_dicts_and_shape_to_dict_carry_line_profile() -> None:
+    profile = LineProfile(reviewed=True)
+    shape_dict = ShapeDict(
+        label="stripe",
+        points=[[1.0, 2.0], [3.0, 4.0]],
+        shape_type="linestrip",
+        flags={},
+        description="",
+        group_id=None,
+        mask=None,
+        other_data={},
+        line_profile=profile,
+    )
+
+    (shape,) = _app._shapes_from_dicts(shape_dicts=[shape_dict], label_flags=None)
+
+    assert shape.line_profile is profile
+    result = _app._shape_to_dict(shape)
+    assert result["line_profile"] is profile
+
+
+def test_line_measurement_token_changes_when_shape_state_changes() -> None:
+    shape = Shape(
+        shape_type="linestrip",
+        points=np.array([[0.0, 0.0], [10.0, 0.0]]),
+        line_profile=LineProfile(),
+    )
+    before = _app._line_measurement_token(shape=shape, pixmap_hash=1)
+    shape.points[1, 0] = 11.0
+    after = _app._line_measurement_token(shape=shape, pixmap_hash=1)
+
+    assert before != after
+
+
+def test_cancel_line_measurement_stops_worker_thread_and_progress() -> None:
+    window = _app.MainWindow.__new__(_app.MainWindow)
+    window._line_measurement_worker = Mock()
+    window._line_measurement_thread = Mock()
+    window._line_measurement_progress = Mock()
+
+    window._cancel_line_measurement()
+
+    window._line_measurement_worker.cancel.assert_called_once_with()
+    window._line_measurement_thread.requestInterruption.assert_called_once_with()
+    window._line_measurement_thread.quit.assert_called_once_with()
+    window._line_measurement_progress.close.assert_called_once_with()
+
+
+def test_line_measurement_result_closes_progress_before_acceptance(
+    *,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    window = _app.MainWindow.__new__(_app.MainWindow)
+    progress = Mock()
+    window._line_measurement_progress = progress
+    window._line_measurement_token = object()
+    accepted = Mock()
+
+    def accept_result(result: object, token: object) -> None:
+        accepted(result, token)
+        assert progress.close.call_count == 1
+
+    monkeypatch.setattr(window, "_accept_line_measurement", accept_result)
+
+    result = object()
+    token = window._line_measurement_token
+    window._on_line_measurement_result(result)
+
+    progress.close.assert_called_once_with()
+    accepted.assert_called_once_with(result, token)
+
+
+def test_line_measurement_parameters_apply_shape_overrides() -> None:
+    profile = LineProfile(
+        measurement_overrides=(
+            ("sample_spacing", 3.0),
+            ("contrast_factor", 0.8),
+            ("width_filter_strength", 50.0),
+            ("fixed_width", 18.0),
+        )
+    )
+
+    class StubWindow:
+        _config: ClassVar[dict[str, object]] = {
+            "line_profile_measurement": {
+                "sample_spacing": 8.0,
+                "search_radius": 32.0,
+                "min_width": 1.0,
+                "max_width": 256.0,
+                "contrast_factor": 0.35,
+                "width_filter_strength": 20.0,
+                "fixed_width": 0.0,
+            }
+        }
+
+    parameters = _app.MainWindow._line_measurement_parameters(
+        cast(_app.MainWindow, StubWindow()), profile=profile
+    )
+
+    assert parameters.sample_spacing == 3.0
+    assert parameters.search_radius == 32.0
+    assert parameters.contrast_factor == 0.8
+    assert parameters.width_filter_strength == 50.0
+    assert parameters.fixed_width == 18.0
 
 
 def test_shape_to_dict_maps_all_fields() -> None:
@@ -524,3 +717,37 @@ def test_resolve_stored_image_path_falls_back_across_real_windows_drives() -> No
         )
         == r"D:\imgs\img.png"
     )
+
+
+def test_scan_image_files_sorts_by_filename(*, tmp_path: Path) -> None:
+    for name in (
+        "2bd6a3c1.jpg",  # hex digest
+        "02be5f9a.jpg",  # hex digest: leading zero must come first
+        "10.png",
+        "2.png",
+        "A.png",
+        "a.png",
+    ):
+        (tmp_path / name).write_bytes(b"")
+    sub = tmp_path / "sub"
+    sub.mkdir()
+    (sub / "a.png").write_bytes(b"")
+
+    images = _app._scan_image_files(root_dir=str(tmp_path))
+
+    # Plain case-insensitive lexicographic order by file name; the full
+    # path breaks ties. Numeric-looking names sort as plain text (a hex
+    # digest keeps its code-point order instead of a numeric one).
+    assert [Path(p).name for p in images] == [
+        "02be5f9a.jpg",
+        "10.png",
+        "2.png",
+        "2bd6a3c1.jpg",
+        "A.png",
+        "a.png",
+        "a.png",
+    ]
+    # Case and path tiebreaks are deterministic.
+    assert images[4] == str(tmp_path / "A.png")
+    assert images[5] == str(tmp_path / "a.png")
+    assert images[6] == str(sub / "a.png")

@@ -49,7 +49,7 @@ class LabelDialog(QtWidgets.QDialog):
     ) -> None:
         LABEL_LIST_HEIGHT: Final[int] = 150
 
-        super().__init__(parent)
+        super().__init__(parent=parent)
         dialog_name = self.tr("Shape Label")
         self.setWindowTitle(dialog_name)
         self.setAccessibleName(dialog_name)
@@ -286,6 +286,19 @@ class LabelDialog(QtWidgets.QDialog):
         if self.label_list.findItems(label, QtCore.Qt.MatchFlag.MatchExactly):
             return
         self.label_list.addItem(label)
+        if self._sort_labels:
+            self.label_list.sortItems()
+
+    def rename_label_history(self, *, old_label: str, new_label: str) -> None:
+        """Replace a label in session history and the dialog's visible list."""
+        self._label_history = [
+            new_label if label == old_label else label for label in self._label_history
+        ]
+
+        for item in self.label_list.findItems(
+            old_label, QtCore.Qt.MatchFlag.MatchExactly
+        ):
+            item.setText(new_label)
         if self._sort_labels:
             self.label_list.sortItems()
 

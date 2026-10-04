@@ -5,6 +5,8 @@ with_image_data: false
 keep_prev: false
 keep_prev_scale: false
 keep_prev_brightness_contrast: false
+# Snap the drawing cursor to the nearest annotation point.
+snap_to_point: false
 # UI language as a locale code (e.g. ja_JP); null follows the system locale.
 language:
 # Color theme: 'system' follows the OS appearance, or force 'light' / 'dark'.
@@ -35,12 +37,27 @@ shape:
   hvertex_fill_color: [255, 255, 255, 255]
   point_size: 8
   show_labels: false
+minimap:
+  show_shape_outlines: true
 mask_polygonization:
   detail: 60
 ai:
   default: Sam2 (balanced)
   text_model: yoloworld:latest
+  # Model-only input preprocessing. 1.0 keeps resolution; 0.0 disables denoising.
+  downsample_scale: 1.0
+  denoise_strength: 0.0
   suppress_existing_shape_matches: false
+# Global defaults for opt-in linestrip profile measurement. Shape/profile data
+# remains independent from these settings.
+line_profile_measurement:
+  sample_spacing: 8.0
+  search_radius: 32.0
+  min_width: 1.0
+  max_width: 256.0
+  contrast_factor: 0.35
+  width_filter_strength: 20
+  fixed_width: 0.0
 # main
 flag_dock:
   show: true
@@ -88,6 +105,10 @@ canvas:
     line: false
     point: false
     linestrip: false
+    bezier2: false
+    bezier3: false
+    catmull_rom: false
+    bspline: false
     ai_points_to_shape: false
     ai_box_to_shape: true
 shortcuts:
@@ -99,6 +120,7 @@ shortcuts:
   save_as: Ctrl+Shift+S
   save_to:
   delete_file: Ctrl+Delete
+  delete_image_file: Shift+Delete
   open_next: [D, Ctrl+Shift+D]
   open_prev: [A, Ctrl+Shift+A]
   zoom_in: [Ctrl++, Ctrl+=]
@@ -113,6 +135,10 @@ shortcuts:
   create_line:
   create_point:
   create_linestrip:
+  create_bezier2:
+  create_bezier3:
+  create_catmull_rom:
+  create_bspline:
   edit_shape: Ctrl+J
   delete_shape: Delete
   duplicate_shape: Ctrl+D
@@ -121,8 +147,13 @@ shortcuts:
   undo: Ctrl+Z
   undo_last_point: Ctrl+Z
   edit_label: Ctrl+E
+  add_point_to_edge: V
+  split_linestrip: B
+  copy_annotations_to_next: Shift+N
+  merge_linestrips: M
   toggle_keep_prev_mode:
-  remove_selected_point: [Meta+H, Backspace]
+  toggle_snap_to_point: S
+  remove_selected_point: [X, Backspace]
   show_all_shapes:
   hide_all_shapes:
   toggle_all_shapes: T

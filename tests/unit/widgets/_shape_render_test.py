@@ -11,6 +11,7 @@ from labelme._shape import ShapeType
 from labelme._widgets._shape_render import Palette
 from labelme._widgets._shape_render import ShapeRenderContext
 from labelme._widgets._shape_render import VertexHighlight
+from labelme._widgets._shape_render import _build_shape_points_paths
 from labelme._widgets._shape_render import bounds
 from labelme._widgets._shape_render import is_hit_by_point
 from labelme._widgets._shape_render import render_shape
@@ -62,6 +63,45 @@ def _render(
     return image
 
 
+@pytest.mark.parametrize(
+    "shape_type", ["line", "linestrip", "bezier2", "bezier3", "catmull_rom", "bspline"]
+)
+def test_line_shapes_are_not_filled_when_selected(*, shape_type: ShapeType) -> None:
+    points = {
+        "line": [[20, 80], [100, 20]],
+        "linestrip": [[20, 80], [60, 20], [100, 80]],
+        "bezier2": [[20, 80], [60, 20], [100, 80]],
+        "bezier3": [[20, 80], [40, 20], [80, 20], [100, 80]],
+        "catmull_rom": [[20, 80], [60, 20], [100, 80]],
+        "bspline": [[20, 80], [60, 20], [100, 80]],
+    }[shape_type]
+    shape = Shape(
+        shape_type=shape_type,
+        points=np.array(points, dtype=np.float64),
+        closed=True,
+    )
+    image = QtGui.QImage(120, 100, QtGui.QImage.Format.Format_ARGB32)
+    image.fill(QtGui.QColor(255, 255, 255))
+    painter = QtGui.QPainter(image)
+    render_shape(
+        painter=painter,
+        shape=shape,
+        context=ShapeRenderContext(
+            scale=1.0,
+            palette=Palette.from_rgb((255, 0, 0)),
+            point_size=8,
+            point_type="round",
+            selected=True,
+            fill=True,
+            highlight=None,
+            rotation_highlight=None,
+        ),
+    )
+    painter.end()
+
+    assert image.pixelColor(60, 50) == QtGui.QColor(255, 255, 255)
+
+
 def _diff_rows(*, a: QtGui.QImage, b: QtGui.QImage, bottom: int) -> int:
     # Only the label text differs between renders; everything else (outline,
     # vertices) is identical, so the per-pixel diff isolates the text. Restrict
@@ -97,6 +137,12 @@ def _shape(*, shape_type: ShapeType, points: list[list[float]]) -> Shape:
             (0.0, 0.0, 10.0, 5.0),
         ),
         ("polygon", [[0, 0], [10, 0], [10, 5], [0, 5]], (0.0, 0.0, 10.0, 5.0)),
+        ("bezier2", [[0, 0], [5, 10], [10, 0]], (0.0, 0.0, 10.0, 5.0)),
+        (
+            "bezier3",
+            [[0, 0], [0, 10], [10, 10], [10, 0]],
+            (0.0, 0.0, 10.0, 7.5),
+        ),
         # A single point bounds to a zero-size rect at its own location.
         ("point", [[100, 100]], (100.0, 100.0, 0.0, 0.0)),
     ],
@@ -120,6 +166,8 @@ def test_bounds_spans_the_shape(
         ("mask", [[5, 5]]),
         ("circle", [[5, 5]]),
         ("oriented_rectangle", [[0, 0], [10, 0], [10, 5]]),
+        ("bezier2", [[0, 0], [5, 10]]),
+        ("bezier3", [[0, 0], [5, 10], [10, 0]]),
         ("polygon", []),
     ],
 )
@@ -128,6 +176,55 @@ def test_bounds_is_empty_for_incomplete_shape(
 ) -> None:
     shape = _shape(shape_type=shape_type, points=points)
     assert bounds(shape=shape).getRect() == (0.0, 0.0, 0.0, 0.0)
+
+
+@pytest.mark.parametrize("shape_type", ["bezier2", "bezier3"])
+def test_bezier_hit_testing_uses_curve_not_control_polygon(
+    *,
+    shape_type: ShapeType,
+) -> None:
+    points = (
+        [[0.0, 0.0], [5.0, 10.0], [10.0, 0.0]]
+        if shape_type == "bezier2"
+        else [[0.0, 0.0], [0.0, 10.0], [10.0, 10.0], [10.0, 0.0]]
+    )
+    shape = _shape(shape_type=shape_type, points=points)
+    assert is_hit_by_point(
+        shape=shape,
+        point=np.array([5.0, 5.0 if shape_type == "bezier2" else 7.5]),
+        scale=1.0,
+        point_size=8,
+        epsilon=1.0,
+    )
+    assert not is_hit_by_point(
+        shape=shape,
+        point=np.array([5.0, 10.0]),
+        scale=1.0,
+        point_size=8,
+        epsilon=1.0,
+    )
+
+
+@pytest.mark.parametrize("shape_type", ["bezier2", "bezier3"])
+def test_bezier_render_includes_control_polygon(*, shape_type: ShapeType) -> None:
+    points = (
+        [[0.0, 0.0], [5.0, 10.0], [10.0, 0.0]]
+        if shape_type == "bezier2"
+        else [[0.0, 0.0], [0.0, 10.0], [10.0, 10.0], [10.0, 0.0]]
+    )
+    shape = _shape(shape_type=shape_type, points=points)
+    context = ShapeRenderContext(
+        scale=1.0,
+        palette=Palette.from_rgb((255, 0, 0)),
+        point_size=8,
+        point_type="round",
+        selected=False,
+        fill=False,
+        highlight=None,
+        rotation_highlight=None,
+    )
+    paths = _build_shape_points_paths(shape=shape, context=context)
+    assert paths.control_polygon.length() > 0
 
 
 @pytest.mark.gui

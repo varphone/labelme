@@ -15,6 +15,7 @@ from .._config import _schema as schema
 from .._config._shape_color import RGB_CHANNEL_COUNT
 from .._utils._qt import new_icon
 from ._integer_slider import IntegerSlider
+from ._integer_slider import _SuffixedIntegerSlider
 
 ApplySetting = Callable[[tuple[str, ...], object], bool]
 PreviewShapeColor = Callable[[tuple[str, ...], list[int] | None], None]
@@ -412,6 +413,16 @@ class _SettingsPage(QtWidgets.QWidget):
         self._groups = [group_box for _title, _icon, group_box in groups]
         self._scrolling_to_group = False
         self._editors = editors
+        # The schema groups are rendered in Group order, while the settings
+        # tuple also serves configuration loading and may contain a feature
+        # group before an older group. Follow the visible page order for
+        # keyboard navigation instead of relying on dict insertion order.
+        self._tab_order = tuple(
+            editors[setting.key_path]
+            for group in typing.get_args(schema.Group)
+            for setting in schema.SETTINGS
+            if setting.group == group
+        )
         self._search_index: list[tuple[schema.Setting, tuple[str, ...], str]] = []
         settings_by_path = {setting.key_path: setting for setting in schema.SETTINGS}
         for key_path, editor in editors.items():
@@ -463,7 +474,7 @@ class _SettingsPage(QtWidgets.QWidget):
             widget.installEventFilter(self)
 
         self.setFocusProxy(self._search)
-        for before, after in pairwise([self._search, navigation, *editors.values()]):
+        for before, after in pairwise([self._search, navigation, *self._tab_order]):
             QtWidgets.QWidget.setTabOrder(before, after)
 
         navigation.currentRowChanged.connect(self._scroll_to_group)
@@ -766,6 +777,11 @@ class _SettingsPage(QtWidgets.QWidget):
         scroll_bar = self._scroll_area.verticalScrollBar()
         if scroll_bar.maximum() > 0 and value == scroll_bar.maximum():
             active = len(self._groups) - 1
+        elif active == len(self._groups) - 1:
+            # Keep the last section selected only at the exact scroll limit;
+            # this preserves the useful second-to-last reading point one pixel
+            # above the bottom when the final group is shorter than the viewport.
+            active = max(0, active - 1)
         with QtCore.QSignalBlocker(self._navigation):
             self._navigation.setCurrentRow(active)
 
@@ -782,7 +798,7 @@ class SettingsDialog(QtWidgets.QDialog):
         settings_editable: bool = True,  # noqa: FBT001 -- controls config editing
         parent: QtWidgets.QWidget | None = None,
     ) -> None:
-        super().__init__(parent)
+        super().__init__(parent=parent)
         self.setWindowTitle(self.tr("Settings"))
 
         self._config = config
@@ -798,6 +814,7 @@ class SettingsDialog(QtWidgets.QDialog):
             "Label sources": "phosphor/tag.svg",
             "Label behavior": "phosphor/sliders-horizontal.svg",
             "AI assist": "phosphor/sparkle.svg",
+            "Line profile measurement": "phosphor/line-segments.svg",
         }
         groups: list[tuple[str, QtGui.QIcon, QtWidgets.QGroupBox]] = []
         for group in typing.get_args(schema.Group):
@@ -847,7 +864,10 @@ class SettingsDialog(QtWidgets.QDialog):
         layout.addLayout(button_layout)
         self.setLayout(layout)
 
-        QtWidgets.QWidget.setTabOrder(page, open_button)
+        # The page contains the editor chain; connect its actual last editor
+        # to the footer so Qt does not fall back to the nested widget order.
+        last_editor = page._tab_order[-1] if page._tab_order else page
+        QtWidgets.QWidget.setTabOrder(last_editor, open_button)
         QtWidgets.QWidget.setTabOrder(open_button, close_button)
 
         DEFAULT_DIALOG_SIZE: typing.Final = QtCore.QSize(760, 590)
@@ -1019,6 +1039,19 @@ class SettingsDialog(QtWidgets.QDialog):
                 lambda checked: self._apply(setting.key_path, checked)
             )
             return check
+        if setting.kind == "float":
+            assert setting.minimum is not None
+            assert setting.maximum is not None
+            spin = QtWidgets.QDoubleSpinBox()
+            spin.setRange(setting.minimum, setting.maximum)
+            spin.setDecimals(setting.decimals)
+            spin.setSingleStep(0.1 if setting.decimals else 1.0)
+            spin.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows)
+            self._set_editor_value(editor=spin, value=value)
+            spin.valueChanged.connect(
+                lambda changed: self._apply(setting.key_path, changed)
+            )
+            return spin
         if setting.kind == "enum":
             assert setting.choices is not None
             enum_items: list[tuple[str, object]] = []
@@ -1036,6 +1069,9 @@ class SettingsDialog(QtWidgets.QDialog):
                 setting=setting, value=value, items=enum_items, min_width=140
             )
         if setting.kind == "int":
+            # Older configs may store integral slider values as floats.
+            if isinstance(value, float) and value.is_integer():
+                value = int(value)
             assert isinstance(value, int)
             if setting.minimum is None and setting.maximum is None:
                 # Qt's integer widgets are 32-bit, but Config Files accept Python ints.
@@ -1050,11 +1086,24 @@ class SettingsDialog(QtWidgets.QDialog):
                 return integer_edit
             assert setting.minimum is not None
             assert setting.maximum is not None
-            slider = IntegerSlider(
-                minimum=setting.minimum,
-                maximum=setting.maximum,
-                value=value,
-            )
+            assert isinstance(setting.minimum, int)
+            assert isinstance(setting.maximum, int)
+            if setting.key_path == (
+                "line_profile_measurement",
+                "width_filter_strength",
+            ):
+                slider = _SuffixedIntegerSlider(
+                    minimum=setting.minimum,
+                    maximum=setting.maximum,
+                    value=value,
+                    suffix="%",
+                )
+            else:
+                slider = IntegerSlider(
+                    minimum=setting.minimum,
+                    maximum=setting.maximum,
+                    value=value,
+                )
             slider.setMinimumWidth(180)
             slider.value_changed.connect(
                 lambda new_value: self._apply(setting.key_path, new_value)
@@ -1183,6 +1232,8 @@ class SettingsDialog(QtWidgets.QDialog):
         elif isinstance(editor, QtWidgets.QComboBox):
             editor.setCurrentIndex(max(editor.findData(value), 0))
         elif isinstance(editor, IntegerSlider):
+            if isinstance(value, float) and value.is_integer():
+                value = int(value)
             assert isinstance(value, int)
             editor.set_value(value)
         elif isinstance(editor, QtWidgets.QLineEdit):
@@ -1197,6 +1248,9 @@ class SettingsDialog(QtWidgets.QDialog):
             editor.set_value(value=typing.cast(dict[str, list[str]] | None, value))
         elif isinstance(editor, _ColorSwatchButton):
             editor.set_rgb(_parse_rgb(value=value))
+        elif isinstance(editor, QtWidgets.QDoubleSpinBox):
+            assert isinstance(value, int | float)
+            editor.setValue(float(value))
 
     def _apply(self, key_path: tuple[str, ...], value: object, /) -> bool:
         editor = self._editors[key_path]

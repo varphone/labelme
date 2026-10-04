@@ -109,6 +109,18 @@ def test_load_config_rejects_invalid_polygon_detail(
         _config.load_config(config_file=config_file, config_overrides={})
 
 
+@pytest.mark.parametrize("key", ["downsample_scale", "denoise_strength"])
+@pytest.mark.parametrize("value", [-0.01, 1.01, float("inf"), "0.3"])
+def test_load_config_rejects_invalid_ai_input_preprocessing(
+    *, tmp_path: Path, key: str, value: object
+) -> None:
+    config_file = tmp_path / "config.yaml"
+    config_file.write_text(f"ai:\n  {key}: {value!r}\n")
+
+    with pytest.raises(ValueError, match=rf"ai\.{key}"):
+        _config.load_config(config_file=config_file, config_overrides={})
+
+
 _POLYGON_TO_SHAPE_RENAMES: Final = {
     "edit_polygon": "edit_shape",
     "delete_polygon": "delete_shape",
@@ -216,14 +228,14 @@ def test_migrate_removes_add_point_to_edge_shortcut() -> None:
     assert "add_point_to_edge" not in config["shortcuts"]
 
 
-def test_load_config_tolerates_removed_add_point_to_edge_shortcut(
+def test_load_config_uses_current_add_point_to_edge_default(
     *,
     tmp_path: Path,
 ) -> None:
     config_file = tmp_path / "config.yaml"
     config_file.write_text("shortcuts:\n  add_point_to_edge: Ctrl+X\n")
     config = _config.load_config(config_file=config_file, config_overrides={})
-    assert "add_point_to_edge" not in config["shortcuts"]
+    assert config["shortcuts"]["add_point_to_edge"] == "V"
 
 
 @pytest.mark.parametrize(
