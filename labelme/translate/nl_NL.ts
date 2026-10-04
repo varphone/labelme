@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>Straal</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>Straal van de geselecteerde cirkel</translation>
     </message>
 </context>
 <context>
@@ -1091,19 +1091,19 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Label in annotatiebestanden hernoemen…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Cirkelradius in annotatiebestanden instellen…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Batchupdate van annotaties</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>Batchupdate van annotaties mislukt</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1111,15 +1111,15 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>Batchupdate van annotaties geannuleerd.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>Geen cirkels gevonden voor label &apos;{0}&apos;.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>De straal van {0} cirkels in {1} andere annotatiebestanden is ingesteld.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1139,7 +1139,7 @@ Wijzig het AI Text-to-Annotation-model naar &apos;SAM3 (smart)&apos; of stel het
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Label hernoemd in {0} andere annotatiebestanden</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1878,7 +1878,7 @@ Verwachte locatie: {path}</translation>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>Stel de waarde in op 0 om de breedte op basis van de afbeelding te meten.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1898,19 +1898,19 @@ Verwachte locatie: {path}</translation>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Schaal voor downsampling van invoer</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Schaal die alleen wordt gebruikt voor de afbeelding die naar AI wordt verzonden; 1,0 behoudt de oorspronkelijke resolutie.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Sterkte van ruisonderdrukking van invoer</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>Onderdrukt ruis in de geschaalde afbeelding die naar AI wordt verzonden; 0,0 schakelt ruisonderdrukking uit.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

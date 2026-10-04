@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>Sugár</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>A kiválasztott kör sugara</translation>
     </message>
 </context>
 <context>
@@ -1105,19 +1105,19 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Címke átnevezése annotációs fájlokban…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Körsugár beállítása annotációs fájlokban…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Kötegelt annotációfrissítés</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>A kötegelt annotációfrissítés sikertelen</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1125,15 +1125,15 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>A kötegelt annotációfrissítés megszakítva.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>Nem találhatók körök a(z) „{0}” címkéhez.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>{0} kör sugara beállítva {1} további annotációs fájlban.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1153,7 +1153,7 @@ Váltson az AI Text-to-Annotation modellnél &apos;SAM3 (smart)&apos;-re, vagy �
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Címke átnevezve {0} további annotációs fájlban</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1884,7 +1884,7 @@ Várt hely: {path}</translation>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>A kép alapján történő szélességméréshez állítsa az értéket 0-ra.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1904,19 +1904,19 @@ Várt hely: {path}</translation>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Bemeneti almintavételezési skála</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Csak a mesterséges intelligenciának küldött képre alkalmazott skála; az 1,0 megtartja az eredeti felbontást.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Bemeneti zajszűrés erőssége</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>A mesterséges intelligenciának küldött átméretezett képet zajszűri; a 0,0 kikapcsolja a zajszűrést.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

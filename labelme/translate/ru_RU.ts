@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>Радиус</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>Радиус выбранной окружности</translation>
     </message>
 </context>
 <context>
@@ -1076,19 +1076,19 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Переименование метки в файлах аннотаций…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Настройка радиуса круга в файлах аннотаций…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Пакетное обновление аннотаций</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>Не удалось выполнить пакетное обновление аннотаций</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1096,15 +1096,15 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>Пакетное обновление аннотаций отменено.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>Круги для метки «{0}» не найдены.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>Радиус {0} кругов в {1} других файлах аннотаций настроен.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1124,7 +1124,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Метка переименована в {0} других файлах аннотаций</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1881,7 +1881,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>Установите значение 0, чтобы измерить ширину по изображению.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1901,19 +1901,19 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Масштаб уменьшения входного изображения</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Масштаб, используемый только для изображения, отправляемого ИИ; значение 1,0 сохраняет исходное разрешение.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Интенсивность подавления шума во входном изображении</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>Подавляет шум в масштабированном изображении, отправляемом ИИ; значение 0,0 отключает подавление шума.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

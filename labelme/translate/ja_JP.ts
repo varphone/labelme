@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>半径</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>選択した円の半径</translation>
     </message>
 </context>
 <context>
@@ -1105,19 +1105,19 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>アノテーションファイルのラベル名を変更中…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>アノテーションファイルの円の半径を設定中…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>アノテーションの一括更新</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>アノテーションの一括更新に失敗しました</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1125,15 +1125,15 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>アノテーションの一括更新をキャンセルしました。</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>ラベル「{0}」の円が見つかりません。</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>{1} 個の他のアノテーションファイルにある {0} 個の円の半径を設定しました。</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1153,7 +1153,7 @@ AI Text-to-Annotation モデルを &apos;SAM3 (smart)&apos; に切り替える�
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>{0} 個の他のアノテーションファイルでラベル名を変更しました</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1892,7 +1892,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>画像から幅を測定するには、値を 0 に設定します。</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1912,19 +1912,19 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>入力ダウンサンプリング倍率</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>AI に送信する画像にのみ使用する倍率です。1.0 では元の解像度を維持します。</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>入力ノイズ除去強度</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>AI に送信する縮小画像のノイズを除去します。0.0 でノイズ除去を無効にします。</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

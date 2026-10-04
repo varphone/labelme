@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>Radius des ausgewählten Kreises</translation>
     </message>
 </context>
 <context>
@@ -1105,19 +1105,19 @@ Wechseln Sie das AI Text-to-Annotation-Modell zu &apos;SAM3 (smart)&apos; oder s
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Label in Annotationsdateien wird umbenannt …</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Kreisradius in Annotationsdateien wird festgelegt …</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Stapelaktualisierung von Annotationen</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>Stapelaktualisierung von Annotationen fehlgeschlagen</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1125,15 +1125,15 @@ Wechseln Sie das AI Text-to-Annotation-Modell zu &apos;SAM3 (smart)&apos; oder s
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>Stapelaktualisierung von Annotationen abgebrochen.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>Keine Kreise für das Label „{0}“ gefunden.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>Der Radius von {0} Kreisen in {1} weiteren Annotationsdateien wurde festgelegt.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1153,7 +1153,7 @@ Wechseln Sie das AI Text-to-Annotation-Modell zu &apos;SAM3 (smart)&apos; oder s
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Label in {0} weiteren Annotationsdateien umbenannt</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1884,7 +1884,7 @@ Erwarteter Speicherort: {path}</translation>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>Auf 0 setzen, um die Breite anhand des Bildes zu messen.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1904,19 +1904,19 @@ Erwarteter Speicherort: {path}</translation>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Skalierungsfaktor für Eingabe-Downsampling</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Wird nur für das an die KI gesendete Bild verwendet; 1,0 behält die Originalauflösung bei.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Stärke der Eingabe-Entrauschung</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>Entrauscht das an die KI gesendete skalierte Bild; 0,0 deaktiviert die Entrauschung.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

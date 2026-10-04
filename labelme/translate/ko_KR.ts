@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>반지름</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>선택한 원의 반지름</translation>
     </message>
 </context>
 <context>
@@ -1091,19 +1091,19 @@ AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>주석 파일의 레이블 이름을 바꾸는 중…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>주석 파일의 원 반지름을 설정하는 중…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>주석 일괄 업데이트</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>주석 일괄 업데이트 실패</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1111,15 +1111,15 @@ AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>주석 일괄 업데이트가 취소되었습니다.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>레이블 &apos;{0}&apos;에 대한 원을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>다른 주석 파일 {1}개에서 원 {0}개의 반지름을 설정했습니다.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1139,7 +1139,7 @@ AI Text-to-Annotation 모델을 &apos;SAM3 (smart)&apos;(으)로 변경하거나
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>다른 주석 파일 {0}개에서 레이블 이름을 변경했습니다</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1878,7 +1878,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>이미지에서 너비를 측정하려면 값을 0으로 설정하세요.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1898,19 +1898,19 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>입력 다운샘플링 배율</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>AI로 전송되는 이미지에만 적용되는 배율입니다. 1.0은 원본 해상도를 유지합니다.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>입력 노이즈 제거 강도</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>AI로 전송되는 크기 조정 이미지의 노이즈를 제거합니다. 0.0은 노이즈 제거를 비활성화합니다.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

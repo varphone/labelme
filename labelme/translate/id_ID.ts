@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>Jari-jari</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>Jari-jari lingkaran yang dipilih</translation>
     </message>
 </context>
 <context>
@@ -1066,19 +1066,19 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Mengganti nama label dalam file anotasi…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Mengatur radius lingkaran dalam file anotasi…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Pembaruan anotasi batch</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>Pembaruan anotasi batch gagal</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1086,15 +1086,15 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>Pembaruan anotasi batch dibatalkan.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>Tidak ditemukan lingkaran untuk label &apos;{0}&apos;.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>Radius {0} lingkaran di {1} file anotasi lainnya telah diatur.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1114,7 +1114,7 @@ Ganti model AI Text-to-Annotation ke &apos;SAM3 (smart)&apos;, atau atur format 
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Label diganti namanya di {0} file anotasi lainnya</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1934,7 +1934,7 @@ Shapes</source>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>Atur nilainya ke 0 untuk mengukur lebar berdasarkan gambar.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1954,19 +1954,19 @@ Shapes</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Skala downsampling input</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Skala yang hanya digunakan untuk gambar yang dikirim ke AI; 1,0 mempertahankan resolusi asli.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Intensitas pengurangan noise input</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>Mengurangi noise pada gambar yang diskalakan sebelum dikirim ke AI; 0,0 menonaktifkan pengurangan noise.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

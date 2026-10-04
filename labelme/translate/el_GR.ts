@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>Ακτίνα</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>Ακτίνα του επιλεγμένου κύκλου</translation>
     </message>
 </context>
 <context>
@@ -991,19 +991,19 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Μετονομασία ετικέτας σε αρχεία σχολιασμών…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Ορισμός ακτίνας κύκλων σε αρχεία σχολιασμών…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Μαζική ενημέρωση σχολιασμών</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>Η μαζική ενημέρωση σχολιασμών απέτυχε</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1011,15 +1011,15 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>Η μαζική ενημέρωση σχολιασμών ακυρώθηκε.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>Δεν βρέθηκαν κύκλοι για την ετικέτα «{0}».</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>Ορίστηκε η ακτίνα για {0} κύκλους σε {1} άλλα αρχεία σχολιασμών.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1039,7 +1039,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Η ετικέτα μετονομάστηκε σε {0} άλλα αρχεία σχολιασμών</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1880,7 +1880,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>Ορίστε την τιμή σε 0 για να μετρήσετε το πλάτος από την εικόνα.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1900,19 +1900,19 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Κλίμακα υποδειγματοληψίας εισόδου</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Κλίμακα που χρησιμοποιείται μόνο για την εικόνα που αποστέλλεται στην ΤΝ· το 1,0 διατηρεί την αρχική ανάλυση.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Ισχύς αποθορυβοποίησης εισόδου</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>Αποθορυβοποιεί την κλιμακωμένη εικόνα που αποστέλλεται στην ΤΝ· το 0,0 απενεργοποιεί την αποθορυβοποίηση.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

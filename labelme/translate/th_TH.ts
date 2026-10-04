@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>รัศมี</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>รัศมีของวงกลมที่เลือก</translation>
     </message>
 </context>
 <context>
@@ -1091,19 +1091,19 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>กำลังเปลี่ยนชื่อป้ายกำกับในไฟล์คำอธิบายประกอบ…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>กำลังตั้งค่ารัศมีวงกลมในไฟล์คำอธิบายประกอบ…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>การอัปเดตคำอธิบายประกอบแบบกลุ่ม</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>การอัปเดตคำอธิบายประกอบแบบกลุ่มล้มเหลว</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1111,15 +1111,15 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>ยกเลิกการอัปเดตคำอธิบายประกอบแบบกลุ่มแล้ว</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>ไม่พบวงกลมสำหรับป้ายกำกับ &apos;{0}&apos;</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>ตั้งค่ารัศมีของวงกลม {0} วงในไฟล์คำอธิบายประกอบอื่น {1} ไฟล์แล้ว</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1139,7 +1139,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>เปลี่ยนชื่อป้ายกำกับในไฟล์คำอธิบายประกอบอื่น {0} ไฟล์แล้ว</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1878,7 +1878,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>ตั้งค่าเป็น 0 เพื่อวัดความกว้างจากภาพ</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1898,19 +1898,19 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>สเกลการลดขนาดภาพอินพุต</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>สเกลที่ใช้เฉพาะกับภาพที่ส่งให้ AI; 1.0 จะคงความละเอียดเดิมไว้</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>ระดับการลดสัญญาณรบกวนของอินพุต</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>ลดสัญญาณรบกวนในภาพที่ปรับขนาดก่อนส่งให้ AI; 0.0 จะปิดการลดสัญญาณรบกวน</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

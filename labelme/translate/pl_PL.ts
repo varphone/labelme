@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>Promień</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>Promień wybranego okręgu</translation>
     </message>
 </context>
 <context>
@@ -1091,19 +1091,19 @@ Zmień model AI Text-to-Annotation na &apos;SAM3 (smart)&apos; lub ustaw format 
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Zmienianie nazwy etykiety w plikach adnotacji…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Ustawianie promienia okręgu w plikach adnotacji…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Grupowa aktualizacja adnotacji</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>Grupowa aktualizacja adnotacji nie powiodła się</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1111,15 +1111,15 @@ Zmień model AI Text-to-Annotation na &apos;SAM3 (smart)&apos; lub ustaw format 
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>Grupowa aktualizacja adnotacji anulowana.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>Nie znaleziono okręgów dla etykiety „{0}”.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>Ustawiono promień {0} okręgów w {1} innych plikach adnotacji.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1139,7 +1139,7 @@ Zmień model AI Text-to-Annotation na &apos;SAM3 (smart)&apos; lub ustaw format 
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Zmieniono nazwę etykiety w {0} innych plikach adnotacji</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1878,7 +1878,7 @@ Oczekiwana lokalizacja: {path}</translation>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>Ustaw wartość na 0, aby zmierzyć szerokość na podstawie obrazu.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1898,19 +1898,19 @@ Oczekiwana lokalizacja: {path}</translation>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Skala zmniejszania obrazu wejściowego</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Skala używana wyłącznie dla obrazu wysyłanego do AI; 1,0 zachowuje oryginalną rozdzielczość.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Siła odszumiania obrazu wejściowego</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>Odszumianie przeskalowanego obrazu wysyłanego do AI; 0,0 wyłącza odszumianie.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

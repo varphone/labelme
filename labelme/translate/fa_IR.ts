@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>شعاع</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>شعاع دایره انتخاب‌شده</translation>
     </message>
 </context>
 <context>
@@ -1091,19 +1091,19 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>در حال تغییر نام برچسب در فایل‌های حاشیه‌نویسی…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>در حال تنظیم شعاع دایره در فایل‌های حاشیه‌نویسی…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>به‌روزرسانی دسته‌ای حاشیه‌نویسی</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>به‌روزرسانی دسته‌ای حاشیه‌نویسی ناموفق بود</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1111,15 +1111,15 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>به‌روزرسانی دسته‌ای حاشیه‌نویسی لغو شد.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>هیچ دایره‌ای برای برچسب «{0}» پیدا نشد.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>شعاع {0} دایره در {1} فایل حاشیه‌نویسی دیگر تنظیم شد.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1139,7 +1139,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>نام برچسب در {0} فایل حاشیه‌نویسی دیگر تغییر کرد</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1878,7 +1878,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>برای اندازه‌گیری عرض از روی تصویر، مقدار را روی 0 تنظیم کنید.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1898,19 +1898,19 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>مقیاس کاهش اندازه ورودی</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>مقیاسی که فقط برای تصویر ارسالی به هوش مصنوعی استفاده می‌شود؛ ۱٫۰ وضوح اصلی را حفظ می‌کند.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>شدت نویزگیری ورودی</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>نویز تصویر مقیاس‌گذاری‌شده ارسالی به هوش مصنوعی را کاهش می‌دهد؛ ۰٫۰ نویزگیری را غیرفعال می‌کند.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

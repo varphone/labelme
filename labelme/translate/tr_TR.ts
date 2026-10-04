@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>Yarıçap</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>Seçili dairenin yarıçapı</translation>
     </message>
 </context>
 <context>
@@ -1097,19 +1097,19 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>Açıklama dosyalarındaki etiket yeniden adlandırılıyor…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>Açıklama dosyalarındaki daire yarıçapı ayarlanıyor…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>Toplu açıklama güncellemesi</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>Toplu açıklama güncellemesi başarısız oldu</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1117,15 +1117,15 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>Toplu açıklama güncellemesi iptal edildi.</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>&apos;{0}&apos; etiketi için daire bulunamadı.</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>{1} diğer açıklama dosyasındaki {0} dairenin yarıçapı ayarlandı.</translation>
     </message>
     <message>
         <source>New label:</source>
@@ -1145,7 +1145,7 @@ AI Text-to-Annotation modelini &apos;SAM3 (smart)&apos; olarak değiştirin veya
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>Etiket {0} diğer açıklama dosyasında yeniden adlandırıldı</translation>
     </message>
     <message>
         <source>{count} files selected</source>
@@ -1884,7 +1884,7 @@ Beklenen konum: {path}</translation>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>Genişliği görüntüden ölçmek için değeri 0 olarak ayarlayın.</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1904,19 +1904,19 @@ Beklenen konum: {path}</translation>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>Girdi alt örnekleme ölçeği</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>Yalnızca yapay zekâya gönderilen görüntü için kullanılan ölçek; 1,0 özgün çözünürlüğü korur.</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>Girdi gürültü azaltma gücü</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>Yapay zekâya gönderilen ölçeklenmiş görüntüdeki gürültüyü azaltır; 0,0 gürültü azaltmayı devre dışı bırakır.</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>

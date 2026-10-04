@@ -162,11 +162,11 @@
     </message>
     <message>
         <source>Quadratic Bezier</source>
-        <translation>Quadratic Bezier</translation>
+        <translation>二阶曲线</translation>
     </message>
     <message>
         <source>Cubic Bezier</source>
-        <translation>Cubic Bezier</translation>
+        <translation>三阶曲线</translation>
     </message>
     <message>
         <source>猫氏样条</source>
@@ -174,15 +174,15 @@
     </message>
     <message>
         <source>B样条</source>
-        <translation>B样条</translation>
+        <translation>B 样条</translation>
     </message>
     <message>
         <source>Mask</source>
-        <translation>Mask</translation>
+        <translation>掩膜</translation>
     </message>
     <message>
         <source>Editing shape: {0}</source>
-        <translation>Editing shape: {0}</translation>
+        <translation>正在编辑形状：{0}</translation>
     </message>
     <message>
         <source>Editing shapes</source>
@@ -206,19 +206,19 @@
     </message>
     <message>
         <source>Click start point for quadratic Bezier curve</source>
-        <translation>Click start point for quadratic Bezier curve</translation>
+        <translation>单击确定二阶贝塞尔曲线起点</translation>
     </message>
     <message>
         <source>Click control point for Bezier curve</source>
-        <translation>Click control point for Bezier curve</translation>
+        <translation>单击确定贝塞尔曲线控制点</translation>
     </message>
     <message>
         <source>Click end point for quadratic Bezier curve</source>
-        <translation>Click end point for quadratic Bezier curve</translation>
+        <translation>单击确定二阶贝塞尔曲线终点</translation>
     </message>
     <message>
         <source>Click second control point for cubic Bezier curve</source>
-        <translation>Click second control point for cubic Bezier curve</translation>
+        <translation>单击确定三阶贝塞尔曲线第二个控制点</translation>
     </message>
     <message>
         <source>Click center point for circle</source>
@@ -238,15 +238,15 @@
     </message>
     <message>
         <source>Click &amp; drag to adjust profile width</source>
-        <translation>Click &amp; drag to adjust profile width</translation>
+        <translation>拖动以调整配置宽度</translation>
     </message>
     <message>
         <source>Click &amp; drag to move width anchor</source>
-        <translation>Click &amp; drag to move width anchor</translation>
+        <translation>拖动以移动宽度锚点</translation>
     </message>
     <message>
         <source>Click &amp; drag to move visibility anchor</source>
-        <translation>Click &amp; drag to move visibility anchor</translation>
+        <translation>拖动以移动可见度锚点</translation>
     </message>
     <message>
         <source>ALT + SHIFT + Click to delete point</source>
@@ -293,11 +293,11 @@
     <name>CircleRadiusWidget</name>
     <message>
         <source>Radius</source>
-        <translation>Radius</translation>
+        <translation>半径</translation>
     </message>
     <message>
         <source>Radius of the selected circle</source>
-        <translation>Radius of the selected circle</translation>
+        <translation>所选圆的半径</translation>
     </message>
 </context>
 <context>
@@ -346,27 +346,27 @@
     <name>LineProfilePanel</name>
     <message>
         <source>Select a linestrip to edit its width and visibility profile.</source>
-        <translation>Select a linestrip to edit its width and visibility profile.</translation>
+        <translation>选择一条折线以编辑其宽度和可见度配置。</translation>
     </message>
     <message>
         <source>Profile Actions</source>
-        <translation>Profile Actions</translation>
+        <translation>配置操作</translation>
     </message>
     <message>
         <source>Anchor</source>
-        <translation>Anchor</translation>
+        <translation>锚点</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>位置</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>宽度</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>可见度</translation>
     </message>
 </context>
 <context>
@@ -377,23 +377,23 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation>手动</translation>
     </message>
     <message>
         <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <translation>已确认</translation>
     </message>
     <message>
         <source>Visibility</source>
-        <translation>Visibility</translation>
+        <translation>可见度</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>来源</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>置信度</translation>
     </message>
 </context>
 <context>
@@ -404,23 +404,23 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation>手动</translation>
     </message>
     <message>
         <source>Confirmed</source>
-        <translation>Confirmed</translation>
+        <translation>已确认</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>Width</translation>
+        <translation>宽度</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>来源</translation>
     </message>
     <message>
         <source>Confidence</source>
-        <translation>Confidence</translation>
+        <translation>置信度</translation>
     </message>
 </context>
 <context>
@@ -659,27 +659,27 @@ Shapes</source>
     </message>
     <message>
         <source>Preview</source>
-        <translation>Preview</translation>
+        <translation>预览</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Measure</translation>
+        <translation>测量</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation>Insert</translation>
+        <translation>插入</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Clear</translation>
+        <translation>清除</translation>
     </message>
     <message>
         <source>Copy Previous</source>
-        <translation>Copy Previous</translation>
+        <translation>复制上一帧</translation>
     </message>
     <message>
         <source>Parameters</source>
-        <translation>Parameters</translation>
+        <translation>参数</translation>
     </message>
     <message>
         <source>Save the labels under a new file name</source>
@@ -695,91 +695,91 @@ Shapes</source>
     </message>
     <message>
         <source>Delete &amp;Image and Label File</source>
-        <translation>Delete &amp;Image and Label File</translation>
+        <translation>删除&amp;图像和标注文件</translation>
     </message>
     <message>
         <source>Delete current image and its label file</source>
-        <translation>Delete current image and its label file</translation>
+        <translation>删除当前图像及其标注文件</translation>
     </message>
     <message>
         <source>Snap to Point</source>
-        <translation>Snap to Point</translation>
+        <translation>吸附到标注点</translation>
     </message>
     <message>
         <source>Snap the cursor to the nearest annotation point while drawing</source>
-        <translation>Snap the cursor to the nearest annotation point while drawing</translation>
+        <translation>绘制时,将光标吸附到最近的标注点。</translation>
     </message>
     <message>
         <source>Copy Annotations to Next Unannotated File</source>
-        <translation>Copy Annotations to Next Unannotated File</translation>
+        <translation>复制标注到下一个未标注文件</translation>
     </message>
     <message>
         <source>Save the current annotations to the next file that has no label file</source>
-        <translation>Save the current annotations to the next file that has no label file</translation>
+        <translation>将当前标注保存到下一个没有标注文件的文件中</translation>
     </message>
     <message>
         <source>Merge into Linestrip</source>
-        <translation>Merge into Linestrip</translation>
+        <translation>合并为折线</translation>
     </message>
     <message>
         <source>Combine the selected line and linestrip annotations into a single linestrip</source>
-        <translation>Combine the selected line and linestrip annotations into a single linestrip</translation>
+        <translation>将选中的直线和折线标注合并为一条折线</translation>
     </message>
     <message>
         <source>Merge Polygons</source>
-        <translation>Merge Polygons</translation>
+        <translation>合并多边形</translation>
     </message>
     <message>
         <source>Merge the selected polygons and fill the gaps between them</source>
-        <translation>Merge the selected polygons and fill the gaps between them</translation>
+        <translation>合并选中的多边形并填充它们之间的间隙</translation>
     </message>
     <message>
         <source>Measure Line Profile</source>
-        <translation>Measure Line Profile</translation>
+        <translation>测量线条配置</translation>
     </message>
     <message>
         <source>Measure width and visibility along the selected linestrip</source>
-        <translation>Measure width and visibility along the selected linestrip</translation>
+        <translation>测量选中折线上的宽度和可见度</translation>
     </message>
     <message>
         <source>Delete Selected Files</source>
-        <translation>Delete Selected Files</translation>
+        <translation>删除选中文件</translation>
     </message>
     <message>
         <source>Permanently delete the selected files and their label files</source>
-        <translation>Permanently delete the selected files and their label files</translation>
+        <translation>永久删除选中的文件及其标注文件</translation>
     </message>
     <message>
         <source>Export Selected Files</source>
-        <translation>Export Selected Files</translation>
+        <translation>导出选中文件</translation>
     </message>
     <message>
         <source>Copy the selected files and their label files to a directory</source>
-        <translation>Copy the selected files and their label files to a directory</translation>
+        <translation>将选中的文件及其标注文件复制到指定目录</translation>
     </message>
     <message>
         <source>Export Annotated Files</source>
-        <translation>Export Annotated Files</translation>
+        <translation>导出已标注文件</translation>
     </message>
     <message>
         <source>Copy the selected annotated files and their label files to a directory</source>
-        <translation>Copy the selected annotated files and their label files to a directory</translation>
+        <translation>将选中的已标注文件及其标注文件复制到指定目录</translation>
     </message>
     <message>
         <source>Fill Missing Line Profiles</source>
-        <translation>Fill Missing Line Profiles</translation>
+        <translation>补齐缺失的线剖面</translation>
     </message>
     <message>
         <source>Measure selected annotations that do not have profile anchors</source>
-        <translation>Measure selected annotations that do not have profile anchors</translation>
+        <translation>测量没有剖面锚点的选中标注</translation>
     </message>
     <message>
         <source>Rebuild Line Profiles</source>
-        <translation>Rebuild Line Profiles</translation>
+        <translation>重建线剖面</translation>
     </message>
     <message>
         <source>Force remeasure all selected line-profile annotations</source>
-        <translation>Force remeasure all selected line-profile annotations</translation>
+        <translation>强制重新测量所有选中的线剖面标注</translation>
     </message>
     <message>
         <source>Modify the label of the selected shape</source>
@@ -819,51 +819,51 @@ Shapes</source>
     </message>
     <message>
         <source>Split Line at Vertex</source>
-        <translation>Split Line at Vertex</translation>
+        <translation>在顶点处分割线条</translation>
     </message>
     <message>
         <source>Split the selected line into two at the hovered vertex</source>
-        <translation>Split the selected line into two at the hovered vertex</translation>
+        <translation>将选中的线条在光标悬停的顶点处分割为两条</translation>
     </message>
     <message>
         <source>Insert Profile Anchor</source>
-        <translation>Insert Profile Anchor</translation>
+        <translation>插入配置锚点</translation>
     </message>
     <message>
         <source>Insert an interpolated profile anchor</source>
-        <translation>Insert an interpolated profile anchor</translation>
+        <translation>插入插值配置锚点</translation>
     </message>
     <message>
         <source>Delete Profile Anchor</source>
-        <translation>Delete Profile Anchor</translation>
+        <translation>删除配置锚点</translation>
     </message>
     <message>
         <source>Delete the active profile anchor</source>
-        <translation>Delete the active profile anchor</translation>
+        <translation>删除当前配置锚点</translation>
     </message>
     <message>
         <source>Clear Line Profile</source>
-        <translation>Clear Line Profile</translation>
+        <translation>清除线条配置</translation>
     </message>
     <message>
         <source>Remove profile metadata and keep the centerline</source>
-        <translation>Remove profile metadata and keep the centerline</translation>
+        <translation>删除配置元数据并保留中心线</translation>
     </message>
     <message>
         <source>Line Profile Measurement Parameters</source>
-        <translation>Line Profile Measurement Parameters</translation>
+        <translation>线条配置测量参数</translation>
     </message>
     <message>
         <source>Override measurement defaults for this linestrip</source>
-        <translation>Override measurement defaults for this linestrip</translation>
+        <translation>覆盖此折线的默认测量参数</translation>
     </message>
     <message>
         <source>Copy Profiles from Previous Frame</source>
-        <translation>Copy Profiles from Previous Frame</translation>
+        <translation>从上一帧复制配置</translation>
     </message>
     <message>
         <source>Copy only compatible line profiles from the previous frame</source>
-        <translation>Copy only compatible line profiles from the previous frame</translation>
+        <translation>仅从上一帧复制兼容的线条配置</translation>
     </message>
     <message>
         <source>Click to place linestrip points; Ctrl+click places the last one.</source>
@@ -871,19 +871,19 @@ Shapes</source>
     </message>
     <message>
         <source>Quadratic Bezier</source>
-        <translation>Quadratic Bezier</translation>
+        <translation>二阶曲线</translation>
     </message>
     <message>
         <source>Start drawing a quadratic Bezier curve (3 points)</source>
-        <translation>Start drawing a quadratic Bezier curve (3 points)</translation>
+        <translation>开始绘制二阶贝塞尔曲线（3 个点）</translation>
     </message>
     <message>
         <source>Cubic Bezier</source>
-        <translation>Cubic Bezier</translation>
+        <translation>三阶曲线</translation>
     </message>
     <message>
         <source>Start drawing a cubic Bezier curve (4 points)</source>
-        <translation>Start drawing a cubic Bezier curve (4 points)</translation>
+        <translation>开始绘制三阶贝塞尔曲线（4 个点）</translation>
     </message>
     <message>
         <source>猫氏样条</source>
@@ -891,15 +891,15 @@ Shapes</source>
     </message>
     <message>
         <source>Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation.</source>
-        <translation>Start drawing a Catmull-Rom spline. Ctrl+LeftClick ends creation.</translation>
+        <translation>开始绘制猫氏样条曲线；按住 Ctrl 并单击结束创建。</translation>
     </message>
     <message>
         <source>B样条</source>
-        <translation>B样条</translation>
+        <translation>B 样条</translation>
     </message>
     <message>
         <source>Start drawing a B-spline. Ctrl+LeftClick ends creation.</source>
-        <translation>Start drawing a B-spline. Ctrl+LeftClick ends creation.</translation>
+        <translation>开始绘制 B 样条曲线；按住 Ctrl 并单击结束创建。</translation>
     </message>
     <message>
         <source>Fit to &amp;Window</source>
@@ -943,19 +943,19 @@ Shapes</source>
     </message>
     <message>
         <source>Show Minimap</source>
-        <translation>Show Minimap</translation>
+        <translation>显示小地图</translation>
     </message>
     <message>
         <source>Show or hide the canvas minimap</source>
-        <translation>Show or hide the canvas minimap</translation>
+        <translation>显示或隐藏画布小地图</translation>
     </message>
     <message>
         <source>Show Line Profile Preview</source>
-        <translation>Show Line Profile Preview</translation>
+        <translation>显示线条配置预览</translation>
     </message>
     <message>
         <source>Show variable-width profile boundaries and handles</source>
-        <translation>Show variable-width profile boundaries and handles</translation>
+        <translation>显示可变宽度配置的边界和控制点</translation>
     </message>
     <message>
         <source>Select Shape Above</source>
@@ -1051,11 +1051,11 @@ Shapes</source>
     </message>
     <message>
         <source>Line Profile</source>
-        <translation>Line Profile</translation>
+        <translation>线条配置</translation>
     </message>
     <message>
         <source>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</source>
-        <translation>Select a label to start annotating for it. Double-click or right-click to rename it. Press &apos;Esc&apos; to deselect.</translation>
+        <translation>请选择一个标签开始标注。双击或右键单击可重命名；按 Esc 取消选择。</translation>
     </message>
     <message>
         <source>Could not reset the Config File.
@@ -1085,31 +1085,31 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Rename Label</source>
-        <translation>Rename Label</translation>
+        <translation>重命名标签</translation>
     </message>
     <message>
         <source>Set Uniform Circle Radius</source>
-        <translation>Set Uniform Circle Radius</translation>
+        <translation>设置圆统一半径</translation>
     </message>
     <message>
         <source>Radius:</source>
-        <translation>Radius:</translation>
+        <translation>半径：</translation>
     </message>
     <message>
         <source>Renaming label in annotation files…</source>
-        <translation>Renaming label in annotation files…</translation>
+        <translation>正在重命名标注文件中的标签…</translation>
     </message>
     <message>
         <source>Setting circle radius in annotation files…</source>
-        <translation>Setting circle radius in annotation files…</translation>
+        <translation>正在设置标注文件中的圆半径…</translation>
     </message>
     <message>
         <source>Batch Annotation Update</source>
-        <translation>Batch Annotation Update</translation>
+        <translation>批量更新标注</translation>
     </message>
     <message>
         <source>Batch Annotation Update Failed</source>
-        <translation>Batch Annotation Update Failed</translation>
+        <translation>批量更新标注失败</translation>
     </message>
     <message>
         <source>&lt;b&gt;{}&lt;/b&gt;</source>
@@ -1117,19 +1117,19 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Batch annotation update canceled.</source>
-        <translation>Batch annotation update canceled.</translation>
+        <translation>批量更新标注已取消。</translation>
     </message>
     <message>
         <source>No circles found for label &apos;{0}&apos;.</source>
-        <translation>No circles found for label &apos;{0}&apos;.</translation>
+        <translation>未找到标签为“{0}”的圆。</translation>
     </message>
     <message>
         <source>Set the radius of {0} circles in {1} other annotation files.</source>
-        <translation>Set the radius of {0} circles in {1} other annotation files.</translation>
+        <translation>已在另外 {1} 个标注文件中设置 {0} 个圆的半径。</translation>
     </message>
     <message>
         <source>New label:</source>
-        <translation>New label:</translation>
+        <translation>新标签：</translation>
     </message>
     <message>
         <source>Invalid label</source>
@@ -1137,7 +1137,7 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>A label named &apos;{}&apos; already exists.</source>
-        <translation>A label named &apos;{}&apos; already exists.</translation>
+        <translation>名为“{}”的标签已存在。</translation>
     </message>
     <message>
         <source>Invalid label &apos;{}&apos; with validation type &apos;{}&apos;</source>
@@ -1145,111 +1145,111 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Renamed label in {0} other annotation files</source>
-        <translation>Renamed label in {0} other annotation files</translation>
+        <translation>已在另外 {0} 个标注文件中重命名标签</translation>
     </message>
     <message>
         <source>{count} files selected</source>
-        <translation>{count} files selected</translation>
+        <translation>已选中 {count} 个文件</translation>
     </message>
     <message>
         <source>Sample spacing</source>
-        <translation>Sample spacing</translation>
+        <translation>采样间距</translation>
     </message>
     <message>
         <source>Search radius</source>
-        <translation>Search radius</translation>
+        <translation>搜索半径</translation>
     </message>
     <message>
         <source>Minimum width</source>
-        <translation>Minimum width</translation>
+        <translation>最小宽度</translation>
     </message>
     <message>
         <source>Maximum width</source>
-        <translation>Maximum width</translation>
+        <translation>最大宽度</translation>
     </message>
     <message>
         <source>Contrast factor</source>
-        <translation>Contrast factor</translation>
+        <translation>对比度系数</translation>
     </message>
     <message>
         <source>Override global measurement settings</source>
-        <translation>Override global measurement settings</translation>
+        <translation>覆盖全局测量设置</translation>
     </message>
     <message>
         <source>Width filter strength</source>
-        <translation>Width filter strength</translation>
+        <translation>宽度滤波强度</translation>
     </message>
     <message>
         <source>Use fixed width</source>
-        <translation>Use fixed width</translation>
+        <translation>使用固定宽度</translation>
     </message>
     <message>
         <source>Fixed width</source>
-        <translation>Fixed width</translation>
+        <translation>固定宽度</translation>
     </message>
     <message>
         <source>Invalid Measurement Parameters</source>
-        <translation>Invalid Measurement Parameters</translation>
+        <translation>测量参数无效</translation>
     </message>
     <message>
         <source>No selected files have label annotations to measure</source>
-        <translation>No selected files have label annotations to measure</translation>
+        <translation>所选文件中没有可测量的标注文件</translation>
     </message>
     <message>
         <source>fill missing line profiles</source>
-        <translation>fill missing line profiles</translation>
+        <translation>补齐缺失的线剖面</translation>
     </message>
     <message>
         <source>rebuild line profiles</source>
-        <translation>rebuild line profiles</translation>
+        <translation>重建线剖面</translation>
     </message>
     <message>
         <source>Batch Line Profile Measurement</source>
-        <translation>Batch Line Profile Measurement</translation>
+        <translation>批量测量线剖面</translation>
     </message>
     <message>
         <source>{0} in {1} selected label files?</source>
-        <translation>{0} in {1} selected label files?</translation>
+        <translation>在选中的 {1} 个标注文件中{0}？</translation>
     </message>
     <message>
         <source>Measuring line profiles…</source>
-        <translation>Measuring line profiles…</translation>
+        <translation>正在测量线剖面…</translation>
     </message>
     <message>
         <source>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</source>
-        <translation>Batch measurement complete: {0} files, {1} linestrips, {2} skipped, {3} failed, {4} canceled</translation>
+        <translation>批量测量完成：{0} 个文件，{1} 条线条，跳过 {2} 个，失败 {3} 个，取消 {4} 个</translation>
     </message>
     <message>
         <source>Batch line-profile measurement failed: {0}</source>
-        <translation>Batch line-profile measurement failed: {0}</translation>
+        <translation>批量线剖面测量失败：{0}</translation>
     </message>
     <message>
         <source>Measuring line profile…</source>
-        <translation>Measuring line profile…</translation>
+        <translation>正在测量线剖面…</translation>
     </message>
     <message>
         <source>Line Profile Measurement</source>
-        <translation>Line Profile Measurement</translation>
+        <translation>线条配置测量</translation>
     </message>
     <message>
         <source>Measurement result is out of date</source>
-        <translation>Measurement result is out of date</translation>
+        <translation>测量结果已过期</translation>
     </message>
     <message>
         <source>Accept Line Profile Measurement</source>
-        <translation>Accept Line Profile Measurement</translation>
+        <translation>接受线条配置测量</translation>
     </message>
     <message>
         <source>Measurement produced {0} samples. Accept automatic width and visibility anchors?</source>
-        <translation>Measurement produced {0} samples. Accept automatic width and visibility anchors?</translation>
+        <translation>测量生成了 {0} 个样本。是否接受自动宽度和可见性锚点？</translation>
     </message>
     <message>
         <source>Only accept samples with confidence &gt;= 0.5</source>
-        <translation>Only accept samples with confidence &gt;= 0.5</translation>
+        <translation>仅接受置信度 &gt;= 0.5 的样本</translation>
     </message>
     <message>
         <source>Line profile measurement failed: {0}</source>
-        <translation>Line profile measurement failed: {0}</translation>
+        <translation>线剖面测量失败：{0}</translation>
     </message>
     <message>
         <source>Saved</source>
@@ -1305,33 +1305,33 @@ Switch the AI Text-to-Annotation model to &apos;SAM3 (smart)&apos;, or set the o
     </message>
     <message>
         <source>Previous frame profiles are incompatible: {0}</source>
-        <translation>Previous frame profiles are incompatible: {0}</translation>
+        <translation>上一帧的线剖面不兼容：{0}</translation>
     </message>
     <message>
         <source>Shape {0} ({1}): centerline difference {2:.2f} px</source>
-        <translation>Shape {0} ({1}): centerline difference {2:.2f} px</translation>
+        <translation>形状 {0}（{1}）：中心线差异 {2:.2f} 像素</translation>
     </message>
     <message>
         <source>unlabeled</source>
-        <translation>unlabeled</translation>
+        <translation>未标注</translation>
     </message>
     <message>
         <source>Shape {0}: width difference {1}, visibility difference {2}</source>
-        <translation>Shape {0}: width difference {1}, visibility difference {2}</translation>
+        <translation>形状 {0}：宽度差异 {1}，可见性差异 {2}</translation>
     </message>
     <message>
         <source>n/a</source>
-        <translation>n/a</translation>
+        <translation>不适用</translation>
     </message>
     <message>
         <source>Frame Profile Transfer Preview</source>
-        <translation>Frame Profile Transfer Preview</translation>
+        <translation>帧线剖面传递预览</translation>
     </message>
     <message>
         <source>Copy profiles from the previous frame?
 
 {0}</source>
-        <translation>Copy profiles from the previous frame?
+        <translation>是否从上一帧复制线剖面？
 
 {0}</translation>
     </message>
@@ -1463,27 +1463,27 @@ Please select a different model or use AI-Box mode.</source>
     </message>
     <message>
         <source>Permanently delete this image and its label file? This action cannot be undone.</source>
-        <translation>Permanently delete this image and its label file? This action cannot be undone.</translation>
+        <translation>永久删除此图像及其标注文件?此操作无法撤消。</translation>
     </message>
     <message>
         <source>Batch Line Profile</source>
-        <translation>Batch Line Profile</translation>
+        <translation>批量线剖面</translation>
     </message>
     <message>
         <source>Permanently delete {count} files and their label files? This action cannot be undone.</source>
-        <translation>Permanently delete {count} files and their label files? This action cannot be undone.</translation>
+        <translation>永久删除 {count} 个文件及其标注文件?此操作无法撤消。</translation>
     </message>
     <message>
         <source>Choose Export Directory</source>
-        <translation>Choose Export Directory</translation>
+        <translation>选择导出目录</translation>
     </message>
     <message>
         <source>Exported {count} annotated files to {dir}</source>
-        <translation>Exported {count} annotated files to {dir}</translation>
+        <translation>已将 {count} 个已标注文件导出到 {dir}</translation>
     </message>
     <message>
         <source>Exported {count} files to {dir}</source>
-        <translation>Exported {count} files to {dir}</translation>
+        <translation>已将 {count} 个文件导出到 {dir}</translation>
     </message>
     <message>
         <source>Image not found</source>
@@ -1499,11 +1499,11 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Current file has no annotations to copy</source>
-        <translation>Current file has no annotations to copy</translation>
+        <translation>当前文件没有可复制的标注</translation>
     </message>
     <message>
         <source>No unannotated file found after the current file</source>
-        <translation>No unannotated file found after the current file</translation>
+        <translation>当前文件之后没有找到未标注文件</translation>
     </message>
     <message>
         <source>File list is disabled when a label file is opened</source>
@@ -1756,7 +1756,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Line profile measurement</source>
-        <translation>Line profile measurement</translation>
+        <translation>线剖面测量</translation>
     </message>
     <message>
         <source>Save automatically</source>
@@ -1772,7 +1772,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Show annotation outlines in Minimap</source>
-        <translation>Show annotation outlines in Minimap</translation>
+        <translation>在小地图中显示标注轮廓</translation>
     </message>
     <message>
         <source>Shape Color Mode</source>
@@ -1808,11 +1808,11 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Snap cursor to annotation points</source>
-        <translation>Snap cursor to annotation points</translation>
+        <translation>将光标吸附到标注点</translation>
     </message>
     <message>
         <source>While drawing, the cursor snaps to the nearest existing annotation point.</source>
-        <translation>While drawing, the cursor snaps to the nearest existing annotation point.</translation>
+        <translation>绘制时,光标会吸附到最近的现有标注点。</translation>
     </message>
     <message>
         <source>Keep previous annotation</source>
@@ -1844,47 +1844,47 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Sample spacing</source>
-        <translation>Sample spacing</translation>
+        <translation>采样间距</translation>
     </message>
     <message>
         <source>Pixels along the centerline.</source>
-        <translation>Pixels along the centerline.</translation>
+        <translation>沿中心线的像素数。</translation>
     </message>
     <message>
         <source>Search radius</source>
-        <translation>Search radius</translation>
+        <translation>搜索半径</translation>
     </message>
     <message>
         <source>Pixels sampled on each normal.</source>
-        <translation>Pixels sampled on each normal.</translation>
+        <translation>沿每条法线采样的像素范围。</translation>
     </message>
     <message>
         <source>Minimum width</source>
-        <translation>Minimum width</translation>
+        <translation>最小宽度</translation>
     </message>
     <message>
         <source>Maximum width</source>
-        <translation>Maximum width</translation>
+        <translation>最大宽度</translation>
     </message>
     <message>
         <source>Contrast factor</source>
-        <translation>Contrast factor</translation>
+        <translation>对比度系数</translation>
     </message>
     <message>
         <source>Width filter strength</source>
-        <translation>Width filter strength</translation>
+        <translation>宽度滤波强度</translation>
     </message>
     <message>
         <source>Sliding window length as a percentage of measured samples.</source>
-        <translation>Sliding window length as a percentage of measured samples.</translation>
+        <translation>滑动窗口长度占测量样本的百分比。</translation>
     </message>
     <message>
         <source>Fixed width</source>
-        <translation>Fixed width</translation>
+        <translation>固定宽度</translation>
     </message>
     <message>
         <source>Set to 0 to measure the width from the image.</source>
-        <translation>Set to 0 to measure the width from the image.</translation>
+        <translation>设为 0 时，将根据图像测量宽度。</translation>
     </message>
     <message>
         <source>AI Text-to-Annotation</source>
@@ -1904,19 +1904,19 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>Input downsample scale</source>
-        <translation>Input downsample scale</translation>
+        <translation>输入下采样系数</translation>
     </message>
     <message>
         <source>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</source>
-        <translation>Scale used only for the image sent to AI; 1.0 keeps the original resolution.</translation>
+        <translation>仅用于发送给 AI 的图像；1.0 保持原始分辨率。</translation>
     </message>
     <message>
         <source>Input denoise strength</source>
-        <translation>Input denoise strength</translation>
+        <translation>输入降噪强度</translation>
     </message>
     <message>
         <source>Denoises the scaled image sent to AI; 0.0 disables denoising.</source>
-        <translation>Denoises the scaled image sent to AI; 0.0 disables denoising.</translation>
+        <translation>对发送给 AI 的缩放图像进行降噪；0.0 表示关闭降噪。</translation>
     </message>
     <message>
         <source>duplicate duplicates avoid duplicates deduplicate</source>
@@ -2028,7 +2028,7 @@ Expected location: {path}</source>
     </message>
     <message>
         <source>BETA</source>
-        <translation>BETA</translation>
+        <translation>测试版</translation>
     </message>
     <message>
         <source>(none)</source>
@@ -2078,7 +2078,7 @@ Expected location: {path}</source>
     <name>_ColorSwatchButton</name>
     <message>
         <source>RGB: {red}, {green}, {blue}</source>
-        <translation>RGB: {red}, {green}, {blue}</translation>
+        <translation>RGB：{red}、{green}、{blue}</translation>
     </message>
 </context>
 <context>
