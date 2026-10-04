@@ -9,6 +9,7 @@ from PySide6 import QtGui
 from PySide6 import QtWidgets
 from PySide6.QtCore import QPoint
 from PySide6.QtCore import QPointF
+from PySide6.QtCore import QSize
 from PySide6.QtCore import Qt
 from pytestqt.qtbot import QtBot
 
@@ -191,7 +192,7 @@ def test_zoom_fit_width_does_not_scroll_horizontally(
     image = QtGui.QImage(2076, 3000, QtGui.QImage.Format.Format_RGB32)
     image.fill(0)
     assert image.save(str(image_path))
-    win = main_win(file_or_dir=str(image_path))
+    win = main_win(file_or_dir=str(image_path), size=QSize(1200, 600))
     show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
 
     win.set_fit_width_mode(True)
@@ -490,6 +491,7 @@ def test_navigation_restores_fitted_view_position(
     win = main_win(
         file_or_dir=str(tmp_path),
         config_overrides={"keep_prev_scale": keep_prev_scale},
+        size=QSize(1200, 600),
     )
     qtbot.waitExposed(win)
     win._switch_zoom_mode(mode)
@@ -527,6 +529,7 @@ def test_navigation_restores_viewport_after_layout_settles(
     win = main_win(
         file_or_dir=str(tmp_path),
         config_overrides={"keep_prev_scale": False},
+        size=QSize(1200, 600),
     )
     show_window_and_wait_for_imagedata(qtbot=qtbot, win=win)
 

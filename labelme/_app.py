@@ -1665,7 +1665,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #
         # Bump this when dock/toolbar layout changes to reset window state
         # for users upgrading from an older version.
-        SETTINGS_VERSION: Final[int] = 2
+        SETTINGS_VERSION: Final[int] = 3
         if self._window_state.value("settingsVersion", 0, type=int) != SETTINGS_VERSION:
             self._reset_layout()
             self._window_state.setValue("settingsVersion", SETTINGS_VERSION)
@@ -1943,12 +1943,9 @@ class MainWindow(QtWidgets.QMainWindow):
             dock_widget.setFeatures(features)
             if self._config[config_key]["show"] is False:
                 dock_widget.setVisible(False)
-        # Keep all auxiliary panels in one right-side column. A horizontal split
-        # would consume most of the default window width and leave the canvas
-        # too narrow for portrait images to expose their vertical scroll range.
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, line_profile)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, flag)
-        self.splitDockWidget(line_profile, flag, Qt.Orientation.Vertical)
+        self.splitDockWidget(line_profile, flag, Qt.Orientation.Horizontal)
         for dock_widget in (file, shape, label):
             self.splitDockWidget(flag, dock_widget, Qt.Orientation.Vertical)
 

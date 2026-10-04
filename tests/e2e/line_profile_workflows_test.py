@@ -62,16 +62,27 @@ def test_line_profile_panel_is_docked_before_annotation_panels(
         win._docks.shape_dock,
         win._docks.file_dock,
     )
-    # Keep the profile editor in the same right-side column as the existing
-    # panels.  A horizontal split makes portrait-image Fit Width navigation
-    # lose its vertical scroll range.
     assert all(
-        profile_dock.geometry().left() == dock.geometry().left()
-        and profile_dock.geometry().right() == dock.geometry().right()
+        win.dockWidgetArea(dock) == Qt.DockWidgetArea.RightDockWidgetArea
         for dock in existing_docks
+    )
+    assert profile_dock.geometry().right() < min(
+        dock.geometry().left() for dock in existing_docks
+    )
+    assert (
+        len(
+            {
+                (dock.geometry().left(), dock.geometry().right())
+                for dock in existing_docks
+            }
+        )
+        == 1
     )
     assert profile_dock.geometry().top() <= min(
         dock.geometry().top() for dock in existing_docks
+    )
+    assert profile_dock.geometry().bottom() >= max(
+        dock.geometry().bottom() for dock in existing_docks
     )
     assert [dock.geometry().top() for dock in existing_docks] == sorted(
         dock.geometry().top() for dock in existing_docks
