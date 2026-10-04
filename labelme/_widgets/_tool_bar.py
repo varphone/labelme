@@ -52,8 +52,33 @@ class ToolBar(QtWidgets.QToolBar):
         for action in actions:
             self.addAction(action)
 
+        if (
+            orientation == Qt.Orientation.Horizontal
+            and button_style == Qt.ToolButtonStyle.ToolButtonTextUnderIcon
+        ):
+            self._align_button_text_lines(actions)
+
         if orientation == Qt.Orientation.Vertical:
             self._equalize_button_widths()
+
+    @staticmethod
+    def _align_button_text_lines(actions: list[QtGui.QAction], /) -> None:
+        # Keep icons level across translations, which can omit the trailing
+        # newline used to give short labels the same height as wrapped labels.
+        icon_actions = [
+            action
+            for action in actions
+            if not action.isSeparator() and not action.icon().isNull()
+        ]
+        if not icon_actions:
+            return
+
+        max_lines = max(action.iconText().count("\n") + 1 for action in icon_actions)
+        for action in icon_actions:
+            icon_text = action.iconText().rstrip("\n")
+            line_count = icon_text.count("\n") + 1
+            if line_count < max_lines:
+                action.setIconText(icon_text + "\n" * (max_lines - line_count))
 
     def _equalize_button_widths(self) -> None:
         buttons = [

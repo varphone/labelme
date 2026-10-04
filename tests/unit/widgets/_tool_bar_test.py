@@ -8,6 +8,7 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from pytestqt.qtbot import QtBot
 
+from labelme._utils import new_icon
 from labelme._widgets._tool_bar import ToolBar
 
 
@@ -256,6 +257,29 @@ def test_toolbar_horizontal_buttons_not_equalized(*, toolbar_h: ToolBar) -> None
     # Horizontal toolbar does NOT call _equalize_button_widths; minimumWidth stays 0.
     for btn in _user_buttons(toolbar_h):
         assert btn.minimumWidth() == 0
+
+
+def test_toolbar_horizontal_icon_buttons_align_despite_label_line_counts(
+    *, qtbot: QtBot
+) -> None:
+    icon = new_icon("phosphor/floppy-disk.svg")
+    actions = [
+        QtGui.QAction(icon, "Open"),
+        QtGui.QAction(icon, "Open Dir"),
+        QtGui.QAction(icon, "Save"),
+    ]
+    actions[0].setIconText("Open\n")
+    actions[1].setIconText("Open\nDir")
+    actions[2].setIconText("Save")
+
+    toolbar = ToolBar(title="Labels", actions=actions)
+    qtbot.addWidget(toolbar)
+    toolbar.show()
+
+    buttons = [toolbar.widgetForAction(action) for action in actions]
+    assert all(isinstance(button, QtWidgets.QToolButton) for button in buttons)
+    assert len({button.geometry().y() for button in buttons}) == 1
+    assert [action.iconText().count("\n") for action in actions] == [1, 1, 1]
 
 
 # --- font scaling when font_base is provided ---
